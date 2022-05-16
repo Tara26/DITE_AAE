@@ -1,0 +1,64 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>InvigilatorDairyTemplateCreation</title>
+</head>
+
+<br />
+<br />
+<br />
+
+<body>
+
+    <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+
+        <h3 style="text-align:center">InvigilatorDairyTemplate</h3>
+        <br/>
+        <br/>
+        <br/>
+        <div class="form-group row">
+            <div class="col-lg-12 col-md-12">
+                <div class="col-md-6 col-lg-offset-5">
+                  
+                    <input type="submit" id="CreateDairy" value="CreateAttendanceDairy" class="btn btn-success" style="margin-left:15px;width:250px" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $("#CreateDairy").click(function (e) {
+        
+        $.ajax({
+            type: 'POST',
+            url: '/Attendance/InvigilatorDairyTmpl',
+            
+            contentType: false,
+            processData: false,
+            cache: false,
+            async: false,
+            success: function (result) {
+                if (result != "Failed") {
+                    bootbox.alert("Saved Sucessfully.");
+                  
+                }
+                else {
+                    bootbox.alert("Error Adding Data into Grid")
+                }
+            },
+            error: function () {
+                bootbox.alert("Error");
+            }
+        });
+        
+    });
+</script>

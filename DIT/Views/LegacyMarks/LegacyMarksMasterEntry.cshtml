@@ -1,0 +1,337 @@
+﻿@model Models.MarksDetails.MarksUpload
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>LegacyMarksMasterEntry</title>
+    <link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Content/frontend/js/bootstrap.js"></script>
+    <script src="~/Scripts/bootbox.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/bootbox.locales.min.js"></script>
+    <script src="~/Content/frontend/js/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+</head>
+<body>
+    <div>
+        <br /><br />
+        <div class="container" style="text-align:center;background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="form-group row">
+                <div class="col-lg-12 modal-header">
+                    <h3 class="modal-title">Enter legacy Marks Master Data</h3>
+                </div>
+            </div>
+            <br /><br />
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4">
+                    <div class="col-md-6">
+                        <label for="txtAgencyRegnNo">Trainee Roll Num <span style="color:red"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(model => model.trainee_roll_num, new { @class = "form-control", @placeholder = "Trainee Number", @MaxLength = "30", @id = "traineerollnum" })
+                        <span id="rollnum" class="text-danger" style="display:none;">Please enter Trainee Roll Number</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="col-md-6">
+                        <label for="txtAgencyRegnNo">Subject Name<span style="color:red"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.SubjectList, new SelectList(Model.SubjectList, "Value", "Text"), new { @class = "form-control select2" ,@id="subjectname", @onchange = "GetSubjectList(this.value)" })
+                        <span id="subname" class="text-danger" style="display:none;">Please Select Subject</span>
+                        @*@Html.TextBoxFor(model => model.SubjectList, new { @class = "form-control", @placeholder = "Trade Type", @MaxLength = "30" })*@
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="col-md-6">
+                        <label for="txtAgencyRegnNo">OMR Marks<span style="color:red"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(model => model.lm_obtained_omr_marks, new { @class = "form-control", @placeholder = "OMR Marks", @MaxLength = "2", @id = "omrmarks" })
+                        <span id="omrmarksvadilation" class="text-danger" style="display:none;">Please enter OMR Marks</span>
+                    </div>
+                </div>
+            </div>
+            <br /><br />
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4">
+                    <div class="col-md-6">
+                        <label for="txtAgencyRegnNo">Sessional Marks<span style="color:red"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(model => model.lm_obtained_sessional_marks, new { @class = "form-control", @placeholder = "Sessional Marks", @MaxLength = "2", @id = "sessionmarks" })
+                        <span id="session" class="text-danger" style="display:none;">Please enter sessional Marks</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="col-md-6">
+                        <label for="txtAgencyRegnNo">Offline Exam Marks<span style="color:red"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(model => model.lm_obtained_offline_exam_marks, new { @class = "form-control", @placeholder = "Offline Exam Marks", @MaxLength = "30", @id = "offlineexammarks" })
+                        <span id="offlineexam" class="text-danger" style="display:none;">Please enter offline exam marks</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="col-md-6">
+                        <label for="txtAgencyRegnNo">Semester<span style="color:red"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.SemesterList, new SelectList(Model.SemesterList, "Value", "Text"), new { @class = "form-control select2", @id = "semester" , @onchange = "GetSemesterList(this.value)" })
+                        <span id="entersemester" class="text-danger" style="display:none;">Please Select Semester</span>
+                        @*@Html.TextBoxFor(model => model.SemesterList, new { @class = "form-control", @placeholder = "Trade", @MaxLength = "30" })*@
+                    </div>
+                </div>
+            </div>
+            <br /><br />
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4">
+                    <div class="col-md-6">
+                        <label for="txtAgencyRegnNo">Exam Type <span style="color:red"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.ExamTypeList, new SelectList(Model.ExamTypeList, "Value", "Text"), new { @class = "form-control select2", @id = "examtype" , @onchange = "GetExamTypeList(this.value)" })
+                        <span id="examtypeval" class="text-danger" style="display:none;">Please Select Exam Type</span>
+                        @*@Html.TextBoxFor(model => model.ExamTypeList, new { @class = "form-control", @placeholder = "Course", @MaxLength = "30" })*@
+                    </div>
+                </div>
+            </div>
+            <br /><br />
+            <div class="form-group row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="col-md-6 col-lg-offset-3">
+                        <input type="button" value="Clear" class="btn btn-success" style="margin-left:15px; width:250px;" id="btnMClear" />
+                        <input type="submit" id="btnEntrySave" value="Save" class="btn btn-success" onclick="validation()" style="margin-left:15px;width:250px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br /><br />
+        <div class="container" style="text-align:center;background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="form-group row">
+                <div class="col-lg-12 modal-header">
+                    <h3 class="modal-title">Upload legacy Marks Master Data</h3>
+                </div>
+            </div>
+            <br /><br />
+            <div class="form-group row">
+                <div class="col-lg-offset-3 col-lg-6 col-md-6">
+                    <div class="col-md-6">
+                        <label for="txtAgencyRegnNo">Master Data Upload<span style="color:red"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(Model => Model.UploadDocs, new { type = "file", @id = "UploadDocsFile", @class = "medium-input" })
+                    </div>
+                </div>
+            </div>
+            <br /><br />
+            <div class="form-group row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="col-md-6 col-lg-offset-3">
+                        <input type="button" value="Clear" class="btn btn-success" style="margin-left:15px; width:250px;" id="btnMClear" />
+                        <input type="submit" id="btnUploadSave" value="Save" class="btn btn-success" style="margin-left:15px;width:250px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br /><br />
+    </div>
+</body>
+</html>
+
+
+<script>
+    var subject = "";
+    var semester = "";
+    var examtype = "";
+    function GetSubjectList(subjectId) {
+        subject = subjectId;
+    }
+    function GetSemesterList(semesterId) {
+        semester = semesterId;
+    }
+    function GetExamTypeList(examId) {
+        examtype = examId;
+    }
+
+    function validation() {
+        var traineenum = $("#traineerollnum").val();
+        //var subject = $("#SubjectList").val();
+        var omrmarks = $("#omrmarks").val();
+        var sessionalmarks = $("#sessionmarks").val();
+        var offlineexammaks = $("#offlineexammarks").val();
+        // var semester = $("#SemesterList").val();
+        //var examtype = $("#ExamTypeList").val();
+        if (traineenum != "") {
+            $("#rollnum").hide();
+        }
+        else {
+            $("#rollnum").show();
+        }
+
+        if (subject != null) {
+            $("#subname").hide();
+        }
+        else {
+            $("#subname").show();
+        }
+
+
+        if (omrmarks != 0) {
+            $("#omrmarksvadilation").hide();
+        }
+        else {
+            $("#omrmarksvadilation").show();
+        }
+
+
+        if (sessionalmarks != 0) {
+            $("#session").hide();
+        }
+        else {
+            $("#session").show();
+        }
+
+
+        if (offlineexammaks != 0) {
+            $("#offlineexam").hide();
+        }
+        else {
+            $("#offlineexam").show();
+        }
+
+
+        if (semester != null) {
+            $("#entersemester").hide();
+        }
+        else {
+            $("#entersemester").show();
+        }
+
+
+        if (examtype != null) {
+            $("#examtypeval").hide();
+        }
+        else {
+            $("#examtypeval").show();
+        }
+
+        
+        if (traineenum != "" && subject != null && omrmarks != "" && sessionalmarks != "" && offlineexammaks != "" && semester != null && examtype != null) {
+            $.ajax({
+                type: 'POST',
+                url: '/LegacyMarks/LegacyMarksMasterData',
+                dataType: 'json',
+                data: {
+                    trainee_roll_num: traineenum,
+                    subject_id: subject,
+                    lm_obtained_omr_marks: omrmarks,
+                    lm_obtained_sessional_marks: sessionalmarks,
+                    lm_obtained_offline_exam_marks: offlineexammaks,
+                    lm_semester: semester,
+                    lm_exam_type: examtype
+                },
+                success: function (result) {
+                    if (result == "Saved") {
+                        var _msg = "Saved Sucessfully.";
+                        bootbox.alert({ message: _msg, callback: function () { window.location.href = window.location.href; } });
+                        $('#UploadDocsFile').val("");
+                    }
+                    else {
+                        var _msg = result;
+                        bootbox.alert({ message: _msg, callback: function () { window.location.href = window.location.href; } });
+                    }
+                },
+                error: function () {
+                    bootbox.alert("Error");
+                }
+            });
+
+            //return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
+
+
+    $("#btnUploadSave").click(function (e) {
+        var file = $("#UploadDocsFile").get(0).files;
+        if (file[0] != null) {
+            var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xlsx|.xls)$/;
+            /*Checks whether the file is a valid excel file*/
+            if (regex.test($("#UploadDocsFile").val().toLowerCase())) {
+                var xlsxflag = false; /*Flag for checking whether excel is .xls format or .xlsx format*/
+                if ($("#UploadDocsFile").val().toLowerCase().indexOf(".xlsx") > 0) {
+                    //xlsxflag = true;
+                    var filesize = ((file[0].size / 1024) / 1024).toFixed(5);
+                    if (filesize > 0.501) {
+                        bootbox.alert("file size is too big please upload less than 500kb file.");
+                    }
+                    else {
+                        bootbox.confirm({
+                            title: "Confirm",
+                            message: "Are you sure you want to Upload File?",
+                            buttons: {
+                                confirm: {
+                                    label: 'Yes',
+                                    className: 'btn-success'
+                                },
+                                cancel: {
+                                    label: 'No',
+                                    className: 'btn-danger'
+                                }
+                            },
+                            callback: function (result) {
+                                if (result == true) {
+                                    var data = new FormData();
+                                    data.append("UploadDocs", file[0]);
+
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '/LegacyMarks/LegacyMarksMasterEntry',
+                                        data: data,
+                                        contentType: false,
+                                        processData: false,
+                                        cache: false,
+                                        async: false,
+                                        success: function (result) {
+                                            if (result != "Failed") {
+                                                bootbox.alert("Saved Sucessfully.");
+                                                $('#UploadDocsFile').val("");
+                                            }
+                                            else {
+                                                bootbox.alert("Error Adding Data into Grid")
+                                            }
+                                        },
+                                        error: function () {
+                                            bootbox.alert("Error");
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+
+            }
+            else {
+                bootbox.alert("Please upload a valid Excel file!");
+            }
+
+        }
+        else {
+            bootbox.alert('Please choose the file to upload');
+            $('#UploadDocsFile').val("");
+        }
+    });
+</script>

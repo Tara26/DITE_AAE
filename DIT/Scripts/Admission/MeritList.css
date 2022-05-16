@@ -1,0 +1,17 @@
+﻿.headetitle {
+    text-align: center;
+    background-color: cornflowerblue;
+    color: white;
+    border-radius: 5px;
+    height: 35px;
+}
+
+.topnav .search-container {
+    float: right;
+}
+
+#div1 div {
+    width: 60px;
+    height: 80px;
+    vertical-align: top;
+}

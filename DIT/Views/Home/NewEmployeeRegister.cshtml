@@ -1,0 +1,497 @@
+﻿@model Models.Admin.NewEmployee
+
+@{
+    ViewBag.Title = "NewEmployeeRegister";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<script src="~/scripts/jquery.validate.min.js" type="text/javascript"></script>
+<script src="~/scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>*@
+
+<body>
+    @using (Html.BeginForm("NewEmployeeRegister", "Home", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+                <div class="tab-content">
+                    <div class="row border">
+                        <div class="accordion-option EligibleApplicationForm">
+                            <h3 class="head1">Employee Registration</h3>
+                            <a href="javascript:void(0)" class="toggle-accordion active" accordion-id="#accordion"></a>
+                        </div>
+                        <div class="clearfix EligibleApplicationForm"></div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+
+                                        <div aria-labelledby="headingOne">
+
+                                            <div class="panel-body">
+                                                <div class="form-group">
+
+                                                    <br>
+                                                    @Html.Hidden("OTPValidornot")
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            @Html.LabelFor(model => model.EmployeeKGIDNumber)
+                                                            <span><font class="text-danger">*</font></span>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            @Html.TextBoxFor(m => m.EmployeeKGIDNumber, new { @autocomplete = "off", @id = "txtKGIDNumber", @placeholder = "KGID Number", @onKeyPress = "if(this.value.length==7) return false;", @class = "form-control", @title = "Enter The KGID Number", @type = "number", onfocusout = "fnGetUserDataFromKGIDNumber()" })
+                                                            @Html.ValidationMessageFor(m => m.EmployeeKGIDNumber, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            @Html.LabelFor(model => model.Name)
+                                                            <span><font class="text-danger">*</font></span>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            @Html.TextBoxFor(m => m.Name, new { @autocomplete = "off", @id = "txtEEName", @placeholder = "Employee Name", @maxlength = "50", @class = "form-control", @title = "Enter The Employee Name" })
+                                                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            @Html.LabelFor(model => model.EmployeeFatherName)
+                                                            <span><font class="text-danger">*</font></span>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            @Html.TextBoxFor(m => m.EmployeeFatherName, new { @autocomplete = "off", @id = "txtEEFatherName", @placeholder = "Employee Father Name", @maxlength = "50", @class = "form-control", @title = "Enter The Employee Father Name" })
+                                                            @Html.ValidationMessageFor(m => m.EmployeeFatherName, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            @Html.LabelFor(model => model.EmployeeGender)
+                                                            <span><font class="text-danger">*</font></span>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            @Html.DropDownListFor(model => model.EmployeeGender, Model.EmployeeGenderList, new { @class = "form-control", id = "EmployeeGender" })
+                                                            @*@Html.DropDownList("StudentGender", new SelectList(Enum.GetValues(typeof(Gender))), "Select Gender", new { @class = "form-control" })*@
+                                                            @*@Html.TextBoxFor(m => m.EmployeeGender, new { @autocomplete = "off", @placeholder = "Employee Gender", @maxlength = "50", @class = "form-control", @title = "Enter The Employee Gender" })*@
+                                                            @Html.ValidationMessageFor(m => m.EmployeeGender, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            @Html.LabelFor(model => model.Email)
+                                                            <span><font class="text-danger">*</font></span>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            @Html.TextBoxFor(m => m.Email, new { @autocomplete = "off", @id = "txtEmail", @placeholder = "Employee Email", @maxlength = "50", @class = "form-control", @title = "Enter The Employee Email", @type = "email" , @onchange = "IsEmailExist()" })
+                                                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            @Html.LabelFor(model => model.EmployeeDOB)
+                                                            <span><font class="text-danger">*</font></span>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            @Html.EditorFor(m => m.EmployeeDOB, new { htmlAttributes = new { @class = "form-control", @id = "dateofbirth" } })
+                                                            @*@Html.TextBoxFor(m => m.EmployeeDOB, new { @autocomplete = "off", @placeholder = "Employee DOB", @maxlength = "50", @class = "form-control", @title = "Enter Employee Date of Birth" })*@
+                                                            @Html.ValidationMessageFor(m => m.EmployeeDOB, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            @Html.LabelFor(model => model.MobileNumber)
+                                                            <span><font class="text-danger">*</font></span>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            @Html.TextBoxFor(m => m.MobileNumber, new { @autocomplete = "off", @id = "txtPhoneNum", @placeholder = "Employee Mobile Number", @maxlength = "10", @class = "form-control", @title = "Enter The Employee Mobile Number" , @onchange = "IsMobileNumberExist()" })
+                                                            @Html.ValidationMessageFor(x => x.MobileNumber, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                    </div>
+                                                    <br />
+                                                    <br />
+
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="submit" name="submit" class="btn btn-primary" id="btnGenerateOTP" value="Generate OTP" />
+                                                            @*<input type="submit" name="submit" value="Cancel" />
+                                                                <input type="button" value="Generate OTP" class="btn btn-primary" id="btnValue" />*@
+                                                        </div>
+
+                                                    </div>
+                                                    <br>
+                                                    @*@if (@Url.RequestContext.RouteData.Values["data"].ToString()== "Generate_otp") {*@
+                                                    <div id="OTPsection" style="display:none">
+                                                        <div class="row">
+                                                            <div class="col-md-2">
+                                                                @Html.LabelFor(model => model.MobileOTP)
+                                                                <span><font class="text-danger">*</font></span>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                @Html.TextBoxFor(m => m.MobileOTP, new { @autocomplete = "off", @placeholder = "Employee Mobile OTP", @maxlength = "10", @class = "form-control", @title = "Enter The Employee Mobile OTP" })
+                                                                @Html.ValidationMessageFor(x => x.MobileOTP, "", new { @class = "text-danger" })
+                                                                <small class="text-success" id="lblValidMobile" style="display:none">Mobile validated successfully</small>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                @Html.LabelFor(model => model.EmailOTP)
+                                                                <span><font class="text-danger">*</font></span>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                @Html.TextBoxFor(m => m.EmailOTP, new { @autocomplete = "off", @placeholder = "Employee Email OTP", @maxlength = "10", @class = "form-control", @title = "Enter The Employee Email OTP" })
+                                                                @Html.ValidationMessageFor(x => x.EmailOTP, "", new { @class = "text-danger" })
+                                                                <small class="text-success" id="lblValidEmail" style="display:none">Email ID Validated successfully</small>
+                                                                @*<input type="submit" name="submit" class="btn btn-primary" id="" value="Validate Email" />*@
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-2">
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <input type="submit" name="submit" class="btn btn-primary" id="" value="Validate Mobile & Email" />
+                                                            </div>
+                                                            <div class="col-md-1" id="divResendOTP">
+                                                                <input type="submit" name="submit" class="btn btn-primary" id="" value="Resend OTP" @*style="color: #110933;font-weight: bold;"*@ />
+                                                            </div>
+                                                        </div>
+                                                        <!--<div class="col-md-1">
+                                                        <input type="submit" name="submit" class="btn btn-primary" id="" value="GO" />-->
+                                                        @*<input type="button" value="GO" class="btn btn-primary" id="otpvalidate" />*@
+                                                        <!--</div>-->
+                                                        @*@if (@Url.RequestContext.RouteData.Values["data"].ToString() == "Generate_otp")
+                                                            {*@
+                                                        <!--<div class="col-md-2" id="divResendOTP">
+                                                            <input type="submit" name="submit" class="" id="" value="Resend OTP" style="color: #110933;font-weight: bold;" />-->
+                                                        @*<a href="#" target="_self" id="ResendOTP" class="" style="color: #110933;font-weight: bold;" value="Resend OTP">Resend OTP</a>*@
+                                                        <!--</div>-->
+                                                        @*}*@
+
+                                                    </div>
+
+                                                    <br>
+                                                    <div id="passwordsection" style="display:none">
+                                                        <div class="row">
+                                                            <div class="col-md-2">
+
+                                                                @Html.LabelFor(model => model.NewPassword)
+                                                                <span><font class="text-danger">*</font></span>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                @Html.PasswordFor(m => m.NewPassword, new { @autocomplete = "off", @id = "txtNewPassword", @placeholder = "Password", @maxlength = "15", @minlength = "8", pattern = Model.pwdPattern, @class = "form-control", @title = Model.pwdMessage, @type = "password" })
+                                                                @Html.ValidationMessageFor(x => x.NewPassword, "", new { @class = "text-danger" })
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <span class="text-danger ">
+                                                                    Password Rules:
+                                                                    <ul class="text-danger">
+                                                                        <li> Please enter at least one capital letter    </li>
+                                                                        <li> Please enter at least one small letter    </li>
+                                                                        <li>
+                                                                            Please enter at least one special character
+                                                                            (!, @@, # or $ are allowed)
+                                                                        </li>
+                                                                        <li>Please enter at least one number / digit  </li>
+                                                                        <li>
+                                                                            Password should have a minimum length
+                                                                            of 8 characters and a maximum length of
+                                                                            15 characters
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-2">
+
+                                                                @Html.LabelFor(model => model.ConfirmNewPassword)
+                                                                <span><font class="text-danger">*</font></span>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                @Html.PasswordFor(m => m.ConfirmNewPassword, new { @autocomplete = "off", @id = "txtConfirmPassword", @placeholder = "Confirm Password", @maxlength = "15", @minlength = "8", pattern = Model.pwdPattern, @class = "form-control", @title = Model.pwdMessage, @type = "password" })
+                                                                @Html.ValidationMessageFor(x => x.ConfirmNewPassword, "", new { @class = "text-danger" })
+                                                            </div>
+
+                                                        </div>
+                                                        <div id="SaveApplicantRegistrationDetails" class="row">
+                                                            <div class="col-md-2">
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="submit" name="submit" class="btn btn-primary" onclick="fnValidateUserEntryFields()" id="" value="Register Employee" />
+                                                                @*<input type="button" value="Register Applicant Details" class="btn btn-primary" id="SaveNewApplicantDetails" />*@
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+
+                                                    <br>
+                                                    <div class="row">
+                                                        <large id="" class="text-danger">
+                                                            &nbsp;&nbsp;&nbsp;Note : Whichever Fields having Asterisk (*) that indicates it as "mandatory".
+                                                        </large>
+                                                    </div>
+
+                                                    <br>
+
+                                                    <br>
+                                                    <div class="row">
+                                                        <div style="text-align:left">
+                                                            @Html.ActionLink("Back to home", "Index", "Home", null, new { @class = "btn btn-primary", @style = "" })
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="hiddenotp" />
+    }
+
+    <script type="text/javascript">
+        function ShowMessage1(message) {
+
+            bootbox.alert(message);
+        }
+        function ShowMessage(message, str, issucess) {
+            switch (str) {
+                case "Generate_otp":
+                    if (issucess == "True") {
+                        $("#OTPsection").show();
+                    }
+                    bootbox.alert(message);
+                    break;
+                case "Validate_otp":
+                    if (issucess == "True") {
+                        $("#lblValidMobile").show();
+                        $("#lblValidEmail").show();
+                        $("#passwordsection").show();
+                        $("#divResendOTP").show();
+                        $("#OTPsection").show();
+                    } else {
+                        $('#MobileOTP').val("");
+                        $('#EmailOTP').val("");
+                        $("#lblValidMobile").hide();
+                        $("#lblValidEmail").hide();
+                        $("#divResendOTP").show();
+                        $("#passwordsection").hide();
+                        $("#OTPsection").show();
+                    }
+                    bootbox.alert(message);
+                    break;
+                case "Resend_OTP":
+                    if (issucess == "True") {
+                        
+                        $('#MobileOTP').val("");
+                        $('#EmailOTP').val("");
+                        $("#lblValidMobile").val("");
+                        $("#lblValidEmail").val("");
+                        $("#passwordsection").hide();
+                        $("#divResendOTP").show();
+                        $("#OTPsection").show();
+                    } else {
+                        $('#MobileOTP').val("");
+                        $('#EmailOTP').val("");
+                        $("#divResendOTP").show();
+                        $("#passwordsection").hide();
+                        $("#OTPsection").show();
+                    }
+                    bootbox.alert(message);
+                    break;
+                case "Register Employee":
+                    if (issucess == "True") {
+                        bootbox.alert(message, function () {
+                            window.location.href = "/Home/Index";
+                        });
+                        @*bootbox.alert({ message: message, callback: function () { window.location.href = window.location.href; } });
+                        //bootbox.alert(message);
+                        //window.location.replace('@Url.Action("Index", "Home")');*@
+                    }
+                    else {
+                        $("#lblValidMobile").show();
+                        $("#lblValidEmail").show();
+
+                        $("#divResendOTP").show();
+                        $("#passwordsection").show();
+                        $("#OTPsection").show();
+                        bootbox.alert(message);
+                    }
+                    break;
+
+            }
+
+        };
+
+        $(document).ready(function () {
+
+
+            $('#MobileNumber').keypress(function (event) {
+                var keycode = event.which;
+                if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+                    event.preventDefault();
+                }
+            });
+
+            $(window).bind("load", function () {
+                $('#mobilenoError').text("");
+                $('#emailError').text("");
+                $('#nameError').text("");
+
+                var inp = $('.input-validation-error:first').get(0);
+                if (inp) {
+                    inp.focus();
+                    $('.input-validation-error:first').css('background-color', '#FAF6A5'); // change the background color
+                }
+            });
+        });
+
+        function fnValidateUserEntryFields() {
+            //$("#txtNewPassword").val(hashSHA256(userPassword));
+            //$("#txtConfirmPassword").val(hashSHA256(userPassword));
+        }
+
+        function fnGetUserDataFromKGIDNumber() {
+            var txtKGID = $("#txtKGIDNumber").val();
+            if ($("#txtKGIDNumber").val() != '' && txtKGID.length <= '7' && txtKGID != '0') {
+                $.ajax({
+                    type: "GET",
+                    data: { KGIDNumber: $("#txtKGIDNumber").val() },
+                    url: "/Home/GetUserDataByKGIDNumber",
+                    contentType: "application/json",
+                    success: function (data) {
+                        if (data[0].KGIDUserID != null) {
+                            if (data[0].pwd == null) {
+                            //var dobMM = data[0].DateOfBirth.split('-')[1].padStart(2, 0);
+                                //var dob = data[0].DateOfBirth.split('-')[2] + "-" + dobMM + "-" + data[0].DateOfBirth.split('-')[0]
+                                if (data[0].DateOfBirth != null) {
+                                    var dt = data[0].DateOfBirth.split('-');
+                                    var date = dt[2] + "-" + dt[1].padStart(2, '0') + "-" + dt[0].padStart(2, '0');
+                                    //$("#txtHolidaydate").val(date);
+                                } else { }
+                            $("#txtKGIDNumber").val(data[0].KGIDUserID);
+                            $("#txtEEName").val(data[0].EEName);
+                            $("#txtEEFatherName").val(data[0].EEFatherName);
+                            $("#dateofbirth").val(date);
+                            $("#EmployeeGender").val(data[0].um_gender);
+                                $("#txtPhoneNum").val(data[0].phoneNum);
+                                $("#txtEmail").val(data[0].email);
+                            //if (data[0].EEName != null && data[0].EEName != "") {
+                            //    $("#txtEEName").val(data[0].EEName);
+                            //    $("#txtEEName").prop("readonly", true);
+
+
+                            //} else {
+                            //    $("#txtEEName").prop("readonly", false);
+                            //}
+                            //if (data[0].EEFatherName != null && data[0].EEFatherName != "") {
+                            //    $("#txtEEFatherName").prop("readonly", true);
+                            //    $("#txtEEFatherName").val(data[0].EEFatherName);
+
+                            //} else {
+                            //    $("#txtEEFatherName").prop("readonly", false);
+                            //}
+                            //alert(dt);
+                            //if (dt != null && dt != ",,") {
+                            //    $("#dateofbirth").val(date);
+                            //    $("#dateofbirth").prop("readonly", true);
+
+
+                            //} else {
+                            //    $("#dateofbirth").val('');
+                            //    $("#dateofbirth").prop("readonly", false);
+
+                            //}
+
+                            //if (data[0].um_gender != null && data[0].um_gender != "") {
+                            //    $("#EmployeeGender").attr("disabled", true);
+                            //    $("#EmployeeGender").val(data[0].um_gender);
+
+
+                            //} else {
+                            //    $("#EmployeeGender").removeAttr("disabled", false);
+
+                            //}
+                            }
+                            else {
+                                bootbox.alert('KGID Number already registered!!!');
+
+                            }
+
+                        }
+                    }
+                });
+            }
+            else {
+                bootbox.alert('Invalid KGID Number, Please Enter valid KGID Number!!!');
+            }
+        }
+
+        function IsMobileNumberExist() {
+            var MobNo = $("#txtPhoneNum").val();
+            //var EmailID = $("#txtEmail").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/IsMobileNumberExist",
+                data: '{MobileNumber: "' + MobNo + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response == true) {
+                        bootbox.alert("Mobile Number already exists in database.")
+                        $("#btnGenerateOTP").attr('disabled', 'disabled');
+                        //if (EmailID != "") {
+                        //    IsEmailExist();
+                        //}
+                    }
+                    else {
+                        $("#btnGenerateOTP").removeAttr('disabled', 'disabled');
+
+                    }
+                }
+            });
+        };
+
+        function IsEmailExist() {
+            var EmailID = $("#txtEmail").val();
+            var MobNo = $("#txtPhoneNum").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/IsEmailExist",
+                data: '{Email: "' + EmailID + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response == true) {
+                        bootbox.alert("Email Id already exists in database.")
+                        $("#btnGenerateOTP").attr('disabled', 'disabled');
+                        //if (MobNo != "") {
+                        //    IsMobileNumberExist();
+                        //}
+                    }
+                    else {
+                        $("#btnGenerateOTP").removeAttr('disabled', 'disabled');
+
+                    }
+                }
+            });
+        };
+
+    </script>
+
+    @if (ViewBag.JavaScriptFunction != null)
+    {
+        <script type="text/javascript">
+        @Html.Raw(ViewBag.JavaScriptFunction)
+        </script>
+    }
+    @if (ViewBag.JavaScriptFunction1 != null)
+    {
+        <script type="text/javascript">
+        @Html.Raw(ViewBag.JavaScriptFunction1)
+        </script>
+    }
+</body>

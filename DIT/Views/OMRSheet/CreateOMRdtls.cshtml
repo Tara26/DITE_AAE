@@ -1,0 +1,194 @@
+﻿@model Models.OMR.OMRdtls
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CreateOMRdtls</title>
+</head>
+<body>
+        <br />
+        <br />
+        <br />
+        @if (Session["UserName"].ToString().Equals("Data Entry Operator"))
+        {
+
+
+
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+
+                <div class="col-lg-12 borderedtext" align="left">
+                    <h3 style="color:white;background-color:cornflowerblue;">OMR Details</h3>
+                </div>
+                <br />
+                <br />
+
+                <div class="form-group row">
+                    <!--Section1-->
+                    <div class="col-lg-6 col-md-6">
+                        <div class="col-md-3 offset-2">
+                            <label for="txtAgencyRegnNo">Division<span style="color:red">*</span></label>
+                        </div>
+                        <div class="col-md-6">
+
+                            @Html.DropDownListFor(model => model.divId, new SelectList(Model.divisionList, "Value", "Text"), new { @class = "form-control select2", @onchange = "GetDivisionBasedData(this.value)" })
+                            @Html.ValidationMessageFor(x => x.divId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6">
+                        <div class="col-md-3 offset-2">
+                            <label for="txtAgencyRegnNo" style="padding:1%;margin:0%;">ExamCenter.</label>
+                        </div>
+                        <div class="col-md-6">
+
+                            @Html.DropDownListFor(model => model.ExamCntrId, new SelectList(Model.ExamCentrList, "Value", "Text"), new { @class = "form-control select2" })
+                            @Html.ValidationMessageFor(x => x.ExamCntrId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div> <!--Section1-->
+
+                <div class="form-group row">
+                    <!--Section1-->
+                    <div class="col-lg-6 col-md-6">
+                        <div class="col-md-3 offset-2">
+                            <label for="txtAgencyRegnNo">Subjects<span style="color:red">*</span></label>
+                        </div>
+                        <div class="col-md-6">
+
+                            @Html.DropDownListFor(model => model.sublectId, new SelectList(Model.SubjectList, "Value", "Text"), new { @class = "form-control select2" , @onchange = "GetSubjectBasedData(this.value)" })
+                            @Html.ValidationMessageFor(x => x.sublectId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                @*//Table*@
+
+                <table width="100" border="0" cellspacing="0" cellpadding="1" id="excltable" style="padding-top:10%;" align="center">
+                    <tr style="color:royalblue">
+                        <th style="background-color:greenyellow; padding:6px;">SlNo</th>
+                        <th style="background-color:greenyellow; padding:6px;">Day</th>
+                        <th style="background-color:greenyellow; padding:6px;">ExamDate</th>
+                        <th style="background-color:greenyellow; padding:6px;">StartTime</th>
+                        <th style="background-color:greenyellow; padding:6px;">EndTime</th>
+                        <th style="background-color:greenyellow; padding:6px;">TradeYesr</th>
+                        <th style="background-color:greenyellow; padding:6px;">Subject</th>
+                        <th style="background-color:greenyellow; padding:6px;">BlockNo</th>
+                        <th style="background-color:greenyellow; padding:6px;">OMRScannedCopy</th>
+                        <th style="background-color:greenyellow; padding:6px;">OMREditableCopy</th>
+                        @*<th style="background-color:greenyellow; padding:6px;">Delete</th>*@
+                    </tr>
+                    <tbody id="tbody_add_Grid">
+                        @if (Model.OMRdtlsList != null)
+                        {
+                            int slNo = 0;
+                            foreach (var cd in Model.OMRdtlsList)
+                            {
+                                slNo++;
+                                <tr>
+                                    <td> @slNo </td>
+                                    <td>@cd.Day</td>
+                                    <td>@cd.ExamDate</td>
+                                    <td>@cd.StartTime</td>
+                                    <td>@cd.EndTime</td>
+                                    <td>@cd.TradeYear</td>
+                                    <td>@cd.Subject</td>
+                                    <td>@cd.BlockNo</td>
+                                    <td>
+                                        @*<a href="@Url.Content("../../" + @cd.InvigilatorSacannedCopy+"//"+@cd.InvigilatorDairyEditableCopy)" data-toggle="tooltip" data-placement="top" title="View Existing File" class="View" style="color:black" target="_blank">View</a>*@
+
+                                    </td>
+                                    <td>
+                                        @*<a href="@Url.Content("../../" + @cd.InvigilatorSacannedCopy+"//"+@cd.InvigilatorDairyEditableCopy)" data-toggle="tooltip" data-placement="top" title="View Existing File" class="View" style="color:black" target="_blank">View</a>*@
+                                    </td>
+                                    @*<td>
+                                            <a class="Delete" onclick="doesFileExist('../../' + @cd.Path+'//'+@cd.FileName')">Delete</a>
+                                            <a class="Delete" href="javascript:;">Delete</a>
+                                        </td>*@
+                                </tr>
+                            }
+                        }
+                    </tbody>
+
+                </table>
+                <br />
+                <br />
+
+                <div class="form-group row">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="col-md-6 col-lg-offset-5">
+                            <input type="button" value="Clear" class="btn btn-success" style="margin-left:15px; width:250px;" id="btnMClear" />
+                            <input type="button" id="SaveAttendancedet" value="Save" class="btn btn-success" style="margin-left:15px;width:250px" />
+                        </div>
+                    </div>
+                </div>
+              
+            </div>
+        }
+    </body>
+
+</html>
+
+<script>
+    function GetSubjectBasedData(subjectId) {
+        // var divValue = $(this).val();
+
+        
+        $.ajax({
+            type: "Post",
+            url: '/OMRSheet/getSubjectDtls',
+            data: { subjectId: subjectId },
+            success: function (data) {
+                if (data.length > 0) {
+                    
+
+                    $("#tbody_add_Grid").empty();
+                    var slNo = 1;
+                    $.each(data, function (id, attentdance) {
+
+                        var markup = "<tr><td>" + slNo + "</td><td>" + attentdance.Day + "</td><td>" + dateFormat(new Date(parseInt((attentdance.ECT_ExamDate).match(/\d+/)[0]))) + "</td><td id = 'startTime'>" + Formattime(new Date(parseInt((attentdance.ECT_Exam_Start_Time).match(/\d+/)[0]))) + "</td><td>" + Formattime(new Date(parseInt((attentdance.ECT_Exam_End_Time).match(/\d+/)[0]))) + "</td><td>" + attentdance.TradeYr + "</td><td>" + attentdance.Subject + "</td><td style='width:30%;'>" + "<input type='text' id='txtName'  value=''>" + "</td><td>" + "<input class= 'btn btn-success' style='align:center; margin:10px;' type='file' id='UploadDocsFile' onchange = 'Upload()'>" + "</td><td>" + "<input class= 'btn btn-success' style='align:center; margin:10px;' type='file' id='UploadExcelFile' onchange = 'ExcelUpload()'>" + "</td></tr>";
+                        $("#tbody_add_Grid").append(markup);
+                        slNo++;
+                    });
+                }
+            }
+        });
+    }
+
+    function GetDivisionBasedData(DivId) {
+        
+        $.ajax({
+            type: "Post",
+            url: "/OMRSheet/CenterListBasedOnDivId",
+            data: { DivId: DivId },
+            success: function (data) {
+                if (data.length > 0) {
+                    $("#ExamCntrId").empty();
+                    $.each(data, function (key, value) {
+                        $("#ExamCntrId").append($("<option></option>").val(value.Value).html(value.Text));
+                    });
+                    $("#ExamCntrId option:selected").index(0);
+                    $("#ExamCntrId").trigger('change');
+                }
+            }
+        });
+    }
+
+    function dateFormat(d) {
+        console.log(d);
+        return (d.getDate() + "").padStart(2, "0")
+            + "/" + ((d.getMonth() + 1) + "").padStart(2, "0")
+            + "/" + d.getFullYear();
+    }
+
+    function Formattime(t) {
+        console.log(t);
+        return (t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + "");//.padStart(2, "0")
+        //+ "/" + ((d.getMonth() + 1) + "").padStart(2, "0")
+        //+ "/" + d.getFullYear();
+    }
+</script>

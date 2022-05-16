@@ -1,0 +1,450 @@
+﻿
+@{
+    ViewBag.Title = "Print_markscard";
+}
+<style>
+    .h4, .h5, h4, h5 {
+        color: #000;
+    }
+
+    .banner {
+        background-image: url('../../Content/frontend/images/inner-bann.png');
+        padding: 0 0;
+        min-height: 150px !important;
+        background-color: transparent;
+        display: block;
+    }
+
+    .banner-dott {
+        background: none !important;
+    }
+
+    .clearfix {
+        margin-bottom: 10px;
+    }
+
+    element.style {
+    }
+
+    .card {
+        box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        margin-bottom: 1rem;
+    }
+
+    .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1.25rem;
+    }
+
+
+
+    .card {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        margin: 5rem 0;
+        padding: 2em 2em;
+    }
+
+    .input-group-text {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: .375rem .75rem;
+        margin-bottom: 0;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        text-align: center;
+        white-space: nowrap;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+    }
+
+    .custom-file-input {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: calc(2.25rem + 2px);
+        margin: 0;
+        opacity: 0;
+    }
+
+    .input-group {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-align: stretch;
+        align-items: stretch;
+        width: 100%;
+    }
+
+        .input-group > .custom-file {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+        .input-group > .input-group-append > .btn, .input-group > .input-group-append > .input-group-text, .input-group > .input-group-prepend:first-child > .btn:not(:first-child), .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child), .input-group > .input-group-prepend:not(:first-child) > .btn, .input-group > .input-group-prepend:not(:first-child) > .input-group-text {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .input-group > .custom-file, .input-group > .custom-select, .input-group > .form-control, .input-group > .form-control-plaintext {
+            position: relative;
+            -ms-flex: 1 1 0%;
+            flex: 1 1 0%;
+            min-width: 0;
+            margin-bottom: 0;
+        }
+
+    .custom-file-label {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1;
+        height: calc(2.25rem + 2px);
+        padding: .375rem .75rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        box-shadow: none;
+    }
+
+    .input-group-append, .input-group-prepend {
+        display: -ms-flexbox;
+        display: flex;
+    }
+
+    .custom-control-label::before, .custom-file-label, .custom-select {
+        transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    label {
+        display: inline-block;
+        margin-bottom: .5rem;
+    }
+
+    .form-group {
+        margin: 20px 20px;
+        min-height: 30px;
+    }
+
+    .agile-logologinblock {
+    }
+
+    .card-header h3 {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .card-header h4 h5 {
+        text-align: center;
+        color: #000;
+    }
+
+    .card-title h4 h5 {
+        text-align: center;
+        color: #000;
+    }
+
+    select, textarea {
+        min-width: 200px;
+        padding: 7px 10px;
+    }
+
+    #excltable {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: inherit;
+        width: 100%;
+    }
+
+        #excltable td, #excltable th {
+            border: 1px solid #e9e8e8;
+            padding: 5px 20px;
+            text-align: left;
+            vertical-align: middle;
+            height: 66px;
+        }
+
+        #excltable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #excltable tr:hover {
+            background-color: #ddd;
+        }
+
+        #excltable th {
+            padding: 20px 20px;
+            text-align: center;
+            vertical-align: middle;
+            background-color: #FFCD37;
+            color: #fff;
+        }
+
+ 
+</style>
+
+<div class="classes" id="classes" style="min-height:1718px;">
+
+    <form action="/action_page.php" method="post">
+
+
+        <div class="col-md-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Update Marks Card</h3>
+                    <h3 class="card-title">Government of Karnataka</h3>
+                    <h3 class="card-title">Commissionerate of Industrial Training & Employment, Bengaluru-29</h3>
+                    <h3 class="card-title">Provisional "C" Form for the All India Trade Test ( CTS DUAL  ) for the 1<sup>st</sup> Year July-2019</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form>
+                    <div class="card-body">
+                        <div class="card-body">
+                            <div class="table-responsive">
+
+                                <table id="example" class="display table-bordered" style="width:100%">
+
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>Sl.no</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom"></td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"></td>
+                                        <td width="113" valign="top"></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>CENTER NUMBER</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="CENTER NUMBER" name="CENTER NUMBER" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>CENTER NAME</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="text" placeholder="CENTER NAME" name="CENTER NAME" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>INSTITUTE NAME</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="INSTITUTE NAME" name="INSTITUTE NAME" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>TRADE      NAME</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="text" placeholder="TRADE      NAME" name="TRADE      NAME" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>ROLL NUMBER</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="ROLL NUMBER" name="ROLL NUMBER" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>TRAINEE NAME</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="text" placeholder="TRAINEE NAME" name="TRAINEE NAME" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>FATHER NAME</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="FATHER NAME" name="FATHER NAME" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>Date of Birth</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="date" placeholder="Date of Birth" name="Date of Birth" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>PRACTICAL MARK</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="PRACTICAL MARK" name="PRACTICAL MARK" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>PRACTICAL SESSIONAL</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="text" placeholder="PRACTICAL SESSIONAL" name="PRACTICAL SESSIONAL" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>PRACTICAL TOTAL</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="PRACTICAL TOTAL" name="PRACTICAL TOTAL" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>PRACTICAL PASS DATE</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="date" placeholder="PRACTICAL PASS DATE" name="PRACTICAL PASS DATE" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>THEORY MARK</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="THEORY MARK" name="THEORY MARK" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>THEORY SESSIONAL MARK</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="text" placeholder="THEORY SESSIONAL MARK" name="THEORY SESSIONAL MARK" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>THEORY TOTAL MARKS</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="THEORY TOTAL MARKS" name="THEORY TOTAL MARKS" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>THEORY PASS DATE</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="date" placeholder="THEORY PASS DATE" name="THEORY PASS DATE" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>ES MARK</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="ES MARK" name="ES MARK" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>ES PASS DATE</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="date" placeholder="ES PASS DATE" name="ES PASS DATE" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>WCS MARK</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="WCS MARK" name="WCS MARK" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>WCS SESSIONAL</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="text" placeholder="WCS SESSIONAL" name="WCS SESSIONAL" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>WCS TOTAL MARK</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="WCS TOTAL MARK" name="WCS TOTAL MARK" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>WCS PASS DATE</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="date" placeholder="WCS PASS DATE" name="WCS PASS DATE" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>ED MARK</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="ED MARK" name="ED MARK" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>ED SESSIONAL</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="text" placeholder="ED SESSIONAL" name="ED SESSIONAL" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p> ED TOTAL</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="ED TOTAL" name="ED TOTAL" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>  ED PASS    DATE</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="date" placeholder="ED PASS    DATE" name="ED PASS    DATE" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>TOTAL MARKS</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="TOTAL MARKS" name="TOTAL MARKS" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>OVER ALL STATUS</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="text" placeholder="OVER ALL STATUS" name="OVER ALL STATUS" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" nowrap="nowrap" valign="bottom"><p>FATHER NAME</p></td>
+                                        <td width="160" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="FATHER NAME" name="FATHER NAME" required>
+                                        </td>
+                                        <td width="213" nowrap="nowrap" valign="bottom"><p>Name &amp; Address of Establishment</p></td>
+                                        <td width="113" valign="top">
+                                            <input type="text" placeholder="Address of Establishment" name="Address of Establishment" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="180" nowrap="nowrap" valign="bottom"><p></p></td>
+                                        <td width="142" valign="bottom"><p></p></td>
+                                        <td width="124" nowrap="nowrap" valign="bottom"><p></p></td>
+                                        <td width="195" valign="bottom"><p>​</p></td>
+                                    </tr>
+                                    <tr></tr>
+
+                                </table>
+                                <br/>
+                                <br/>
+                                <a href="#" class="btn btn-success">Submit</a>
+                                <a href="#" class="btn btn-danger">Canel</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- /.card-body -->
+
+
+                </form>
+            </div>
+        </div>
+
+
+
+
+    </form>
+    <!-- modal popup -->
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog">
+        <!-- Modal1 -->
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" style="float:right!important;">&times;</button>
+                    <h4>NCVT / SCVT Exams</h4>
+                    <img src="~/Content/frontend/images/1.jpg" alt=" " class="img-responsive">
+                    <h5>Supplementary Portions</h5>
+                    <p>
+                        Industrial Training and Employment (DITE) manages the functioning
+                        of operation of Government Industrial Training Institutes (ITIs) and monitoring of
+                        Government Aided ITIs and Private ITIs.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //Modal1 -->
+</div>
+
+<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript" class="init">
+
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+
+</script>
+

@@ -1,0 +1,231 @@
+﻿@model Models.ExamNotification.DSCModel
+
+@{
+    ViewBag.Title = "RegisterDSCDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/DigitalSignCerti.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#Save").hide();
+
+        $("#DSCUpdation").click(function (e) {
+            e.preventDefault();
+        });
+    });
+
+    function SignInWithDSCLogin(e) {
+        debugger;
+        //e.preventDefault();
+        if (!isBrowserSupportsExtension() || !isExtensionInstalled()) {
+            $("#errLogin").html("Please Download Chrome Extension.");
+            return;
+        }
+        DSCSignRegSignedExtension.getSelectedCertificate()
+            .then(
+                function (CertInfo) {
+                    var jobj = JSON.parse(CertInfo);
+                    var SelCertSubj = jobj.SelCertSubject.split(',');
+
+                    $("#DSCName").val(SelCertSubj[0].split('=')[1]);
+                    $("#SerialNo").val(SelCertSubj[1].split('=')[1]);
+                    $("#Place").val(SelCertSubj[2].split('=')[1]);
+                    $("#PhoneNumber").val(SelCertSubj[4].split('=')[1]);
+                    $("#ExpiryDate").val(jobj.ExpDate);
+                    $("#PublicKey").val(jobj.PublicKey);
+                    $("#ValidFromDate").val(jobj.ValidFrom);
+                    $("#issuerEmail").val(jobj.eMail);
+                    $("#certifyingAuthority").val(jobj.issuerName.Name.split(',')[2].split('=')[1]);
+                    $("#createuser").show();
+                    $("#DSCUpdation").hide();
+
+                    $("#Save").show();
+                },
+                function (errmsg) {
+                    $("#ResultDisplay").html(errmsg.message);
+                    $("#Save").hide();
+                }
+            );
+    }
+
+</script>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+
+                        @*<div class="breadcrumb font">
+                                <span class="inline odd first"><a href="/Home/index1">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">
+                                    Notification Status
+                                </span>
+
+                            </div>*@
+                        <li class="breadcrumb-item"><a href="/Home/index1">Home</a></li>
+                        <li class="breadcrumb-item active">Register DSC Key</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Details Of Work</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                @using (Html.BeginForm("RegisterDSCDetails", "Notification", FormMethod.Post, new { @id = "structure" }))
+                {
+                    @Html.AntiForgeryToken();
+                    <div class="card-body">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                        @if (ViewBag.Status != null && ViewBag.Status == "Success")
+                        {
+                            <h4 class="text-success">DSC Key Registered Successfully</h4>
+                        }
+                        else if (ViewBag.Status != null && ViewBag.Status == "Failed")
+                        {
+                            <h4>Failed to Insert.</h4>
+                        }
+                        @if (ViewBag.Status != "Success")
+                        {
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo">DSC Name<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(Model => Model.DSCName, new { @class = "form-control", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo">Place<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(Model => Model.Place, new { @class = "form-control", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo">Issuer Email<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(Model => Model.issuerEmail, new { @class = "form-control", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo">Serial No<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(Model => Model.SerialNo, new { @class = "form-control", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo">Expiry Date<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(Model => Model.ExpiryDate, new { @class = "form-control", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo">ValidFromDate<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(Model => Model.ValidFromDate, new { @class = "form-control", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo">Certifying Authority<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(Model => Model.certifyingAuthority, new { @class = "form-control", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    @Html.HiddenFor(Model => Model.PhoneNumber)
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo">Public Key<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextAreaFor(Model => Model.PublicKey, new { @class = "form-control", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        @if (ViewBag.Status != "Success")
+                        {
+                            <div class="row">
+                                <div class="col-md-7">
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="button" id="DSCUpdation" value="Link DSC Key" class="btn btn-info" style="margin-left:15px" onclick="SignInWithDSCLogin();" />
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="submit" name="submit" class="btn btn-primary" id="Save" value="Save" style="float:right">&nbsp;Save&nbsp;</button>
+                                </div>
+                                <div class="col-md-1">
+                                    @*<button type="submit" name="submit" class="btn btn-info" id="Sign" value="Sign" style="float:right">&nbsp;&nbsp;Sign&nbsp;&nbsp;</button>*@
+                                </div>
+                                <div class="col-md-2">
+                                    @*<button type="submit" name="submit" class="btn btn-success" id="Generate Work ID" value="Generate Work ID" style="float:right">Generate Work ID</button>*@
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <!-- Large modal -->
+                    <button type="button" class="btn btn-primary" id="errorbutton" style="display:none" data-toggle="modal" data-target=".modal">Large modal</button>
+
+                    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                </div>
+                                <div class="modal-body" id="ErrorMSG">
+                                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                }
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+
+
+
+
+@*@section scripts {
+
+    }*@
+

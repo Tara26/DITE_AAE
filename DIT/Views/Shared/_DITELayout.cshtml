@@ -1,0 +1,308 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<!-- Head -->
+<head>
+    <title>Department of Industrial Training and Employment (DITE)  | Home :: DITE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Department of Industrial Training and Employment (DITE)" />
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryDataTable")
+    @Scripts.Render("~/bundles/Bootbox")
+    @Scripts.Render("~/bundles/jqueryUi")
+
+    @Styles.Render("~/Content/css")
+
+    <link href="//fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&amp;subset=cyrillic,cyrillic-ext,greek,latin-ext,vietnamese" rel="stylesheet">
+
+    @*<script src="~/Content/frontend/accessibility-controls/js/textResizestyle1.js"></script>*@
+    @*<script src="~/Content/frontend/accessibility-controls/js/jquery_cookie.js"></script>*@
+
+    @*<script>
+            $(function () {
+                $('input').keydown(function (e) {
+                    if (e.keyCode == 13) {
+                        $("input[value='Login']").focus().click();
+                        return false;
+                    }
+                });
+            });
+        </script>*@
+</head>
+
+<!-- Body -->
+<body>
+
+    <!-- banner -->
+    <div class="banner">
+        <div class="w3ls-slider">
+            <div class="banner-dott">
+                <div class="header-top">
+                    @if (Session["UserRole"] != null)
+                    {
+                    <div class="header-top" style="background:#ffffff40;padding: 5px 0 0 0">
+
+
+                        <div class="container">
+                            <div class="ht-left" style="float:left;">
+                                <div class="mail-service">
+                                    <i class=" fa fa-envelope"></i>
+                                    <a href="mailto:help.DPAR@karnataka.gov.in">help[dot]dte[at]karnataka[dot]gov[dot]in</a>
+                                </div>
+                                <div class="phone-service ht-left">
+                                    <i class=" fa fa-phone"></i>
+                                    +91 080 2237 3845
+                                </div>
+
+                            </div>
+
+
+                            <div class="ht-right" style="float:right;">
+                                <div class="agile-logologinblock">
+                                    <p style="padding:5px 5px; color:#fff">
+
+                                        Kannada |     <a class="readmore" href="#" data-toggle="modal" data-target="#reg">Login</a>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Modal -->
+
+                            <div class="modal fade" id="reg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel" style="color: #010480; padding-top: 15px; font-size: 27px; text-align: center; font-family: sans-serif;">DIT-Login  </h5>
+                                            <button type="button" class="close" style="outline:none;" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true" style="float:right!important; width: 0%;">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" style=" min-height: 450px;">
+                                            <form action="/action_page.php" method="post">
+                                                <div class="col-md-12">
+                                                    <label for="uname"><b>Username</b></label>
+                                                    <input type="text" placeholder="Enter Username" id="txtUserName" name="UserName" required>
+
+                                                    <label for="psw"><b>Password</b></label>
+                                                    <input type="password" placeholder="Enter Password" id="txtPassword" name="Password" required>
+
+                                                    <label for="captcha"><b>Captcha</b></label>
+                                                    <div style="display:inline-block;width:320px;">
+                                                        <div class="col-md-6" style="display: inline-block;width: 150px;background-image: url('../../Content/img/CaptchaBackground.jpg');">
+                                                            <input class=" custom_style" id="txtInputCaptcha" name="txtInputCaptcha" readonly style="min-width: 130px; background:transparent; font-size:25px" type="text" value="87818" />
+                                                        </div>
+                                                        <div style="display:inline-block;">
+                                                            <button id="imgRfreshCaptura" type="button" style="background-color:whitesmoke">
+                                                                <img src="~/Content/img/Refresh.png" alt="RefreshCaptcha" style="cursor:pointer; height:30px; width:30px; ">
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <input autocomplete="off" class="form-control" data-val="true" data-val-required="The Enter Captcha field is required." id="txtEnteredCaptcha" maxlength="5" name="enteredCaptcha" style="min-width: 30px" type="text" value="" />
+                                                    <br />
+                                                    <label>
+                                                        <input type="checkbox" checked="checked" name="remember"> Remember me
+                                                    </label><br /><br />
+                                                    <input type="button" id="btnSubmit" value="Login" class="btn btn-primary" style="margin-left:15px" />
+                                                    <div class="clearfix"></div>
+                                                    <div class="col-md-12">
+                                                        @*<button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>*@
+                                                        <span class="psw">Forgot <a href="#">Password?</a></span>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="ht-right">
+
+                                <div class="page white-page-bg" style="width:250px;">
+                                    <div style="float: left">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<a class='yellowblack' href='#'><img src="~/Content/frontend/accessibility-controls/images/1.png" title='Yellow on Black' style="float: left" /></a>
+                                        <a class='yellowblue' href='#'><img src='~/Content/frontend/accessibility-controls/images/2.png' title='Yellow on Blue' style="float: left" /></a>
+                                        <a class='fushblack' href='#'><img src='~/Content/frontend/accessibility-controls/images/3.png' title='Fuchsia on Black' style="float: left" /></a>
+                                        <a class='standards' href='#'><img src="~/Content/frontend/accessibility-controls/images/4.png" title='Standard' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    <div style="float: left">
+                                        <a class='decreaseFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/aSmall.png' title='Font Decrease' style="float: left" /></a>
+                                        <a class='resetFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/a_reset.png' title='Standard' style="float: left" /></a>
+                                        <a class='increaseFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/aBig.png' title='Font Increase' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    <div style="float: left">
+                                        <a class='defaultspace' href='#'><img src='~/Content/frontend/accessibility-controls/images/default.png' title='Narrow' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                                        <a class='widest' href='#'><img src='~/Content/frontend/accessibility-controls/images/wider.png' title='Wider' style="float: left" /></a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="header-top">
+                        <div class="container banner-drop">
+                            <div class="header row">
+                                <div class="agile-logo col-md-2">
+                                    <p class="img-center"><img src="~/Content/frontend/images/dite-logo.png" alt="dite-logo" /></p>
+                                </div>
+                                <div class="agile-logoheader col-md-8">
+                                    <h1>
+                                        <a class="navbar-brand" href="DITEindex.html">
+                                            Department of Industrial Training and Employment<br>
+                                            <span class="agile-logoheadertext">Government of Karnataka</span>
+                                        </a>
+                                    </h1>
+                                </div>
+                                <div class="agile-logo col-md-2">
+                                    <p class="img-center"><img src="~/Content/frontend/images/gok-en-wh-sml.png" alt="gok-logo" /></p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    @if (Session["UserRole"] != null)
+                    {
+                        Html.RenderAction("Menu", "Home");
+                    }
+
+                    <!-- nav -->
+                    @RenderBody()
+
+
+
+                   
+                    <div class="wthree_copy_right">
+                        <div class="container">
+                            <p>
+                                Content Owned and Maintained by : Department of Industrial Training and Employment (DITE), Government of Karnataka<br>
+                                Copyright &copy; 2020. All Rights &reg; Reserved. <br> Design &amp; Developed by <a href="https://csg.karnataka.gov.in/">Center for Smart Governance-CSG</a>
+                            </p>
+
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //here ends scrolling icon -->
+</body>
+</html>
+
+@Scripts.Render("~/bundles/jqueryFlex")
+@Scripts.Render("~/bundles/carousel")
+@Scripts.Render("~/bundles/SmoothScroll")
+@Scripts.Render("~/bundles/move")
+@Scripts.Render("~/bundles/easing")
+@Scripts.Render("~/bundles/steller")
+@RenderSection("scripts", required: false)
+
+
+<script>
+    $(document).ready(function () {
+        $("#imgRfreshCaptura").click(function (e) {
+            $("#txtInputCaptcha").val(generate());
+        });
+        $("#txtInputCaptcha").val(generate());
+        jQuery('.stellarnav').stellarNav({
+            theme: 'light',
+            breakpoint: 960,
+            position: 'right',
+            phoneBtn: '18009997788',
+
+        });
+    });
+    //Testimonials script js start
+    //start - slider - script
+    $(window).on('load', function () {
+        $('.flexslider').flexslider({
+            animation: "slide",
+            start: function (slider) {
+                $('body').removeClass('loading');
+            }
+        });
+    });
+    //end
+    jQuery(document).ready(function ($) {
+        //start - smooth - scrolling
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+            $('html,body').animate({ scrollTop: $(this.hash).offset().top }, 1000);
+        });
+        //end
+        $().UItoTop({ easingType: 'easeOutQuart' });
+        //Owl-Carousel-JavaScript
+        $("#owl-demo").owlCarousel({
+            items: 3,
+            lazyLoad: true,
+            autoPlay: true,
+            pagination: true,
+        });
+        $("#txtInputCaptcha").val(generate());
+        //end
+
+    });
+</script>
+<script>
+    function generate() {
+        return Math.floor(Math.random() * 90000) + 10000;
+    }
+    $("#btnSubmit").click(function (e) {
+        var isValid = 1;
+        var userName = $('#txtUserName').val(); //getElementById("txtUserName");
+        if (userName == "" || userName == null) {
+            bootbox.alert("Please enter User Name");
+            isValid = 0;
+        }
+        if (isValid) {
+            var userPassword = $('#txtPassword').val(); //getElementById("txtUserName");
+            if (userPassword == "" || userPassword == null) {
+                bootbox.alert("Please enter User Password");
+                isValid = 0;
+            }
+        }
+        if (isValid) {
+            var CapturaText = $('#txtInputCaptcha').val();
+            var EnteredCapturaText = $('#txtEnteredCaptcha').val();
+            if (CapturaText != EnteredCapturaText) {
+                bootbox.alert("Please enter valid Captcha.");
+                isValid = 0;
+            }
+        }
+        if (isValid == 1) {
+            //var objUserInfo = new Object();
+            //objUserInfo.UserName = userName;
+            //objUserInfo.UserPassword = userPassword;
+
+            $.ajax({
+                url: "/Home/Index",
+                data: {
+                    UserName: userName,
+                    //UserPassword: userPassword
+                    Password: userPassword
+                }, //data: { dscUserApprove: objuserDet},
+                type: 'post',
+                success: function (result) {
+                    if (result == true) {
+                        window.location.href = "/Home/DITEIndex";
+                    }
+                    else {
+                        bootbox.alert("Invalid user name or password");
+                    }
+                }, error: function (result) {
+                    bootbox.alert("Error", "Invalid user name or password");
+                }
+            });
+        }
+    });
+</script>
+

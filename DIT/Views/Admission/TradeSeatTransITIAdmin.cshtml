@@ -1,0 +1,499 @@
+﻿@*@model Models.ExamNotification.ExamCalendarMaster*@
+@model Models.Admission.SeatAvailabilityMaster
+
+@{
+    //Layout = null;
+    ViewBag.Title = "SeatAvailability";
+    int sno = 1;
+}
+<link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Content/frontend/js/bootstrap.js"></script>
+<script src="~/Scripts/bootbox.js"></script>
+<script src="~/Scripts/bootbox.min.js"></script>
+<script src="~/Scripts/bootbox.locales.min.js"></script>
+<script src="~/Content/frontend/js/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+<style>
+    button {
+        background-color: #5A8CD3;
+        color: white;
+    }
+
+    button {
+        background-color: #5A8CD3;
+        color: white;
+    }
+
+    .content-box-gray .content {
+        overflow: hidden;
+        padding: 10px;
+        font-size: 15px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border: 1px solid gray;
+        color: #3385FF;
+    }
+
+    .content-box-gray .title {
+        height: 50px;
+        line-height: 30px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-size: 18px;
+        font-weight: bold;
+        font-family: verdana;
+        display: block;
+        color: white;
+        display: block;
+        padding: 10px;
+        border: 1px solid gray;
+        border-bottom: none;
+    }
+</style>
+<br /><br /><br />
+
+<h4>
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#tab_1" id="tab1" data-toggle="tab">View seat availability</a>
+        </li>
+        <li>
+            <a href="#tab_2" id="tab2" data-toggle="tab">Add New trades</a>
+        </li>
+    </ul>
+</h4>
+<div class="tab-content">
+    <div class="tab-pane fade in active" id="tab_1">
+        <div class="container" id="datatable" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <h4 style="text-align:center">View Seat availability</h4>                        
+                        <br /><br />
+                        <div style="overflow-y:scroll;overflow-x:scroll">
+                            <table class="table table-bordered table-hover" id="ReadyToSentGridViewSeat">
+                                <thead>
+                                    <tr>
+                                        <th align="center">Sl No.</th>
+                                        <th>MIS Code</th>
+                                        <th>Division Code</th>
+                                        <th>Division Name</th>
+                                        <th>District Code</th>
+                                        <th>District Name</th>
+                                        <th>Institute Type</th>
+                                        <th>Institute Id</th>
+                                        <th>Institute Name</th>
+                                        <th>Trade Code</th>
+                                        <th>Trade Name</th>
+                                        <th>Seats per unit</th>
+                                        <th>Unit</th>
+                                        <th>Govt/GIA seats</th>
+                                        <th>PPP Seats</th>
+                                        <th>IMC/Private/ManagementSeats</th>
+                                        <th>IsPPP</th>
+                                        <th>Shift</th>
+                                        <th>DualSystemTraining</th>
+                                        <th>Action</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color:Black;" id="Texamnotification">
+                                    @foreach (var item in Model.seatAvailabilityMaster)
+                                    {
+                                        <tr>
+                                            <td>@(sno++)</td>
+                                            <td>@item.MISCode</td>
+                                            <td>@item.division_id</td>
+                                            <td>@item.Division_name</td>
+                                            <td>@item.dist_id</td>
+                                            <td>@item.dist_name</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.units</td>
+                                            <td>@item.ShiftId</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.shifts</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td><center><span class="glyphicon glyphicon-pencil" data-toggle=" modal" onclick="getDataBGV(@item.MISCode )" style="color:black"></span>&nbsp;&nbsp;</center></td>
+                                            <td>@item.Trade_ITI_Id</td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab_2">
+        <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div>
+                <h4 style="text-align:center">Add new trade</h4>
+                <br /><br />
+                <div class="form-group" id="ddList">
+                    <div class="row">
+                        <div class="col-lg-1">
+                            <label for="ddlNewtrade">Select new trade</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlNewtradeName">
+                                <option value="Select">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtAgencyRegnNo">Number of units in trade</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlUnitstrade">
+                                <option value="Select">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtAgencyRegnNo">Is PPP</label>
+                        </div>
+                        <div class="col-lg-2">
+                            @Html.DropDownListFor(model => model.IsPPP, new List<SelectListItem>()
+                                {
+                             new SelectListItem() { Text = "Yes", Value = "True" },
+                              new SelectListItem() { Text = "No", Value = "False"}
+                            }, "Select", new { @id = "IsPPP", @class="form-control" })
+
+                            @*<select class="form-control" id="ddlisPPP">
+                        <option value="Select">Select Yes/No</option>
+                        <option value="Select">Yes</option>
+                        <option value="Select">No</option>
+                    </select>*@
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtAgencyRegnNo">Is Dual system training</label>
+                        </div>
+                        <div class="col-lg-2">
+                            @Html.DropDownListFor(model => model.DualSystemTraining, new List<SelectListItem>()
+                               {
+                            new SelectListItem() { Text = "Yes", Value = "True" },
+                             new SelectListItem() { Text = "No", Value = "False"}
+                           }, "Select", new { @id = "DualSystemTraining", @class="form-control" })
+
+                            @*<select class="form-control" id="ddlSystemtraining">
+                        <option value="Select">Select Yes/No</option>
+                        <option value="Select">Yes</option>
+                        <option value="Select">No</option>
+                    </select>*@
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group row">
+                    <div class="col-lg-12 col-md-12">
+                        <div style="text-align: left;">
+                            <label style="font-size:15px;color:black">Upload Document</label>
+                            <div style="">
+                                <input type="file" id="SeatAvailfileUpload" name="SeatAvailfileUpload" style="color:black;font-size:15px;text-align: left;">
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <input type="button" value="Clear" id="btnMClear" onclick="BtnClear()" class="btn btn-success" style="width:100px;" />
+                            <input type="submit" id="btnGridSave" value="Submit" class="btn btn-success" style="width:100px;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div style="overflow-y:scroll;overflow-x:scroll">
+                            <table class="table table-bordered table-hover" id="ReadyToSentGridViewSeat2">
+                                <thead>
+                                    <tr>
+                                        <th align="center">Sl No.</th>
+                                        <th>MIS Code</th>
+                                        <th>Division Code</th>
+                                        <th>Division Name</th>
+                                        <th>District Code</th>
+                                        <th>District Name</th>
+                                        <th>Institute Type</th>
+                                        <th>Institute Id</th>
+                                        <th>Institute Name</th>
+                                        <th>Trade Code</th>
+                                        <th>Trade Name</th>
+                                        <th>Seats per unit</th>
+                                        <th>Unit</th>
+                                        <th>Govt/GIA seats</th>
+                                        <th>PPP Seats</th>
+                                        <th>IMC/Private/ManagementSeats</th>
+                                        <th>IsPPP</th>
+                                        <th>Shift</th>
+                                        <th>DualSystemTraining</th>
+                                        <th>Action</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.seatAvailabilityMaster)
+                                    {
+                                        <tr>
+                                            <td>@(sno++)</td>
+                                            <td>@item.MISCode</td>
+                                            <td>@item.division_id</td>
+                                            <td>@item.Division_name</td>
+                                            <td>@item.dist_id</td>
+                                            <td>@item.dist_name</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.units</td>
+                                            <td>@item.ShiftId</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.shifts</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+    $("#ReadyToSentGridViewSeat").DataTable();
+    $(document).ready(function () {
+        //$("#btnMClear").bind("click", function () {
+        //    //$("#ddlNewtradeName")[0].selectedIndex = 0;
+        //    $("#ddlNewtradeName").val("");
+        //    $("#ddlUnitstrade").val("");
+        //    $("#IsPPP").val("");
+        //    $("#DualSystemTraining").val("");
+        //});
+        
+
+        GetTradeName();
+        GetTradeUnit();
+        GetIsPPP();
+        GetSysTraining();
+
+    });
+    function BtnClear() {
+        $('#ddlNewtradeName').val("");
+        $('#ddlUnitstrade').val("");
+        $('#IsPPP').val("");
+        $('#DualSystemTraining').val("");
+        $('#SeatAvailfileUpload').val("");
+    }
+    
+
+    function GetTradeName() {
+        var Bu = $("#ddlNewtradeName");
+      
+        $.ajax({
+            url: "/Admission/GetTradeNameTypes",
+            type: "Get",
+            success: function (response) {
+                Bu.empty().append('<option selected="selected" value="0">Select</option>');
+                $.each(response, function () {
+                    Bu.append($("<option value='" + this['trade_id'] + "'>" + this['trade_name'] + "</option>"));
+                });
+            }
+
+        });
+    }
+
+    //function GetTradeName() {
+    //    $("#ddlNewtradeName").empty();
+    //    $("#ddlNewtradeName").append('<option value="choose">choose</option>');
+    //    
+    //    $.ajax({
+    //        url: "/Admission/GetTradeNameTypes",
+    //        type: 'Get',
+    //        contentType: 'application/json; charset=utf-8',
+    //        success: function (data) {
+    //            if (data != null || data != '') {
+    //                $.each(data, function () {
+    //                    $("#ddlNewtradeName").append($("<option/>").val(this.trade_id).text(this.trade_name));
+    //                });
+    //            }
+
+    //        }, error: function (result) {
+    //            alert("Error", "something went wrong");
+    //        }
+    //    });
+    //}
+
+
+    function GetTradeUnit() {
+        var Bu = $("#ddlUnitstrade");
+        $.ajax({
+            url: "/Admission/GetUnitTradeTypes",
+            type: "Get",
+            success: function (response) {
+                Bu.empty().append('<option selected="selected" value="0">Select</option>');
+                $.each(response, function () {
+                    Bu.append($("<option value='" + this['u_id'] + "'>" + this['units'] + "</option>"));
+                });
+            }
+
+        });
+    }
+    function GetIsPPP() {
+        var Bu = $("#ddlisPPP");
+        $.ajax({
+            url: "/Admission/GetTradeIsPPPTypes",
+            type: "Get",
+            success: function (response) {
+                Bu.empty().append('<option selected="selected" value="0">Select</option>');
+                $.each(response, function () {
+                    if (response.DualSystemTraining == 'true') {
+                        Bu.append($("<option value='" + this['Trade_ITI_seat_id'] + "'>" + this['IsPPP'] + "</option>"));
+                    }
+
+                });
+            }
+
+        });
+    }
+    //function GetIsPPP() {
+    //    var Bu = $("#ddlisPPP");
+    //    $.ajax({
+    //        url: "/Admission/GetTradeIsPPPTypes",
+    //        type: "Get",
+    //        success: function (response) {
+    //            Bu.empty().append('<option selected="selected" value="0">Select</option>');
+    //            $.each(response, function () {
+
+    //                Bu.append($("<option value='" + this['IsPPP'] + "'>" + this['IsPPP'] + "</option>"));
+    //            });
+    //        }
+
+    //    });
+    //}
+
+    function GetSysTraining() {
+        var Bu = $("#ddlSystemtraining");
+        $.ajax({
+            url: "/Admission/GetSysTrainingTypes",
+            type: "Get",
+            success: function (response) {
+                Bu.empty().append('<option selected="selected" value="0">Select</option>');
+                $.each(response, function () {
+
+                    Bu.append($("<option value='" + this['DualSystemTraining'] + "'>" + this['DualSystemTraining'] + "</option>"));
+                });
+            }
+
+        });
+    }
+
+    $(document).ready(function () {
+        var ReadyToSentGridViewSeat = $('#ReadyToSentGridViewSeat').DataTable();
+        ReadyToSentGridViewSeat.on('order.dt arch.dt', function () {
+            ReadyToSentGridViewSeat.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+
+    });
+
+    $(document).ready(function () {
+        var ReadyToSentGridViewSeat2 = $('#ReadyToSentGridViewSeat2').DataTable();
+        ReadyToSentGridViewSeat2.on('order.dt arch.dt', function () {
+            ReadyToSentGridViewSeat2.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+    });
+
+
+    //$(document).ready(function () {
+    //    $("#ReadyToSentGridViewSeat").DataTable();
+    //    
+    //
+    //    let SaveTrades = document.getElementById('btnGridSave');
+    //    SaveTrades.addEventListener('click', (ev) => {
+    //        ev.preventDefault();
+    //        if (ValidateData() == true) {
+    //            bootbox.confirm('Do you want to Save the Trade?', (confirma) => {
+    //                if (confirma) {
+    //                    return $(ev.target)[0].form.submit();
+    //                }
+    //            })
+    //        }
+
+    //    });
+
+
+    //});
+
+    $("body").on("click", "#btnGridSave", function () {
+        
+        var TradeIdData = {
+            Trade_ITI_Id: $("#ddlNewtradeName").val(),
+            UnitId: $("#ddlUnitstrade").val(),
+            IsPPP: $("#IsPPP").val(),
+            DualSystemTraining: $("#DualSystemTraining").val(),
+            ShiftId: 1,
+            SeatsPerUnit: 20,
+            SeatsTypeId: 1,
+            CreatedBy: 1
+
+        };
+        
+        $.ajax({
+            type: "POST",
+            url: "/Admission/InsertTradeSeat",
+            data: JSON.stringify(TradeIdData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+            success: function (data) {
+                //RatingloadData();
+                alert('Data');
+                //$('#RatingAddModel').modal('hide');
+                //$('.modal-backdrop').hide();
+                //$("#RatingEmployeeNumber").val(0);
+                //$("#CilentType").val(0);
+                //$("#CilentName").val(0);
+                //$("#Rating").val(0);
+                //$("#RatingComments").val("");
+
+            }
+
+        });
+
+
+    });
+
+
+</script>

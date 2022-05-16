@@ -1,0 +1,415 @@
+﻿@model Models.Admission.SeatAvailabilityMaster
+@{
+    ViewBag.Title = "SeatAvailabilityMaster";
+    int sno = 1;
+}
+
+<style>
+    button {
+        background-color: #5A8CD3;
+        color: white;
+    }
+
+    button {
+        background-color: #5A8CD3;
+        color: white;
+    }
+
+    .content-box-gray .content {
+        overflow: hidden;
+        padding: 10px;
+        font-size: 15px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border: 1px solid gray;
+        color: #3385FF;
+    }
+
+    .content-box-gray .title {
+        height: 50px;
+        line-height: 30px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-size: 18px;
+        font-weight: bold;
+        font-family: verdana;
+        display: block;
+        color: white;
+        display: block;
+        padding: 10px;
+        border: 1px solid gray;
+        border-bottom: none;
+    }
+</style>
+<br /><br /><br />
+<h4>
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="#tab_1" id="tab1" data-toggle="tab">View Seat availability</a>
+        </li>
+        <li>
+            <a href="#tab_2" id="tab2" data-toggle="tab">Update Seat availability</a>
+        </li>
+        <li>
+            <a href="#tab_3" id="tab3" data-toggle="tab">Add New trades</a>
+        </li>
+    </ul>
+</h4>
+<div class="tab-content">
+    <div class="tab-pane fade" id="tab_1">
+        <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px; width: 1450px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div class="form-group row">
+                            <div class="col-lg-12 modal-header">
+                                <h4 class="modal-title" style="background-color:cornflowerblue; color:white">View Seat availability</h4>
+                            </div>
+                        </div>
+                        <br />
+                        <div style="overflow-y:scroll;overflow-x:scroll">
+                            <table class="table table-bordered table-hover" id="tblGridSeatAvailability">
+                                <thead>
+                                    <tr>
+                                        <th align="center">Sl No.</th>
+                                        <th>MIS Code</th>
+                                        <th>Division Code</th>
+                                        <th>Division Name</th>
+                                        <th>District Code</th>
+                                        <th>District Name</th>
+                                        <th>Institute Type</th>
+                                        <th>Institute Id</th>
+                                        <th>Institute Name</th>
+                                        <th>Trade Code</th>
+                                        <th>Trade Name</th>
+                                        <th>Seats per unit</th>
+                                        <th>Unit</th>
+                                        <th>Govt/GIA seats</th>
+                                        <th>PPP Seats</th>
+                                        <th>IMC/Private/ManagementSeats</th>
+                                        <th>IsPPP</th>
+                                        <th>Shift</th>
+                                        <th>DualSystemTraining</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.seatAvailabilityMaster)
+                                    {
+                                        <tr>
+                                            <td>@(sno++)</td>
+                                            <td>@item.MISCode</td>
+                                            <td>@item.division_id</td>
+                                            <td>@item.Division_name</td>
+                                            <td>@item.dist_id</td>
+                                            <td>@item.dist_name</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.units</td>
+                                            <td>@item.ShiftId</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.shifts</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab_2">
+        <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1450px;">
+            <div>
+                <br>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-1">
+                            <label for="txtAgencyRegnNo">Course Type</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="CourseTypes">
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtAgencyRegnNo">Division</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="Divisions" onchange="GetDistrictList(this);">
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtAgencyRegnNo">District</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="Districts" onchange="GetTaluka(this);">
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtAgencyRegnNo">Taluka</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="Talukas">
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-lg-12" align="right">
+                    <a class=" btn btn-primary sendBtn3" onclick="GetProjectDetailsList()">Search</a>
+                </div>
+            </div>
+        </div>
+        <div class="container" id="EnableDataGridTab2" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1450px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="DivReadyToSentforApproval">
+                        <div class="form-group row">
+                            <div class="col-lg-12 modal-header">
+                                <h4 class="modal-title" style="background-color:cornflowerblue; color:white">Update seat availability</h4>
+                            </div>
+                        </div>
+                        <br />
+                        <div style="overflow-y:scroll;overflow-x:scroll;" id="update_panel">
+                            <table class="table table-bordered table-hover" id="tblUpdateSeatAvail"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab_3">
+        <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1450px;">
+            <div>
+                <br>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-1">
+                            <label for="txtAgencyRegnNo">Course Type</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="CourseTypes">
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtAgencyRegnNo">Division</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="Divisions" onchange="GetDistrictList(this);">
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtAgencyRegnNo">District</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="Districts" onchange="GetTaluka(this);">
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtAgencyRegnNo">Taluka</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="Talukas">
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-lg-12" align="right">
+                    <a class=" btn btn-primary sendBtn3">Search</a>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1450px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="DivReadyToSentforApproval">
+                        <div class="form-group row">
+                            <div class="col-lg-12 modal-header">
+                                <h4 class="modal-title" style="background-color:cornflowerblue; color:white">Add New trades</h4>
+                            </div>
+                        </div>
+                        <br />
+                        <div style="overflow-y:scroll;overflow-x:scroll">
+                            <table class="table table-bordered table-hover" id="tblGridAddNewtrades">
+                                <thead>
+                                    <tr>
+                                        <th align="center">MISCode</th>
+                                        <th>DivisionId</th>
+                                        <th>DivisionName</th>
+                                        <th>DistrictCode</th>
+                                        <th>DistrictName</th>
+                                        <th>InstituteType</th>
+                                        <th>InstituteId</th>
+                                        <th>InstituteName</th>
+                                        <th>TradeId</th>
+                                        <th>TradeName</th>
+                                        <th>Seatsperunit</th>
+                                        <th>Unit</th>
+                                        <th>Govt/GIA seats</th>
+                                        <th>PPP Seatsperunit</th>
+                                        <th>IMC/Private/Management Seats</th>
+                                        <th>IS PPP</th>
+                                        <th>Shift</th>
+                                        <th>DualSystemTraining</th>
+                                        <th>Action</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyReadyToSentGrid">
+                                    @foreach (var item in Model.seatAvailabilityMaster)
+                                    {
+                                        <tr>
+                                            <td>@(sno++)</td>
+                                            <td>@item.MISCode</td>
+                                            <td>@item.division_id</td>
+                                            <td>@item.Division_name</td>
+                                            <td>@item.dist_id</td>
+                                            <td>@item.dist_name</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.units</td>
+                                            <td>@item.ShiftId</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.shifts</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                            <td>
+                                                <a class="btn btn-primary RateAnalysis" id="btn3" href='javascript:;'>View</a>
+                                            </td>
+                                            <td>@item.Trade_ITI_Id</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="DivViewReadyToSentforApproval" style="display:none">
+                        <div class="form-group row">
+                            <div class="col-lg-12 modal-header">
+                                <h4 class="modal-title" style="background-color:cornflowerblue; color:white">Ready To Sent for Approval</h4>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="row">
+                            <div class="col-lg-2">Notification Number:</div>
+                            <div class="col-lg-2">
+                                <label id="Notif_Number"></label>
+                            </div>
+                            <div class="col-lg-2">Notification Description:</div>
+                            <div class="col-lg-2">
+                                <label id="Notif_Description"></label>
+                            </div>
+                            <div class="col-lg-2">Course Type:</div>
+                            <div class="col-lg-2">
+                                <label id="course"></label>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <div class="row">
+                            <div class="col-lg-2">Name of the Department:</div>
+                            <div class="col-lg-2">
+                                <label id="dept"></label>
+                            </div>
+                            <div class="col-lg-2">Status:</div>
+                            <div class="col-lg-2">
+                                <label id="Notif_Status"></label>
+                            </div>
+                            <div class="col-lg-2">Record Present:</div>
+                            <div class="col-lg-2">
+                                <label id="Notif_Present"></label>
+                            </div>
+                        </div>
+                        <br /><br />
+
+                        <div class="form-group row">
+                            <div class="col-lg-12 modal-header">
+                                <h4 class="modal-title" style="background-color:cornflowerblue; color:white">Calender Time Table</h4>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <div class="text-md-center">
+                                    <label for="txtAgencyRegnNo">Remarks</label>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.TextArea("Remarks", "", new { @class = "form-control", @style = "resize:none", @rows = "4", @cols = "100", @id = "Remarks", @Maxlength = "100" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Status</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    @*<div class="row">
+                            <div class="col-lg-offset-1 col-lg-2"> MIS Code:</div>
+                            <div class="col-lg-6"><label id="TradeITIseatidID"></label></div>
+                        </div>*@
+                    <br>
+                    <label id="TradeITIseatidID"></label>
+                    <div class="row">
+                        <div class="col-lg-offset-1 col-lg-2">
+                            Remarks
+                        </div>
+                        <div class="col-lg-6">
+                            <textarea id="RemarksTxt" name="RemarksTxt" rows="5" cols="33"> </textarea>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-offset-1 col-lg-2">
+                            Status
+                        </div>
+                        <div class="col-lg-4">
+                            <select class="form-control" id="StatusId"></select>
+                        </div>
+                        <div class="col-lg-5">
+                            <a class=" btn btn-primary" id="submitbtn" data-dismiss="modal" onclick="UpdateRemarksDetailsForSeat()">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@Scripts.Render("~/bundles/TradeSeatTransJD")
+<script type="text/javascript">
+
+    $("#EnableDataGridTab2").hide();
+
+</script>

@@ -1,0 +1,2268 @@
+﻿@model Models.Admission.SeatAvailabilityMaster
+@{
+    ViewBag.Title = "SeatAllocation";
+}
+<link href="~/Scripts/Admission/SeatAllocation.css" rel="stylesheet" />
+
+<br><br><br>
+<h4>
+    <ul class="nav nav-tabs">
+        @if (Session["UserName"].ToString().Equals("CaseWorker"))
+        {
+            <li>
+                <a href="#tab_1" id="tab1" data-toggle="tab">Rules for seat allocation</a>
+            </li>
+            <li>
+                <a href="#tab_2" id="tab2" data-toggle="tab">Update seat allocation rules</a>
+            </li>
+            <li>
+                <a href="#tab_3" id="tab3" data-toggle="tab">View seat allocation rules</a>
+            </li>
+        }
+        @if (Session["UserName"].ToString().Equals("Additional Director"))
+        {
+            <li>
+                <a href="#tab_4" id="tab4" data-toggle="tab">Review seat allocation rules</a>
+            </li>
+            <li>
+                <a href="#tab_3" id="tab3" data-toggle="tab">View seat allocation rules</a>
+            </li>
+        }
+        @if (Session["UserName"].ToString().Equals("Director") || Session["UserName"].ToString().Equals("Commissioner"))
+        {
+            <li>
+                <a href="#tab_5" id="tab5" data-toggle="tab">Approve seat allocation rules</a>
+            </li>
+            <li>
+                <a href="#tab_3" id="tab3" data-toggle="tab">View seat allocation rules</a>
+            </li>
+        }
+    </ul>
+</h4>
+
+<div class="tab-content">
+    <div class="tab-pane fade" id="tab_1">
+        <div class="container stylecls">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div class="form-group row">
+                            <div class="col-lg-12 modal-header">
+                                <h4 class="modal-title" style="background-color:cornflowerblue; color:white">Rules for seat allocation</h4>
+                            </div>
+                        </div>
+                        <br />
+                        <label id="SeatAllocationRulesId" style="display:none"></label>
+                        <div>
+                            <div class="col-lg-1">
+                                <label for="txtExamYear">Exam Year</label>
+                            </div>
+                            <div class="col-lg-3">
+                                <select class="form-control" id="ExamYear" onchange="ExamYearOnChange()">
+                                    <option value="choose">Select</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-1">
+                                <label for="txtCourseType">Course Type</label>
+                            </div>
+                            <div class="col-lg-3">
+                                <select class="form-control" id="CourseTypes" onchange="ExamYearOnChange()">
+                                    <option value="choose">Select</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-8">
+                                <label>Vertical Reservation Rules</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-12">
+                                <table class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label>Vertical rules</label></td>
+                                        <td width="100" align="center"><label>GM</label></td>
+                                        <td width="100" align="center"><label>SC</label></td>
+                                        <td width="100" align="center"><label>ST</label></td>
+                                        <td width="100" align="center"><label>C1</label></td>
+                                        <td width="100" align="center"><label>IIA</label></td>
+                                        <td width="100" align="center"><label>IIB</label></td>
+                                        <td width="100" align="center"><label>IIIA</label></td>
+                                        <td width="100" align="center"><label>IIIB</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>Percentage</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="GMPerc" id="GMPerc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="SCPerc" id="SCPerc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="STPerc" id="STPerc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="C1Perc" id="C1Perc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="IIAPerc" id="IIAPerc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="IIBPerc" id="IIBPerc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="IIIAPerc" id="IIIAPerc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="IIIBPerc" id="IIIBPerc">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-8">
+                                <label>Horizontal Reservation Rules</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-12">
+                                <table class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label>Horizontal rules</label></td>
+                                        <td width="100" align="center"><label>Women</label></td>
+                                        <td width="100" align="center"><label>Persons with disabilities</label></td>
+                                        <td width="100" align="center"><label>Ex-Service</label></td>
+                                        <td width="100" align="center"><label>Kannda medium</label></td>
+                                        <td width="100" align="center"><label>Land Loser</label></td>
+                                        <td width="100" align="center"><label>Kashmiri Migrants</label></td>
+                                        <td width="100" align="center"><label>Economic weaker section</label></td>
+                                        <td width="100" align="center"><label>General Pool</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>Percentage</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="WomenPerc" id="WomenPerc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="PerDisabilitiesperc" id="PerDisabilitiesperc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ExServicePerc" id="ExServicePerc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="KanMediumPerc" id="KanMediumPerc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="LandLoserPerc" id="LandLoserPerc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="KashmiriMigrPerc" id="KashmiriMigrPerc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="EconomicWeakerPerc" id="EconomicWeakerPerc">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="GPPerc" id="GPPerc">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-6">
+                                <label>Hyderabad and Non Hyderabad region </label>
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Reservation Rules </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-1">
+
+                            </div>
+                            <div class="col-lg-2" valign="center">
+                                <label>Hyderabad Region </label>
+                            </div>
+                            <div class="col-lg-7">
+                                <table class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label>Hyderabad Candidate</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="HyderabadRegion" id="HyderabadRegion">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>Non-Hyderabad Candidate</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="NonHyderabadRegion" id="NonHyderabadRegion">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-1">
+
+                            </div>
+                            <div class="col-lg-2" valign="center">
+                                <label>Non - Hyderabad Region </label>
+                            </div>
+                            <div class="col-lg-7">
+                                <table class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label>Hyderabad Candidate</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="NHyderabadRegion" id="NHyderabadRegion">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>Non-Hyderabad Candidate</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="NNonHyderabadRegion" id="NNonHyderabadRegion">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-6">
+                                <label>Grade to Percentage details</label>
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Reservation Rules </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-1">
+                                <label>Syllabus</label>
+                            </div>
+                            <div class="col-lg-2">
+                                <select class="form-control" id="Syllabus">
+                                    <option value="choose">Select</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-9">
+                                <table class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label>Grades</label></td>
+                                        <td width="100" align="center"><label>A1</label></td>
+                                        <td width="100" align="center"><label>A2</label></td>
+                                        <td width="100" align="center"><label>B1</label></td>
+                                        <td width="100" align="center"><label>B2</label></td>
+                                        <td width="100" align="center"><label>C1</label></td>
+                                        <td width="100" align="center"><label>C2</label></td>
+                                        <td width="100" align="center"><label>D</label></td>
+                                        <td width="100" align="center"><label>E1</label></td>
+                                        <td width="100" align="center"><label>E2</label></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>Percentage</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="GradespercA1" id="GradespercA1">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="GradespercA2" id="GradespercA2">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="GradespercB1" id="GradespercB1">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="GradespercB2" id="GradespercB2">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="GradespercC1" id="GradespercC1">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="GradespercC2" id="GradespercC2">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="GradespercD" id="GradespercD">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="GradespercE1" id="GradespercE1">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="GradespercE2" id="GradespercE2">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-12">
+                        <label>Other Reservation rules</label>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="col-lg-2">
+                        <label>Rural</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="ReservationRural" style="margin-left:15px;" />
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="col-lg-2">
+                        <label>Transgender</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="ReservationTransgender" style="margin-left:15px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-5">
+
+                    </div>
+                    <div class="col-lg-2">
+                        <button type="submit" class="btn btn-primary" onclick="InsertSeatAllocationData()">Submit</button>
+                    </div>
+                    <div class="col-lg-5">
+
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab_2">
+        <div class="container stylecls">
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px;width:1300px;height:200px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 modal-header">
+                                    <h4 class="modal-title" style="background-color:cornflowerblue; color:white;font-size:20px"><b>Rules for seat allocation</b></h4>
+                                </div>
+                            </div>
+                            <br />
+                            <label id="SeatAllocationUpdateId" style="display:none"></label>
+                            <div>
+                                <div class="col-lg-1">
+                                    <label for="txtExamYear" style="font-size:14px">Exam Year</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <select class="form-control" id="UpdateExamYear">
+                                        <option value="choose">Select</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-1">
+                                    <label for="txtCourseType" style="font-size:14px">Course Type</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <select class="form-control" id="UpdateCourseTypes">
+                                        <option value="choose">Select</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width:1300px;height:350px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-8">
+                                    <label>Vertical Reservation Rules</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-12">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:13px">Vertical rules</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">GM</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">SC</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">ST</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">C1</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">IIA</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">IIB</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">IIIA</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">IIIB</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:13px">Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateGMPerc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateSCPerc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateSTPerc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateC1Perc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateIIAPerc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateIIBPerc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateIIIAPerc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateIIIBPerc" readonly>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:13px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:13px">Remarks</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center">
+                                    <label id="UpdateVerticalStatus"></label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea id="UpdateVerticalRemarks" rows="3" style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly> </textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1300px;height:350px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-8">
+                                    <label style="font-size:18px">Horizontal Reservation Rules</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-12">
+                                    <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:13px">Horizontal rules</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">Women</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">Persons with disabilities</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">Ex-Service</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">Kannda medium</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">Land Loser</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">Kashmiri Migrants</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">Economic weaker section</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">General Pool</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:13px">Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateWomenPerc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdatePerDisabilitiesperc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateExServicePerc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateKanMediumPerc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateLandLoserPerc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateKashmiriMigrPerc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateEconomicWeakerPerc" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="UpdateGPPerc" readonly>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:13px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:13px">Remarks</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="50" align="center">
+                                    <label id="UpdateHorizontalStatus"></label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea id="UpdateRemarksStatus" rows="3" style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly> </textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1300px;height:550px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-6">
+                                    <label style="font-size:18px">Hyderabad and Non Hyderabad region </label>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label style="font-size:18px">Reservation Rules </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-1">
+
+                                </div>
+                                <div class="col-lg-2" valign="center">
+                                    <label>Hyderabad Region </label>
+                                </div>
+                                <div class="col-lg-7">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:13px">Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateHyderabadRegion" id="UpdateHyderabadRegion" readonly>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:13px">Non-Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateNonHyderabadRegion" id="UpdateNonHyderabadRegion" readonly>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-1">
+
+                                </div>
+                                <div class="col-lg-2" valign="center">
+                                    <label>Non - Hyderabad Region </label>
+                                </div>
+                                <div class="col-lg-7">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:13px">Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateNHyderabadRegion" id="UpdateNHyderabadRegion" readonly>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:13px">Non-Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateNNonHyderabadRegion" id="UpdateNNonHyderabadRegion" readonly>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:13px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:13px">Remarks</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="50" align="center">
+                                    <label id="UpdateHyderabadRegionStatus"></label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea rows="3" id="UpdateHyderabadRegionRemarks" style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly> </textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1300px;height:350px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-6">
+                                    <label style="font-size:18px">Grade to Percentage details</label>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label style="font-size:18px">Reservation Rules </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-1">
+                                    <label style="font-size:15px">Syllabus</label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <select class="form-control" id="UpdateSyllabus">
+                                        <option value="choose">Select</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-9">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:13px">Grades</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">A1</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">A2</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">B1</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">B2</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">C1</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">C2</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">D</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">E1</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">E2</label></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:13px">Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateGradespercA1" id="UpdateGradespercA1" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateGradespercA2" id="UpdateGradespercA2" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateGradespercB1" id="UpdateGradespercB1" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateGradespercB2" id="UpdateGradespercB2" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateGradespercC1" id="UpdateGradespercC1" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateGradespercC2" id="UpdateGradespercC2" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateGradespercD" id="UpdateGradespercD" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateGradespercE1" id="UpdateGradespercE1" readonly>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" name="UpdateGradespercE2" id="UpdateGradespercE2" readonly>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:13px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:13px">Remarks</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center">
+                                    <label id="UpdateGradeStatus"></label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea id="UpdateGradeRemarks" rows="3" style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly> </textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1300px;height:300px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-lg-12">
+                            <label style="font-size:18px">Other Reservation rules</label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-2">
+                            <label>Rural</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="UpateReservationRural" style="margin-left:15px;" readonly />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="col-lg-2">
+                            <label>Transgender</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="UpdateReservationTransgender" style="margin-left:15px;" readonly />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:13px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:13px">Remarks</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center">
+                                    <label id="UpdateOtherStatus"> </label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea rows="3" id="UpdateOtherRemarks" readonly style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly> </textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-5">
+
+                    </div>
+                    <div class="col-lg-2">
+                        <button type="submit" class="btn btn-primary">
+                            Submit
+                        </button>
+                    </div>
+                    <div class="col-lg-5">
+
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab_3">
+        <div class="container stylecls">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div class="form-group row">
+                            <div class="col-lg-12 modal-header">
+                                <h4 class="modal-title" style="background-color:cornflowerblue; color:white;font-size:20px"><b>View seat allocation rules</b></h4>
+                            </div>
+                        </div>
+                        <br />
+                        <label id="SeatAllocationViewId" style="display:none"></label>
+                        <div>
+                            <div class="col-lg-1">
+                                <label for="txtExamYear">Exam Year</label>
+                            </div>
+                            <div class="col-lg-3">
+                                <select class="form-control" id="ViewExamYear">
+                                    <option value="choose">Select</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-1">
+                                <label for="txtCourseType">Course Type</label>
+                            </div>
+                            <div class="col-lg-3">
+                                <select class="form-control" id="ViewCourseTypes">
+                                    <option value="choose">Select</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-8">
+                                <label>Vertical Reservation Rules</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-12">
+                                <table class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label>Vertical rules</label></td>
+                                        <td width="100" align="center"><label>GM</label></td>
+                                        <td width="100" align="center"><label>SC</label></td>
+                                        <td width="100" align="center"><label>ST</label></td>
+                                        <td width="100" align="center"><label>C1</label></td>
+                                        <td width="100" align="center"><label>IIA</label></td>
+                                        <td width="100" align="center"><label>IIB</label></td>
+                                        <td width="100" align="center"><label>IIIA</label></td>
+                                        <td width="100" align="center"><label>IIIB</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>Percentage</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewGMPerc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewSCPerc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewSTPerc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewC1Perc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewIIAPerc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewIIBPerc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewIIIAPerc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewIIIBPerc" readonly>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-8">
+                                <label>Horizontal Reservation Rules</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-12">
+                                <table class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label>Horizontal rules</label></td>
+                                        <td width="100" align="center"><label>Women</label></td>
+                                        <td width="100" align="center"><label>Persons with disabilities</label></td>
+                                        <td width="100" align="center"><label>Ex-Service</label></td>
+                                        <td width="100" align="center"><label>Kannda medium</label></td>
+                                        <td width="100" align="center"><label>Land Loser</label></td>
+                                        <td width="100" align="center"><label>Kashmiri Migrants</label></td>
+                                        <td width="100" align="center"><label>Economic weaker section</label></td>
+                                        <td width="100" align="center"><label>General Pool</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>Percentage</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewWomenPerc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewPerDisabilitiesperc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewExServicePerc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewKanMediumPerc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewLandLoserPerc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewKashmiriMigrPerc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewEconomicWeakerPerc" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewGPPerc" readonly>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-6">
+                                <label>Hyderabad and Non Hyderabad region </label>
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Reservation Rules </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-1">
+
+                            </div>
+                            <div class="col-lg-2" valign="center">
+                                <label>Hyderabad Region </label>
+                            </div>
+                            <div class="col-lg-7">
+                                <table class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label>Hyderabad Candidate</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewHyderabadRegion" id="ViewHyderabadRegion" readonly>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>Non-Hyderabad Candidate</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewNonHyderabadRegion" id="ViewNonHyderabadRegion" readonly>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-1">
+
+                            </div>
+                            <div class="col-lg-2" valign="center">
+                                <label>Non - Hyderabad Region </label>
+                            </div>
+                            <div class="col-lg-7">
+                                <table class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label>Hyderabad Region</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewNHyderabadRegion" id="ViewNHyderabadRegion" readonly>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>Non-Hyderabad Region</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewNNonHyderabadRegion" id="ViewNNonHyderabadRegion" readonly>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-6">
+                                <label>Grade to Percentage details</label>
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Reservation Rules </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-1">
+                                <label>Syllabus</label>
+                            </div>
+                            <div class="col-lg-2">
+                                <select class="form-control" id="ViewSyllabus">
+                                    <option value="choose">Select</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-9">
+                                <table class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label>Grades</label></td>
+                                        <td width="100" align="center"><label>A1</label></td>
+                                        <td width="100" align="center"><label>A2</label></td>
+                                        <td width="100" align="center"><label>B1</label></td>
+                                        <td width="100" align="center"><label>B2</label></td>
+                                        <td width="100" align="center"><label>C1</label></td>
+                                        <td width="100" align="center"><label>C2</label></td>
+                                        <td width="100" align="center"><label>D</label></td>
+                                        <td width="100" align="center"><label>E1</label></td>
+                                        <td width="100" align="center"><label>E2</label></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>Percentage</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewGradespercA1" id="ViewGradespercA1" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewGradespercA2" id="ViewGradespercA2" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewGradespercB1" id="ViewGradespercB1" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewGradespercB2" id="ViewGradespercB2" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewGradespercC1" id="ViewGradespercC1" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewGradespercC2" id="ViewGradespercC2" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewGradespercD" id="ViewGradespercD" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewGradespercE1" id="ViewGradespercE1" readonly>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewGradespercE2" id="ViewGradespercE2" readonly>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-12">
+                        <label>Other Reservation rules</label>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="col-lg-2">
+                        <label>Rural</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text"  readonly id="ViewReservationRural" style="margin-left:15px;" />
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="col-lg-2">
+                        <label>Transgender</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" readonly id="ViewReservationTransgender" style="margin-left:15px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab_4">
+        <div class="container stylecls">
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px;width:1300px;height:210px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 modal-header">
+                                    <h4 class="modal-title" style="background-color:cornflowerblue; color:white;font-size:20px"><b>Review Seat Allocation Rule</b></h4>
+                                </div>
+                            </div>
+                            <br />
+                            <label id="SeatAllocationReviewId" style="display:none"></label>
+                            <div>
+                                <div class="col-lg-1">
+                                    <label style="font-size:14px">Exam Year</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <select class="form-control" id="ReviewExamYear">
+                                        <option value="choose">Select</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-1">
+                                    <label for="txtCourseType" style="font-size:14px">Course Type</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <select class="form-control" id="ReviewCourseTypes">
+                                        <option value="choose">Select</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width:1300px;height:280px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-8">
+                                    <label style="font-size:18px">Vertical Reservation Rules</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-12">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Vertical rules</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">GM</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">SC</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">ST</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">C1</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">IIA</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">IIB</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">IIIA</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">IIIB</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px;">Action</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewGMPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewSCPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewSTPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewC1Perc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewIIAPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewIIBPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewIIIAPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewIIIBPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <center><span class="glyphicon glyphicon-pencil" data-toggle=" modal" data-target="#TargetModelEdit" onclick="getDataVertical()" style="color:blue"></span></center>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:15px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:15px">Remarks</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center">
+                                    <label id="ReviewVerticalStatus"></label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea class="col-sm-6" id="ReviewVerticalRemarks" rows="3" style="border: none; width: 90%;height:400%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly>                               
+                                    </textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1300px;height:300px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-8">
+                                    <label style="font-size:18px">Horizontal Reservation Rules</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-12">
+                                    <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Horizontal rules</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Women</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Persons with disabilities</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Ex-Service</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Kannda medium</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Land Loser</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Kashmiri Migrants</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Economic weaker section</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">General Pool</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px;">Action</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewWomenPerc" readonly></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewPerDisabilitiesperc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewExServicePerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewKanMediumPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewLandLoserPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewKashmiriMigrPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewEconomicWeakerPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewGPPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <center><span class="glyphicon glyphicon-pencil" data-toggle=" modal" data-target="#TargetModelEdit" onclick="getDataHorizontal()" style="color:blue"></span></center>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:15px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:15px">Remarks</label></td>
+
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center">
+                                    <label id="ReviewHorizontalStatus">Horizontal Reservation Rules</label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea id="ReviewHorizontalRemarks" rows="3" style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly> </textarea>
+                                </td>
+
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1300px;height:350px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-6">
+                                    <label style="font-size:18px">Hyderabad and Non Hyderabad region </label>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label style="font-size:18px">Reservation Rules </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-1">
+
+                                </div>
+                                <div class="col-lg-2" valign="center">
+                                    <label>Hyderabad Region </label>
+                                </div>
+                                <div class="col-lg-7">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ReviewHyderabadRegion" id="ReviewHyderabadRegion"></label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Non-Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ReviewNonHyderabadRegion" id="ReviewNonHyderabadRegion"></label>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-1">
+
+                                </div>
+                                <div class="col-lg-2" valign="center">
+                                    <label>Non - Hyderabad Region </label>
+                                </div>
+                                <div class="col-lg-7">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ReviewNHyderabadRegion" id="ReviewNHyderabadRegion"></label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Non-Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ReviewNNonHyderabadRegion" id="ReviewNNonHyderabadRegion"></label>
+                                            </td>
+                                        </tr>
+                                        <tr></tr>
+                                    </table>
+                                </div>
+                                <div class="col-lg-2">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px;">Action</label></td>
+                                        </tr>
+                                        <tr>
+                                            @*<td width="100" align="center">
+                                                <a class="btn btn-primary RateAnalysis" id="btn3" href='javascript:;'>Edit</a>*@
+                                            <td>
+                                                <center><span class="glyphicon glyphicon-pencil" data-toggle=" modal" data-target="#TargetModelEdit" onclick="getDataRegion()" style="color:blue"></span></center>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:15px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:15px">Remarks</label></td>
+
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="50" align="center">
+                                    <label id="UpdateHyderabadStatus"></label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea id="UpdateHyderabadRemarks" rows="3" style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly></textarea>
+                                </td>
+
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1300px;height:290px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-6">
+                                    <label style="font-size:18px">Grade to Percentage details</label>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label style="font-size:18px">Reservation Rules </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-1">
+                                    <label style="font-size:15px">Syllabus</label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <select class="form-control" id="ReviewSyllabus">
+                                        <option value="choose">Select</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-9">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Grades</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">A1</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">A2</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">B1</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">B2</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">C1</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">C2</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">D</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">E1</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">E2</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px;">Action</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:13px">Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewGradespercA1"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewGradespercA2"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewGradespercB1"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewGradespercB2"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ReviewGradespercC1"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ReviewGradespercC2"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ReviewGradespercD"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ReviewGradespercE1"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ReviewGradespercE2"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <center><span class="glyphicon glyphicon-pencil" data-toggle=" modal" data-target="#TargetModelEdit" onclick="getDataGrades()" style="color:blue"></span></center>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:15px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:15px">Remarks</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center">
+                                    <label id="ReviewGradeStatusId"> </label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea id="ReviewGradeRemarks" rows="3" style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1300px;height:290px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-lg-12">
+                            <label style="font-size:18px">Other Reservation rules</label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-5" width="100" align="center"><label style="font-size:15px">Rural</label></td>
+                                <td class="col-sm-5" width="100" align="center"><label style="font-size:15px">Transgender</label></td>
+                                <td class="col-sm-1" width="100" align="center"><label style="font-size:15px;">Action</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-5" width="100" align="center">
+                                    <label type="text" id="ReviewReservationRural"></label>
+                                </td>
+                                <td class="col-sm-5" width="100" align="center">
+                                    <label type="text" id="ReviewReservationTransgender"></label>
+                                </td>
+                                <td class="col-sm-1"><center><span class="glyphicon glyphicon-pencil" data-toggle=" modal" data-target="#TargetModelEdit" onclick="getDataOtherReservation()" style="color:blue"></span></center></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:15px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:15px">Remarks</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center">
+                                    <label id="ReviewReservationsStatus"> </label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea id="ReviewReservationRemarks" rows="3" style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-5">
+
+                    </div>
+                    <div class="col-lg-2">
+                        <button type="submit" class="btn btn-primary">
+                            Submit
+                        </button>
+                    </div>
+                    <div class="col-lg-5">
+
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab_5">
+        <div class="container stylecls">
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px;width:1300px;height:210px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 modal-header">
+                                    <h4 class="modal-title" style="background-color:cornflowerblue; color:white;font-size:20px"><b>Approve Seat Allocation Rule</b></h4>
+                                </div>
+                            </div>
+                            <br />
+                            <label id="SeatAllocationReviewId" style="display:none"></label>
+                            <div>
+                                <div class="col-lg-1">
+                                    <label style="font-size:14px">Exam Year</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <select class="form-control" id="ReviewExamYear">
+                                        <option value="choose">Select</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-1">
+                                    <label for="txtCourseType" style="font-size:14px">Course Type</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <select class="form-control" id="ReviewCourseTypes">
+                                        <option value="choose">Select</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width:1300px;height:280px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-8">
+                                    <label style="font-size:18px">Vertical Reservation Rules</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-12">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Vertical rules</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">GM</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">SC</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">ST</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">C1</label></td>
+                                            <td width="100" align="center"><label style="font-size:13px">IIA</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">IIB</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">IIIA</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">IIIB</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px;">Action</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveGMPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveSCPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveSTPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveC1Perc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveIIAPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveIIBPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveIIIAPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveIIIBPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <center><span class="glyphicon glyphicon-pencil" data-toggle=" modal" data-target="#TargetModelEdit" onclick="getDataVertical()" style="color:blue"></span></center>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:15px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:15px">Remarks</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center">
+                                    <label id="ApproveVerticalStatus"></label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea class="col-sm-6" id="ApproveVerticalRemarks" rows="3" style="border: none; width: 90%;height:400%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly>                               
+                                    </textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1300px;height:300px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-8">
+                                    <label style="font-size:18px">Horizontal Reservation Rules</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-12">
+                                    <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Horizontal rules</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Women</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Persons with disabilities</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Ex-Service</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Kannda medium</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Land Loser</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Kashmiri Migrants</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">Economic weaker section</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">General Pool</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px;">Action</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveWomenPerc" readonly></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApprovePerDisabilitiesperc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveExServicePerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveKanMediumPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveLandLoserPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveKashmiriMigrPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveEconomicWeakerPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveGPPerc"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <center><span class="glyphicon glyphicon-pencil" data-toggle=" modal" data-target="#TargetModelEdit" onclick="getDataHorizontal()" style="color:blue"></span></center>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:15px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:15px">Remarks</label></td>
+
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center">
+                                    <label id="ApproveHorizontalStatus">Horizontal Reservation Rules</label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea id="ApproveHorizontalRemarks" rows="3" style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly> </textarea>
+                                </td>
+
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1300px;height:350px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-6">
+                                    <label style="font-size:18px">Hyderabad and Non Hyderabad region </label>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label style="font-size:18px">Reservation Rules </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-1">
+
+                                </div>
+                                <div class="col-lg-2" valign="center">
+                                    <label>Hyderabad Region </label>
+                                </div>
+                                <div class="col-lg-7">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ApproveHyderabadRegion" id="ApproveHyderabadRegion"></label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Non-Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ApproveNonHyderabadRegion" id="ApproveNonHyderabadRegion"></label>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-1">
+
+                                </div>
+                                <div class="col-lg-2" valign="center">
+                                    <label>Non - Hyderabad Region </label>
+                                </div>
+                                <div class="col-lg-7">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ApproveNHyderabadRegion" id="ReviewApproveNHyderabadRegion"></label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Non-Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ApproveNNonHyderabadRegion" id="ApproveNNonHyderabadRegion"></label>
+                                            </td>
+                                        </tr>
+                                        <tr></tr>
+                                    </table>
+                                </div>
+                                <div class="col-lg-2">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px;">Action</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <center><span class="glyphicon glyphicon-pencil" data-toggle=" modal" data-target="#TargetModelEdit" onclick="getDataRegion()" style="color:blue"></span></center>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:15px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:15px">Remarks</label></td>
+
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="50" align="center">
+                                    <label id="ApproveHyderabadStatus"></label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea id="ApproveHyderabadRemarks" rows="3" style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly></textarea>
+                                </td>
+
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1300px;height:290px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-6">
+                                    <label style="font-size:18px">Grade to Percentage details</label>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label style="font-size:18px">Reservation Rules </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-1">
+                                    <label style="font-size:15px">Syllabus</label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <select class="form-control" id="ApproveSyllabus">
+                                        <option value="choose">Select</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-9">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:15px">Grades</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">A1</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">A2</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">B1</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">B2</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">C1</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">C2</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">D</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">E1</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px">E2</label></td>
+                                            <td width="100" align="center"><label style="font-size:15px;">Action</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label style="font-size:13px">Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveGradespercA1"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveGradespercA2"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveGradespercB1"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveGradespercB2"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" id="ApproveGradespercC1"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ApproveGradespercC2"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ApproveGradespercD"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ApproveGradespercE1"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <label type="text" name="ApproveGradespercE2"></label>
+                                            </td>
+                                            <td width="100" align="center">
+                                                <center><span class="glyphicon glyphicon-pencil" data-toggle=" modal" data-target="#TargetModelEdit" onclick="getDataGrades()" style="color:blue"></span></center>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:15px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:15px">Remarks</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center">
+                                    <label id="ApproveGradeStatusId"> </label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea id="ApproveGradeRemarks" rows="3" style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width: 1300px;height:290px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-lg-12">
+                            <label style="font-size:18px">Other Reservation rules</label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-5" width="100" align="center"><label style="font-size:15px">Rural</label></td>
+                                <td class="col-sm-5" width="100" align="center"><label style="font-size:15px">Transgender</label></td>
+                                <td class="col-sm-1" width="100" align="center"><label style="font-size:15px;">Action</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-5" width="100" align="center">
+                                    <label type="text" id="ApproveReservationRural"></label>
+                                </td>
+                                <td class="col-sm-5" width="100" align="center">
+                                    <label type="text" id="ApproveReservationTransgender"></label>
+                                </td>
+                                <td class="col-sm-1"><center><span class="glyphicon glyphicon-pencil" data-toggle=" modal" data-target="#TargetModelEdit" onclick="getDataOtherReservation()" style="color:blue"></span></center></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="display table-bordered" style="width:100% ;table-layout: fixed;">
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center"><label style="font-size:15px">Status</label></td>
+                                <td class="col-sm-6" width="100" align="center"><label style="font-size:15px">Remarks</label></td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" width="100" align="center">
+                                    <label id="ApproveReservationsStatus"> </label>
+                                </td>
+                                <td class="col-sm-6" width="100" align="center">
+                                    <textarea id="ApproveReservationRemarks" rows="3" style="border: none; width: 90%;height:100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;resize:none;" readonly></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-5">
+
+                    </div>
+                    <div class="col-lg-2">
+                        <button type="submit" class="btn btn-primary">
+                            Submit
+                        </button>
+                    </div>
+                    <div class="col-lg-5">
+
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Status</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <br>
+                    <label id="SeatAllocationRulesId" style="display:none"></label>
+                    <label id="SeatAllocationPartId" style="display:none"></label>
+                    <label id=""></label>
+                    <div class="row">
+                        <div class="col-lg-offset-1 col-lg-2">
+                            Remarks
+                        </div>
+                        <div class="col-lg-6">
+                            <textarea id="RemarksTxt" name="RemarksTxt" rows="5" cols="33"> </textarea>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-offset-1 col-lg-2">
+                            Status
+                        </div>
+                        <div class="col-lg-4">
+                            <select class="form-control" id="StatusId"></select>
+                        </div>
+                        <div class="col-lg-5">
+                            <a class=" btn btn-primary" id="submitbtn" data-dismiss="modal" onclick="UpdateRemarksDetailsForSeat()">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/SeatAllocation")

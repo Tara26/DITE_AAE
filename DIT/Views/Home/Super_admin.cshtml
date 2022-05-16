@@ -1,0 +1,373 @@
+﻿
+@{
+    ViewBag.Title = "Super_admin";
+}
+<style>
+    .h4, .h5, h4, h5 {
+        color: #000;
+    }
+
+    .banner {
+        background-image: url('../../Content/frontend/images/inner-bann.png');
+        padding: 0 0;
+        min-height: 150px !important;
+        background-color: transparent;
+        display: block;
+    }
+
+    .banner-dott {
+        background: none !important;
+    }
+
+    .clearfix {
+        margin-bottom: 10px;
+    }
+
+    element.style {
+    }
+
+    .card {
+        box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        margin-bottom: 1rem;
+    }
+
+    .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1.25rem;
+    }
+
+    .card {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        margin: 2rem 0;
+        padding: 2em 2em;
+    }
+
+    .input-group-text {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: .375rem .75rem;
+        margin-bottom: 0;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        text-align: center;
+        white-space: nowrap;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+    }
+
+    .custom-file-input {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: calc(2.25rem + 2px);
+        margin: 0;
+        opacity: 0;
+    }
+
+    .input-group {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-align: stretch;
+        align-items: stretch;
+        width: 100%;
+    }
+
+        .input-group > .custom-file {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+        .input-group > .input-group-append > .btn, .input-group > .input-group-append > .input-group-text, .input-group > .input-group-prepend:first-child > .btn:not(:first-child), .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child), .input-group > .input-group-prepend:not(:first-child) > .btn, .input-group > .input-group-prepend:not(:first-child) > .input-group-text {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .input-group > .custom-file, .input-group > .custom-select, .input-group > .form-control, .input-group > .form-control-plaintext {
+            position: relative;
+            -ms-flex: 1 1 0%;
+            flex: 1 1 0%;
+            min-width: 0;
+            margin-bottom: 0;
+        }
+
+    .custom-file-label {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1;
+        height: calc(2.25rem + 2px);
+        padding: .375rem .75rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        box-shadow: none;
+    }
+
+    .input-group-append, .input-group-prepend {
+        display: -ms-flexbox;
+        display: flex;
+    }
+
+    .custom-control-label::before, .custom-file-label, .custom-select {
+        transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    label {
+        display: inline-block;
+        margin-bottom: .5rem;
+    }
+
+    .form-group {
+        margin: 20px 20px;
+        min-height: 30px;
+    }
+
+    .agile-logologinblock {
+    }
+
+    .card-header h3 {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .card-header h4 h5 {
+        text-align: center;
+        color: #000;
+    }
+
+    .card-title h4 h5 {
+        text-align: center;
+        color: #000;
+    }
+
+    select, textarea {
+        min-width: 200px;
+        padding: 7px 10px;
+    }
+
+    #excltable {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: inherit;
+        width: 100%;
+    }
+
+        #excltable td, #excltable th {
+            border: 1px solid #e9e8e8;
+            padding: 5px 20px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        #excltable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #excltable tr:hover {
+            background-color: #ddd;
+        }
+
+        #excltable th {
+            padding: 20px 20px;
+            text-align: center;
+            vertical-align: middle;
+            background-color: #FFCD37;
+            color: #fff;
+        }
+
+    .bg-colors {
+        background: #077ba8;
+        padding: 20px 20px;
+        color: #fff;
+        margin-top: 7rem;
+    }
+</style>
+<div class="classes" id="classes" style="min-height: 697px;">
+
+    <form action="/action_page.php" method="post">
+
+       
+        <div class="col-md-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Super Admin</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+            
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label for="uname"><b>Select year to View Report</b></label><br />
+                        <select style="float:left;">
+                            <option value="">-- Select --</option>
+                            <option value="">2020</option>
+                            <option value="">2019</option>
+                            <option value="">2018</option>
+                            <option value="">2017</option>
+                            <option value="">2018</option>
+                        </select>
+
+                        <div class="card-footer col-md-2" style=" margin-right:40px; margin-top: -8px;">
+                <button  class="btn btn-success">Submit</button>
+            </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table id="example" class="display table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th><p>Roll    No.</p></th>
+                                        <th><p>Name</p></th>
+                                        <th>
+                                            <p>
+                                                Father<br />
+                                                Name
+                                            </p>
+                                        </th>
+                                        <th>
+                                            <p>
+                                                ITI<br />
+                                                Name
+                                            </p>
+                                        </th>
+                                        <th><p>Date    of Birth</p></th>
+                                        <th><p>Marks-I</p></th>
+                                        <th><p>Marks-II</p></th>
+                                        <th><p>Marks-III</p></th>
+                                        <th><p>Marks-IV</p></th>
+                                        <th><p>Marks-V</p></th>
+                                        <th><p>Total</p></th>
+                                        <th><p>Grade</p></th>
+                                        <th colspan="2"><p>Action Methods</p></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><p>180829081459</p></td>
+                                        <td><p>Abhishek</p></td>
+                                        <td><p>Poorna</p></td>
+                                        <td><p>GSC</p></td>
+                                        <td><p>19-08-1989</p></td>
+                                        <td><p>70</p></td>
+                                        <td><p>70</p></td>
+                                        <td><p>70</p></td>
+                                        <td><p>70</p></td>
+                                        <td><p>70</p></td>
+                                        <td><p>350</p></td>
+                                        <td><p>A</p></td>
+                                        <td>
+                                            <p>Count : 0 </p>
+
+
+                                            <label>View Remarks :  </label>
+                                            <div style="display:flex;">
+                                                <button type="submit" class="btn btn-success btn-sm" style="margin-right:2px;">Approve</button>
+                                                <button type="submit" class="btn btn-danger btn-sm">Deny</button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p>Duplicate Remarks</p><div style="display:flex;">
+                                                <button type="submit" class="btn btn-success btn-sm" style="margin-right:2px;">Approve</button>
+                                                <button type="submit" class="btn btn-danger btn-sm">Deny</button>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td><p>180829081459</p></td>
+                                        <td><p>Abhishek</p></td>
+                                        <td><p>Poorna</p></td>
+                                        <td><p>GSC</p></td>
+                                        <td><p>19-08-1989</p></td>
+                                        <td><p>70</p></td>
+                                        <td><p>70</p></td>
+                                        <td><p>70</p></td>
+                                        <td><p>70</p></td>
+                                        <td><p>70</p></td>
+                                        <td><p>350</p></td>
+                                        <td><p>A</p></td>
+                                        <td>
+                                            <p>Count : 1 </p>
+
+
+                                            <label>View Remarks :  </label>
+                                            <div style="display:flex;">
+                                                <button type="submit" class="btn btn-primary btn-sm" style="margin-right:2px;" disabled>Approved</button>
+                                                <button type="submit" class="btn btn-danger btn-sm">Deny</button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p>Duplicate Remarks</p><div style="display:flex;">
+                                                <button type="submit" class="btn btn-success btn-sm" style="margin-right:2px;">Approve</button>
+                                                <button type="submit" class="btn btn-danger btn-sm">Deny</button>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                    <!-- /.card-body -->
+
+
+                </form>
+
+
+  
+
+
+
+
+             
+
+     
+
+
+  
+
+
+</div>
+
+<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript" class="init">
+
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+
+</script>

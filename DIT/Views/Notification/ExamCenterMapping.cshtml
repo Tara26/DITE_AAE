@@ -1,0 +1,292 @@
+﻿@model Models.ExamCenterMap.ExamcenterMapping
+@{
+    ViewBag.Title = "ExamCenterMappingNEW";
+}
+
+
+<style>
+    .makewide {
+        width: 130%;
+    }
+    label div {
+        color: dodgerblue;
+    }
+    .AA{
+        color:chocolate;
+    }
+    .BB {
+        color: chocolate;
+    }
+</style>
+<link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+@*<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>*@
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Content/frontend/js/bootstrap.js"></script>
+
+<script src="~/Scripts/bootbox.js"></script>
+<script src="~/Scripts/bootbox.min.js"></script>
+<script src="~/Scripts/bootbox.locales.min.js"></script>
+<script src="~/Content/frontend/js/jquery-ui.min.js"></script>
+<script src="~/Content/frontend/js/SmoothScroll.min.js"></script>
+<script src="~/Content/frontend/js/move-top.js"></script>
+<script src="~/Content/frontend/js/easing.js"></script>
+
+<br /><br /><br />
+
+<ul class="nav nav-tabs">
+    <li>
+        <a href="#tab_11" data-toggle="tab">Mapping Exam center</a>
+    </li>
+    <li>
+        <a href="#tab_22" data-toggle="tab">View Mapping</a>
+    </li>
+
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade" id="tab_11">
+        <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 style="text-align:center">Mapping Exam center</h3>
+                    <br /><br />
+                    <div class="form-group row">
+                        <div class="col-lg-4 col-md-4">
+                            <div class="col-md-6">
+                                <label for="txtcoursetype">Course Type<span style="color:red"> *</span></label>
+                            </div>
+                            <div class="col-md-6">
+                                @Html.DropDownListFor(model => model.Course_id, new SelectList(Model.Course_Type_List, "value", "Text"), new { @class = "form-control select2 makewide" })
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="col-md-6">
+                                <label for="txtdivision">Division<span style="color:red"> *</span></label>
+                            </div>
+                            <div class="col-md-6" id="DivID">
+                                @Html.DropDownListFor(model => model.Division_id, new SelectList(Model.DivisionList, "Value", "Text"), new { @class = "form-control select2 makewide", @onchange = "GetDist()" })
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="col-md-5">
+                                <label for="txtdistrict">District<span style="color:red"> *</span></label>
+                            </div>
+                            <div class="col-md-6" id="DistID">
+                                @Html.DropDownListFor(model => model.District_dist_id, new SelectList(Model.DistrictList, "Value", "Text"), new { @class = "form-control select2 makewide", @onchange = "GetCol()" })
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <div>
+                            <label for="txtdistrict">Exam Center Mapping with college List<span style="color:red"> *</span></label>
+                        </div>
+                        <hr>
+                        <div class="AA">
+                            @Html.Label("Select Exam Center Name")&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            @Html.Label("Exam Center Code")
+                        </div>
+                            <div id="Radio_Exam_Center">
+                            </div>
+                       
+                        <br />
+                        <div class="BB">
+                            @Html.Label("Select ITI Colleges")&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            @Html.Label("ITI College Code")
+                        </div>
+                            <div id="Checkbox_Colege_Name">
+                            </div>
+                        
+                            <div id="ITI_Coll_Code_ID">
+                                <div id="Collge_code">
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+                        <br /> <br /> <br />
+                        <center>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12">
+                                    <input type="button" value="Venue Mapping" onclick="Save_Exam_Mapping_Data()" class="btn btn-success" style="margin-left:15px; width:250px;" id="btnAdd" />
+                                    
+                                </div>
+                            </div>
+                        </center>
+                </div>
+    </div>
+ </div>
+   
+<br /> <br /> <br />
+
+<script type="text/javascript">
+    
+    function GetDist()
+    {
+       
+            var Div_ID = $('#Division_id :selected').val();
+            $.ajax({
+                type: 'POST',
+                url: '/Notification/GetDistrictbasedonDivisionID',
+                data: { Div_ID_Res: Div_ID },
+                success: function (data)
+                {
+                    
+                    if (data.length > 0)
+                    {
+                        $("#District_dist_id").empty();
+                        $.each(data, function (key, value)
+                        {
+                            $("#District_dist_id").append($("<option></option>").val(value.Value).html(value.Text));
+                        });
+
+                    }
+                }
+            });
+        
+    }
+
+    function GetDiv_Validation()
+    {
+        
+        var return_data = true;
+        if ($('#Division_id :selected').val() == "")
+        {
+            alert("Select Division");
+            return return_data = false;
+        }
+        return return_data;
+
+    }
+
+    function GetDist_Validation() {
+        
+        var return_data = true;
+        if ($('#District_dist_id :selected').val() == "")
+        {
+            alert("Select District");
+            return return_data = false;
+        }
+        return return_data;
+
+    }
+
+    function GetCol() {
+            var Dist_ID = $('#District_dist_id :selected').val();
+            $.ajax({
+                type: 'POST',
+                url: '/Notification/GetCollegetNamebasedonDivisionID',
+                data: { Dist_ID_Res: Dist_ID },
+                success: function (data)
+                {
+                    if (data.length > 0) {
+                        $("#Radio_Exam_Center").empty();
+                        $("#Checkbox_Colege_Name").empty();
+
+                        for (var i = 0; i < data.length; i++)
+                        {
+                            $("#Radio_Exam_Center").append($('<input id="Radio"'+ i+' type="radio" class="EC"  name ="myradio" value = "' + data[i].Text.split('-')[0] + '" ><label for="RadioExam">&nbsp;&nbsp; ' + data[i].Text.split('-')[0] + '</label><label for="RadioExamCode">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;' + data[i].Text.slice(0, 3).concat("-").concat(i) + '</label><br>'));
+                            $("#Checkbox_Colege_Name").append($('<input id="Radio"'+ i +' type="checkbox" class="CB" name="mycheckbox"  value = "' + data[i].Text.split('-')[0] + '" ><label for="CheckCol">&nbsp;&nbsp;' + data[i].Text.split('-')[0] + '</label><label for="RadioExamCode">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;' + data[i].Text.split('-')[1] + '</label><br>'));
+                        }
+                    }
+                }
+            });
+    }
+
+    function GetCourseType_Validation()
+    {
+        var return_data = true;
+        if ($("#Course_id").val() == "")
+        {
+            alert("Select Course Type.")
+            return_data = false;
+        }
+        return return_data;
+    }
+
+    function GetCol_Validation()
+    {
+        var return_data = true;
+        if ($(".EC").val() == "") {
+            alert("Select Exam center");
+            return_data = false;
+        }
+        else if ($(".CB").val() == "") {
+           alert("Select College Name");
+            return_data = false;
+
+        }
+        return return_data;
+    }
+    
+    function Get_Col_Code(col_code)
+    {
+        var Col_Code_ID = col_code;
+        $.ajax({
+            type: 'POST',
+            url: '/Notification/GetCollegeCodebasedonCollegeID',
+            data: { Col_Code_ID: Col_Code_ID },
+            success: function (data)
+            {
+                var co_code = data;
+                return co_code;
+            }
+        });
+    }
+
+    function Get_Exam_Center_Code()
+    {
+        var i = 0;
+        var Exam_Center_Code = $('#ExamCenterID :selected').text().slice(0, 4).concat("-").concat(++i);
+        $('#ExamCenterCodeID').text(Exam_Center_Code);
+
+    }
+    
+    function Save_Exam_Mapping_Data()
+    {
+        if (GetCourseType_Validation())
+        {
+            if (GetDiv_Validation())
+            {
+                if (GetDist_Validation())
+                {
+                    var myarray = new Array()
+                    $('input:checked').each(function ()
+                    {
+                        myarray.push($(this).val());
+
+                    });
+                    var ECModel = {};
+                    ECModel.Division_ID = $('#Division_id').val();
+                    ECModel.District_ID = $('#District_dist_id').val();
+                   
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Notification/SaveMappedData',
+                        data: { Check_values: myarray, ECModel: ECModel },
+                        success: function (data)
+                        {
+                            
+                            if (data.success = true) {
+                                alert("Data Saved Sucessfuly")
+                                
+                            }
+                            $('input:checked').each(function () {
+                                //myarray.pop($(this).val());
+                                $("#Radio_Exam_Center").empty();
+                                $("#Checkbox_Colege_Name").empty();
+                                $("#Division_id ").val('');
+                                $("#District_dist_id").val('');
+
+                            });
+                            
+                        }
+                    });
+                }
+            }
+        }
+    }
+      
+    </script>
+

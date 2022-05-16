@@ -1,0 +1,902 @@
+﻿
+@{
+    ViewBag.Title = "SeatAvailability_DD";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>SeatAvailability_DD</h2>
+
+
+<link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Content/frontend/js/bootstrap.js"></script>
+<script src="~/Scripts/bootbox.js"></script>
+<script src="~/Scripts/bootbox.min.js"></script>
+<script src="~/Scripts/bootbox.locales.min.js"></script>
+<script src="~/Content/frontend/js/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+<style>
+    button {
+        background-color: #5A8CD3;
+        color: white;
+    }
+
+    button {
+        background-color: #5A8CD3;
+        color: white;
+    }
+
+    .content-box-gray .content {
+        overflow: hidden;
+        padding: 10px;
+        font-size: 15px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border: 1px solid gray;
+        color: #3385FF;
+    }
+
+    .content-box-gray .title {
+        height: 50px;
+        line-height: 30px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-size: 18px;
+        font-weight: bold;
+        font-family: verdana;
+        display: block;
+        color: white;
+        display: block;
+        padding: 10px;
+        border: 1px solid gray;
+        border-bottom: none;
+    }
+</style>
+<br /><br /><br />
+<h4></h4>
+<div class="tab-content" style="padding-left:200px; width:1400px">
+    <br />
+    <b>
+        <ul class="nav nav-tabs" style="color:black;background-color:gray">
+            <li>
+                <a href="#tab_1" id="tab1" data-toggle="tab">View Seat Availability</a>
+            </li>
+            <li>
+                <a href="#tab_2" id="tab2" data-toggle="tab">Update Seat Availability</a>
+            </li>
+            <li>
+                <a href="#tab_3" id="tab3" data-toggle="tab">Added New Trades</a>
+            </li>
+        </ul>
+    </b>
+
+    <div class="tab-content" style="background-color:white;width:1200px">
+        <div class="tab-pane fade active" id="tab_1">
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px; width:1200px">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div class="tab-pane container active p-0" id="home">
+                                <br />
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">Course Type</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="CourseTypes">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">Division</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Divisions" onchange="GetDistrictList(this);">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">District</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Districts" onchange="GetTaluka(this);">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">Taluka</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Talukas">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="col-lg-12" align="right">
+                                    <a class=" btn btn-primary sendBtn3" onclick="GetGridDetails()">Search</a>
+                                </div>
+                            </div>
+
+                            <br />
+                            <div style="overflow-y:scroll;overflow-x:scroll">
+                                <table class="table table-striped table-hover text-center shadow clswidth" id="GridViewSeatAvailability" style="width:100% !important" border="1" align="center"></table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="tab_2">
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:2px; padding:20px;width:1200px">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="DivReadyToSentforApproval">
+
+                            <div class="tab-pane container active p-0" id="home">
+                                <br />
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">Course Type</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="CourseTypes1">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">Submitted By</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="SubmittedBy">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">Division</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Divisions1" onchange="GetDistrictList1(this);">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">District</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Districts1" onchange="GetTaluka1(this);">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="col-lg-1">
+                                    <label for="txtAgencyRegnNo">Taluka</label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <select class="form-control" id="Talukas1">
+                                        <option value="choose">Select</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-9" align="right">
+                                    <a class=" btn btn-primary sendBtn3" onclick="GetUpdateGridDetails()">Search</a>
+                                </div>
+                            </div>
+
+                            <br />
+                            <div style="overflow-y:scroll;overflow-x:scroll">
+                                <table class="table table-striped table-hover text-center shadow clswidth" id="GridUpdateSeatAvailability" style="width:100% !important" border="1" align="center"></table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="tab_3">
+            <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 modal-header">
+                                    <h4 class="modal-title" style="background-color:cornflowerblue; color:white">View Added Trades</h4>
+                                </div>
+                            </div>
+                            <div class="tab-pane container active p-0" id="home">
+                                <br />
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">Course Type</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="CourseTypes2">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">Division</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Divisions2" onchange="GetDistrictList2(this);">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">District</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Districts2" onchange="GetTaluka2(this);">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">Taluka</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Talukas2">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="col-lg-12" align="right">
+                                    <a class=" btn btn-primary sendBtn3" onclick="GetGridDetails()">Search</a>
+                                </div>
+                            </div>
+
+                            <br />
+                            <div style="overflow-y:scroll;overflow-x:scroll">
+                                <table class="table table-striped table-hover text-center shadow clswidth" id="GridViewSeatAvailability" style="width:100% !important" border="1" align="center"></table>
+
+                                @*<table class="table table-bordered table-hover" id="ReadyToSentGridViewSeat">
+                                        <thead>
+                                            <tr>
+                                                <th align="center">Sl No.</th>
+                                                <th>Course Type</th>
+                                                <th>Name of the Department</th>
+                                                <th>Notification Number</th>
+                                                <th>Description</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Status</th>
+                                                <th>Status</th>
+                                                <th>Status</th>
+                                                <th>Status</th>
+                                                <th>Status</th>
+
+                                                <th>Course Type</th>
+                                                <th>Name of the Department</th>
+                                                <th>Notification Number</th>
+                                                <th>Description</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Status</th>
+                                                <th>Status</th>
+                                                <th>Status</th>
+                                                <th>Status</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.NotificationForApprovalList)
+                                            {
+                                                <tr>
+                                                    <td align="center">@item.Exam_CalNotif_Number</td>
+                                                    <td>@item.CourseName</td>
+                                                    <td>@item.DeptName</td>
+                                                    <td>@item.Exam_CalNotif_Number</td>
+                                                    <td>@item.Exam_CalNotif_Description</td>
+                                                    <td>@item.Notif_Date.ToString("dd/MM/yyyy")</td>
+                                                    <td>@item.status</td>
+                                                    <td>@item.status</td>
+                                                    <td>@item.status</td>
+                                                    <td>@item.status</td>
+                                                    <td>@item.status</td>
+                                                    <td>@item.status</td>
+
+                                                    <td>@item.CourseName</td>
+                                                    <td>@item.DeptName</td>
+                                                    <td>@item.Exam_CalNotif_Number</td>
+                                                    <td>@item.Exam_CalNotif_Description</td>
+                                                    <td>@item.Notif_Date.ToString("dd/MM/yyyy")</td>
+                                                    <td>@item.status</td>
+                                                    <td>@item.status</td>
+                                                    <td>@item.status</td>
+                                                    <td>@item.status</td>
+                                                    <td>@item.status</td>
+                                                    <td>@item.status</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>*@
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*</div>*@
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Category</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-offset-1 col-lg-2"> MIS Code:</div>
+                    <div class="col-lg-6"><label id="TradeITIseatidID"></label></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-offset-1 col-lg-2">
+                        Remarks
+                    </div>
+                    <div class="col-lg-6">
+                        @*@Html.TextAreaFor(Model => Model.Remarks, new { @class = "form-control", @rows = "10" })*@
+                        <textarea id="RemarksTxt" name="RemarksTxt" rows="5" cols="33"> </textarea>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-lg-offset-1 col-lg-2">
+                        Status
+                    </div>
+                    <div class="col-lg-4">
+                        @*@Html.DropDownListFor(model => model.StatusId, new SelectList(Model.StatusList, "Value", "Text"), new { @class = "form-control select2" })
+                            <span id="spnselectdropdown" class="text-danger" style="display:none;">Please  Select Hierarcy level</span>*@
+                        <select class="form-control" id="StatusId">
+                            <option value="choose">Select</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-5">
+                        <a class=" btn btn-primary" id="submitbtn" onclick="UpdateRemarksDetailsForSeat()">Submit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/MasterDataUpload")
+
+<script src="https://cdn.jsdelivr.net/npm/html-to-pdfmake/browser.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/pdfmake@latest/build/pdfmake.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/pdfmake@latest/build/vfs_fonts.min.js'></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#tblGrid").DataTable();
+    });
+    GetOnLoadGridDetails();
+
+    GetRoles();
+
+    GetCourseTypes();
+    GetDivisions();
+    function GetCourseTypes() {
+        
+        $("#CourseTypes").empty();
+        $("#CourseTypes1").empty();
+        $("#CourseTypes2").empty();
+        $("#CourseTypes").append('<option value="choose">choose</option>');
+        $("#CourseTypes1").append('<option value="choose">choose</option>');
+        $("#CourseTypes2").append('<option value="choose">choose</option>');
+        $.ajax({
+            url: "/Admission/GetCourseTypes",
+            type: 'Get',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data != null || data != '') {
+                    $.each(data, function () {
+                        $("#CourseTypes").append($("<option/>").val(this.CourseId).text(this.CourseTypeName));
+                        $("#CourseTypes1").append($("<option/>").val(this.CourseId).text(this.CourseTypeName));
+                        $("#CourseTypes2").append($("<option/>").val(this.CourseId).text(this.CourseTypeName));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function GetDivisions() {
+        $("#Divisions").empty();
+        $("#Divisions1").empty();
+        $("#Divisions2").empty();
+        $("#Divisions").append('<option value="Select">Select</option>');
+        $("#Divisions1").append('<option value="Select">Select</option>');
+        $("#Divisions2").append('<option value="Select">Select</option>');
+        $.ajax({
+            url: "/Admission/GetDivisions",
+            type: 'Get',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data != null || data != '') {
+                    $.each(data, function () {
+                        $("#Divisions").append($("<option/>").val(this.Division_id).text(this.Division_name));
+                        $("#Divisions1").append($("<option/>").val(this.Division_id).text(this.Division_name));
+                        $("#Divisions2").append($("<option/>").val(this.Division_id).text(this.Division_name));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function GetDistrictList() {
+        var Divisions = $('#Divisions :selected').val();
+        $.ajax({
+            type: 'Get',
+            url: '/Admission/GetDistrictList',
+            data: { Divisions: Divisions },
+            success: function (data) {
+                if (data != null || data != '') {
+                    $("#Districts").empty();
+                    $("#Talukas").empty();
+                    $("#Districts").append($("<option/>").val(0).text("--Please Select--"));
+                    $("#Talukas").append($("<option/>").val(0).text("--Please Select--"));
+                    $.each(data, function () {
+                        $("#Districts").append($("<option/>").val(this.district_id).text(this.District_dist_name));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function GetTaluka() {
+        var Districts = $('#Districts :selected').val();
+        $.ajax({
+            type: 'Get',
+            url: '/Admission/GetTalukList',
+            data: { Districts: Districts },
+            success: function (data) {
+                if (data != null || data != '') {
+                    $("#Talukas").empty();
+                    $.each(data, function () {
+                        $("#Talukas").append($("<option/>").val(this.taluk_id).text(this.taluk_name));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function GetDistrictList1() {
+        var Divisions = $('#Divisions1 :selected').val();
+        $.ajax({
+            type: 'Get',
+            url: '/Admission/GetDistrictList',
+            data: { Divisions: Divisions },
+            success: function (data) {
+                if (data != null || data != '') {
+                    $("#Districts1").empty();
+                    $("#Talukas1").empty();
+                    $("#Districts1").append($("<option/>").val(0).text("--Please Select--"));
+                    $("#Talukas1").append($("<option/>").val(0).text("--Please Select--"));
+                    $.each(data, function () {
+                        $("#Districts1").append($("<option/>").val(this.district_id).text(this.District_dist_name));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function GetTaluka1() {
+        var Districts = $('#Districts1 :selected').val();
+        $.ajax({
+            type: 'Get',
+            url: '/Admission/GetTalukList',
+            data: { Districts: Districts },
+            success: function (data) {
+                if (data != null || data != '') {
+                    $("#Talukas1").empty();
+                    $.each(data, function () {
+                        $("#Talukas1").append($("<option/>").val(this.taluk_id).text(this.taluk_name));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function GetDistrictList2() {
+        var Divisions = $('#Divisions2 :selected').val();
+        $.ajax({
+            type: 'Get',
+            url: '/Admission/GetDistrictList',
+            data: { Divisions: Divisions },
+            success: function (data) {
+                if (data != null || data != '') {
+                    $("#Districts2").empty();
+                    $("#Talukas2").empty();
+                    $("#Districts2").append($("<option/>").val(0).text("--Please Select--"));
+                    $("#Talukas2").append($("<option/>").val(0).text("--Please Select--"));
+                    $.each(data, function () {
+                        $("#Districts2").append($("<option/>").val(this.district_id).text(this.District_dist_name));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function GetTaluka2() {
+        var Districts = $('#Districts2 :selected').val();
+        $.ajax({
+            type: 'Get',
+            url: '/Admission/GetTalukList',
+            data: { Districts: Districts },
+            success: function (data) {
+                if (data != null || data != '') {
+                    $("#Talukas2").empty();
+                    $.each(data, function () {
+                        $("#Talukas2").append($("<option/>").val(this.taluk_id).text(this.taluk_name));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+
+
+
+    function GetRoles() {
+        $("#SubmittedBy").empty();
+        $("#SubmittedBy").append('<option value="choose">choose</option>');
+        $.ajax({
+            url: "/Admission/GetRoleList",
+            type: 'Get',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data != null || data != '') {
+                    $.each(data, function () {
+                        $("#SubmittedBy").append($("<option/>").val(this.role_id).text(this.role_name));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+    function GetGridDetails() {
+        
+        var CourseTypes = $('#CourseTypes :selected').val();
+        var Divisions = $('#Divisions :selected').val();
+        var Districts = $('#Districts :selected').val();
+        var Talukas = $('#Talukas :selected').val();
+        
+        $.ajax({
+            type: "Post",
+            url: "/Admission/GetGridDetails",
+            data: {
+                CourseTypes: CourseTypes,
+                Divisions: Divisions,
+                Districts: Districts,
+                Talukas: Talukas,
+            },
+            success: function (data) {
+                
+                var t = $('#GridViewSeatAvailability').DataTable({
+                    data: data,
+                    destroy: true,
+                    columns: [
+                        { 'data': 'MISCode', 'title': 'Slno', 'className': 'text-center' },
+                        { 'data': 'MISCode', 'title': 'MISCode', 'className': 'text-center' },
+                        { 'data': 'Division_id', 'title': 'Division_id', 'className': 'text-left' },
+                        { 'data': 'Division_name', 'title': 'Division_name', 'className': 'text-left' },
+                        { 'data': 'district_id', 'title': 'DistrictCode', 'className': 'text-left' },
+                        { 'data': 'dist_name', 'title': 'DistrictName', 'className': 'text-left' },
+
+                        //{ 'data': 'Type', 'title': 'Type', 'className': 'text-center' },
+                        { 'data': 'iti_college_id', 'title': 'InstituteId', 'className': 'text-left' },
+                        { 'data': 'iti_college_name', 'title': 'InstituteName', 'className': 'text-left' },
+                        { 'data': 'trade_id', 'title': 'TradeId', 'className': 'text-left' },
+                        { 'data': 'trade_name', 'title': 'TradeName', 'className': 'text-left' },
+                        { 'data': 'SeatsPerUnit', 'title': 'SeatsPerUnit', 'className': 'text-center' },
+                        { 'data': 'units', 'title': 'Unit', 'className': 'text-left' },
+                        { 'data': 'SeatType', 'title': 'GovtGIASeats', 'className': 'text-left' },
+                        { 'data': 'PPP_seats', 'title': 'PPPSeats', 'className': 'text-left' },
+                        { 'data': 'IMCPrivateManageMent', 'title': 'IMCPrivateManageMent', 'className': 'text-left' },
+                        { 'data': 'IsPPP', 'title': 'IsPPP', 'className': 'text-center' },
+                        { 'data': 'Shift', 'title': 'Shift', 'className': 'text-center' },
+                        { 'data': 'DualSystemTraining', 'title': 'DualSystemTraining', 'className': 'text-center' },
+
+
+                    ]
+                });
+                t.on('order.dt search.dt', function () {
+                    t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            }
+        });
+    }
+    function GetOnLoadGridDetails() {
+        
+        //var CourseTypes = $('#CourseTypes :selected').val();
+        //var Divisions = $('#Divisions :selected').val();
+        //var Districts = $('#Districts :selected').val();
+        //var Talukas = $('#Talukas :selected').val();
+        
+        $.ajax({
+            type: "Get",
+            url: "/Admission/GetOnLoadGridDetails",
+            success: function (data) {
+                
+                var t = $('#GridViewSeatAvailability').DataTable({
+                    data: data,
+                    destroy: true,
+                    columns: [
+                        { 'data': 'MISCode', 'title': 'Slno', 'className': 'text-center' },
+                        { 'data': 'MISCode', 'title': 'MISCode', 'className': 'text-center' },
+                        { 'data': 'Division_id', 'title': 'Division_id', 'className': 'text-left' },
+                        { 'data': 'Division_name', 'title': 'Division_name', 'className': 'text-left' },
+                        { 'data': 'district_id', 'title': 'DistrictCode', 'className': 'text-left' },
+                        { 'data': 'dist_name', 'title': 'DistrictName', 'className': 'text-left' },
+
+                        //{ 'data': 'Type', 'title': 'Type', 'className': 'text-center' },
+                        { 'data': 'iti_college_id', 'title': 'InstituteId', 'className': 'text-left' },
+                        { 'data': 'iti_college_name', 'title': 'InstituteName', 'className': 'text-left' },
+                        { 'data': 'trade_id', 'title': 'TradeId', 'className': 'text-left' },
+                        { 'data': 'trade_name', 'title': 'TradeName', 'className': 'text-left' },
+                        { 'data': 'SeatsPerUnit', 'title': 'SeatsPerUnit', 'className': 'text-center' },
+                        { 'data': 'units', 'title': 'Unit', 'className': 'text-left' },
+                        { 'data': 'SeatType', 'title': 'GovtGIASeats', 'className': 'text-left' },
+                        { 'data': 'PPP_seats', 'title': 'PPPSeats', 'className': 'text-left' },
+                        { 'data': 'IMCPrivateManageMent', 'title': 'IMCPrivateManageMent', 'className': 'text-left' },
+                        { 'data': 'IsPPP', 'title': 'IsPPP', 'className': 'text-center' },
+                        { 'data': 'Shift', 'title': 'Shift', 'className': 'text-center' },
+                        { 'data': 'DualSystemTraining', 'title': 'DualSystemTraining', 'className': 'text-center' },
+
+
+                    ]
+                });
+                t.on('order.dt search.dt', function () {
+                    t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            }
+        });
+    }
+
+    //update tab
+    GetProjectDetailsList();
+    GetStatusList();
+    function GetProjectDetailsList() {
+        $.ajax({
+            type: "GET",
+            url: "/Admission/GetSeatList",
+            contentType: "application/json",
+            success: function (data) {
+
+                $('#tblsample').DataTable({
+                    data: data,
+                    "destroy": true,
+                    columns: [
+                        { 'data': 'SlNo', 'title': 'Sl No' },
+                        { 'data': 'MISCode', 'title': 'MIS Code', 'className': 'text-left' },
+                        { 'data': 'Division_name', 'title': 'Division name' },
+                        { 'data': 'dist_name', 'title': 'District Name', 'className': 'text-left' },
+                        //{ 'data': 'DBName', 'title': 'Item Cost' },
+                        {
+                            'data': 'MISCode',
+                            'title': 'Action',
+                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                                $(nTd).html("<input type='button' onclick='GetSeatId(" + oData.MISCode + ")' class='btn btn-success btn-xs' data-toggle='modal' data-target='#myModal' value='Edit' id='edit'/>");
+                            }
+
+                        }
+                    ]
+                });
+            }
+        });
+    }
+
+    function GetSeatList(control) {
+        $.ajax({
+            type: "GET",
+            url: '/Admission/GetSeatList',
+            contentType: "application/json",
+            success: function (data) {
+                if (data.length > 0) {
+
+                    var $data = $('<table id=tblGridUpdateSeatAvailability></table>').addClass('table table-bordered table-hover');
+                    var header = "<thead><tr><th>Sl No</th><th>MIS Code</th><th>Division Name</th><th>District Name</th><th></th></tr></thead>";
+                    $data.append(header);
+                    $.each(data, function (i, row) {
+                        var $row = $('<tr/>');
+                        $row.append($('<td/>').html(row.SlNo));
+                        $row.append($('<td/>').html(row.MISCode));
+                        $("#TradeITIseatidID").text(row.Trade_ITI_seat_id);
+                        $row.append($('<td/>').html(row.Division_name));
+                        $row.append($('<td/>').html(row.dist_name));
+                        $row.append($('<td/>').html("<a class='btn btn-primary' onClick='GetSeatId(10)'>Action</a>"));
+                        $data.append($row);
+                    })
+                    $('#update_panel').html($data);
+                    var tblGridUpdateSeatAvailability = $('#tblGridUpdateSeatAvailability').DataTable();
+                    tblGridUpdateSeatAvailability.on('order.dt arch.dt', function () {
+                        tblGridUpdateSeatAvailability.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
+                    }).draw();
+                }
+            }
+        });
+    }
+
+    function GetSeatId(GetMISCode) {
+        $.ajax({
+            type: 'Get',
+            url: '/Admission/GetTalukList',
+            data: { Districts: GetMISCode },
+            success: function (data) {
+                if (data != null || data != '') {
+                    $.each(data, function () {
+                        $("#Remarks").text(this.RemarksText);
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+        $('#myModal').modal('show');
+    }
+
+    function GetStatusList() {
+        $.ajax({
+            type: 'Get',
+            url: '/Admission/GetStatusList',
+            success: function (data) {
+                if (data != null || data != '') {
+                    $.each(data, function () {
+                        $("#StatusId").append($("<option/>").val(this.Value).text(this.Text));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function UpdateRemarksDetailsForSeat() {
+        var Remarks = $('textarea#RemarksTxt').val();
+        var Status = $('#StatusId :selected').val();
+        $.ajax({
+            type: 'Get',
+            url: '/Admission/UpdateRemarksDetailsForSeat',
+            data: {
+                Remarks: Remarks,
+                Status: Status
+            },
+            success: function (data) {
+                if (data.length > 0) {
+
+                    var $data = $('<table id=tblGridUpdateSeatAvailability></table>').addClass('table table-bordered table-hover');
+                    var header = "<thead><tr><th>Sl No</th><th>MIS Code</th><th>Division Name</th><th>District Name</th><th></th></tr></thead>";
+                    $data.append(header);
+                    $.each(data, function (i, row) {
+                        var $row = $('<tr/>');
+                        $row.append($('<td/>').html(row.SlNo));
+                        $row.append($('<td/>').html(row.MISCode));
+                        $("#TradeITIseatidID").val(row.MISCode);
+                        $row.append($('<td/>').html(row.Division_name));
+                        $row.append($('<td/>').html(row.dist_name));
+                        $row.append($('<td/>').html("<a class='btn btn-primary' onClick='GetSeatId(10)'>Action</a>"));
+                        $data.append($row);
+                    })
+                    $('#update_panel').html($data);
+                    var tblGridUpdateSeatAvailability = $('#tblGridUpdateSeatAvailability').DataTable();
+                    tblGridUpdateSeatAvailability.on('order.dt arch.dt', function () {
+                        tblGridUpdateSeatAvailability.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
+                    }).draw();
+
+                    $("#myModal").hide();
+                }
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+
+    }
+    //update grid
+    function GetUpdateGridDetails() {       
+        var CourseTypes = $('#CourseTypes1 :selected').val();
+        var Divisions = $('#Divisions1 :selected').val();
+        var Districts = $('#Districts1 :selected').val();
+        var Talukas = $('#Talukas1 :selected').val();
+        
+        $.ajax({
+            type: "Post",
+            url: "/Admission/GetGridDetails",
+            data: {
+                CourseTypes: CourseTypes,
+                Divisions: Divisions,
+                Districts: Districts,
+                Talukas: Talukas,
+            },
+            success: function (data) {
+                
+                var t = $('#GridUpdateSeatAvailability').DataTable({
+                    data: data,
+                    destroy: true,
+                    columns: [
+                        { 'data': 'MISCode', 'title': 'Slno', 'className': 'text-center' },
+                        { 'data': 'MISCode', 'title': 'MISCode', 'className': 'text-center' },
+                        { 'data': 'Division_id', 'title': 'Division_id', 'className': 'text-left' },
+                        { 'data': 'Division_name', 'title': 'Division_name', 'className': 'text-left' },
+                        { 'data': 'district_id', 'title': 'DistrictCode', 'className': 'text-left' },
+                        { 'data': 'dist_name', 'title': 'DistrictName', 'className': 'text-left' },
+
+                        //{ 'data': 'Type', 'title': 'Type', 'className': 'text-center' },
+                        { 'data': 'iti_college_id', 'title': 'InstituteId', 'className': 'text-left' },
+                        { 'data': 'iti_college_name', 'title': 'InstituteName', 'className': 'text-left' },
+                        { 'data': 'trade_id', 'title': 'TradeId', 'className': 'text-left' },
+                        { 'data': 'trade_name', 'title': 'TradeName', 'className': 'text-left' },
+                        { 'data': 'SeatsPerUnit', 'title': 'SeatsPerUnit', 'className': 'text-center' },
+                        { 'data': 'units', 'title': 'Unit', 'className': 'text-left' },
+                        { 'data': 'SeatType', 'title': 'GovtGIASeats', 'className': 'text-left' },
+                        { 'data': 'PPP_seats', 'title': 'PPPSeats', 'className': 'text-left' },
+                        { 'data': 'IMCPrivateManageMent', 'title': 'IMCPrivateManageMent', 'className': 'text-left' },
+                        { 'data': 'IsPPP', 'title': 'IsPPP', 'className': 'text-center' },
+                        { 'data': 'Shift', 'title': 'Shift', 'className': 'text-center' },
+                        { 'data': 'DualSystemTraining', 'title': 'DualSystemTraining', 'className': 'text-center' },
+                        {
+                            'data': 'MISCode',
+                            'title': 'Action',
+                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                                $(nTd).html("<input type='button' onclick='GetSeatId(" + oData.MISCode + ")' class='btn btn-success btn-xs' data-toggle='modal' data-target='#myModal' value='Edit' id='edit'/>");
+                            }
+
+                        }]
+                });
+                t.on('order.dt search.dt', function () {
+                    t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            }
+        });
+    }
+
+
+
+</script>

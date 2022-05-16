@@ -1,0 +1,137 @@
+﻿@*@model Models.ExamNotification.QuestionPaper
+
+    @{
+        ViewBag.Title = "Edit_GetSearchModifyQuestionPapers1";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }*@
+
+
+@model Models.ExamNotification.ViewModel
+@{
+    ViewBag.Title = "GetSearchModifyQuestionPapers";
+    Layout = null;
+    //  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Content/frontend/js/SmoothScroll.min.js"></script>
+<script src="~/Content/frontend/js/move-top.js"></script>
+<script src="~/Content/frontend/js/easing.js"></script>
+<script>
+    //To get selected value an text of dropdownlist
+    function SelectedValue(ddlObject) {
+        //Selected value of dropdownlist
+        var selectedValue = ddlObject.value;
+        //Selected text of dropdownlist
+        var selectedText = ddlObject.options[ddlObject.selectedIndex].innerHTML;
+
+        //alert popup with detail of seleceted value and text
+        alert(" Selected Value: " + selectedValue + " -- " + "Selected Text: " + selectedText);
+    }
+</script>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>QuestionPaper</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.questionPaperSets.course_name, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label for="txtAgencyRegnNo">Course Type<span style="color:red"> *</span></label>
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.CourseType, new { htmlAttributes = new { @class = "form-control" } })*@
+                @*@Html.DropDownListFor(model => model.questionPaperSets.course_id, new SelectList(Model.questionPaperSets.CourseTypeList, "Value", "Text"), new { @class = "form-control select2", @id = "ddlCID" })*@
+                @*@Html.DropDownListFor(m => m.questionPaperSets.course_id, ViewBag.EntidadList as SelectList, "Seleccionar", new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.DropDownListFor(a => a.questionPaperSets.course_id, (IEnumerable<SelectListItem>)ViewBag.EntidadList, "-- Select Department --")*@
+                @*@Html.DropDownListFor(m => m.questionPaperSets.course_id, (IEnumerable<SelectListItem>)ViewBag.CourseID)*@
+                @*@Html.ValidationMessageFor(model => model.questionPaperSets.course_name, "", new { @class = "text-danger" })*@
+                @Html.DropDownListFor(model => model.questionPaperSets.course_id, ViewBag.CourseID as SelectList, new { @class = "form-control", @onChange = "SelectedValue(this)" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.TradeType, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label for="txtAgencyRegnNo">Trade Type<span style="color:red"> *</span></label>
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.TradeType, new { htmlAttributes = new { @class = "form-control" } })*@
+                @*@Html.DropDownListFor(model => model.questionPaperSets.trade_type_id, new SelectList(Model.questionPaperSets.TradeTypeList, "Value", "Text"), new { @class = "form-control select2", @onchange = "GetTradeList()", @id = "trade_type_idmodify" })*@
+                @*@Html.DropDownListFor(m => m.questionPaperSets.trade_type_id, ViewBag.EntidadList as SelectList, "Seleccionar", new { htmlAttributes = new { @class = "form-control" } })*@
+                @*@Html.ValidationMessageFor(model => model.questionPaperSets.TradeTypeList, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.Trade, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Trade, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Trade, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TradeYear, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TradeYear, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TradeYear, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ExamType, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ExamType, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ExamType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SubjectType, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SubjectType, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SubjectType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ExamDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ExamDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ExamDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.QP, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.QP, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.QP, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

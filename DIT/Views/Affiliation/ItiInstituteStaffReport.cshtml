@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewBag.Title = "ItiInstituteStaffReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+<style>
+    table.dataTable thead tr {
+        background-color: cornflowerblue;
+        color: white;
+    }
+
+    .headetitle {
+        text-align: center;
+        background-color: cornflowerblue;
+        color: white;
+        border-radius: 5px;
+        height: 35px;
+    }
+</style>
+<br />
+<br />
+<br />
+<select id="mode" style="display:none">
+    <option value="Dite">Avoid-all</option>
+    <option value="css">CSS</option>
+    <option value="legacy">Legacy</option>
+    <option value="specify">Specified elements (using before/after/avoid)</option>
+</select>
+<div class="tab-content">
+    <input type="hidden" id="hdnDiv_ID" data-value="@ViewBag.UserDivionId" /> 
+    <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+        <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">GIA-Private Staff Details Report</span></div>
+        <br /><br />
+        <h2 class="head1">GIA-Private Staff Details Report</h2>
+        <br /><br />
+              <div class="row">
+
+                  <div class="col-lg-1">
+                      <label>Session:</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change " id="Session12">
+                      </select>
+                  </div>
+
+                  <div class="col-lg-1">
+                      <label>Quarter</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change " id="Quarterid">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                      </select>
+                  </div>
+
+                  <div class="col-lg-1">
+                      <label class="control-label" for="txtAgencyRegnNo">Course Type</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change" id="CourseTypes">
+                          <option value="choose">Select</option>
+                      </select>
+                  </div>
+                  <div class="col-lg-1">
+                      <label for="txtAgencyRegnNo">Division</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change" id="Divisions" onchange="GetDistrictList(this);">
+                          <option value="choose">Select</option>
+                      </select>
+                  </div>
+                  
+              </div>
+              <div class="row">
+                  <div class="col-lg-1">
+                      <label for="txtAgencyRegnNo">District</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change district" id="Districts" onchange="GetTalukList(this);">
+                          <option value="choose">Select</option>
+                      </select>
+                  </div>
+                  <div class="col-lg-1">
+                      <label for="txtAgencyRegnNo">Taluk</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change " id="Taluka">
+                          <option value="0">Select</option>
+                      </select>
+                  </div>
+                  <div class="col-lg-1">
+                      <label for="txtAgencyRegnNo">Location Type</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change" id="LocationType-Add">
+                      </select>
+                  </div>
+                  <div class="col-lg-1">
+                      <label class="control-label" for="txtAgencyRegnNo">Institute Type</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change" id="TypeOfITI-Add">
+                      </select>
+                  </div>
+                  
+
+              </div>
+              <div class="row">
+                  <div class="col-lg-1">
+                      <label for="txtAgencyRegnNo">Financial Scheme</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change " id="Scheme-Add">
+                      </select>
+                  </div>
+                  <div class="col-lg-1">
+                      <label>Mode Of Training</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change " id="trainingID">
+                          <option value="0">ALL</option>
+                          <option value="dual">Dual</option>
+                          <option value="regular">Regular</option>
+                      </select>
+                  </div>
+
+                  <div class="col-lg-1">
+                      <label for="txtAgencyRegnNo">Trade</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change " id="dd-trade">
+                      </select>
+                  </div>
+                  <div class="col-lg-1">
+                      <label for="txtAgencyRegnNo">Gender</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change" id="Gender">
+                      </select>
+                  </div>
+                 
+              </div>
+              <div class="row">
+                  <div class="col-lg-1">
+                      <label for="txtAgencyRegnNo">Staff Type</label>
+                  </div>
+                  <div class="col-lg-2">
+                      <select class="form-control filter-change " id="dd-stafftype">
+                      </select>
+                  </div>
+              </divclass="row">
+        <div class="col-sm-2">
+            <div class="col-sm-6">
+                <button class="btn btn-primary" style="width:100px;" onclick="GetAllstaffInstitute()">Search</button>
+            </div>
+        </div>
+        <div>
+
+        </div>
+        <br />
+        <br />
+
+        <div class="row">
+            <div></div>
+            @*<div class="col-lg-4">
+                    <input type="button" id="btn-cancel" class="btn btn-primary" value="Download PDF" onclick="pdfStaffDownload()" />
+                </div>*@
+
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-lg-4" id="staf-count">
+                    <label>Total No. of Staff : </label>&nbsp;&nbsp;<span style="font-weight:bold;color:red;" id="StaffCount"></span>
+                </div>
+                <div class="col-lg-4">
+                    @*<input type="button" id="btn-cancel" class="btn btn-primary" value="Download PDF" onclick="pdfStaffDownload()" />*@
+                    <input type="button" id="Staf-Excel" class="btn btn-primary" value="Download Excel" onclick="ExcelExportStaff()" />
+                </div>
+            </div>
+            <div style="overflow-x:scroll">
+                <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="StaffStatusTable">
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/StaffReportJs")
+<script src="~/Scripts/htmltopdf/html2pdf.bundle.js"></script>
+<script src="~/Scripts/table2excel.js"></script>

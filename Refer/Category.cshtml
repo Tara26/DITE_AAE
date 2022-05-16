@@ -1,0 +1,404 @@
+﻿
+@{
+    ViewBag.Title = "Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xl-12 col-12">
+            <div class="page-heading d-sm-flex justify-content-sm-between align-items-sm-center">
+                <h2 class="title mb-3 mb-sm-0">
+                    Category
+                </h2>
+                <nav class="mb-0 breadcrumb">
+                    <a style="float:right; margin-right:10px;" class="btn btn-primary pull-right" data-toggle='modal' onclick="Clear()" data-target='#myModal'><i class='zmdi zmdi-plus-circle-o zmdi-hc-fw'></i> Add Category</a>
+                </nav>
+            </div>
+            <div class="gx-card">
+                <div class="gx-card-body">
+
+                    <div class="table-responsive max-hight-scroll">
+                        <table class="table table-striped" id="CategoryTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Category</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="text-right">
+                                        <label for="CategoryNameTxt">Category Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="text" id="CategoryNameTxt" />
+                                    <span id="CategoryNameTxtErr" style="font-size:12px;color:red;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="text-right">
+                                        <label for="SpNameTxt">SP Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="SpNameTxt" >
+                                        <option value="choose">choose</option>
+                                    </select>
+                                    <span id="SpNameTxtErr" style="font-size:12px;color:red;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="text-right">
+                                        <label for="DescTxt">Description</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="text" id="DescTxt" />
+                                    <span id="DescTxtErr" style="font-size:12px;color:red;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="Save()">Save</button>
+                <button class="btn btn-info" onclick="Clear()">Clear</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Category</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            <div class="row">
+                                <input type="hidden" id="CategoryId" />
+                                <div class="col-sm-4">
+                                    <div class="text-right">
+                                        <label for="CategoryNameTxt1">Category Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="text" id="CategoryNameTxt1" />
+                                    <span id="CategoryNameTxtErr1" style="font-size:12px;color:red;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="text-right">
+                                        <label for="SpNameTxt1">SP Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="SpNameTxt1">
+                                        <option value="choose">choose</option>
+                                    </select>
+                                    <span id="SpNameTxtErr1" style="font-size:12px;color:red;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="text-right">
+                                        <label for="DescTxt1">Description</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="text" id="DescTxt1" />
+                                    <span id="DescTxtErr1" style="font-size:12px;color:red;"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="Update()">Update</button>
+                <button class="btn btn-primary" onclick="EditClear()">Clear</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    function Clear() {
+        $('#CategoryNameTxt').val('');
+        $('#SpNameTxt').val('choose');
+
+
+        $('#DescTxt').val('');
+        $('#CategoryNameTxtErr').text('');
+        $('#SpNameTxtErr').text('');
+        $('#DescTxtErr').text('');
+    }
+    GetSpNames();
+    function GetSpNames() {        
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSPNames", "MSSQL")',               
+                contentType: "application/json",
+                success: function (data) {
+                    $('#SpNameTxt').empty();
+                    var option1 = '<option value="choose" selected>choose </option>'; 
+                    $('#SpNameTxt').append(option1);                    
+                    var option = '';
+                    for (var i = 0; i < data.length; i++) {
+                        option += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    }                                  
+                    $('#SpNameTxt').append(option);
+
+                    $('#SpNameTxt1').empty();
+                    var option2 = '<option value="choose" selected>choose </option>';
+                    $('#SpNameTxt1').append(option2);
+                    var option3 = '';
+                    for (var i = 0; i < data.length; i++) {
+                        option3 += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    }
+                    $('#SpNameTxt1').append(option3);
+                    
+                },
+                error: function (error) {
+                       alert(error.status + " " + error.statusText);
+                }
+        });
+    }
+
+    function Update() {
+            $('#CategoryNameTxtErr1').text('');
+            $('#SpNameTxtErr1').text('');
+            $('#DescTxtErr1').text('');
+            if ($('#CategoryNameTxt1').val() == '' && $('#SpNameTxt1').val() == 'choose' && $('#DescTxt1').val() == '') {
+                $('#CategoryNameTxtErr1').text('Enter the category name');
+                $('#SpNameTxtErr1').text('Enter the sp name');
+                $('#DescTxtErr1').text('Enter the Description');
+            }
+            else if ($('#CategoryNameTxt1').val()=='') {
+                $('#CategoryNameTxtErr1').text('Enter the category name');
+            }
+            else if ($('#SpNameTxt1').val() == 'choose') {
+                $('#SpNameTxtErr1').text('select the sp name');
+            }
+            else if ($('#DescTxt1').val() == '') {
+                $('#DescTxtErr1').text('Enter the Description');
+            }
+            else {
+                var uData = {
+                 CategoryID:$('#CategoryId').val(),
+                CategoryName: $('#CategoryNameTxt1').val(),
+                SPName: $('#SpNameTxt1').val(),
+                Description: $('#DescTxt1').val()
+
+                }
+                $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateCategory", "MSSQL")',
+                data: ko.toJSON(uData),
+                contentType: "application/json",
+                    success: function (data) {
+                        if (data == true) {
+                            alert("Updated successfully");
+                            LoadTable();
+                            $("#myModal2").modal("hide");
+                        }
+                        else {
+                            alert("Update failed");
+                        }
+                    },
+                    error: function (error) {
+                        alert(error.status + " " + error.statusText);
+                    }
+                });
+            }
+        }
+
+    function EditClear() {
+        $('#CategoryNameTxt1').val('');
+        $('#SpNameTxt1').val('choose');
+        $('#DescTxt1').val('');
+        $('#CategoryNameTxtErr1').text('');
+        $('#SpNameTxtErr1').text('');
+        $('#DescTxtErr1').text('');
+    }
+
+    function Save() {
+        $('#CategoryNameTxtErr').text('');
+        $('#SpNameTxtErr').text('');
+        $('#DescTxtErr').text('');
+
+        if ($('#CategoryNameTxt').val() == '' && $('#SpNameTxt').val() == 'choose' && $('#DescTxt').val()=='') {
+            $('#CategoryNameTxtErr').text('Enter the category name');
+            $('#SpNameTxtErr').text('Enter the sp name');
+            $('#DescTxtErr').text('Enter the Description');
+        }
+        else if ($('#CategoryNameTxt').val() == '') {
+            $('#CategoryNameTxtErr').text('Enter the category name');
+        }
+        else if ($('#SpNameTxt').val() == 'choose') {
+            $('#SpNameTxtErr').text('Select the sp name');
+        }
+        else if ($('#DescTxt').val() == '') {
+            $('#DescTxtErr').text('Enter the Description');
+        }
+        else {
+            var cData = {
+                CategoryName: $('#CategoryNameTxt').val(),
+                SPName: $('#SpNameTxt').val(),
+                Description: $('#DescTxt').val()
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddCategory", "MSSQL")',
+                data: ko.toJSON(cData),
+                contentType: "application/json",
+                success: function (data) {
+                    if (data == "success") {
+                        alert("Record inserted successfully");
+                        LoadTable();
+                        Clear();
+                        $('#myModal').modal("hide");
+                    }
+                    else if (data == "exists") {
+                        alert("Category name already exists ");
+                    }
+                    else {
+                        alert("Record insert failed due to following reasons \n Manufacturer already exist \n Connection issue ");
+                    }
+
+
+                },
+                error: function (error) {
+                    alert(error.status + " " + error.statusText);
+                }
+            });
+        }
+
+    }
+    LoadTable();
+    function LoadTable() {
+        loadLevelTables("CategoryTable");
+    }
+    function loadLevelTables(control)
+    {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetCategoryList", "MSSQL")',
+            contentType: "application/json",
+            //data: { "Level": level },
+            success: function (data) {
+                $('#' + control).DataTable({
+                    data: data,
+                    "bDestroy": true,
+                    columns: [
+                        { 'data': 'SlNo', 'title': 'Sl No' },
+                        { 'data': 'CategoryName', 'title': 'Name' },
+                        { 'data': 'SPName', 'title': 'SP Name', 'className': 'text-left' },
+                        { 'data': 'Description', 'title': 'Description', 'className': 'text-left' },
+                         {
+                             'data': 'CategoryID',
+                            'title': 'Action',
+                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                                $(nTd).html("<i class='zmdi zmdi-edit zmdi-hc-fw' style='cursor: pointer;' onclick='edit(" + oData.CategoryID + ")' data-toggle='modal' data-target='#myModal2'></i>  " +
+                                    " <i class='zmdi zmdi-delete zmdi-hc-fw text-danger' style='cursor: pointer;' onclick='DeleteDescription(" +
+                                    oData.CategoryID + ")'></i>");
+                            }
+
+                        }
+                    ]
+                });
+            }
+        });
+    }
+
+     function DeleteDescription(num) {
+         var del = confirm("Do you want to delete?");
+         if (del === true) {
+             $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("DeleteCategory", "MSSQL")',
+                    data: { "id": num},
+                    contentType: "application/json",
+                    success: function (data) {
+                        if (data == true) {
+                            alert("Deleted successfully");
+                            LoadTable();
+                        }
+                        else {
+                        alert("Delete failed");
+                        }
+                    },
+                    error: function (error) {
+                        alert(error.status + " " + error.statusText);
+                    }
+            });
+         }
+
+     }
+
+    function edit(num) {
+        $('#CategoryNameTxtErr1').text('');
+        $('#SpNameTxtErr1').text('');
+        $('#DescTxtErr1').text('');
+        $('#CategoryId').val('');
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetCategoryById", "MSSQL")',
+            data: { "Id": num },
+            contentType: "application/json",
+            success: function (data) {
+                $('#CategoryNameTxt1').val(data.CategoryName);
+                $('#SpNameTxt1').val(data.SPName);
+                $('#DescTxt1').val(data.Description);
+                $('#CategoryId').val(data.CategoryID);
+            },
+            error: function (error) {
+                alert(error.status + " " + error.statusText);
+            }
+        });
+    }
+
+
+</script>

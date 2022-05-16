@@ -1,0 +1,658 @@
+﻿@model Models.Admission.AssignDataBasedOnTabs
+
+@{
+    ViewBag.Title = "ApplicantOnlineApplicationForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    Model.SearchFrom = "A";
+}
+
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+
+<ul class="nav nav-tabs font p30">
+    <li>
+        <a href="#tab_1" id="tab1" data-toggle="tab">Application Form</a>
+    </li>
+    <li>
+        <a href="#tab_2" id="tab2" data-toggle="tab">Application Status</a>
+    </li>
+</ul>
+
+<div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);padding:5px;" id="divEnds">
+    <div class="row border">
+        <div class="tab-content">
+            <div class="tab-pane fade" id="tab_1">
+
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="row clsStudyInKarnataka">
+                            <div class="col-md-5">
+                                <label>Have you studied in Karnataka for 5 Years (Y/N)?</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="radio" name='StudyInKarnataka' value="1"><b>Yes</b>&nbsp;&nbsp;
+                                <input type="radio" name='StudyInKarnataka' value="0"><b>No</b>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row clsParentGovtEE" hidden>
+                            <div class="col-md-5">
+                                <label>Is your parent employ of Central/state Govt. working in other state (Y/N)?</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="radio" name='ParentGovtEE' value="1"><b>Yes</b>&nbsp;&nbsp;
+                                <input type="radio" name='ParentGovtEE' value="0"><b>No</b>
+                            </div>
+                            <div class="row clsOtherState" hidden>
+                                <div class="col-md-2">
+                                    <label>Select State<font class="text-danger">*</font></label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="ddlState">
+                                        <option value="0">Select State</option>
+                                    </select>
+                                    <small class="text-danger" id="ddlState-Required" style="display:none">State is required*</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Parent Occupation<font class="text-danger"></font></label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input name="txtParentOccHeader" type="text" id="txtParentOccHeader" onkeyup="getParentOccupation(this.id, 'txtParentOccupation')" maxlength="50" autocomplete="off" class="form-control ParentOccupation">
+                                    <small class="text-danger" id="txtParentOccupation-Required" style="display:none">Parent Occupation is required*</small>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row clsStudyKannadaInOtherSt" hidden>
+                            <div class="col-md-5">
+                                <label>Have you Studied Kannada Medium from 1st to 10th Std in other state (Y/N)?</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="radio" name='StudyKannadaInOtherSt' value="1"><b>Yes</b>&nbsp;&nbsp;
+                                <input type="radio" name='StudyKannadaInOtherSt' value="0"><b>No</b>
+                            </div>
+                            <div class="row clsOtherState1" hidden>
+                                <div class="col-md-2">
+                                    <label>Select State<font class="text-danger">*</font></label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="ddlState1">
+                                        <option value="0">Select State</option>
+                                    </select>
+                                    <small class="text-danger" id="ddlState-Required" style="display:none">State is required*</small>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+
+                @Html.Partial("ApplicantOnlineApplicationFormPartial", Model)
+
+                <div id="EnableDisableSubmit" class="panel panel-default">
+                    <br>
+                    <div class="row">
+                        <div class="text-justify" style="text-align:center">
+                            <div id="FinalSubmitRemarks" class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label>Remarks</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <textarea name="txtApplRemarks" style="resize: none;" type="text" id="txtApplRemarks" maxlength="250" class="form-control" rows="4" cols="20"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="FinalSubmit" class="form-group">
+                                <input type="button" value="Submit" class="btn btn-primary update-button" onclick="SaveUpdates()" />
+                                <br><br>
+                                <large id="showSubmitButtonDetailsNote" class="text-danger">
+                                    Note : Kindly click the submit button if you are updating any changes in anyone of the listed above details,
+                                    then only changes will get reflect to your Application 111111111*
+                                </large>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="EnableDisableSubmitReason" class="panel panel-default">
+                    <br>
+                    <div class="row">
+                        <div class="text-justify" style="text-align:center">
+                            <div class="form-group">
+                                <large id="showSubmitButtonDetailsNote" class="text-danger">
+                                    Note : Kindly Enter the required details listed above Applicant, Education, Address, Documents,
+                                    Document Verification Center, Institute Preference to submit the application*
+                                </large>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ApplSubmittedRecipt" class="panel panel-default">
+                    <br>
+                    <div class="row">
+                        <div class="text-justify" style="text-align:center">
+                            <div class="form-group">
+                                <large class="text-danger">
+                                    Note : Application Submitted Succesfully. Verification officer not yet assigned.
+                                </large>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="NotEligibleApplFormLocalCriteria" class="panel panel-default" hidden>
+                    <br>
+                    <div class="row">
+                        <div class="text-justify" style="text-align:center">
+                            <div class="form-group">
+                                <large class="text-danger">
+                                    Note : You are NOT eligible to fill the Application Form as you do NOT meet the specified criteria.
+                                </large>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ApplSubmittedReciptVO" class="panel panel-default">
+                    <br>
+                    <div class="row">
+                        <div class="text-justify" style="text-align:center">
+                            <div class="form-group">
+                                <large class="text-danger">
+                                    Note : Application Submitted Succesfully. Verification officer will verify your application submitted documents and they will update your application status
+                                </large>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ApplReSubmittedRecipt" class="panel panel-default">
+                    <br>
+                    <div class="row">
+                        <div class="text-justify" style="text-align:center">
+                            <div class="form-group">
+                                <large class="text-danger">
+                                    Note : Application Re-Submitted Successfully. Verification officer will verify your application re-submitted documents and update your application status
+                                </large>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ApplVerifiedOfficer" class="panel panel-default">
+                    <br>
+                    <div class="row">
+                        <div class="text-justify" style="text-align:center">
+                            <div class="form-group">
+                                <large class="text-danger">
+                                    Note : Application Approved by Verification Officer
+                                </large>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group NotEligibleApplicationForm" style="text-align:center;">
+                    <large class="text-danger">
+                        Note : You're not eligible to file the application because the current date not yet reached the committed date.
+                    </large>
+                </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="tab_2">
+                <table id="ApplicantStatusTable" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+            </div>
+        </div>
+    </div>
+</div>    
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog" style="width:80%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <a href="#" class="close" data-dismiss="modal" aria-label="close">&times;</a><br><br>
+                <div class="accordion-option">
+                    <h3 class="title">Application Document Details summary - Status of each Application given by Verification Officer</h3>
+                    <a href="javascript:void(0)" class="toggle-accordion active" accordion-id="#accordion"></a>
+                </div>
+                <div class="clearfix"></div>
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h3 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Documents
+                                </a>
+                            </h3>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <table class="table table-bordered table-hover text-center" id="tblGrid">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>Document Type</th>
+                                                <th>Document File</th>
+                                                <th width="2%">Link</th>
+                                                <th>Document Status</th>
+                                                <th>Document Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="color:Black;" id="SeatRulesValues">
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Educational certificate</b>
+                                                    <div id="DocEduCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocEduCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="EduCertificate" class="form-control" id="EduCertificate1" disabled>
+                                                </td>
+                                                <td>
+                                                    <a id="aEduCertificate1" href="" class="link EduFileAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Education Documents" class="pull-left" id="aEduCertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="EduDocStatus" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocEduStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtEduCertRemarks" disabled style="resize: none;width: 90%" type="text" id="txtEduCertRemarks" maxlength="50" class="form-control" rows="4" cols="20"></textarea>
+                                                    <small class="text-danger" id="WithoutDocEduRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Caste certificate</b>
+                                                    <div id="DocCasCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocCasCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="CasteCertificate" class="form-control" id="CasteCertificate1" disabled>
+                                                </td>
+                                                <td>
+                                                    <a id="aCasteCertificate1" href="" class="link CasteFileAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Caste Documents" class="pull-left" id="aCasteCertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="CasDocStatus">Update the status</select>
+                                                    <small class="text-danger" disabled id="WithoutDocCasStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtCasteCertRemarks" disabled style="resize: none;width: 90%" type="text" id="txtCasteCertRemarks" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocCasRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Ration card</b>
+                                                    <div id="DocRatCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocRatCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Rationcard" class="form-control" id="Rationcard1" disabled>
+                                                </td>
+                                                <td>
+                                                    <a id="aRationCard1" href="" class="link RationFileAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Ration Documents" class="pull-left" id="aRationCard1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" disabled id="RationDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocRatStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtRationCardRemarks" disabled style="resize: none;width: 90%" type="text" id="txtRationCardRemarks" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocRatRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Income certificate</b>
+                                                    <div id="DocIncCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocIncCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Incomecertificate" class="form-control" id="Incomecertificate1" disabled>
+                                                </td>
+                                                <td>
+                                                    <a id="aIncomeCertificate1" href="" class="link IncomeCertificateAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Income Documents" class="pull-left" id="aIncomeCertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" disabled id="IncCerDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocIncStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtIncCertRemarks" disabled style="resize: none;width: 90%" type="text" id="txtIncCertRemarks" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocIncRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>UID Number</b>
+                                                    <div id="DocUIDCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocUIDCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="UIDNumber" class="form-control" id="UIDNumber1" disabled>
+                                                </td>
+                                                <td>
+                                                    <a id="aUIDNumber1" href="" class="link UIDFileAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Income Documents" class="pull-left" id="aUIDNumber1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" disabled id="UIDDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocUIDStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtUIDRemarks" disabled style="resize: none;width: 90%" type="text" id="txtUIDRemarks" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocUIDRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Rural certificate</b>
+                                                    <div id="DocRurCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocRurCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Ruralcertificate" class="form-control" id="Ruralcertificate1" disabled>
+                                                </td>
+                                                <td>
+                                                    <a id="aRuralcertificate1" href="" class="link RuralcertificateAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Income Documents" class="pull-left" id="aRuralcertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" disabled id="RcerDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocRurStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtRurCertRemarks" disabled style="resize: none;width: 90%" type="text" id="txtRurCertRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocRurRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Kannada medium Certificate</b>
+                                                    <div id="DocKanMedCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocKanMedCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="KannadamediumCertificate" class="form-control" id="KannadamediumCertificate1" disabled>
+                                                </td>
+                                                <td>
+                                                    <a id="aKannadamediumCertificate1" href="" class="link KannadamediumCertificateAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Kannada Documents" class="pull-left" id="aKannadamediumCertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" disabled id="KanMedCerDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocKMCStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtKanMedRemarks" disabled style="resize: none;width: 90%" type="text" id="txtKanMedRemarks" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocKMCRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Person with disability certificate</b>
+                                                    <div id="DocDidAblCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocDidAblCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Differentlyabledcertificate" class="form-control" id="Differentlyabledcertificate1" disabled>
+                                                </td>
+                                                <td>
+                                                    <a id="aDifferentlyabledcertificate1" href="" class="link DifferentlyabledcertificateAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Person with disability Documents" class="pull-left" id="aDifferentlyabledcertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" disabled id="DiffAblDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocDAStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtDiffAbledCertRemarks" disabled style="resize: none;width: 90%" type="text" id="txtDiffAbledCertRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocDARemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Exempted from study Certificate</b>
+                                                    <div id="DocExStuCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocExStuCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="ExemptedCertificate" class="form-control" id="ExemptedCertificate1" disabled>
+                                                </td>
+                                                <td>
+                                                    <a id="aExemptedCertificate1" href="" class="link ExemptedCertificateAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Person with disability Documents" class="pull-left" id="aExemptedCertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="ExCerDocStatus" disabled>Update the status</select>
+                                                    <small class="text-danger" disabled id="WithoutDocECStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtExeCertRemarks" disabled style="resize: none;width: 90%" type="text" id="txtExeCertRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocECRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Hyderabad Karnataka Region</b>
+                                                    <div id="DocHyKarRegAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocHyKarRegRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="HyderabadKarnatakaRegion" class="form-control" id="HyderabadKarnatakaRegion1" disabled>
+                                                </td>
+                                                <td>
+                                                    <a id="aHyderabadKarnatakaRegion1" href="" class="link HyderabadKarnatakaRegionAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Region Documents" class="pull-left" id="aHyderabadKarnatakaRegion1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" disabled id="HyKarDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocHKRStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtHydKarnRemarks" disabled style="resize: none;width: 90%" type="text" id="txtHydKarnRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocHKRRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Horanaadu/Gadinaadu Kannadiga's</b>
+                                                    <div id="DocHorGadKanAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocHorGadKanRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="HoranaaduKannadiga" class="form-control" id="HoranaaduKannadiga1" disabled>
+                                                </td>
+                                                <td>
+                                                    <a id="aHoranaaduKannadiga1" href="" class="link HoranaaduKannadigaAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Horanaadu/Gadinaadu Kannadiga's Documents" class="pull-left" id="aHoranaaduKannadiga1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" disabled id="HorKanDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocHorKanStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtHorGadKannadigaRemarks" disabled style="resize: none;width: 90%" type="text" id="txtHorGadKannadigaRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocHorKanRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Other Certificates</b>
+                                                    <div id="DocOthCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocOthCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="OtherCertificates" class="form-control" id="OtherCertificates1" disabled>
+                                                </td>
+                                                <td>
+                                                    <a id="aOtherCertificates1" href="" class="link OtherCertificatesAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Others Certificate Documents" class="pull-left" id="aOtherCertificates1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" disabled id="OtherCerDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocOCStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtOtherCertRemarks" disabled style="resize: none;width: 90%" type="text" id="txtOtherCertRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocOCRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Ex serviceman</b>
+                                                    <div id="DocExSerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocExSerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Exserviceman" disabled class="form-control" id="Exserviceman1" accept=".pdf,.PDF">
+                                                </td>
+                                                <td>
+                                                    <a id="aExserviceman1" href="" class="link ExservicemanAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Ex-serviceman Documents" class="pull-left" id="aExserviceman1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" disabled id="ExserDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocExSerStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtExservicemanRemarks" disabled style="resize: none;width: 90%" type="text" id="txtExservicemanRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocExSerRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Economically Weaker Sections</b>
+                                                    <div id="DocEWSAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocEWSRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="EWSCertificate" disabled class="form-control" id="EWSCertificate1" accept=".pdf,.PDF">
+                                                </td>
+                                                <td>
+                                                    <a id="aEWSCertificate1" href="" class="link EWSCertificateAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached EWSCertificate Documents" class="pull-left" id="aEWSCertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" disabled id="EWSDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocEWSStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtEWSCertificateRemarks" disabled style="resize: none;width: 90%" type="text" id="txtEWSCertificateRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocEWSRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>        
+
+
+<div class="modal" id="HistoryRemarksCommentsModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Remarks</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <table class="table table-striped table-hover text-center shadow clswidth" id="GetCommentRemarksDetails" style="width:100% !important" border="1" align="center"></table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <label hidden id="CalenderNotificationEligibleInd"></label>
+        @Scripts.Render("~/bundles/ApplicantOnlineApplicationForm")

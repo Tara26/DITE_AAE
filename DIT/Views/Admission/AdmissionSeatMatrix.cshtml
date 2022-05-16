@@ -1,0 +1,936 @@
+﻿@model Models.Admission.seatmatrixmodelNest
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int sno = 1;
+}
+
+<link href="~/Scripts/Admission/MeritList.css" rel="stylesheet" />
+
+<style>
+    table.dataTable thead tr {
+        background-color: cornflowerblue;
+        color: white;
+    }
+
+    /*.taluk {
+        display: none;
+    }*/
+
+    .buttons-html5 {
+        border-radius: 5px;
+        height: 40px;
+        width: 100px;
+        background: cornflowerblue;
+    }
+
+    .headetitle {
+        text-align: center;
+        background-color: cornflowerblue;
+        color: white;
+        border-radius: 5px;
+        height: 35px;
+    }
+
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted black;
+    }
+
+    .tooltiptext {
+        visibility: hidden;
+        width: 200px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+    }
+
+    #viewbtn:hover .tooltiptext {
+        visibility: visible;
+    }
+
+    .buttons-html5 {
+        width: 180px;
+    }
+
+    table th {
+        text-align: center;
+        font-size: smaller;
+    }
+</style>
+<br />
+<br />
+<br />
+
+@if (Session["RoleId"].Equals(5))
+{
+    <ul class="nav nav-tabs font bg-light">
+        <li>
+            <a href="#tab_1" data-toggle="tab">View Seat Availability </a>
+        </li>
+        <li>
+            <a href="#tab_2" data-toggle="tab">Generate Seat Matrix </a>
+        </li>
+        <li>
+            <a href="#tab_3" data-toggle="tab">Update Seat Matrix</a>
+        </li>
+        <li>
+            <a href="#tab_5" data-toggle="tab">Check Summary Seat Matrix</a>
+        </li>
+        <li>
+            <a href="#tab_6" data-toggle="tab">View Seat Matrix</a>
+        </li>
+    </ul>
+}
+@if ((Session["RoleId"].Equals(6)) || (Session["RoleId"].Equals(1)) || (Session["RoleId"].Equals(2)) || (Session["RoleId"].Equals(4)))
+{
+    <ul class="nav nav-tabs font bg-light">
+        <li>
+            <a href="#tab_4" data-toggle="tab">Review Seat Matrix</a>
+        </li>
+        <li>
+            <a href="#tab_6" data-toggle="tab">View Seat Matrix</a>
+        </li>
+    </ul>
+}
+@if (Session["RoleId"].Equals(9) || (Session["RoleId"].Equals(16)))
+{
+    <ul class="nav nav-tabs font bg-light">
+        <li>
+            <a href="#tab_6" data-toggle="tab">View Seat Matrix</a>
+        </li>
+    </ul>
+}
+
+<br />
+<div class="tab-content">
+    @*UseCase-30-seat availability*@
+    <div class="tab-pane fade in active" id="tab_1">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Seat Availability Status</span></div>
+                <br /><br />
+                <h3 class="head1">View Seat Availability</h3>
+
+                @if (Session["RoleId"].ToString().Equals("5"))
+                {
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="col-sm-5">
+                                <label>Academic Year:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="Session2" style="width:100px;" onchange="GetViewSeatAvailability()">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="col-sm-5">
+                                <label>Course Type:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" style="width:100px;" id="CourseType2"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="col-sm-5">
+                                <label>Division:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" style="width:100px;" id="divisionDdp" onchange="getfilter('divisionDdp',1)" @*onchange="GetDistrictData('divisionDdp','districtDdp1','1')"*@></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="col-sm-5">
+                                <label>District:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" style="width:100px;" id="districtDdp1" onchange="getfilter('districtDdp1',2)"
+                                        @*onchange="GetTaluksData('districtDdp1','talukDdp','1')"*@>
+                                    <option value="">choose</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="col-sm-5">
+                                <label>Taluk:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" style="width:100px;" id="talukDdp" onchange="getfilter('talukDdp',3)"
+                                        @*onchange="GetTaluksData('talukDdp','instituteDdp','2')"*@>
+                                    <option value="">choose</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="col-sm-5">
+                                <label>Institute:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" style="width:100px;" onchange="getfilter('instituteDdp',0)" id="instituteDdp"><option value="">choose</option></select>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="row">
+                            <div class="col-sm-12">
+                                <button class="btn btn-primary" style="width:100px;float:right;" onclick="GetViewSeatAvailability()">Search</button>
+                            </div>
+                        </div>*@
+                }
+                <div class="row">
+                    <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="seatAvailabilityTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*UseCase-30-Generte Seat Matrix*@
+    <div class="tab-pane fade" id="tab_2">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Seat Availability Status</span></div>
+                <br /><br />
+                <h3 class="head1">Generate Seat Matrix</h3>
+                <div class="row" style="margin-left:10px;">
+                    <div class="row">
+                        <span style="display:none" id="id"></span>
+                        <div class="col-md-2">
+                            <div class="col-sm-4"><label>Academic Year:</label></div>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="ddlAcademicYearGen" style="width: 100px;"></select>
+                                <span id="AcademicyearGenErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="col-md-6"><label>Course Type :</label></div>
+                            <div class="col-md-6">
+                                <select class="form-control" id="courseType"> </select>
+                                <span id="courseTypeErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="col-md-6"><label>Applicant Type:</label></div>
+                            <div class="col-md-6">
+                                <select class="form-control" onchange="changeRounds('ddlApplicantTypeGen','ddlRoundGen')" id="ddlApplicantTypeGen">
+                                    <option value="Select">Select</option>
+                                </select>
+                                <span id="ApplicantTypeGenErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <div class="col-md-6"><label>Round no :</label></div>
+                            <div class="col-md-6">
+                                <select class="form-control" id="ddlRoundGen">
+                                    <option value="choose">choose</option>
+                                </select>
+                                <span id="RoundGenErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="submit" id="btnGenerate" class="btn btn-primary" name="submit" value="Generate" onclick="GenerateSeatMatrixRoundwise()" />
+                        </div>
+
+                    </div>
+                </div>
+                <div id="seatGenerate">
+                    <div id="SeatGenerateDiv">
+                        @{
+                            Html.RenderPartial("GetDivisionsInstituteTradesUpdate");
+                        }
+                    </div>
+
+                    <br />
+                    <div class="row" id="divuserSubmit">
+                        <div class="row">
+                            <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+                                Remarks
+                            </div>
+                            <div class="col-lg-6">
+                                <input type="text" multiple style="height:auto;" id="SubmitRemarks" class="form-control" />
+                            </div>
+                        </div>
+                        <br />
+                        <div>
+                            <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+                                Send to
+                            </div>
+                            <div class="col-lg-2">
+                                <select class="form-control" id="users"></select>
+                                <span id="spnselectdropdown" class="text-danger" style="display:none;"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div id="" style="text-align:right;">
+                                <a class=" btn btn-primary" id="btnsubmit" onclick="SubmitMainseatMatrix()">Submit</a>
+                                <a class=" btn btn-primary" id="btnCancel" onclick="btnCancelseatmatrix()">Back</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*UseCase-30-Update Seat Matrix*@
+    <div class="tab-pane fade" id="tab_3">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Update Seat Matrix</span></div>
+                <br /><br />
+                <h3 class="head1">Update Seat Matrix</h3>
+                <div class="row" style="margin-left:10px;">
+                    <div class="row">
+                        <span style="display:none" id="id"></span>
+                        <div class="col-md-3">
+                            <div class="col-sm-4"><label>Academic Year:</label></div>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="ddlAcademicYearUpdate">
+                                    <option value="Select">Select</option>
+                                </select>
+                                <span id="AcademicyearUpdateErr" style="color:red;font-size:12px;">Select The Academic Year</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <input type="submit" id="btnUpdateView" class="btn btn-primary" name="submit" value="Search" onclick="UpdateSeatMatrix()" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input type="hidden" id="courseIdUpdate" class="form-control" />
+                            <input type="hidden" id="apptypeIDUpdate" class="form-control" />
+                            <input type="hidden" id="roundIDUpdate" class="form-control" />
+                            <div class="col-lg-12" id="listTable">
+                                <table id="tblUpdateseatmatrix" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                            <div class="col-lg-12" id="Collegepartialview">
+                                <div id="MyPrivateDiv">
+                                    @{
+                                        Html.RenderPartial("GetDivisionsInstituteTradesUpdate");
+                                    }
+                                </div>
+                                <div id="updateDiv">
+                                    <div class="row">
+                                        <div>
+                                            <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+                                                Status
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <select class="form-control" id="UpStatus"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+                                            Remarks
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <input type="text" multiple style="height:auto;" id="fwdremarks" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div>
+                                            <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+                                                Send to
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <select class="form-control" id="Upusers"></select>
+                                                <span id="spnselectdropdown" class="text-danger" style="display:none;">Please  Select Hierarcy level</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div style="text-align:center">
+                                                <div class="form-group">
+                                                    <input type="button" id="updateBtn" class="btn btn-primary" value="Update" onclick="UpdateMainSeatMatrix()" />
+                                                    <input type="button" id="btn-cancel" class="btn btn-danger" value="Back" onclick="cancelUpdate()" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="button" id="BackBtn" class="btn btn-primary" value="Back" onclick="cancelUpdate()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br /><br />
+                    <br /><br />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    @*Review Seat Matrix*@
+    <div class="tab-pane fade" id="tab_4">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Review Seat Matrix</span></div>
+                <br /><br />
+                <h3 class="head1">Review Seat Matrix</h3>
+                <div class="row" style="margin-left:10px;">
+                    <div class="row">
+                        <span style="display:none" id="id"></span>
+                        <div class="col-md-3">
+                            <div class="col-sm-4"><label>Academic Year:</label></div>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="ddlAcademicYearReview">
+                                    <option value="Select">Select</option>
+                                </select>
+                                <span id="AcademicyearReviewErr" style="color:red;font-size:12px;">Select the academic year</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <input type="submit" id="btnReView" class="btn btn-primary" name="submit" value="Search" onclick="ReviewSeatMatrix()" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-12" id="TablereviewGrid">
+                            <table id="tblReviewseatmatrix" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                        <div id="reviewGrid">
+
+                            <input type="hidden" id="courseId" class="form-control" />
+                            <input type="hidden" id="roundId" class="form-control" />
+                            <div id="ReviewDiv">
+                                @{
+                                    Html.RenderPartial("GetDivisionsInstituteTradesUpdate");
+                                }
+                            </div>
+                            <div id="SendDiv">
+                                <div class="row">
+                                    <div>
+                                        <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+                                            Status
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" onchange="Approvebtn('ReviewStatus')" id="ReviewStatus"></select>
+                                            <span id="ReviewStatusErr" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+                                        Remarks
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="text" multiple style="height:auto;" id="reviewRemarks" class="form-control" />
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div>
+                                        <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+                                            Send to
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Reviewusers"></select>
+                                            <span id="ReviewusersErr" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div style="text-align:center">
+                                            <div class="form-group">
+                                                <input type="button" class="btn btn-primary" value="Submit" onclick="ForwardSendBackApproveSeatMatrix()" />
+                                                <input type="button" id="btn-cancel" class="btn btn-danger" value="Back" onclick="cancelReview()" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="button" id="btnBack" class="btn btn-primary" value="Back" onclick="cancelReview()" />
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*model popup for remarks*@
+    <div class="modal fade font" id="RemarksCommentsModal" role="dialog">
+        <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+            <div class="modal-content" style="padding:15px;">
+                <div class="modal-header">
+                    <h2 class="head1">Remark Details</h2>
+                </div>
+                <table class="table table-striped table-hover text-center shadow clswidth" id="CommentsTable" style="width:100% !important" border="1" align="center"></table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%; color:white;background-color:forestgreen">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*UseCase-30 Summary of Seat Matrix (Department)*@
+    <div class="tab-pane fade" id="tab_5">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Check Summary Seat Matrix</span></div>
+                <br /><br />
+                <h3 class="head1">Check Summary Seat Matrix</h3>
+                <div class="row" style="margin-left:10px;">
+                    <div class="row">
+                        <span style="display:none" id="id"></span>
+                        <div class="col-md-3">
+                            <div class="col-sm-4"><label>Academic Year:</label></div>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="ddlAcademicYearcheckSum">
+                                    <option value="choose">choose</option>
+                                </select>
+                                <span id="AcademicyearcheckSumErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="col-sm-4"><label>Applicant Type:</label></div>
+                            <div class="col-sm-8">
+                                <select class="form-control" onchange="changeRounds('ddlApplicantTypecheck','ddlRoundcheck')" id="ddlApplicantTypecheck">
+                                    <option value="choose">choose</option>
+                                </select>
+                                <span id="ApplicantTypecheckErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <div class="col-sm-4"><label>Round</label></div>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="ddlRoundcheck">
+                                    <option value="choose">choose</option>
+                                </select>
+                                <span id="RoundcheckErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="col-sm-4"><label>Division:</label></div>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="ddlDivision" onchange="GetDistrict()">
+                                    <option value="choose">choose</option>
+                                </select>
+                                <span id="divisionviewcheckSumErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <div class="col-sm-4"><label>District:</label></div>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="ddlDistrict" onchange="GetTaluk()">
+                                    <option value="choose">choose</option>
+                                </select>
+                                <span id="districtviewcheckErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="col-sm-4"><label>Taluka:</label></div>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="ddlTaluka" onchange="GetInstitutes('ddlInstitutecheck','ddlTaluka')">
+                                    <option value="choose">choose</option>
+                                </select>
+                                <span id="talukaviewcheckSumErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="col-sm-4"><label>Institute</label></div>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="ddlInstitutecheck">
+                                    <option value="choose">choose</option>
+                                </select>
+                                <span id="InstitutecheckErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            @*<a class=" btn btn-primary" id="btnView" onclick="btnSeatmatrixcheckSummary()">Check Summary</a>*@
+                            <input type="submit" id="btnView" class="btn btn-primary" name="submit" value="Check Summary" onclick="btnSeatmatrixcheckSummary()" />
+                        </div>
+                    </div>
+                    <br /><br />
+                    <div class="row" id="divtblCheckSummary">
+                        <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                            <div class="col-lg-12">
+                                <table id="tblCheckSummary" class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label></label></td>
+                                        <td width="100" align="center"><label>GP</label></td>
+                                        <td width="100" align="center"><label>Women</label></td>
+                                        <td width="100" align="center"><label>Physically Handicapped</label></td>
+                                        <td width="100" align="center"><label>Ex-Service</label></td>
+                                        <td width="100" align="center"><label>Kannada medium</label></td>
+                                        <td width="100" align="center"><label>Economic weaker section</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>GM</label></td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkGeneralPoolGM" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkWomenGM" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkPhysicallyHandiGM" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkExServiceGM" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkKanMediumGM" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkEwsGM" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>SC</label></td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkGeneralPoolSC" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkWomenSC" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkPhysicallyHandiSC" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkExServiceSC" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkKanMediumSC" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkEwsSC" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>ST</label></td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkGeneralPoolST" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkWomenST" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkPhysicallyHandiST" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkExServiceST" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkKanMediumST" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkEwsST" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>C1</label></td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkGeneralPoolC1" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkWomenC1" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkPhysicallyHandiC1" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkExServiceC1" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkKanMediumC1" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkEwsC1" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>2A</label></td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkGeneralPool2A" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkWomen2A" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkPhysicallyHandi2A" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkExService2A" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkKanMedium2A" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkEws2A" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>2B</label></td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkGeneralPool2B" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkWomen2B" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkPhysicallyHandi2B" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkExService2B" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkKanMedium2B" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkEws2B" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>3A</label></td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkGeneralPool3A" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkWomen3A" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkPhysicallyHandi3A" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkExService3A" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkKanMedium3A" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkEws3A" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>3B</label></td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkGeneralPool3B" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkWomen3B" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkPhysicallyHandi3B" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkExService3B" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkKanMedium3B" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                        <td width="100" align="center">
+                                            <label type="text" id="checkEws3B" readonly style="width:100px;height:30px;"></label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br /><br />
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*UseCase-33 View Seat Matrix*@
+    <div class="tab-pane fade" id="tab_6">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">View Seat Matrix</span></div>
+                <br /><br />
+                <h3 class="head1">View Seat Matrix</h3>
+                @if (Session["RoleId"].Equals(9))
+                {
+                    <div class="row" style="margin-left:10px;">
+                        <div class="row">
+                            <span style="display:none" id="id"></span>
+                            <div class="col-md-3">
+                                <div class="col-sm-4"><label>Academic Year:</label></div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="ddlAcademicYearView">
+                                        <option value="choose">choose</option>
+                                    </select>
+                                    <span id="AcademicyearViewErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="col-sm-4"><label>Applicant Type:</label></div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" onchange="changeRounds('ddlApplicantTypeView','ddlRoundView')" id="ddlApplicantTypeView">
+                                        <option value="choose">choose</option>
+                                    </select>
+                                    <span id="ApplicantTypeViewErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="col-sm-4"><label>Round</label></div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="ddlRoundView">
+                                        <option value="choose">choose</option>
+                                    </select>
+                                    <span id="RoundViewErr" style="color:red;font-size:12px;"></span>
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <input type="submit" id="btnView" class="btn btn-primary" name="submit" value="search" onclick="ViewITISeatMatrix()" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" id="">
+                            <div>
+                                <table id="tblWebgridviewSeatM" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <br /><br />
+                    </div>
+                }
+                else
+                {
+                    <div class="row" style="margin-left:10px;">
+                        <div class="row">
+                            <span style="display:none" id="id"></span>
+                            <div class="col-md-3">
+                                <div class="col-sm-4"><label>Academic Year:</label></div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="ddlAcademicYearView">
+                                        <option value="choose">choose</option>
+                                    </select>
+                                    <span id="AcademicyearViewErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="col-sm-4"><label>Applicant Type:</label></div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" onchange="changeRounds('ddlApplicantTypeView','ddlRoundView')" id="ddlApplicantTypeView">
+                                        <option value="choose">choose</option>
+                                    </select>
+                                    <span id="ApplicantTypeViewErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-3">
+                                <div class="col-sm-4"><label>Round</label></div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="ddlRoundView" onchange="btnviewSeatmatrix()">
+                                        <option value="choose">choose</option>
+                                    </select>
+                                    <span id="RoundViewErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="col-sm-4"><label>Division:</label></div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="ddlDivisionView" onchange="ViewSeatsfilter('ddlDivisionView',1)" @*onchange="GetDistrictView()"*@>
+                                        <option value="choose">choose</option>
+                                    </select>
+                                    <span id="divisionviewViewErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="col-sm-4"><label>District:</label></div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="ddlDistrictView" onchange="ViewSeatsfilter('ddlDistrictView',2)" @*onchange="GetTalukView()"*@>
+                                        <option value="choose">choose</option>
+                                    </select>
+                                    <span id="spandistrictViewErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="col-sm-4"><label>Taluka:</label></div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="ddlTalukaView" onchange="ViewSeatsfilter('ddlTalukaView',3)" @*onchange="GetInstitutes('ddlInstituteView','ddlTalukaView')"*@>
+                                        <option value="choose">choose</option>
+                                    </select>
+                                    <span id="spantalukaViewErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="col-sm-4"><label>Institute</label></div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="ddlInstituteView" onchange="ViewSeatsfilter('ddlInstituteView',0)">
+                                        <option value="choose">choose</option>
+                                    </select>
+                                    <span id="InstituteViewErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                            @*<div class="col-md-3">
+                                    <input type="submit" id="btnView" class="btn btn-primary" name="submit" value="search" onclick="btnviewSeatmatrix()" />
+                                </div>*@
+                        </div>
+                        <br /><br />
+                        <div class="row" id="">
+                            <div>
+                                <table id="tblWebgridviewSeatM" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <br /><br />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ViewListModel">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>View Seats</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div style="overflow-x:scroll;">
+                            <table class="table table-bordered table-hover" id="tblViewListModel"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" id="btn-cancel" class="btn btn-secondary" value="Close" onclick=$("#ViewListModel").modal("hide"); />
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/AdmissionSeatMatrix")

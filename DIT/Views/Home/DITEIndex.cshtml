@@ -1,0 +1,262 @@
+﻿
+@{
+    ViewBag.Title = "DITEIndex";
+    Layout = "~/Views/Shared/_DITELayout.cshtml";
+}
+
+
+<div>
+    <div>
+        <div>
+            <div>
+                <div class="w3l-banner-grids">
+
+                    <div>
+                        <div class="content">
+                            <table class="table table-bordered table-hover text-center " style="color:white; background-color:aliceblue;width:30%;" id="tblGrid">
+                                <thead>
+                                    <tr class="text-center" style="color:black">
+                                        <th>Exam Notifications</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color:Black;">
+                                    
+                                </tbody>
+                            </table>
+
+                            <table class="table table-bordered table-hover text-center " style="color:white; background-color:aliceblue;width:30%;" id="tblGrid">
+                                <thead>
+                                    <tr class="text-center" style="color:black">
+                                        <th>Time Table Notifications</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color:Black;">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="container">
+                    <div class="slider">
+                        <div class="callbacks_container">
+
+
+                            <ul class="rslides" id="slider4">
+                                <li>
+                                    <div class="w3ls-text">
+                                        <h3>online platform</h3>
+
+                                        <p>Provide an online platform for all Sections to automate their processes.</p>
+                                    </div>
+                                    <div class="more-button">
+                                        <a href="#" data-toggle="modal" data-target="#myModal1">Read More</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="w3ls-text">
+
+                                        <h3>Facilitate</h3>
+                                        <p>Facilitate Sections for interchange of data</p>
+                                    </div>
+                                    <div class="more-button">
+                                        <a href="#" data-toggle="modal" data-target="#myModal1">Read More</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="w3ls-text">
+
+                                        <h3> anytime view</h3>
+                                        <p>Enable anytime view of various tasks</p>
+                                    </div>
+                                    <div class="more-button">
+                                        <a href="#" data-toggle="modal" data-target="#myModal1">Read More</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="w3ls-text">
+
+                                        <h3> analytical / intelligent reports</h3>
+                                        <p>Generate analytical / intelligent reportsfor better decision making.</p>
+                                    </div>
+                                    <div class="more-button">
+                                        <a href="#" data-toggle="modal" data-target="#myModal1">Read More</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <script src="~/Content/frontend/js/responsiveslides.min.js"></script>
+                        <script>
+                            // You can also use "$(window).load(function() {"
+                            $(function () {
+                                // Slideshow 4
+                                $("#slider4").responsiveSlides({
+                                    auto: true,
+                                    pager: true,
+                                    nav: false,
+                                    speed: 500,
+                                    namespace: "callbacks",
+                                    before: function () {
+                                        $('.events').append("<li>before event fired.</li>");
+                                    },
+                                    after: function () {
+                                        $('.events').append("<li>after event fired.</li>");
+                                    }
+                                });
+
+                            });
+                        </script>
+                        <!--banner Slider starts Here-->
+                    </div>
+
+
+                </div>
+
+                @*Publish Notification*@
+                @*<div class="row" style="margin-left:auto;">
+                        <marquee onmouseover="stop();" onmouseout="start();" scrollamount="7" scrolldelay="100" direction="side" width="100%" height="20" style="margin-top: 0px;color:aqua; ">
+                            New Updates Here <a href="~//Content//Template//Notification_123SCVT202345.pdf" data-toggle="tooltip" download="">Exam Notification</a>
+                        </marquee>
+                    </div>*@
+
+
+                <div class="banner-bottom-grids">
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back">
+                            <i class="fa fa-pagelines" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Affiliation</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back1">
+                            <i class="fa fa-thumb-tack" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Admission</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back2">
+                            <i class="fa fa-asl-interpreting" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Training</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back3">
+                            <i class="fa fa-wpforms" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Examination</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back4">
+                            <i class="fa fa-bookmark" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Apprenticeship</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back5">
+                            <i class="fa fa-lightbulb-o" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Inspection</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back6">
+                            <i class="fa fa-map-marker" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Buildings</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back7">
+                            <i class="fa  fa-gavel" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Court Cases</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back8">
+                            <i class="fa fa-gears (alias)" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Admin Section</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back9">
+                            <i class="fa fa-users" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>HRD</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back10">
+                            <i class="fa fa-puzzle-piece" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Planning</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back11">
+                            <i class="fa fa-pencil-square-o" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Inventory Management</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back12">
+                            <i class="fa fa-shopping-cart" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Purchase and Procurement</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back13">
+                            <i class="fa  fa-inr" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Accounts</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 banner-bottom-grid">
+                        <div class="banner-bottom-grd w3-agile-back14">
+                            <i class="fa fa-retweet" style="font-size:24px; color:#fff; float:right" aria-hidden="true"></i>
+                            <h3>Employment Exchange Integration</h3>
+
+                            <div class="clearfix"> </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>

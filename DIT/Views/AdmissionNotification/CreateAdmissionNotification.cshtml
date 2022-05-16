@@ -1,0 +1,425 @@
+﻿
+@model Models.Admission.AdmissionNotification
+@{
+    ViewBag.Title = "CreateAdmissionNotification";
+    int sno = 1;
+
+}
+
+
+<head>
+    <style>
+        .headetitle {
+            text-align: center;
+            background-color: cornflowerblue;
+            color: white;
+            border-radius: 5px;
+            height: 35px;
+            
+        }
+    </style>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: 'textarea',
+            //width: 1520,
+            height: 500,
+            plugins: 'table',
+        });
+
+    </script>
+</head>
+
+
+<br /><br /><br />
+@if (Session["RoleName"].ToString().Equals("Case Worker"))
+{
+    <h4>
+        <ul class="nav nav-tabs">
+            <li>
+                <a href="#tab_1" data-toggle="tab">Preparation of Notification</a>
+            </li>           
+            <li>
+                <a href="#tab_2" data-toggle="tab">Update Notification</a>
+            </li>
+        </ul>
+    </h4>
+}
+else
+{
+    <h4>
+        <ul class="nav nav-tabs">
+            <li>
+                <a href="#tab_2" data-toggle="tab">Update Notification</a>
+            </li>
+        </ul>
+    </h4>
+}
+
+
+<br />
+
+<div class="tab-content">
+    <div class="tab-pane fade" id="tab_1">
+        <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <h4 class="headetitle">Enter Admission Notification Details</h4>
+                    <br /><br />
+                    @using (Html.BeginForm("CreateAdmissionNotification", "AdmissionNotification", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+                    {
+                        <input type="hidden" value="@Model.Admission_Notif_Id" name="Exam_Notif_Id" />
+                        <div class="form-group row">
+                            <!--Section1-->
+                            <div class="col-lg-6 col-md-6">
+                                <div class="col-md-6">
+                                    <label for="txtAgencyRegnNo">Course Type<span style="color:red">*</span></label>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(model => model.CourseTypeId, new SelectList(Model.CourseList, "Value", "Text"), new { @class = "form-control select2",id= "courseType" })
+                                    @Html.ValidationMessageFor(x => x.CourseTypeId, "", new { @class = "text-danger" })
+                                    <span id="CourseTypeErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="col-md-6">
+                                    <label for="txtAgencyRegnNo" style="padding:1%;margin:0%;">Name of Department</label>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(model => model.DeptId, new SelectList(Model.DeptList, "Value", "Text"), new { @class = "form-control select2", id = "deptId" })                                    
+                                    @Html.ValidationMessageFor(x => x.DeptId, "", new { @class = "text-danger" })
+                                </div>
+
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="col-md-6">
+                                    <label for="txtAgencyRegnNo" style="padding:1%;margin:0%;">Notification Desc</label>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(model => model.NotifDesc, new { @class = "form-control",id= "NotifDesc" })
+                                    @Html.ValidationMessageFor(x => x.NotifDesc, "", new { @class = "text-danger" })                                   
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="col-md-6">
+                                    <label for="txtAgencyRegnNo">Notification Number<span style="color:red">*</span></label>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(model => model.Exam_Notif_Number, new { @class = "form-control", MaxLength = "99",id= "notifNumber" })
+                                    @Html.ValidationMessageFor(x => x.Exam_Notif_Number, "", new { @class = "text-danger" })
+                                    <span id="NotificationNumErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row">
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="col-md-6">
+                                    <label for="txtAgencyRegnNo" style="padding:1%;margin:0%;">Notification Date</label>
+                                </div>
+                                <div class="col-md-6">                                    
+                                    @Html.TextBoxFor(model => model.Exam_notif_date, "{0:dd/MM/yyyy}", new { @class = "form-control", id = "notif_date", autocomplete = "off", style = " background-position:right; background-size:30px; background-image:  url(../../Content/img/Calendar.png);background-repeat: no-repeat;" })                                    
+                                    @Html.ValidationMessageFor(x => x.Exam_notif_date, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="col-md-6">
+                                    <label for="txtAgencyRegnNo" style="padding:1%;margin:0%;">Select Template Language:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="ddlLang">
+                                        <option value="1">ಕನ್ನಡ</option>
+                                        <option value="2">English</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div>
+
+                            @Html.TextAreaFor(m => m.content, new { @class = "mceEditor" })
+                            <br />
+
+                            <a href="#" class="btn btn-primary" id="btnValue" onclick="sample()">PreView</a>
+                            <div class="modal fade" id="my123" role="dialog">
+                                <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content" style="width:auto; max-width:1500px;">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" style="float:right!important;">&times;</button>
+                                            <h4 class="modal-title">Details</h4>
+                                        </div>
+                                        <div class="modal-body">
+
+
+                                            <div id="divkarea"></div>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            @if (Model.Admission_Notif_Id == 0)
+                            {
+                                <input type="submit" id="createNotification1" value="Create" class="btn btn-success" style="margin-left:15px;" />
+                            }
+                            else
+                            {
+                                <input type="submit" id="createNotification1" value="Update" class="btn btn-success" style="margin-left:15px;" />
+
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <br /><br />
+    </div>
+
+    <div class="tab-pane fade" id="tab_2">
+
+        <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row" id="GridListDiv">
+                <div class="col-lg-12">
+                    <h3 class="headetitle">Notification Status</h3>
+                    <br />
+                    <table id="AdmissionNotificationTable" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                </div>
+            </div>
+            <div class="row" style="margin-left:10px;" id="ViewDiv">
+                <div class="row">                    
+                    <span style="display:none" id="id"></span>
+
+                    <div class="col-lg-2"><label>Course Type:</label></div>
+                    <div class="col-lg-2">
+                        <span id="course"></span>
+                    </div>
+                    <div class="col-lg-2"><label>Name of the Department:</label></div>
+                    <div class="col-lg-2">
+                        <span id="dept"></span>
+                    </div>
+                    <div class="col-lg-2"><label>Notification Number:</label></div>
+                    <div class="col-lg-2">
+                        <span id="notifynum"></span>
+                    </div>
+                </div>
+
+                <br /><br />
+                <div class="row">
+
+                    <div class="col-lg-2"><label>Notification Type:</label></div>
+                    <div class="col-lg-2">
+                        <span id="desc1"></span>
+                    </div>
+                    <div class="col-lg-2"><label>Date and Time:</label></div>
+                    <div class="col-lg-2">
+                        <span id="datenotify"></span>
+                    </div>
+                    <div class="col-lg-2"><label>Status</label></div>
+                    <div class="col-lg-2">
+                        <span id="statusdesc"></span>
+                    </div>
+                </div>
+                <br /><br />
+                <div class="row">
+
+                    <div class="col-lg-2"><label>Notification pending with:</label></div>
+                    <div class="col-lg-2">
+                        <span id="RecordLevel"></span>
+                    </div>
+                </div>
+                <br /><br />
+                <div class="row">
+
+                </div>
+
+                <br /><br />
+                <div class="row">
+                    <div class=" col-lg-offset-4 col-lg-2">
+                        <a style="text-align:center; float:initial" class="btn btn-primary" onclick="GetClientReport1()">View Notification Pdf</a>
+                    </div>
+                    <div class="col-lg-4">
+                        <a style="text-align:center; float:initial" class="btn btn-primary" onclick="GetCommentTable()">View Comments</a>
+                    </div>
+                </div>
+                <br /><br />
+                <div class="row">
+                    <div class="col-lg-offset-1 col-lg-2">
+                        Remarks
+                    </div>
+
+                    <div class="col-lg-6">
+                        <input type="text" multiple style="height:auto;" id="remarks" class="form-control" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-lg-offset-1 col-lg-2">
+                        Forward To
+                    </div>
+                    <div class="col-lg-2">
+                        <select class="form-control" id="users"></select>
+                        <span id="spnselectdropdown" class="text-danger" style="display:none;">Please  Select Hierarcy level</span>
+                    </div>
+                    <div class="col-lg-7">
+                        <a class=" btn btn-primary" id="sendBtn1" onclick="ForwardAdmissionNotification()">Forward</a>                        
+                        <a class=" btn btn-primary" id="sendBtn3" onclick="ApproveAdmissionNotification()">Approve</a>
+                        <a class=" btn btn-primary" id="sendBtnchanges" onclick="ChangesAdmissionNotification()">Changes/Modification</a>
+                        <a class=" btn btn-primary" id="CancelBtn">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="RemarksCommentsModal" role="dialog">
+            <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+                <div class="modal-content" style="padding:15px;">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Remark Details</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <table class="table table-striped table-hover text-center shadow clswidth" id="CommentsTable" style="width:100% !important" border="1" align="center"></table>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@Scripts.Render("~/bundles/AdmissionNotification")
+
+
+<script type="text/javascript">
+    var selectedTab = '@Model.selectTab';
+    if (selectedTab != null)
+    {
+        if (selectedTab == 0) {
+            $('.nav-tabs li:eq(0) a').tab('show')
+        }
+        else if (selectedTab == 1) {
+            $('.nav-tabs li:eq(1) a').tab('show')
+        }
+        else if (selectedTab == 2) {
+            $('.nav-tabs li:eq(2) a').tab('show')
+        }
+    }
+
+    if ('@TempData["Saved"]' != "") {
+        if ('@TempData["Saved"]' == "Saved") {
+            bootbox.alert("Data Saved Successfully");
+            $('#courseType').val('');
+            $('#notifNumber').val('');
+            $('#NotifDesc').val('');
+        }
+        else if ('@TempData["Saved"]' == "Updated") {
+            bootbox.alert("Data Updated Successfully");
+        }
+        else if ('@TempData["Saved"]' == "Failed") {
+            bootbox.alert("Failed to Save/Update data");
+        }
+        else if ('@TempData["Saved"]' == "Invalid") {
+            bootbox.alert("Some of the fields are invalid, please select valid data.");
+        }
+    }
+
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#ddlLang").change(function () {
+            var selectedText = $(this).find("option:selected").text();
+            var content = "";
+            var strKan = "";
+            var selectedValue = $(this).val();
+            if (selectedText == "English") {
+
+                content = "<p style=\"text-align: center; \">Government of Karnataka</p><p>Notification Date: &lt;Notication Date&gt;</p><p style=\"text-align: right;\">Notification Number : &lt;Notication Number&gt;</p><p>&nbsp;</p><p style=\"text-align: center;\">NOTIFICATION</p><br>";
+
+
+            }
+            else {
+                content = "<p style=\"text-align: center; font-size: 12.0pt; mso-bidi-font-size: 11.0pt; line-height: 107%; font-family: 'Tunga',sans-serif;\">ಕರ್ನಾಟಕ ಸರ್ಕಾರ </p><p style=\"font-size: 12.0pt; mso-bidi-font-size: 11.0pt; line-height: 107%; font-family: 'Tunga',sans-serif;\">ದಿನಾಂಕ : &lt;ಅಧಿಸೂಚನೆ ದಿನಾಂಕ&gt;</p><p style=\"text-align: right; font-size: 12.0pt; mso-bidi-font-size: 11.0pt; line-height: 107%; font-family: 'Tunga',sans-serif;\">ಅಧಿಸೂಚನೆ ಸಂ.: &lt;ಅಧಿಸೂಚನೆ ಸಂ.&gt;</p><p>&nbsp;</p><p style=\"text-align: center;font-size: 12.0pt; mso-bidi-font-size: 11.0pt; line-height: 107%; font-family: 'Tunga',sans-serif;\">ಅಧಿಸೂಚನೆ</p><br>";
+
+            }
+            tinymce.get("content").setContent(content);
+
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        
+        let SaveNotification = document.getElementById('createNotification1');
+        SaveNotification.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            if (ValidateData() == true) {
+               $('#CourseTypeErr').text('');
+                $('#NotificationNumErr').text('');
+                if ($('#courseType').val() == '') {
+                    $('#CourseTypeErr').text('select course type');
+                }
+                else if ($('#notifNumber').val() == '') {
+                    $('#NotificationNumErr').text('Enter the notification number');
+                }
+                else {
+                    bootbox.confirm('Do you want to Save the notification?', (confirma) => {
+                        if (confirma) {
+                            return $(ev.target)[0].form.submit();
+                        }
+                    })
+                }  
+            }
+
+        });
+
+        $('#btnValue').click(function () {
+            $("#divkarea").html("");
+            var content = tinymce.get("content").getContent();
+            content = content.replace("&lt;Notication Date&gt;", $('#Exam_notif_date').val());
+            content = content.replace("&lt;Notication Number&gt;", $('#Exam_Notif_Number').val());
+            content = content.replace("&lt;ಅಧಿಸೂಚನೆ ದಿನಾಂಕ&gt;", $('#Exam_notif_date').val());
+            content = content.replace("&lt;ಅಧಿಸೂಚನೆ ಸಂ.&gt;", $('#Exam_Notif_Number').val());
+            content = content.replace("&lt;Fees Date&gt;", $('#fee_pay_last_date').val());
+            
+            $("#divkarea").html(content);
+
+        });
+
+        $('#notif_date').datepicker({
+            dateFormat: 'dd-mm-yy',
+            minDate: 0.,
+            changeMonth: true,
+            changeYear: true
+        });
+    });
+
+    function sample() {
+        $('#my123').modal('show');
+    }
+
+    function ValidateData() {
+        var returnValue = true;
+        var fees_regex = new RegExp(/^[0-9]+[0-9]*$/i);
+        return returnValue;
+    }
+
+</script>
+
+

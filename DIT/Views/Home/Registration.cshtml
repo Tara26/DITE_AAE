@@ -1,0 +1,373 @@
+﻿
+@{
+    ViewBag.Title = "Registration";
+}
+<style>
+    .h4, .h5, h4, h5 {
+        color: #000;
+    }
+
+    .bg-colors {
+        background: #077ba8;
+        padding: 20px 20px;
+        color: #fff;
+        margin-top: 8rem;
+    }
+
+    .banner {
+        background-image: url('../../Content/frontend/images/inner-bann.png');
+        padding: 0 0;
+        min-height: 150px !important;
+        background-color: transparent;
+        display: block;
+    }
+
+    .banner-dott {
+        background: none !important;
+    }
+
+    .clearfix {
+        margin-bottom: 10px;
+    }
+
+    element.style {
+    }
+
+    .card {
+        box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        margin-bottom: 1rem;
+    }
+
+    .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1.25rem;
+    }
+
+    .card {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        margin: 2rem 0;
+        padding: 2em 2em;
+    }
+
+    .input-group-text {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: .375rem .75rem;
+        margin-bottom: 0;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        text-align: center;
+        white-space: nowrap;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+    }
+
+    .custom-file-input {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: calc(2.25rem + 2px);
+        margin: 0;
+        opacity: 0;
+    }
+
+    .input-group {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-align: stretch;
+        align-items: stretch;
+        width: 100%;
+    }
+
+        .input-group > .custom-file {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+        .input-group > .input-group-append > .btn, .input-group > .input-group-append > .input-group-text, .input-group > .input-group-prepend:first-child > .btn:not(:first-child), .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child), .input-group > .input-group-prepend:not(:first-child) > .btn, .input-group > .input-group-prepend:not(:first-child) > .input-group-text {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .input-group > .custom-file, .input-group > .custom-select, .input-group > .form-control, .input-group > .form-control-plaintext {
+            position: relative;
+            -ms-flex: 1 1 0%;
+            flex: 1 1 0%;
+            min-width: 0;
+            margin-bottom: 0;
+        }
+
+    .custom-file-label {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1;
+        height: calc(2.25rem + 2px);
+        padding: .375rem .75rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        box-shadow: none;
+    }
+
+    .input-group-append, .input-group-prepend {
+        display: -ms-flexbox;
+        display: flex;
+    }
+
+    .custom-control-label::before, .custom-file-label, .custom-select {
+        transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    label {
+        display: inline-block;
+        margin-bottom: .5rem;
+    }
+
+    .form-group {
+        margin: 20px 20px;
+        min-height: 30px;
+    }
+
+    .agile-logologinblock {
+    }
+
+    .card-header h3 {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .card-header h4 h5 {
+        text-align: center;
+        color: #000;
+    }
+
+    .card-title h4 h5 {
+        text-align: center;
+        color: #000;
+    }
+
+    select, textarea {
+        min-width: 200px;
+        padding: 7px 10px;
+    }
+
+    #excltable {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: inherit;
+        width: 100%;
+    }
+
+        #excltable td, #excltable th {
+            border: 1px solid #e9e8e8;
+            padding: 5px 20px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        #excltable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #excltable tr:hover {
+            background-color: #ddd;
+        }
+
+        #excltable th {
+            padding: 20px 20px;
+            text-align: center;
+            vertical-align: middle;
+            background-color: #FFCD37;
+            color: #fff;
+        }
+</style>
+
+<div class="classes" id="classes" style="min-height:1200px;">
+
+    <form action="/action_page.php" method="post">
+        <div class="clearfix"></div>
+        <div class="clearfix"></div>
+        <div class="clearfix"></div>
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Registration</h3>
+
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form>
+                    <div class="card-body">
+                        <div class="card-body">
+                            <div class="form-group">
+
+                                <table border="0" cellspacing="0" cellpadding="0" width="400" id="excltable">
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom"><p>SL.NO.</p></td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="SL.No" name="slno" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom">
+                                            <p>DATE OF REGISTRATION</p>
+                                        </td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="REGISTRATION" name="REGISTRATION" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom"><p>NAME AND ADDRESS</p></td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="NAME AND ADDRESS" name="NAME AND ADDRESS" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom">
+                                            <p>DATE OF BIRTH</p>
+                                        </td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="date" placeholder="DATE OF BIRTH" name="DATE OF BIRTH" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom">
+                                            <p>REGISTRATION NO</p>
+                                        </td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="REGISTRATION NO" name="REGISTRATION NO" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom"><p>NCO </p></td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="NCO" name="NCO" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom"><p>NCO DATE</p></td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="date" placeholder="NCO DATE" name="NCO DATE" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom">
+                                            <p>EDUCATIONAL QUALIFICATION</p>
+                                        </td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="EDUCATIONAL QUALIFICATION" name="EDUCATIONAL QUALIFICATION" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom"><p>CASTE</p></td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="CASTE" name="CASTE" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom"><p>CONTACT NO.</p></td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="CONTACT NO" name="CONTACT NO" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom"><p>E-Mail</p></td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="E-Mail" name="E-Mail" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom"><p>NCS REGISTER NO.</p></td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="NCS REGISTER" name="NCS REGISTER" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="108" nowrap="nowrap" valign="bottom"><p>REMARKS</p></td>
+                                        <td width="164" nowrap="nowrap" valign="bottom">
+                                            <input type="text" placeholder="REMARKS" name="REMARKS" required>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="card-footer" style="float:right; margin-right:40px;">
+                                    <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#myModal1">Preview</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- /.card-body -->
+
+
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-2"></div>
+
+
+    </form>
+    <!-- modal popup -->
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog">
+        <!-- Modal1 -->
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" style="float:right!important;">&times;</button>
+                    <h4>NCVT / SCVT Exams</h4>
+                    <img src="~/Content/frontend/images/1.jpg" alt=" " class="img-responsive">
+                    <h5>Supplementary Portions</h5>
+                    <p>
+                        Industrial Training and Employment (DITE) manages the functioning
+                        of operation of Government Industrial Training Institutes (ITIs) and monitoring of
+                        Government Aided ITIs and Private ITIs.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //Modal1 -->
+</div>
+
+<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript" class="init">
+
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+
+</script>
+

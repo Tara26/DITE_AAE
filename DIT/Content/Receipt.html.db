@@ -1,0 +1,50 @@
+<table style="width: 100%;">
+    <thead>
+        <tr>
+          <th colspan="2"><br>
+            <p style='text-align:center;'>
+              <!--img src="D:\DITE\DIT\Content\frontend\images\Seal_of_Karnataka.png" alt="karnataka logo" width="100" height="100" /-->
+              <img src="#img" alt="karnataka logo" width="100" height="100" />
+            </p>
+              <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0.8cm;line-height:107%;font-size:18px;font-family:"Calibri",sans-serif;text-align:center;'>
+                Department of Industrial Training and Employment</p>
+          </br>
+            <br>
+              <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0.5cm;line-height:107%;font-size:12px;font-family:"Calibri",sans-serif;text-align:center;'>
+                ( Student Copy )
+              </p>
+            </br>
+          <br>
+              <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0.5cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;text-align:center;'>
+                #TitleText Fee Payment Receipt</p>
+          </br></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="width: 18%;">
+              <p style='margin-top:1cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:2cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>Receipt Number : #ReceiptNum
+              </p>
+              <p style='margin-top:0.5cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:2cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>Name of the #AppTrainText : #ApplicantName</p>
+              <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:2cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>Trade : #Trade</p>
+              <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:2cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>Fee Amount (In Words): #FeeAmt</p>
+              <p style='margin-top:2cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:2cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>#AppTrainText Signature</p>
+            </td>
+            <td style="width: 10%;">
+              <p style='margin-top:1cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;text-align:left;'>#LOCMONYYYY</p>
+              <p style='margin-top:0.5cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;text-align:left;'>Institute Name : #InstituteName</p>
+              <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;text-align:left;'>MIS Code : #MisCode</p>
+              <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;text-align:left;'>Date : #Date</p>
+              <p style='margin-top:2cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>Officer Signature</p>
+          </td>
+        </tr>
+    </tbody>
+
+  <tfoot>
+    <tr>
+      <td COLSPAN='2' style='text-align:center;'>
+        -------------------------------------------------------------------------------------------------------------------------------------------- <!--140 hypens(-)-->
+      </td>
+    </tr>
+  </tfoot>
+</table>

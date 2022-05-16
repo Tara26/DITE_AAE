@@ -1,0 +1,176 @@
+﻿@model Models.ExamNotification.Notification
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ExamTemplateFormat</title>
+    <style>
+        #child-left {
+            float: right;
+            width: 300px;
+        }
+        
+        .mceEditor {
+            
+            /*height: 500px;*/
+           /*// width:700px;*/
+        }
+         .tox{
+           /*// width: 1000px;*/
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    @*<script type="text/javascript" src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>*@
+    @*<script type="text/javascript" src="~/Scripts/tinymce.min.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.6.2/tinymce.min.js" integrity="sha512-sOO7yng64iQzv/uLE8sCEhca7yet+D6vPGDEdXCqit1elBUAJD1jYIYqz0ov9HMd/k30e4UVFAovmSG92E995A==" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        tinymce.init({
+            selector: 'textarea',
+            width: 1520,
+            height: 300
+            
+        });
+    </script>
+
+</head>
+
+
+@*<body>
+        <div>
+
+            <div class="Container">
+                <h5 style="text-align:center">Karnatak Government</h5>
+                <div class="row">
+                    <div class="col-lg-4">
+                        @ViewBag.NotificationNumber
+                    </div>
+                    <div class="col-lg-4" id="child-left">
+                        <pre>
+    Industrial training and employment
+    Skill House, Dairy Circle,
+    Bannerghatta Road, Bangalore-560 029,
+    Date: @ViewBag.NotificationDate
+
+    </pre>
+                    </div>
+                </div>
+            </div>
+            <br /><br /><br />
+            <div class="Container">
+                <h5 style="text-align:center">NOTIFICATION </h5>
+                <p>
+                    Topic: -August 2019 under Artisan Training Program
+                    About the state career test (SCVT)
+                </p>
+                <p>*************</p>
+                <p>
+                    With respect to the above, apply for the state career exam to be held in August 2019 The notification is issued by setting the date for filing and payment of fixed fees. To act accordingly
+                </p>
+                <p>
+                    1) Regular / Repeater of Government and Private Industrial Training Institute Trainees Examination Fees without Penalties at Government Industrial Training Institutes concerned Deadline to pay: @ViewBag.NotificationDate
+                </p>
+                <p>2) Regular of Government and Private Industrial Training Institute Failure (Repeater) Industrial related to test applications filled out by trainees Deadline for submission at training institutes.@ViewBag.NotificationDate</p>
+                <p>3) SSLC applications for trainees from government and private industrial training institutes Name of the trainee as well as the father's name and birth as in the list Check the date, composition and a copy of the approved entry list (Private Industrial Training Institutes) with CD and Hard copy Last date for submission of checklist to the concerned test center is @ViewBag.NotificationDate</p>
+                <p>4) Examination center review all applications, to the divisional office Deadline to submit: 18/07/2019 Applications of each Industrial Training Institute are regular and failing Candidates (composition, approved entry list) are correct with these Check, list separately the proposals to the Divisional Office with the CD Sending mandatory time. Receipt of payment of test fee Confirmation of Attachment of Application</p>
+                <p>5) Joint Director, Divisional Office, Government / Private within their jurisdiction Check the composition of industrial training institutes, correct Application forms with information and hard copy And a copy of the approved list to the test headquarters Deadline to send: @ViewBag.NotificationDate</p>
+            </div>
+
+
+
+
+        </div>
+    </body>*@
+<body>
+
+    @using (Html.BeginForm("ExamTemplateFormat", "Notification", FormMethod.Post, new { id = "formText" }))
+    {
+        <div>
+            @*<textarea id="txtarea"></textarea>*@
+            @Html.TextAreaFor(m => m.content, new { @class = "mceEditor" })
+            <br />
+            <input type="button" id="btnValue" value="PreView" />
+            <input type="submit" id="createNotification1" value="Create" class="btn btn-success" style="margin-left:15px;" />
+
+            <div id="divkarea"></div>
+        </div>
+    }
+
+    @*<div>
+        <textarea id="txtarea"></textarea>
+        <br/>
+        <input type="button" id="btnValue" value="PreView" />   <input type="button" id="createNotification" value="Create" class="btn btn-success" style="margin-left:15px;" />
+
+        <div id="divkarea"></div>*@
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $('#btnValue').click(function () {
+            $("#divkarea").html("");
+            debugger;
+            //var content = tinymce.get("txtarea").getContent();
+            var content = tinymce.get("content").getContent();
+            $("#divkarea").html(content);
+        });
+    });
+
+
+</script>
+
+
+
+
+
+@*<script>
+           var rteObj;
+           debugger;
+        $(function () {
+            $("#createNotification").on("click", function () {
+                 rteObj = tinymce.get("txtarea").getContent();
+                $.ajax({
+                    url: "@Url.Action("ExamTemplateFormat", "Notification") ' + '?content=' content",
+                    type: "post",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (e) {
+                        rteObj.setHtml(e); //setting Html content for RTE
+                    }
+                });
+            });
+        });
+        function onCreate() {
+            rteObj = this; // accessing control’s instance
+        }
+    </script>*@
+
+@*<script>
+    //$("#createNotification").click(function () {
+    //    var content = tinymce.get("txtarea").getContent();
+    //    debugger;
+    //    alert("button");
+    //    $.ajax({
+    //        type: "Post",
+    //        url: "/Notification/ExamTemplateFormat",
+    //        contentType: 'application/json; charset=utf-8',
+    //        data: { content: content },
+    //        success: function (html) {
+
+    //            if (data == true) {
+    //                alert("value");
+    //            }
+    //            else {
+    //                alert("Value Not");
+    //            }
+    //        }
+    //    });
+    //});
+</script>*@
+
+
+
+

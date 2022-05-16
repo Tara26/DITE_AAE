@@ -1,0 +1,793 @@
+﻿@model Models.ExamNotification.Notification
+@{
+    ViewBag.Title = "Notificationstatus";
+    Layout = null;
+    int sno = 1;
+}
+
+@*<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>*@
+<script src="~/Content/frontend/js/bootstrap.js"></script>
+<script src="~/Content/frontend/js/SmoothScroll.min.js"></script>
+<script src="~/Content/frontend/js/move-top.js"></script>
+<script src="~/Content/frontend/js/easing.js"></script>
+<script src="~/Scripts/bootbox.js"></script>
+<script src="~/Scripts/bootbox.min.js"></script>
+<script src="~/Scripts/bootbox.locales.min.js"></script>
+<script src="~/Content/frontend/js/jquery-ui.min.js"></script>
+<script src="~/Content/js/moment.min.js"></script>
+<link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Content/js/jquery.datetimepicker.js"></script>
+<script src="~/Content/js/browser.js"></script>
+<script src="~/Content/js/vfs_fonts.min.js"></script>
+<script src="~/Content/js/pdfmake.min.js"></script>
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+
+@*<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Content/frontend/js/SmoothScroll.min.js"></script>
+    <script src="~/Content/frontend/js/move-top.js"></script>
+    <script src="~/Content/frontend/js/easing.js"></script>*@
+
+
+<style>
+    .txtarea {
+        height:100px;
+    }
+
+    .btn-danger {
+        color: #fff;
+        background-color: #d9534f;
+        border-color: #d43f3a;
+        width: 100px;
+    }
+
+
+    .btn-success{
+        color: #fff;
+        background-color: #449d44;
+        border-color: #398439;
+        width: 100px;
+    }
+    .modal-content img {
+        width: 20%;
+    }
+</style>
+
+<div class="tblgrid1 container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+    @*<div class="row border">
+        <div class="col-lg-12">*@
+    <div class="col-lg-12">
+        <div class="form-group row" style="border:1px solid black">
+            <div class="breadcrumb font">
+                <span class="inline odd first"><a href="/Home/index1">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">
+                    Notification Status
+                </span>
+
+            </div>
+
+            @*<h2 class="modal-title head1">Notification Status</h2><br /><br />*@
+            <div class="col-lg-12 modal-header">
+                <h2 class="modal-title head1">Examination Notification Status</h2>
+            </div>
+            <table class="table table-bordered table-hover text-center" style="color:aliceblue;" id="tblGrid">
+                <thead>
+                    <tr class="text-center">
+                        <th>Sl. No.</th>
+                        <th>Course Type</th>
+                        <th style="display:none;">Name of the Section</th>
+                        <th>Notification Number</th>
+                        <th style="display:none;">Notification Description</th>
+                        <th style="display:none;">Notification Type</th>
+                        <th>Notification Date</th>
+                        <th>Status - Currently With</th>
+                        <th>Remarks</th>
+                        <td style="display:none">Created Date</td>
+                        <td style="display:none">Sent Date</td>
+                        <th style="display:none">Send To</th>
+                        <th width="140px">Action</th>
+                    </tr>
+                </thead>
+                <tbody style="color:Black;">
+                    @foreach (var item in Model.notifications)
+                    {
+                        <tr>
+                            <td>@(sno++)</td>
+                            <td>@item.CourseTypeName</td>
+                            <td style="display:none">@item.DeptName</td>
+                            <td>@item.Exam_Notif_Number</td>
+                            <td style="display:none">@item.Description</td>
+                            <td style="display:none">@item.Exam_Notif_Desc</td>
+                            <td>@item.Exam_notif_date.ToString("dd/MM/yyyy")</td>
+
+                            @*<td>@item.exam_notif_status_desc  -  @item.By</td>*@
+                            <td>
+                                @if (item.exam_notif_status_desc != "Published Notification")
+                                {
+                                    <label>@item.exam_notif_status_desc - </label> <label>@item.By</label>
+                                }
+                                else
+                                {
+                                    <label>@item.exam_notif_status_desc  </label>
+                                }
+                            </td>
+                            <td>
+                                @if (item.comcount == 0)
+                                {
+                                    <a style="text-align:center; float:initial;pointer-events: none; opacity:0.5 " class="btn btn-primary" onclick="GetComment(@item.Exam_Notif_Id,'@item.Exam_Notif_Number')">View</a>
+                                }
+                                else
+                                {
+                                    <a style="text-align:center; float:initial" class="btn btn-primary" onclick="GetComment(@item.Exam_Notif_Id,'@item.Exam_Notif_Number')">View</a>
+                                }
+
+
+                            </td>
+                            <td style="display:none">@item.creation_datetime</td>
+                            <td style="display:none">@item.updation_datetime</td>
+                            <td style="display:none">
+                                @if (item.exam_notif_status_id.Equals(100))
+                                {
+                                    @Html.DropDownListFor(model => model.RoleId, new SelectList(Model.LoginRoleList, "Value", "Text"), new { @class = "form-control select2", @onchange = "GetSelectedValue(this.value)" })
+                                    @Html.ValidationMessageFor(x => x.RoleId, "", new { @class = "text-danger" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.RoleId, new SelectList(Model.LoginRoleList, "Value", "Text"), new { @class = "form-control select2", @onchange = "GetSelectedValue(this.value)", @id = "Sectionlsts", disabled = "disabled" })
+                                    @Html.ValidationMessageFor(x => x.RoleId, "", new { @class = "text-danger" })
+                                }
+
+                            </td>
+                            <td>
+                                @if (item.exam_notif_status_id != 111)
+                                {
+                                    <a class=" btn btn-primary" onclick="viewDetails(@item.Exam_Notif_Id)">View</a>
+                                }
+                                @*@if (item.exam_notif_status_desc == "Ready to Send for Approval" || item.exam_notif_status_desc == "Pending for Confirmation")
+                                    {
+                                        <a class=" btn btn-primary" onclick="viewDetails(@item.Exam_Notif_Id)">View</a>
+                                    }*@
+
+                                @if (item.exam_notif_status_id == 100 || item.exam_notif_status_id == 111)
+                                {
+                                    <a class=" btn btn-primary" href='@Url.Action("CreateNotification", "Notification", new { NotificationId = item.Exam_Notif_Id})'>Edit</a>
+                                }
+
+                                @*@if (item.exam_notif_status_desc == "Changes/Modifications" || item.exam_notif_status_desc == "Modification To Published Notic")*@
+                                @if (item.exam_notif_status_id == 109 || item.exam_notif_status_id == 102)
+                                {
+                                    <a class=" btn btn-primary" href='@Url.Action("CreateNotification", "Notification", new { NotificationId = item.Exam_Notif_Id})'>Edit</a>
+                                }
+
+                                @if (item.exam_notif_status_id == 110)
+                                {
+                                    <a class="btn btn-primary" id="sendBtn" onclick="PublishnotifDetails(@item.Exam_Notif_Id,'@item.Exam_Notif_Number',105)">Publish</a>
+                                }
+
+                                @*@if (item.exam_notif_status_desc != "Ready to Send for Approval" && item.exam_notif_status_desc != "Pending for Confirmation")
+                                    {
+                                    <a class="btn btn-primary" id="sendBtn" onclick="GetCommentFileDetails(@item.Exam_Notif_Id)">View</a>
+                                    }*@
+
+
+                            </td>
+
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@*<div class="modal fade" id="HistoryRemarksCommentsModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+*@
+@*<div class="modal-header">
+        <h4 class="modal-title">Remark Details</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+    </div>*@
+<div class="Container-fluid" id="HistoryModal" style="margin:10px;padding:10px;background-color:white;display:none">
+    <div class="row" style="border:1px solid black">
+        <div class="breadcrumb font">
+            <span class="inline odd first"><a href="/Home/index1">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">
+                Examination Notification View
+            </span>
+
+        </div>
+        <br /> <div class="row">
+            <h2 class="head1">Examination Notification View</h2>
+        </div>
+
+
+        <div class="row">
+
+            @*<div class="col-lg-2"><b>Notification ID:</b></div>
+                <div class="col-lg-2">
+                    <label id="id"></label>
+                </div>*@
+            <div class="col-lg-2"><b>Course Type:</b></div>
+            <div class="col-lg-2">
+                <label id="course" class="opvalues"></label>
+            </div>
+            <div class="col-lg-2"><b>Name of the Section:</b></div>
+            <div class="col-lg-2">
+                <label id="dept" class="opvalues"></label>
+            </div>
+            <div class="col-lg-1"><b>Notification Number:</b></div>
+            <div class="col-lg-3">
+                <label id="notifynum" class="opvalues"></label>
+            </div>
+        </div>
+
+        <br />
+        <div class="row">
+
+            <div class="col-lg-2"><b>Notification Type</b></div>
+            <div class="col-lg-2">
+                <label id="desc1" class="opvalues"></label>
+            </div>
+            <div class="col-lg-2"><b>Notification Date:</b></div>
+            <div class="col-lg-2">
+                <label id="datenotify" class="opvalues"></label>
+            </div>
+            <div class="col-lg-2"><b>Fee Pay Last Date::</b></div>
+            <div class="col-lg-2">
+                <label id="feepaylastdate" class="opvalues"></label>
+            </div>
+
+
+
+            @*<div class="col-lg-2">Status</div>
+                <div class="col-lg-2">
+                    <label id="statusdesc"></label>
+                </div>*@
+        </div>
+        <br />
+        <div class="row">
+
+            <div class="col-lg-2"><b>Status:</b></div>
+            <div class="col-lg-2">
+                <label id="statusdesc" class="opvalues"></label>
+            </div>
+
+            <div class="col-lg-2"><b>Notification Description:</b></div>
+            <div class="col-lg-2">
+                <label id="description" class="opvalues"></label>
+            </div>
+        </div>
+
+
+
+        <br />
+        <div class="row">
+            <div class=" col-lg-offset-5 col-lg-2">
+                <a style="text-align:center; float:initial" class="btn btn-primary" onclick="GetClientReport1()">View Notification Pdf</a>
+            </div>
+          
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-lg-offset-1 col-lg-2">
+                Remarks
+            </div>
+
+            <div class="col-lg-6">
+                @Html.TextBoxFor(Model => Model.comments, new { @class = "form-control txtarea", @rows = "10",  @Maxlength = "100" })
+
+            </div>
+        </div>
+
+        <br />
+        <div class="row">
+
+            <div class="col-lg-offset-1 col-lg-2">
+                Send To
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownListFor(model => model.SelectedRoleId, new SelectList(Model.LoginRoleList, "Value", "Text"), new { @class = "form-control select2 firstclass" })
+                @*@Html.ValidationMessageFor(x => x.SelectedRoleId, "", new { @class = "text-danger" })*@
+                <span id="spnselectdropdown" class="text-danger" style="display:none;">Please  Select Hierarcy level</span>
+
+            </div>
+
+            <div class="col-lg-7">
+                @*<a class=" btn btn-primary" id="sendBtn" onclick="SendStatusDetails(@item.Exam_Notif_Id,@item.exam_notif_status_id)">Send</a>*@
+                <a class=" btn btn-primary" id="sendBtn1" onclick="SendStatusDetails()">Send</a>
+                <a class=" btn btn-primary" id="backbtn">Cancel</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade font" id="HistoryCommentsModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h2 class="modal-title head1">Remark Details</h2>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <P>Exam Notification Number: <label id="notif"></label></P><br /><br />
+            <table class="table table-striped table-hover text-center shadow clswidth" id="GetCommentRemarksDetails" style="width:100% !important" border="1" align="center">
+                <thead>
+                    <tr>
+                        <th width="20px">Sl. No.</th>
+                        <th>Date</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyGrid"></tbody>
+            </table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%; background-color:forestgreen;color:white;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="RemarksCommentsModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Remark Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <br />
+            <div>
+                <input type="button" value="ViewNotificationFile" class="btn btn-primary" onclick="GetClientReport()" style="margin-left:15px; width:250px;" id="btnFileView" />
+            </div>
+            <br />
+
+            <table class="table table-striped table-hover text-center shadow clswidth" id="GetCommentRemarkstbl" style="width:100% !important" border="1" align="center"></table>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade font" id="ViewNotificationFileFlowModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h2 class="head1">Notification Details</h2>
+            </div>
+            <div style="overflow-y:scroll;overflow-x:scroll;">
+                <table class="table table-striped table-hover text-center shadow clswidth" id="tblViewNotification" style="width:100% !important" border="1" align="center">
+                    <thead>
+                        <tr>
+                            <th>SL.No.</th>
+                            <th style="display:none;">LoginID</th>
+                            <th>Date</th>
+                            <th>Officer Name</th>
+                            <th>Upload/Download Notofication(.doc)</th>
+                            <th>Download Notofication(.pdf)</th>
+                            <th style="display:none;">Notofication No.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="viewNotificationFiles"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%; color:white;background-color:red">OK</button>
+                <button type="button" class="btn btn-default" onclick="SaveUploadNotifDoc()" data-dismiss="modal" style="width: 20%; color:white;background-color:forestgreen">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#tblGrid").DataTable();
+        $("#GetCommentRemarksDetails").DataTable();
+        $("#HistoryModal").hide();
+        $('#sendBtn1').attr('disabled', 'disabled');
+        $('.txtarea').attr('disabled', 'disabled');
+        $('.firstclass').attr('disabled', 'disabled');
+        $("#backbtn").click(function () {
+            $(".tblgrid1").show();
+            $("#HistoryModal").hide();
+        });
+        $('#combox').hide();
+        // $('#sendBtn1').removeAttr('disabled');
+
+
+
+    });
+
+    //var RoleId = '';
+    //function GetSelectedValue(ID1) {
+    //    RoleId = ID1;
+    //}
+
+    function dateFormat(d) {
+        console.log(d);
+        return (d.getDate() + "").padStart(2, "0")
+            + "/" + ((d.getMonth() + 1) + "").padStart(2, "0")
+            + "/" + d.getFullYear() + " " +  Formattime(d); //+ d.getHours() + ":" + d.getMinutes();
+    }
+    var ExamNotifyId = "";
+    var NotifyNum = "";
+    var StatusID = "";
+    var StatusDesc = "";
+    var Filename = "";
+            function viewDetails(id) {
+                debugger;
+                $('#sendBtn1').attr('disabled', 'disabled');
+                $('.txtarea').attr('disabled', 'disabled');
+                $('.firstclass').attr('disabled', 'disabled');
+        $('#HistoryModal').show();
+        $('.tblgrid1').hide();
+        ExamNotifyId = id
+        var loginid = '@Session["LoginId"]';
+        $.ajax({
+            type: "POST",
+            url: "/Notification/GetDetails",
+            dataType: 'json',
+            data: {
+                //__RequestVerificationToken: token,
+                ID: id
+            },
+            success: function (response) {
+                debugger;
+                $("#id").html(response.Exam_Notif_Id);
+                $("#course").html(response.CourseTypeName);
+                $("#dept").html(response.DeptName);
+                //$("#notifynum").html(response.Exam_Notif_Number);
+                $("#notifynum").html(response.Exam_Notif_Number);
+                $("#filename").html(response.filename);
+                $("#desc1").html(response.Exam_Notif_Desc);
+                $('#datenotify').html(dateFormat(new Date(parseInt((response.Exam_notif_date).match(/\d+/)[0]))));
+                $('#statusdesc').html(response.exam_notif_status_desc);
+                $('#RecordLevel').html(response.RecordLevel);
+                $('#description').html(response.Description);
+                $('#feepaylastdate').html(dateFormat(new Date(parseInt((response.fee_pay_last_date).match(/\d+/)[0]))));
+                comcount = response.comcount;
+                if (comcount != 0) {
+                    $('#combox').show();
+                }
+                Statusdescription = response.exam_notif_status_desc;
+                StatusID = response.exam_notif_status_id;
+                NotifyNum = response.Exam_Notif_Number;
+                StatusDesc = response.exam_notif_status_desc;
+                Filename = response.filename;
+                Loginid = response.login_id;
+                if (Statusdescription == 'Ready to Send for Approval') {
+                    if (Loginid == loginid) {
+                        $('#sendBtn1').removeAttr('disabled');
+                        $('.txtarea').removeAttr('disabled');
+                        $('.firstclass').removeAttr('disabled');
+                    }
+                }
+
+
+                //$("#tbl_EmpView").show();
+            }, error: function (e) {
+                var _msg = "Something went wrong.";
+                bootbox.alert(_msg);
+                $("#preloder, .loader").hide();
+            }
+        })
+
+
+
+
+
+    }
+
+
+
+    function SendStatusDetails() {
+        var comments1 = $("#comments").val();
+        var RoleId = $('#SelectedRoleId :selected').val();
+        var Rolename = $('#SelectedRoleId :selected').text();
+        var dropdown = $("#SelectedRoleId").val();
+        if (dropdown != 0) {
+            bootbox.confirm({
+                title: "Confirm",
+                message: "Are you sure you want to Send  this Exam Notification No." + NotifyNum.bold() + " to " + Rolename.bold() + " for Review and Recommand?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result == true) {
+                        //var comments1 = $("#comments").val();
+                        //var RoleId = $('#SelectedRoleId :selected').val();
+                        debugger;
+                        $.ajax({
+                            type: "POST",
+                            url: "/Notification/UpdateTransStatus",
+                            dataType: 'json',
+                            data: {
+                                Id: ExamNotifyId,
+                                Status: 113,
+                                Loginid: RoleId,
+                                comments: comments1,
+                            },
+
+                            success: function (response) {
+
+                                if (response == 1) {
+                                    //$('#sendBtn').attr("disabled", "disabled");
+                                    var _msg = "Exam Notificaion No. " + NotifyNum.bold() + " Sent Successfully to " + Rolename.bold() + " for Review and Recommand." ;
+                                    //bootbox.alert(_msg);
+                                    bootbox.alert({ message: _msg, closeButton: false, callback: function () { window.location.href = window.location.href; } });
+                                }
+                                else {
+                                    var _msg = "Fail to send";
+                                    bootbox.alert(_msg);
+                                }
+                            }, error: function (e) {
+                                var _msg = "Something went wrong.";
+                                bootbox.alert(_msg);
+                                $("#preloder, .loader").hide();
+                            }
+                        });
+                    }
+                }
+            });
+            //$("#spnselectdropdown").hide();
+        }
+        else {
+            $("#spnselectdropdown").show();
+            return false;
+        }
+    }
+
+    //function GetClientReport1() {
+    //    debugger;
+    //    var urlPath = "../../Content//Template//" + Filename + ".pdf";
+    //    window.open(urlPath, '_blank');
+    //};
+
+    function GetClientReport1() {
+        debugger;
+        $('#ViewNotificationFileFlowModal').modal('show');
+            $.ajax({
+                type: "Get",
+                url: "/Notification/ViewNotificationFile",
+                data: { id: ExamNotifyId },
+
+                success: function (data) {
+                    var login_id = 0;
+
+
+                    $("#viewNotificationFiles").empty();
+                    var slNo = 1;
+                    var i = 0;
+                    var Arr = [];
+                    $.each(data.NotificationList, function (id, li) {
+                        var pdfUrlPath =  "'../../Content//Template//" + li.filename + ".pdf'";
+                        var docUrlPath = "'../../Content//Template//" + li.Docfilename + ".docx'";
+                        var FileName = li.Docfilename;
+                        if (FileName == null) {
+                            FileName ="This user not uploaded file, because he is not reviewed"
+                        }
+                        debugger;
+                        var markup = "<tr><td>" + slNo + "</td><td style = 'display:none'>" + li.login_id + "</td><td>" + dateFormat(new Date(parseInt((li.creation_datetime).match(/\d+/)[0]))) + "</td><td>" + li.user_name + "</td><td>" + "<a href= " + docUrlPath + " data-toggle='tooltip' data-placement='top' title='Downlaod Word File' class='View' style='color: blue' target='_blank'><span>" + FileName+ "</span></a><input class= 'btn btn-success' style='align:center; margin:10px;width:80%' type='file'  id='UploadDocFile"+(i + 1)+"' onchange = 'PdfUpload(this)'>"  +
+                            "</td><td>" + " <a href=" + pdfUrlPath + " target='_blank'><img src='/Content/img/pdf_logo.png' height='35px' width='35px' title='Download Notification(pdf)'/></a>" + "</td><td style = 'display:none'>" + li.Exam_Notif_Number + "</td></tr>";
+                        $("#viewNotificationFiles").append(markup);
+
+                        Arr[i] += i;
+                        if (@Session["LoginId"] != li.login_id) {
+                            var d = document.getElementById('UploadDocFile' + (i + 1));
+                            $(d).attr('disabled', 'disabled');
+                        }
+
+                        i++;
+                        slNo++;
+                    });
+
+                }
+            });
+    }
+
+  function GetComment(ExamNofyId, num) {
+                $('#HistoryCommentsModal').modal('show');
+                document.getElementById("notif").innerHTML = num;
+                $.ajax({
+                    type: "Post",
+                    url: "/Notification/GetCommentDetails",
+                    data: { NotificationId: ExamNofyId },
+                    success: function (data) {
+                        debugger;
+                        $("#tbodyGrid").empty();
+                        var slNo1 = 1;
+                        $.each(data.NotificationList, function (id, col) {
+
+                            //var markup = "<tr><td>" + slNo1 + "</td><td>" + col.creationdatetime + "</td><td>" + col.By + "</td><td>" + col.Status +
+                            var markup = "<tr><td>" + slNo1 +"</td><td>" + col.creationdatetime + "</td><td>" + col.By + "</td><td>" + col.Status +
+                                "</td><td>" + col.comments + "</td></tr>";
+                            $("#tbodyGrid").append(markup);
+                            slNo1++;
+                        });
+
+                    }
+                });
+  }
+
+    function PublishnotifDetails(id, NotificationNumber, status) {
+
+
+        debugger;
+
+        if (id == 0 && status == 0) {
+            bootbox.alert("There Is No Notification No. And Status ID");
+        }
+
+        else {
+            bootbox.confirm({
+                title: "Confirm",
+                message: "Are you sure you want to publish the " + NotificationNumber.bold() + " please confirm ,while you Publish mail will be sent to all iti institute ",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                closeButton: false,
+                callback: function (result) {
+                    if (result == true) {
+
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/Notification/PublishNotification",
+                            dataType: 'json',
+                            data: {
+                                Id: id,
+                                Status: status,
+                                //Loginid: RoleId,
+                            },
+
+                            success: function (response) {
+                                debugger;
+                                if (response == "Saved") {
+                                    //$('#sendBtn').attr("disabled", "disabled");
+                                    var _msg = "The Exam Notification " + NotificationNumber.bold() + " Published  Successfully";
+                                    //bootbox.alert(_msg);
+                                    bootbox.alert({ message: _msg, callback: function () { window.location.href = window.location.href; } });
+                                }
+                                else {
+                                    var _msg = "Fail to send";
+                                    bootbox.alert(_msg);
+                                }
+                            }, error: function (e) {
+                                var _msg = "Something went wrong.";
+                                bootbox.alert(_msg);
+                                $("#preloder, .loader").hide();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+    }
+
+
+    function GetClientReport() {
+        debugger;
+        var urlPath = "../../Content//Template//Notification_" + Filename + ".pdf";
+        window.open(urlPath, '_blank');
+
+    }
+
+    function Formattime(t) {
+        console.log(t);
+        return (t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' , second: '2-digit' }) + "");//.padStart(2, "0")
+        //+ "/" + ((d.getMonth() + 1) + "").padStart(2, "0")
+        //+ "/" + d.getFullYear();
+    }
+
+    function SaveUploadNotifDoc() {
+        debugger;
+        //var statusForUpload = $("#HiddenStatusId").text();
+        var fileData = new FormData();
+        var table = document.getElementById('tblViewNotification');
+        var rowLength = table.rows.length;
+
+        for (var i = 1; i < rowLength; i += 1) {
+
+            var row = table.rows[i];
+
+            var ID = row.cells[1];
+            var LoginID = ID.innerText;
+
+            if ((@Session["LoginId"] == LoginID)) {
+                // get Officer column details
+                var Name = row.cells[3];
+                var officerName = Name.innerText;
+
+                var notifNo = row.cells[6];
+                var NotificationNo = notifNo.innerText;
+
+
+
+                var upladFileCell = row.cells[4].childNodes[1];
+                var SavePath = upladFileCell.files[0].name;
+
+                //model.UploadPdf = upladFileCell.files[0];
+                fileData.append(SavePath, upladFileCell.files[0]);
+                //fileData.append(i, model);
+
+
+                var obj = {
+                    officerName: officerName, SavePath: SavePath, Exam_Notif_Number: NotificationNo, login_id:LoginID
+
+                };
+                var myJSON = JSON.stringify(obj);
+                fileData.append(i, myJSON);
+
+
+                bootbox.confirm({
+                    title: "Confirm",
+                    message: "Are you sure you want to upload the modifeid notification file?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
+                    },
+                    closeButton: false,
+                    callback: function (result) {
+                        if (result == true) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '/Notification/SaveNotificationDocFile',
+                                contentType: false, // Not to set any content header
+                                processData: false, // Not to process data
+                                async: false,
+                                data: fileData,
+                                success: function (result) {
+                                    if (result > 0) {
+                                      
+                                        var _msg = " Notification file updated, and saved sucessfully.";
+                                        bootbox.alert(_msg);
+                                        //bootbox.alert({ message: _msg, closeButton: false, callback: function () { window.location.href ="/Notification/Notificationstatus?selectedTab=1"; } });
+                                       
+                                    }
+                                    else {
+                                        bootbox.alert("Error while Saving Notification Detils");
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+
+
+        }
+    }
+
+</script>
+<script type="text/javascript">
+    var selectedTab = '@Model.selectTab';
+    var NotifId = '@Model.Exam_Notif_Number';
+
+</script>
+

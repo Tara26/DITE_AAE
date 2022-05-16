@@ -1,0 +1,609 @@
+﻿@{
+    ViewBag.Title = "SeatAutoAllotment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .headetitle {
+        text-align: center;
+        background-color: cornflowerblue;
+        color: white;
+        border-radius: 5px;
+        height: 35px;
+    }
+</style>
+<br />
+<br />
+<br />
+
+<h4>
+    <ul class="nav nav-tabs font">
+        @if (Session["RoleId"].Equals(5))   //DD
+        {
+
+            <li>
+                <a href="#tab_1" data-toggle="tab">Allocation of seats</a>
+            </li>
+            <li>
+                <a href="#tab_2" data-toggle="tab">Update the allocated seats</a>
+            </li>
+            <li>
+                <a href="#tab_4" data-toggle="tab">View allocated seats</a>
+            </li>
+
+        }
+        else if (Session["RoleId"].Equals(6) || Session["RoleId"].Equals(2) || Session["RoleId"].Equals(1) || Session["RoleId"].Equals(4)) //AD, D,C
+        {
+            <li>
+                <a href="#tab_3" data-toggle="tab">Review the allocated seats</a>
+            </li>
+            <li>
+                <a href="#tab_4" data-toggle="tab">View allocated seats</a>
+            </li>
+        }
+
+    </ul>
+</h4>
+
+<div class="tab-content">
+    <div class="tab-pane fade in active" id="tab_1">
+        <div class="container-fluid font" style="background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding: 5px;">
+            <div class="row border">
+                <div class="breadcrumb font">
+                    <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span> <span class="inline odd last">Allocation of seats</span>
+                </div>
+                <div class="col-lg-12">
+                    <h3 class="head1">Allocation of seats</h3>
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="col-sm-5">
+                                <div class="text-right">
+                                    <label for="txtAgencyRegnNo">Academic Year</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <select class="form-control" id="AcademicYear"></select>
+                                    <span id="academicYearErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="col-sm-6">
+                                <div class="text-right">
+                                    <label for="txtAgencyRegnNo">Course Type</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <select class="form-control" id="CourseTypes"></select>
+                                    <span id="coursetypeErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="col-sm-6">
+                                <div class="text-right">
+                                    <label for="txtAgencyRegnNo">Applicant Type <font class="text-danger">*</font></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <select class="form-control" id="ApplicantTypes" onchange="GetAdmissionRounds(this.id)"></select>
+                                    <span id="applicantErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="col-sm-4">
+                                <div class="text-left">
+                                    <label for="txtAgencyRegnNo">Round<font class="text-danger">*</font></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <select style="width:100px;" class="form-control" id="Rounds"></select>
+                                    <span id="roundErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="text-left">
+                                <button class="btn btn-primary" style="width:83px;margin-top:-1px;" onclick="GenerateSeatAutoAllotment()">Generate</button>
+                            </div>
+                        </div>
+                    </div>
+                    </br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="seatAutoAllotmentTable"></table>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row footDiv">
+                        <div class="col-md-2">
+                            <label>Remarks</label>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-right">
+                                <textarea style="resize:none;" class="form-control" id="SendToRemarks" rows="2" cols="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Status</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control" id="StatusId" onchange="OnchangeStatus()"></select>
+                            <span id="StatusIdErr" style="color:red;font-size:12px;"></span>
+                        </div>
+                    </div>
+                    <div id="EnableForwardTo" class="row" style="display:none">
+                        <div class="col-md-2">
+                            <label for="status">Send To</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control" id="users"></select>
+                            <span id="roleIdErr" style="color:red;font-size:12px;"></span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="ShowSendToSubmit row footDiv">
+                        <div class="col-sm-6 GenerateSubmitButton" style="text-align-last:right;">
+                            <input type="button" class="btn btn-primary" value="Submit" onclick="SubmitSeatAutoAllotment()" />
+                            <input type="button" class="btn btn-danger" value="Back" data-dismiss="modal" />
+                        </div>
+                    </div>
+                </div>
+                <br /><br />
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab_2">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+            <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+                <div class="row border">
+                    <div class="breadcrumb font">
+                        <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span><span class="inline odd last">Update the allocated seats</span>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <h3 class="head1">Update the allocated seats</h3>
+                        <br /><br />
+                        <div class="col-md-3">
+                            <div class="col-sm-6">
+                                <div class="text-right">
+                                    <label for="txtAgencyRegnNo">Academic Year</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <select class="form-control" id="AcademicYearEdit">
+                                    </select>
+                                    <span id="academicYearEditErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="col-sm-6">
+                                <div class="text-right">
+                                    <label for="txtAgencyRegnNo">Course Type</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <select class="form-control" id="CourseTypesEdit"></select>
+                                    <span id="coursetypeEditErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="col-sm-6">
+                                <div class="text-right">
+                                    <label for="txtAgencyRegnNo">Applicant Type<font class="text-danger">*</font></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <select class="form-control" id="ApplicantTypesEdit" onchange="GetAdmissionRounds(this.id)"></select>
+                                    <span id="applicantEditErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="col-sm-4">
+                                <div class="text-left">
+                                    <label for="txtAgencyRegnNo">Round<font class="text-danger">*</font></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <select style="width:100px;" class="form-control" id="RoundsEdit">
+                                    </select>
+                                    <span id="roundEditErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="text-left">
+                                <button class="btn btn-primary" style="width:75px;margin-top:-1px;" onclick="FilterGetGeneratedSeatAutoAllotmentList()">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="UpdateseatAutoAllotmentTable"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab_3">
+        <div class="tab-pane fade in active">
+            <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+                <div class="row border">
+                    <div class="breadcrumb font">
+                        <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span><span class="inline odd last">Review the allocated seats</span>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <h3 class="head1">Review the allocated seats</h3>
+                        <br /><br />
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="col-sm-6">
+                                    <div class="text-right">
+                                        <label for="txtAgencyRegnNo">Academic Year</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="text-left">
+                                        <select class="form-control" id="ddlAcademicYearGen">
+                                        </select>
+                                        <span id="ddlAcademicYearGenErr" style="color:red;font-size:12px;"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="col-sm-6">
+                                    <div class="text-right">
+                                        <label for="txtAgencyRegnNo">Course Type</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="text-left">
+                                        <select class="form-control" id="ddlCourseTypesGen"></select>
+                                        <span id="ddlCourseTypesGenErr" style="color:red;font-size:12px;"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="col-sm-6">
+                                    <div class="text-right">
+                                        <label>Applicant Type<font class="text-danger">*</font></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="text-left">
+                                        <select class="form-control" id="ddlApplicantTypeGen" onchange="GetAdmissionRounds(this.id)"></select>
+                                        <span id="ddlApplicantTypeGenErr" style="color:red;font-size:12px;"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="col-sm-4">
+                                    <div class="text-left">
+                                        <label>Round<font class="text-danger">*</font></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="text-left">
+                                        <select style="width:100px;" class="form-control" id="ddlRoundGen">
+                                        </select>
+                                        <span id="ddlRoundGenErr" style="color:red;font-size:12px;"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="text-left">
+                                    <button class="btn btn-primary" style="width:75px;margin-top:-1px;" onclick="FilterGetGeneratedSeatAutoAllotmentReviewList()">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <table id="seatAutoAllotmentReviewTable" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab_4">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+            <div class="row border">
+                <div class="breadcrumb font">
+                    <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span><span class="inline odd last">View the Allocated Seats</span>
+                </div>
+
+                <div class="col-lg-12">
+                    <h3 class="head1">View the Allocated Seats</h3>
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="col-sm-6">
+                                <div class="text-right">
+                                    <label>Academic Year</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <select class="form-control" id="AcademicYearVAS">
+                                    </select>
+                                    <span id="AcademicYearVASErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="col-sm-6">
+                                <div class="text-right">
+                                    <label>Course Type</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <select class="form-control" id="CourseTypesVAS"></select>
+                                    <span id="CourseTypesVASErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="col-sm-6">
+                                <div class="text-right">
+                                    <label>Applicant Type<font class="text-danger">*</font></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <select class="form-control" id="ApplicantTypesVAS" onchange="GetAdmissionRounds(this.id)"></select>
+                                    <span id="ApplicantTypesVASErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="col-sm-4">
+                                <div class="text-left">
+                                    <label>Round<font class="text-danger">*</font></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <select style="width:100px;" class="form-control" id="RoundsVAS">
+                                    </select>
+                                    <span id="RoundVASErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="text-left">
+                                <button class="btn btn-primary" style="width:75px;margin-top:-1px;" onclick="GetApprovedAllocationSeatofRuletoView()">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <table id="seatAutoAllotmentViewList" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="modal fade" id="RemarksModal" role="dialog">
+        <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+            <div class="modal-content" style="padding:15px;">
+                <div class="modal-header">
+                    <h4 class="modal-title">Remark Details</h4>
+                </div>
+                <table class="table table-striped table-hover text-center shadow clswidth" id="RemarksTable" style="width:100% !important" border="1" align="center"></table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 15%;background-color:grey;color:white;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="RemarksModal" role="dialog">
+        <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+            <div class="modal-content" style="padding:15px;">
+                <div class="modal-header">
+                    <h4 class="modal-title">Seat Details</h4>
+                </div>
+                <table class="table table-striped table-hover text-center shadow clswidth" id="RemarksTable" style="width:100% !important" border="1" align="center"></table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 15%;background-color:grey;color:white;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ShowGeneratedSeatAllocationReviewModel" role="dialog">
+        <!-- Modal content-->
+        <div class="modal-content" style="width: 80%;margin-left:10%;">
+            <div class="modal-header">
+                <div class="modal-body" style="text-align:center;">
+                    <h4></h4>
+                    <div id="root">
+                        <div style="text-align:center;">
+                            <img src="/Content/frontend/images/gok-en-wh-sml.png" alt="gok-logo" style="width:5%;">
+                        </div>
+                        <div class="row" id="GridListDiv">
+                            <div class="col-lg-12">
+                                <h3 class="headetitle" style="text-align:center;"> Generated Seat Allocation List</h3>
+                                <br />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" style="margin-left:10px;">
+                            <div class="row">
+                                <table id="tblShowGeneratedSeatAllocationReview" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                            <br /><br />
+                        </div>
+                    </div>
+                    <div class="ReviewSendTo row">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Status</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control" id="ReviewStatusId" onchange="OnchangeReviewStatus()"></select>
+                                <span id="StatusIdErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Remarks</label>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-right">
+                                    <textarea style="resize:none;" class="form-control" id="ReviewSendToRemarks" rows="2" cols="5"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div id="EnableReviewForwardTo" class="row" style="display:none">
+                        <div class="col-md-2">
+                            <label for="status">Send To</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control" id="Reviewusers"></select>
+                            <span id="roleIdErr" style="color:red;font-size:12px;"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ReviewSendTo row">
+                    <div class="col-sm-6" style="text-align-last:right;">
+                        <input type="button" class="btn btn-primary btn-SubmitReviewSeatAutoAllotment" value="Submit" onclick="SubmitReviewSeatAutoAllotment()" />
+                        <input type="button" class="btn btn-cancel" data-dismiss="modal" value="Back" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ApprovedShowGeneratedSeatAllocationReviewModel" role="dialog">
+        <!-- Modal content-->
+        <div class="modal-content" style="width: 80%;margin-left:10%;">
+            <div class="modal-header">
+                <div class="modal-body" style="text-align:center;">
+                    <h4></h4>
+                    <div>
+                        <div style="text-align:center;">
+                            <img src="/Content/frontend/images/gok-en-wh-sml.png" alt="gok-logo" style="width:5%;">
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h3 class="headetitle" style="text-align:center;"> Approved Seat Allocation List</h3>
+                                <br />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" style="margin-left:10px;">
+                            <div class="row">
+                                <table id="tblApprovedShowGeneratedSeatAllocationReview" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                            <br /><br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ShowGeneratedSeatAllocationModel" role="dialog">
+        <!-- Modal content-->
+        <div class="modal-content" style="width: 80%;margin-left:10%;">
+            <div class="modal-header">
+                <div class="modal-body" style="text-align:center;">
+                    <a href="#" class="close" data-dismiss="modal" aria-label="close">&times;</a><br><br>
+                    <h4></h4>
+                    <div id="root">
+                        <div style="text-align:center;">
+                            <img src="/Content/frontend/images/gok-en-wh-sml.png" alt="gok-logo" style="width:5%;">
+                        </div>
+                        <div class="row" id="GridListDiv">
+                            <div class="col-lg-12">
+                                <h3 class="headetitle" style="text-align:center;"> Seat Auto Allocation List</h3>
+                                <br />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" style="margin-left:10px;">
+                            <div class="row">
+                                @*<div style="width:auto;">*@
+                                <table id="tblShowGeneratedSeatAllocation" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                            @*</div>*@
+                            <br /><br />
+                        </div>
+                    </div>
+                    <div class="CorrectionSendTo row">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Remarks</label>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-right">
+                                    <textarea style="resize:none;" class="form-control" id="CorrectionSendToRemarks" rows="2" cols="5"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Status</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control" id="CorrectionStatusId" onchange="OnCorrectionchangeStatus()"></select>
+                                <span id="CorrectionStatusIdErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                        <div id="CorrectionEnableForwardTo" class="row" style="display:none">
+                            <div class="col-md-2">
+                                <label>Send To</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control" id="Correctionusers"></select>
+                                <span id="roleIdErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="CorrectionSendTo row">
+                        <div class="col-sm-6" style="text-align-last:right;">
+                            <input type="button" class="btn btn-primary btn-SubmitSeatAutoAllotment" value="Submit" onclick="CorrectionSeatAutoAllotment()" />
+                            <input type="button" class="btn btn-cancel" data-dismiss="modal" value="Back" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="hdnSession" data-value='@Request.RequestContext.HttpContext.Session["RoleId"]' />
+    <input type="hidden" id="hdnSessionRole" data-value='@Session["RoleName"].ToString()' />
+
+    @Scripts.Render("~/bundles/SeatAutoAllotment")

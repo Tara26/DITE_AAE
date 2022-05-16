@@ -1,0 +1,606 @@
+﻿
+@{
+    ViewBag.Title = "ApplicationVerficationOfficer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<link href="~/Scripts/Admission/ApplicantOnlineApplicationForm.css" rel="stylesheet" />
+
+<script src="~/Scripts/Admission/ApplicantOnlineApplicationForm.js"></script>
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+<script src="~/Scripts/Admission/GrievanceAgainstTentativeList.js"></script>
+
+<style>
+    table.dataTable thead tr {
+        background-color: cornflowerblue;
+        color: white;
+    }
+
+    .headetitle {
+        text-align: center;
+        background-color: cornflowerblue;
+        color: white;
+        border-radius: 5px;
+        height: 35px;
+    }
+
+    table th {
+        text-align: center;
+    }
+</style>
+<br />
+<br />
+<br />
+<ul class="nav nav-tabs font">
+    <li>
+        <a href="#tab_1" id="tab1" data-toggle="tab">Verify documents - Govt./Aided</a>
+    </li>
+    <li>
+        <a href="#tab_3" id="tab3" data-toggle="tab"> Document Verification - ReConcile Fee </a>
+    </li>
+    <li>
+        <a href="#tab_2" id="tab2" data-toggle="tab">Grievance against Gradation and Status</a>
+    </li>
+
+    <li style="display:none">
+        <a href="#tab_4" id="tab3" data-toggle="tab"> Verify documents - Private </a>
+    </li>
+    @if (Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.CaseWorker)
+
+    {
+        <li>
+            <a href="#tab_5" id="tab5" data-toggle="tab"> Document Verification Status </a>
+        </li>
+        <li>
+            <a href="#tab_6" id="tab6" data-toggle="tab"> Document ReConcile Fee - Private</a>
+        </li>
+    }
+</ul>
+
+<div class="tab-content">
+    <input type="hidden" id="hdnDiv_ID" data-value="@ViewBag.UserDivionId" />
+
+    <div class="tab-pane fade" id="tab_1">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border clsVerifyDocAppl">
+                <div class="breadcrumb font">
+                    <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Verify documents of the applicants</span>
+                </div>
+                <div class="col-lg-12">
+                    <h3 class="head1">Verify documents of the applicants</h3>
+                    <br /><br />
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="col-sm-5">
+                                    <label>Session:</label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <select class="form-control" id="Session22" style="width:100px;">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm-6">
+                                    <label>Course Type:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select class="form-control" style="width:100px;" id="CourseType22"></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm-6">
+                                    <label>Application Mode</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="ApplicantTypeSelect" name="ApplicantTypeSelect">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary" style="width:100px;" onclick="GetDataToVerifyDocuments()">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <table id="VerifyDocumentsTable" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab_2">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="row" id="gridlist">
+                    <div class="breadcrumb font">
+                        <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Grievance against Gradation and Status</span>
+                    </div>
+                    <div class="col-lg-12">
+                        <h3 class="head1">Grievance against Gradation and Status</h3>
+                        <br />
+                        @if (Session["RoleId"].ToString().Equals("12") || Session["RoleId"].ToString().Equals("12"))
+                        {
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="col-sm-6">
+                                        <label>Course Type:</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" style="width:100px;" id="CourseType"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="col-sm-5">
+                                        <label>Session:</label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <select class="form-control" id="Session" style="width:100px;">
+                                            <option value="choose">choose</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2021">2021</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="col-sm-6">
+                                        <label>Application Mode:</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" style="width:100px;" id="applicantType"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <button class="btn btn-primary" style="width:100px;" onclick="GetGrievanceTentativeStatus()">Search</button>
+                                </div>
+                                <div class="col-sm-1"> </div>
+                            </div>
+                        }
+                        <br />
+                        <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="ApplicantGrievanceStatus"></table>
+                    </div>
+                </div>
+
+                <div class="row" id="EditviewDetails">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4 class="headetitle">Grievance against tentative gradation list details</h4>
+                            <br /><br />
+                            <div style="overflow-x:scroll;">
+                                <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="ApplicantGrievanceEdit">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-7" id="tablegrid">
+                            <table id="GrievanceData1">
+                                <tbody id="tablebody"></tbody>
+                            </table>
+
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-primary" id="add" style="width:50px;" onclick="AddOnemoreFileEdit()"><span style="font-weight:900;">+</span></button>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-3">
+                            <textarea rows="3" id="remarksEdit" class="form-control"></textarea>
+                            <textarea rows="3" id="verRemarks" class="form-control"></textarea>
+                            <input type="hidden" id="GrievanceId" />
+                            <input type="hidden" id="grivancNumber" />
+                        </div>
+                        <div class="col-md-5">
+                            <br />
+                            <button class="btn btn-primary" style="width:80px;" id="update" onclick="UpdateGrievance()">Update</button>
+                            <button class="btn btn-primary" style="width:80px;" id="verifiedbtn" onclick="VerifyGrievance()">Verified</button>
+                            <button class="btn btn-primary" style="width:150px;" id="sendbtn" onclick="SendForCorrection()">Send for correction</button>
+                            @*<button class="btn btn-primary" style="width:70px;" id="rejectbtn" onclick="Reject()">Reject</button>*@
+                            <button class="btn btn-default" style="background-color:dimgrey;color:white;width:80px;" onclick="CancelGrievance()">Back</button>
+                        </div>
+
+                    </div>
+                    <br />
+                    <span style="color:red;font-size:14px;font-weight:bold;">Note : Please Update the applicant details and relevant grievance documents in the application form after verify the grievance </span>
+
+                </div>
+            </div>
+        </div>
+        <br /><br />
+    </div>
+
+    <div class="tab-pane fade" id="tab_3">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font">
+                    <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Document Verification Re-Concillation Fee</span>
+                </div>
+                <div class="col-lg-12">
+                    <h3 class="head1"> Document Verification Re-Concillation Fee</h3>
+                    <br /><br />
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="col-sm-5">
+                                    <label>Session:</label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <select class="form-control" id="ddlSessionDvF" style="width:100px;"></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm-6">
+                                    <label>Course Type:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select class="form-control" style="width:100px;" id="ddlCourseTypeDvF"></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="col-sm-6">
+                                    <label>Application Mode</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="ddlApplicantTypeDvF" name="ddlApplicantTypeDvF">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary" style="width:100px;" onclick="GetDataDocumentsVerificationFee()">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row" style="overflow-x:scroll; width:99%">
+                            <table id="tblDocumentVerifyFee" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab_4">
+
+
+
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font">
+                    <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Document Verification Fee</span>
+                </div>
+                <div class="col-lg-12">
+                    <h3 class="head1"> Document Verification Fee </h3>
+                    <br /><br />
+                    <div class="card-body">
+                        <div class="row">
+                            @*<div class="col-sm-3">
+                                    <div class="col-sm-5">
+                                        <label>Academic Year:</label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <select class="form-control" id="ddlSessionfee" style="width:100px;"></select>
+                                    </div>
+                                </div>*@
+                            @*<div class="col-sm-3">
+                                    <div class="col-sm-6">
+                                        <label>Course Type:</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" style="width:100px;" id="ddlCourseTypefee"></select>
+                                    </div>
+                                </div>*@
+                            @*<div class="col-sm-3">
+                                    <div class="col-sm-6">
+                                        <label>Applicant Type</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="ApplicantTypeffee" name="ApplicantTypeffee">
+                                        </select>
+                                    </div>
+                                </div>*@
+                            <div class="col-sm-3">
+                                <div class="col-sm-6">
+                                    <label>Application Number</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" id="ApplNo" class="form-control">
+
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary" style="width:100px;" onclick="GetDocumentVerificationFeeToPay1()">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <input type="hidden" id="ApplicationId" value="" name="ApplicationIdNo" />
+                        <div class="row" style="overflow-x:scroll; width:99%">
+                            <table id="tblDocumentFeePay" class="table table-striped table-hover text-center shadow clswidth" border="1" @*data-component="datatable" data-locale="en" data-search="true"*@>
+                                <thead>
+                                    <tr>
+                                        <th>Sl.No.</th>
+                                        <th>Course Type</th>
+                                        <th>Session</th>
+                                        <th>Application Number</th>
+                                        <th>Applicant Name</th>
+                                        <th>Mobile Number</th>
+                                        <th>Application Mode </th>
+                                        <th>Application Status</th>
+                                        <th>Application Acknowledgement</th>
+                                        <th>Remarks</th>
+
+                                        <th>Action</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="studentMarks">
+                                </tbody>
+                            </table>
+
+                            <div style="text-align:center">
+                                <button class="btn btn-success" id="savefee" style="width: 100px; display: none" onclick="SavePaymentsDetails()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*@if (Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.JDDiv)
+
+        {*@
+    @*<div class="tab-pane fade" id="tab_5">
+            <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+                <div class="row border">
+                    <div class="breadcrumb font">
+                        <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Verify documents of the applicants</span>
+                    </div>
+                    <div class="col-lg-12">
+                        <h3 class="head1">Verify documents of the applicants</h3>
+                        <br /><br />
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="col-sm-5">
+                                        <label>Academic Year:</label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <select class="form-control" id="Session22doc" style="width:100px;">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="col-sm-6">
+                                        <label>Course Type:</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" style="width:100px;" id="CourseType22doc"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="col-sm-6">
+                                        <label>Applicant Type</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="ApplicantTypeSelectdoc" name="ApplicantTypeSelect">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="col-sm-6">
+                                        <label>District</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="districtDoc" name="districtSelect">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="col-sm-6">
+                                        <label>Taluk</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="talukDoc" name="talukSelect">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="col-sm-6">
+                                        <label>Institute Name</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="Instname" name="InstnameSelect">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="col-sm-6">
+                                        <button class="btn btn-primary" style="width:100px;" onclick="GetDataToVerifyDocuments()">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <table id="VerifyDocumentsTableDivision" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    @*<div class="tab-pane fade" id="tab_6">
+            <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+                <div class="row border">
+                    <div class="breadcrumb font">
+                        <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Document Verification Fee</span>
+                    </div>
+                    <div class="col-lg-12">
+                        <h3 class="head1"> Document Re-ConcileFee Fee </h3>
+                        <br /><br />
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="col-sm-5">
+                                        <label>Academic Year:</label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <select class="form-control" id="ddlSessionDvFRcl" style="width:100px;"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="col-sm-6">
+                                        <label>Course Type:</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" style="width:100px;" id="ddlCourseTypeDvFRcl"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="col-sm-6">
+                                        <label>Applicant Type</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="ddlApplicantTypeDvFRcl" name="ddlApplicantTypeDvF">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="col-sm-6">
+                                        <label>District</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="districtreconcile" name="districtSelectreconcile">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="col-sm-6">
+                                        <label>Taluk</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="talukreconcile" name="talukreconcile">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="col-sm-6">
+                                        <label>Institute Name</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="Instnamereconcile" name="InstnameSelectreconcile">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="col-sm-6">
+                                        <button class="btn btn-primary" style="width:100px;" onclick="GetDataDocumentsVerificationFee()">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row" style="overflow-x:scroll; width:99%">
+                                <table id="tblDocumentVerifyFeeReconcile" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    @*}*@
+</div>
+
+@*</div>*@
+@Html.Partial("ApplicantOnlineApplicationFormPartial")
+
+<div class="modal fade" id="myModal" role="dialog" style="display:none">
+    <div class="modal-dialog" style="width:80%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <a href="#" class="close" data-dismiss="modal" aria-label="close">&times;</a><br><br>
+                <div class="accordion-option">
+                    <h3 class="title">Application Form Details</h3>
+                    <a class="toggle-accordion active" accordion-id="#accordion"></a>
+                </div>
+                <div class="clearfix"></div>
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    @Html.Partial("ApplicantOnlineApplicationFormPartial")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="hdnSession" data-value='@Request.RequestContext.HttpContext.Session["LoginId"]' />
+<label hidden id="CalenderNotificationEligibleInd"></label>
+@*@Html.Partial("ApplicantOnlineApplicationFormPartial")*@
+
+<div class="modal fade" id="HistoryRemarksCommentsModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Remarks</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <table class="table table-striped table-hover text-center shadow clswidth" id="GetCommentRemarksDetails" style="width:100% !important" border="1" align="center"></table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="GrievaceRemarksModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Remark Details</h4>
+                <label><b>Grievance Number :</b></label><label style="color:red;" id="grievanceNum"></label><br />
+            </div>
+            <table class="table table-striped table-hover text-center shadow clswidth" id="RemarksTable" style="width:100% !important" border="1" align="center"></table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="HisVerificatiobnFeeRemarksModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Remarks</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <table class="table table-striped table-hover text-center shadow clswidth" id="tblVerificationFeeCommentDetails" style="width:100% !important" border="1" align="center"></table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("~/Views/Admission/ApplicantDetails.cshtml")
+
+@Scripts.Render("~/bundles/ApplicantVerificationOfficer")
+@*@Scripts.Render("~/bundles/GrievanceTentativeList")*@
+
+
+<script>
+    var RoleId = '@Session["RoleId"]';
+</script>

@@ -1,0 +1,117 @@
+﻿@model Models.ExamNotification.DSCModelList
+
+@{
+    ViewBag.Title = "ReviewDSCDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item font"><a href="/Home/index1" style="color:cornflowerblue; ">Home</a></li>
+                        <li class="breadcrumb-item active">Review And Approve DSC Key</li>
+                        @*<div class="form-group row" style="border:1px solid black">
+                                                        <div class="breadcrumb font">
+                                                            <span class="inline odd first"><a href="/Home/index1">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">
+                                Review And Approve DSC Key
+                            </span>
+
+                                                        </div>
+                                                    </div>*@
+
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid text-center">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary">
+                    <h4 class="card-title"><b>Review DSC</b></h4>
+                </div>
+                <div class="card-body text-center">
+                    @using (Html.BeginForm("ReviewDSCDetails", "Notification", FormMethod.Post, new { @id = "structure" }))
+                    {
+                        @Html.AntiForgeryToken();
+                        <div>
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                            @if (ViewBag.Status != null && ViewBag.Status == "Success")
+                            {
+                                <h4 class="text-success">Successfully Updated</h4>
+                            }
+                            else if (ViewBag.Status != null && ViewBag.Status == "Failed")
+                            {
+                                <h4>Failed to Update.</h4>
+                            }
+                        </div>
+                        <table id="tblNewAgentRegList" class="table table-bordered table-striped table-hover text-center shadow clswidth">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Sl No</th>
+                                    <th>Name</th>
+                                    <th>Designation</th>
+                                    <th>Issuer Email</th>
+                                    <th>Valid From Date</th>
+                                    <th>Expiry Date</th>
+                                    <th>Certifying Authority</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @if (Model.dSCModels != null)
+                                {
+                                    int sl = 1;
+
+                                    for (int i = 0; i < Model.dSCModels.Count(); i++)
+                                    {
+                                        <tr>
+                                            <td>@Html.CheckBoxFor(m => m.dSCModels[i].ischecked)</td>
+                                            <td>@sl</td>
+                                            <td>
+                                                @Html.HiddenFor(m => m.dSCModels[i].DSCKeyId)
+                                                @Model.dSCModels[i].DSCName
+                                            </td>
+                                            <td>@Model.dSCModels[i].designation</td>
+                                            <td>@Model.dSCModels[i].issuerEmail</td>
+                                            <td>@Model.dSCModels[i].ValidFromDate</td>
+                                            <td>@Model.dSCModels[i].ExpiryDate</td>
+                                            <td>@Model.dSCModels[i].certifyingAuthority</td>
+                                            <td>@Html.TextBoxFor(m => m.dSCModels[i].remarks)</td>
+                                        </tr>
+                                        sl++;
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+
+                        <div class="row">
+                            <div class="col-md-8"></div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-danger" name="submit" id="Reject" value="Reject" style="float:right">Reject</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-success" name="submit" id="Approve" value="Approve" style="float:right">Approve</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+

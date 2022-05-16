@@ -1,0 +1,1058 @@
+﻿@model Models.ExamNotification.Notification
+@{
+    ViewBag.Title = "CreateNotification";
+    int sno = 1;
+
+}
+
+
+<link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script src="~/Content/frontend/js/bootstrap.js"></script>
+<script src="~/Content/js/jquery-3.5.1.js"></script>
+<script src="~/Content/js/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootbox.js"></script>
+<script src="~/Scripts/bootbox.min.js"></script>
+<script src="~/Scripts/bootbox.locales.min.js"></script>
+@*<script src="~/Content/frontend/js/jquery-ui.min.js"></script>*@
+<script src="~/Content/js/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="~/Content/css/jquery-ui.min.css" type="text/css">
+@*<script type="text/javascript" src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>*@
+@*<script type="text/javascript" src="~/Scripts/tinymce.min.js"></script>*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.6.2/tinymce.min.js" integrity="sha512-sOO7yng64iQzv/uLE8sCEhca7yet+D6vPGDEdXCqit1elBUAJD1jYIYqz0ov9HMd/k30e4UVFAovmSG92E995A==" crossorigin="anonymous"></script>
+@*<script src="~/Content/tinymce/tinymce.min.js"></script>*@
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+<style>
+    button {
+        background-color: #5A8CD3;
+        color: white;
+    }
+
+    .content-box-gray .content {
+        overflow: hidden;
+        padding: 10px;
+        font-size: 15px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border: 1px solid gray;
+        color: #3385FF;
+    }
+
+    .content-box-gray .title {
+        height: 50px;
+        line-height: 30px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        /*background: #5A8CD3;*/
+        font-size: 18px;
+        font-weight: bold;
+        font-family: verdana;
+        display: block;
+        color: white;
+        display: block;
+        padding: 10px;
+        border: 1px solid gray;
+        border-bottom: none;
+    }
+
+    .tox-statusbar {
+        visibility: hidden;
+    }
+
+    .modal-dialog {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+.modal-dialog1 {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .modal-content {
+        height: auto;
+        min-height: 100%;
+        border-radius: 0;
+    }
+</style>
+<style>
+    button {
+        background-color: #5A8CD3;
+        color: white;
+    }
+
+    label {
+        font-weight: normal;
+    }
+
+    .content-box-gray .content {
+        overflow: hidden;
+        padding: 10px;
+        font-size: 15px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border: 1px solid gray;
+        color: #3385FF;
+    }
+
+    .content-box-gray .title {
+        height: 50px;
+        line-height: 30px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        /*background: #5A8CD3;*/
+        font-size: 18px;
+        font-weight: bold;
+        font-family: verdana;
+        display: block;
+        color: white;
+        display: block;
+        padding: 10px;
+        border: 1px solid gray;
+        border-bottom: none;
+    }
+
+    .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+        color: #fff;
+    }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+            cursor: default;
+            color: #fff !important;
+            border: 1px solid transparent;
+            background: transparent;
+            box-shadow: none;
+        }
+
+    tr {
+        color: black;
+    }
+
+    <style >
+    /*select {
+                    padding-bottom: 50px;
+                }*/
+    .border {
+        border: 1px solid black;
+    }
+
+    .new {
+        background-color: "#e6ffee";
+    }
+
+    .font {
+        font-size: 12px;
+        font-weight: 700;
+        font-family: Arial, Helvetica,sans-serif;
+    }
+
+    .smallheading {
+        font-size: 18px;
+        font-weight: 700;
+        font-family: Arial, Helvetica,sans-serif;
+        padding: 20px;
+    }
+
+    .bigheading {
+        font-size: 32px;
+        font-weight: 700;
+        font-family: Arial, Helvetica,sans-serif;
+    }
+
+    .midheading {
+        font-size: 24px;
+        font-weight: 700;
+        font-family: Arial, Helvetica,sans-serif;
+    }
+
+    a {
+        color: #195c9f;
+        text-decoration: none;
+    }
+
+    textarea.form-control {
+        height: auto;
+        float: inline-start;
+        margin-left: 0px !important;
+    }
+
+
+    th {
+        background-color: #195c9f;
+        color: white;
+        text-align: center;
+    }
+
+    .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+        color: #fff;
+    }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+            cursor: default;
+            color: #fff !important;
+            border: 1px solid transparent;
+            background: transparent;
+            box-shadow: none;
+        }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #195c9f;
+        border-color: #195c9f;
+    }
+
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+        color: #555;
+        cursor: default;
+        background-color: #1b191929;
+        border: 1px solid #ddd;
+        border-bottom-color: transparent;
+    }
+
+    .panel-heading {
+        padding: 10px 15px;
+        border-bottom: 1px solid transparent;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        font-size: 12px;
+    }
+
+    .panel-default > .panel-heading {
+        color: #333;
+        background-color: #195c9f;
+        border-color: #ddd;
+        color: white;
+        font-weight: 700;
+        font-family: Arial, Helvetica,sans-serif;
+        font-size: 12px;
+    }
+
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+        padding: 10px;
+        background-color: #80808014;
+    }
+
+    .col-md-12 {
+        position: relative;
+        min-height: 1px;
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    label {
+        margin: 0;
+        font-weight: 700;
+        font-size: 12px;
+        color: black;
+        font-family: Arial, Helvetica,sans-serif;
+    }
+
+    .head1 {
+        color: #195c9f;
+        text-align: center;
+        font-weight: 700;
+        background-color: #195c9f;
+        color: white;
+    }
+
+    .td1 {
+        background-color: #195c9f;
+        color: #fff;
+    }
+
+    .head {
+        color: #195c9f;
+        text-align: center;
+        font-weight: 700;
+        margin: -50px;
+    }
+
+    .table > thead:first-child > tr:first-child > th, .table > caption + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > td, .table > thead:first-child > tr:first-child > td {
+        border-top: 0;
+        text-align: center;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 6px 12px;
+        font-weight: 700;
+        font-family: Arial, Helvetica,sans-serif;
+        font-size: 12px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+        box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    }
+
+    .bg {
+        background-color: white;
+    }
+
+    .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+        color: #000;
+    }
+
+    .breadcrumb {
+        text-align: right;
+        border: none;
+        margin: 0;
+        background: none;
+        border-radius: 0;
+        float: left;
+        margin-top: -10px;
+    }
+</style>
+<head>
+
+</head>
+<body>
+    <br /><br /><br />
+    @if (Session["RoleName"].ToString().Equals("Case Worker"))
+    {
+        <h4>
+            <ul class="nav nav-tabs font">
+                <li>
+                    <a href="#tab_1" data-toggle="tab">Preparation of Notification</a>
+                </li>
+                <li>
+                    <a href="#tab_2" data-toggle="tab">Notification status</a>
+                </li>
+                @*<li>
+                        <a href="#tab_3" data-toggle="tab">Update Notification</a>
+                    </li>*@
+            </ul>
+        </h4>
+
+        <br />
+
+        <div class="tab-content">
+            <div class="tab-pane fade" id="tab_1">
+                <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+                    <div class="row" style="border:1px solid black">
+                        <div class="breadcrumb font">
+                            <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">
+                                Enter Notification Details
+                            </span>
+                        </div>
+                        <div class="col-lg-12">
+
+                            <h2 class="head1" style="text-align:center">Enter Notification Details</h2>
+                            <br /><br />
+
+                            @Html.HiddenFor(x => x.Exam_Notif_Id)
+                            @*// @Html.HiddenFor(x => x.Exam_Notif_Number)*@
+
+                            @Html.HiddenFor(x => x.Action)
+
+                            <div class="form-group row">
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo" style="padding:1%;margin:0%;">Select Template Language:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select id="ddlLang">
+                                            <option value="1">English</option>
+                                            <option value="2">ಕನ್ನಡ</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo">Course Type:<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(model => model.CourseTypeId, new SelectList(Model.CourseList, "Value", "Text"), new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(x => x.CourseTypeId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <!--Section1-->
+
+
+                                <div class="form-group row">
+                                    <div class="col-md-2 col-sm-2 col-form-label">
+                                        <label for="txtAgencyRegnNo">Notification Description:<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        @*<div id="multilineinput" contenteditable="true"></div>*@
+                                        @Html.TextBoxFor(Model => Model.Description, new { @class = "form-control", @rows = "10", @Maxlength = "100", })
+                                        @*@Html.ValidationMessageFor(x => x.Description, "", new { @class = "text-danger" })*@
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <br />
+                            <div class="form-group row">
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo" style="padding:1%;margin:0%;">Name of Section:</label>
+                                    </div>
+                                    <div class="col-md-6" style="display:none">
+                                        @Html.DropDownListFor(model => model.DeptId, new SelectList(Model.DeptList, "Value", "Text"), new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(x => x.DeptId, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="txtDepartmentName" style="color:blue; "><b>@Model.DeptName</b></label>
+                                        <input type="hidden" value="@Model.DeptName" name="DeptName" />
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo" style="padding:1%;margin:0%;">Notification Type:</label>
+                                    </div>
+                                    <div class="col-md-6" style="display:none">
+                                        @Html.DropDownListFor(model => model.NotifDescId, new SelectList(Model.NotifDescList, "Value", "Text"), new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(x => x.NotifDescId, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="txtNotificationDescription" style="color:blue;"><b>@Model.Exam_Notif_Desc</b></label>
+                                        <input type="hidden" value="@Model.Exam_Notif_Desc" name="Exam_Notif_Desc" />
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <br />
+                            <div class="form-group row">
+
+                                <div class="col-lg-9 col-md-9">
+                                    <div class="col-md-4">
+                                        <label for="txtAgencyRegnNo">Notification Number:<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @* <input type="text" id="Exam_Notif_Number_show" class="form-control" value="@Model.Exam_Notif_Number" name="Exam_Notif_Number_show" readonly />*@
+                                        @Html.TextBoxFor(model => model.Exam_Notif_Number, new { @class = "form-control", MaxLength = "99", @readonly = "readonly" })
+                                        @Html.ValidationMessageFor(x => x.Exam_Notif_Number, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="form-group row">
+
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo" style="padding:1%;margin:0%;">Notification Date</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(model => model.Exam_notif_date, "{0:dd/MM/yyyy}", new { @class = "form-control", autocomplete = "off", style = " background-position:right; background-size:30px; background-image:  url(../../Content/img/Calendar.png);background-repeat: no-repeat;" })
+                                        @Html.ValidationMessageFor(x => x.Exam_notif_date, "", new { @class = "text-danger" })
+                                    </div>
+
+                                </div>
+
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo" style="padding:1%;margin:0%;">Fee Pay Last Date</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(model => model.fee_pay_last_date, "{0:dd/MM/yyyy}", new { @class = "form-control", autocomplete = "off", style = " background-position:right; background-size:30px; background-image:  url(../../Content/img/Calendar.png);background-repeat: no-repeat;" })
+                                        @Html.ValidationMessageFor(x => x.fee_pay_last_date, "", new { @class = "text-danger" })
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <br />
+
+                            <div class="form-group row">
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="col-md-6">
+                                        <label for="txtAgencyRegnNo" style="padding:1%;margin:0%;">Upload Notification file :</label>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="file" class="form-control mb-2" accept=".doc,.docx" id="Notificationfile" name="file" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        @*<button type="button" class="btn btn-primary">Download</button>*@
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br />
+                            <br />
+
+
+
+                            <div>
+
+
+                                @*<a href="#" class="btn btn-primary" id="btnValue" data-toggle="modal" onclick="sample()">PreView</a>*@
+
+
+                                @if (Model.Exam_Notif_Id == 0)
+                                {
+                                    <input type="button" id="createNotification1" value="Create" class="btn btn-success" style="margin-left:15px;" />
+
+                                    <input type="button" id="draftNotification" value="Save As Draft" class="btn btn-success" style="margin-left:15px;" />
+
+                                    <input type="button" id="btnCancel" value="Cancel" class="btn btn-success" style="margin-left:15px;" />
+
+                                }
+
+
+                                else
+                                {
+                                    <input type="button" id="createNotification1" value="Create" class="btn btn-success" style="margin-left:15px;" />
+
+                                    <input type="button" id="draftNotification" value="Save As Draft" class="btn btn-success" style="margin-left:15px;" />
+
+                                    <input type="button" id="btnCancel" value="Cancel" class="btn btn-success" style="margin-left:15px;" />
+
+                                }
+
+                            </div>
+
+
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <br /><br />
+            </div>
+
+            <div class="tab-pane fade" id="tab_2">
+
+                @Html.Action("Notificationstatus", "Notification")
+
+
+            </div>
+
+            @*<div class="tab-pane fade" id="tab_3">
+
+                @Html.Action("UpdateNotificationDet", "Notification")
+            </div>*@
+
+        </div>
+
+    }
+</body>
+
+<script type="text/javascript">
+    tinymce.init({
+        selector: 'textarea',
+        //width: 1520,
+        height: 500,
+        plugins: 'table',
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        $("#tblGrid").DataTable();
+
+        $("#btnCancel").click(function () {
+            window.location.href = "/Notification/CreateNotification?selectedTab=1";
+        });
+
+        debugger;
+       
+    });
+
+
+
+
+
+    function SelectedCourseType() {
+        var courseType = $("#CourseTypeId option:selected").index();
+        if (courseType == 0) {
+            bootbox.alert("Please Select The Course Type");
+        }
+    }
+
+    //function NotifDesc() {
+    //    debugger;
+    //    var dept = $("#DeptId option:selected").index();
+    //    if (dept == 0) {
+    //        bootbox.alert("Please Select Notification Department");
+    //    }
+    //}
+    function ValidateData() {
+        debugger;
+
+        var returnValue = true;
+        var fees_regex = new RegExp(/^[0-9]+[0-9]*$/i);
+        var apllnFees = $("#fee_pay_last_date").val();
+        var NotificationNumber = $("#Exam_Notif_Number").val();;
+
+        if (NotificationNumber == "") {
+            bootbox.alert("Please Generate the Notification Number by clicking the button Generate Notification No. ");
+            returnValue = false;
+
+        }
+        else if (apllnFees == "") {
+            bootbox.alert("Please enter valid fees pay last date");
+            returnValue = false;
+        }
+
+        return returnValue;
+    }
+</script>
+
+<script type="text/javascript">
+    var selectedTab = '@Model.selectTab';
+    var NotificationNumber = '@Model.Exam_Notif_Id';
+
+    if (selectedTab != null)
+    {
+         if (selectedTab == 0) {
+        $('.nav-tabs li:eq(0) a').tab('show')
+        }
+        else if (selectedTab == 1) {
+            $('.nav-tabs li:eq(1) a').tab('show')
+        }
+        else if (selectedTab == 2) {
+            $('.nav-tabs li:eq(2) a').tab('show')
+        }
+
+    }
+
+    if ('@TempData["Saved"]' != "") {
+        if ('@TempData["Saved"]' == "Created") {
+            bootbox.alert({ message: 'The Notification No. ' + '@TempData["NotificationNumber"]'.bold() + ' Created  Successfully', callback: function () { window.location.href = "/Notification/CreateNotification?selectedTab=1"; } });
+        }
+        else if ('@TempData["Saved"]' == "Draft") {
+            bootbox.alert({ message: 'The Notification No. ' + '@TempData["NotificationNumber"]'.bold() + ' Created Draft Successfully', callback: function () { window.location.href = "/Notification/CreateNotification?selectedTab=1"; } });
+        }
+        else if ('@TempData["Saved"]' == "Updated") {
+            bootbox.alert({ message: 'The Notification No. ' + '@TempData["NotificationNumber"]'.bold() + ' Updated Successfully', callback: function () { window.location.href = "/Notification/CreateNotification?selectedTab=1"; } });
+        }
+             else if ('@TempData["Saved"]' == "Failed") {
+            bootbox.alert("Failed to Save/Update Exam Notification");
+        }
+        else if ('@TempData["Saved"]' == "Invalid") {
+            bootbox.alert("Some of the fields are invalid, please select valid data.");
+        }
+    }
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#btnValue').click(function () {
+            $("#divkarea").html("");
+            debugger;
+
+            var content = tinymce.get("content").getContent();
+            content = content.replace("&lt;Notification Date&gt;", $('#Exam_notif_date').val());
+            content = content.replace("&lt;Notification Number&gt;", $('#Exam_Notif_Number').val());
+            content = content.replace("&lt;ಅಧಿಸೂಚನೆ ದಿನಾಂಕ&gt;", $('#Exam_notif_date').val());
+            content = content.replace("&lt;ಅಧಿಸೂಚನೆ ಸಂ.&gt;", $('#Exam_Notif_Number').val());
+            content = content.replace("&lt;Fees Date&gt;", $('#fee_pay_last_date').val());
+            debugger;
+            $("#divkarea").html(content);
+
+        });
+    });
+   
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#ddlLang").change(function () {
+            debugger;
+            var selectedText = $(this).find("option:selected").text();
+            var content = "";
+            var strKan = "";
+            var selectedValue = $(this).val();
+            if (selectedText == "English") {
+
+                content = "<h2 style=\"text-align: center;\"><span style=\"font-family: 'times new roman', times, serif;\">Government of Karnataka</span></h2>\r\n<p>&nbsp;</p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: 0cm; line-height: normal; mso-layout-grid-align: none; text-autospace: none;\"><span style=\"font-size: 12pt; font-family: 'times new roman', times, serif;\">&lt;Notification Number&gt;</span></p>\r\n<p class=\"MsoNormal\" style=\"text-align: right; line-height: 1;\" align=\"right\"><span style=\"font-family: 'times new roman', times, serif;\">Industrial training and employment</span></p>\r\n<p class=\"MsoNormal\" style=\"text-align: right; line-height: 1;\" align=\"right\"><span style=\"font-family: 'times new roman', times, serif;\">Skill House, Dairy Circle,</span></p>\r\n<p class=\"MsoNormal\" style=\"text-align: right; line-height: 1;\" align=\"right\"><span style=\"font-family: 'times new roman', times, serif;\">Bannerghatta Road, Bangalore-560 029,</span></p>\r\n<p class=\"MsoNormal\" style=\"text-align: right; line-height: 1;\" align=\"right\"><span style=\"font-family: 'times new roman', times, serif;\">Date: &lt;Notification Date&gt;</span></p>\r\n<p class=\"MsoNormal\" style=\"text-align: center;\" align=\"center\"><span style=\"font-family: 'times new roman', times, serif;\">NOTIFICATION</span></p>\r\n<p>&nbsp;</p>";
+
+
+            }
+            else {
+                content = "<p class='read' style=\"text-align: center; font-size: 12.0pt; mso-bidi-font-size: 11.0pt; line-height: 107%; font-family: 'Tunga',sans-serif;\">ಕರ್ನಾಟಕ ಸರ್ಕಾರ </p><p style=\"font-size: 12.0pt; mso-bidi-font-size: 11.0pt; line-height: 107%; font-family: 'Tunga',sans-serif;\">ದಿನಾಂಕ : &lt;ಅಧಿಸೂಚನೆ ದಿನಾಂಕ&gt;</p><p style=\"text-align: right; font-size: 12.0pt; mso-bidi-font-size: 11.0pt; line-height: 107%; font-family: 'Tunga',sans-serif;\">ಅಧಿಸೂಚನೆ ಸಂ.: &lt;ಅಧಿಸೂಚನೆ ಸಂ.&gt;</p><p>&nbsp;</p><p style=\"text-align: center;font-size: 12.0pt; mso-bidi-font-size: 11.0pt; line-height: 107%; font-family: 'Tunga',sans-serif;\">ಅಧಿಸೂಚನೆ</p><br>";
+
+            }
+            tinymce.get("content").setContent(content);
+
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+
+        $('#Exam_notif_date').datepicker({
+
+            dateFormat: 'dd/mm/yy',
+            minDate: 0.,
+            changeMonth: true,
+            changeYear: true,
+            startDate: new Date(),
+
+
+            onSelect: function (selected,picker) {
+                debugger;
+                var arr = selected.split("/");
+                var minimumDate = new Date(arr[2], arr[1] - 1, arr[0]);
+                $("#fee_pay_last_date").datepicker("option", "minDate", minimumDate)
+            }
+        });
+
+        if (NotificationNumber != 0) {
+
+            $('#CourseTypeId').attr("disabled", "disabled");
+            $('#Description').attr("readonly", "readonly");
+            $('#DeptName').attr("readonly", "readonly");
+            }
+    });
+
+    $(document).ready(function () {
+        debugger;
+        $('#fee_pay_last_date').datepicker({
+            dateFormat: 'dd/mm/yy',
+            minDate: 0.,
+            changeMonth: true,
+            changeYear: true
+        });
+    });
+
+    function sample() {
+        $('#my123').modal('show');
+    }
+
+    $("#button").click(function () {
+        var current_index = $("#selectedTab").tabs("option", "selected");
+    });
+
+
+
+    function Generate_Notification_Number() {
+        var CourseValue = $("#CourseTypeId option:selected").text();
+        var DescriptionValue = $('#Description').val();
+        var courseType = $("#CourseTypeId option:selected").index();
+        var newNotificationId = @Model.LastNotigicationId + 1;
+        debugger;
+        if (courseType > 0 && DescriptionValue != "") {
+
+            bootbox.confirm('<br/><br/> Your Notification Number Will Be Generated Which Is Final and Cannot Be Edited or Modified, Do You Want To Continue.?', (confirma) => {
+                var result = "";
+                if (confirma) {
+                    debugger;
+                    var currentdate = new Date();
+                    var newYear = currentdate.getFullYear();
+                    result = 'DITE/' + CourseValue + '/TRG/' + newNotificationId + '/' + newYear + '-' + (newYear + 1);
+                    FileNo = result;
+
+                    $("#Exam_Notif_Number").val(result);
+                    //res = $("#Exam_Notif_Number").val();
+                    //alert(res);
+                   // ReplaceTags(result, null, null, DescriptionValue);
+                  //  $("#Exam_Notif_Number_show").val(result);
+
+                    return result;
+                }
+            });
+
+
+        }
+        else {
+            if (courseType <= 0) {
+                bootbox.alert("Please Select the Course Type.");
+            }
+            else {
+                bootbox.alert("Please enter Notification Description.");
+            }
+        }
+
+
+    }
+
+
+    $("#createNotification1").click(function (e) {
+        debugger;
+
+        var currentTime = new Date()
+        var year = currentTime.getFullYear()
+        var data = new FormData();
+        var files;
+        var nameoftheSection = '@Model.DeptName';
+        var DescriptionValue = $('#Description').val();
+        var NotificationNo = $('#Exam_Notif_Number').val();
+        var noId = '@Model.NotifDescId';
+        var DeparmentId = '@Model.DeptId'
+        var action = 1;
+        if ($('#Notificationfile').val()=="") {
+
+            bootbox.alert("Please upload the Notification DOC File");
+        } else {
+            bootbox.confirm({
+                title: "Confirm",
+                message: "Are you sure you want to create Notification for the year " + year +" ? ",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result == true) {
+
+                        var SAFile = $("#Notificationfile").get(0).files;
+                        files = SAFile.name;
+                        if (SAFile.length > 0) {
+                            files = checkValidationForFileSize(SAFile);
+                            if (files == true) {
+                                data.append("UploadPdf", SAFile[0]);
+                            }
+                            else {
+                                return false;
+                            }
+                        }
+                        data.append("CourseTypeId", $("#CourseTypeId option:selected").val());
+                        data.append("Description", $('#Description').val());
+                        data.append("Exam_Notif_Number", $("#Exam_Notif_Number").val());
+                        data.append("DeptName", nameoftheSection);
+                        data.append("Exam_notif_date", $('#Exam_notif_date').val());
+                        data.append("fee_pay_last_date", $('#fee_pay_last_date').val());
+                        data.append("NotifDescId", noId);
+                        data.append("DeptId", DeparmentId);
+                        data.append("Action", action)
+                        $.ajax({
+                            type: "POST",
+                            url: '/Notification/PostNotificationData',
+                            processData: false,
+                            contentType: false,
+                            data: data,
+                            success: function (result) {
+                                if (result == "Saved") {
+                                    bootbox.alert({
+                                        message: "The notification " + NotificationNo.bold() + " created successfully",
+                                        callback: function () {
+                                            window.location.href = "/Notification/CreateNotification?selectedTab=1";
+                                        }
+                                    });
+
+                                }
+
+                                else {
+                                    bootbox.alert("Error while creating the notification")
+                                }
+
+                            }
+                        });
+                    }
+                }
+            });
+
+        }
+    });
+
+    
+
+    $("#draftNotification").click(function (e) {
+        debugger;
+
+        var currentTime = new Date()
+        var year = currentTime.getFullYear()
+        var data = new FormData();
+        var files;
+        var nameoftheSection = '@Model.DeptName';
+        var DescriptionValue = $('#Description').val();
+        var NotificationNo = $('#Exam_Notif_Number').val();
+        var noId = '@Model.NotifDescId';
+        var DeparmentId = '@Model.DeptId'
+        var action = 0;
+        if ($('#Notificationfile').val()=="") {
+
+            bootbox.alert("Please upload the Notification DOC File");
+        } else {
+            bootbox.confirm({
+                title: "Confirm",
+                message: "Are you sure you want to create draft notification for the year " + year +" ? ",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result == true) {
+
+                        var SAFile = $("#Notificationfile").get(0).files;
+                        files = SAFile.name;
+                        if (SAFile.length > 0) {
+                            files = checkValidationForFileSize(SAFile);
+                            if (files == true) {
+                                data.append("UploadPdf", SAFile[0]);
+                            }
+                            else {
+                                return false;
+                            }
+                        }
+                        data.append("CourseTypeId", $("#CourseTypeId option:selected").val());
+                        data.append("Description", $('#Description').val());
+                        data.append("Exam_Notif_Number", $("#Exam_Notif_Number").val());
+                        data.append("DeptName", nameoftheSection);
+                        data.append("Exam_notif_date", $('#Exam_notif_date').val());
+                        data.append("fee_pay_last_date", $('#fee_pay_last_date').val());
+                        data.append("NotifDescId", noId);
+                        data.append("DeptId", DeparmentId);
+                        data.append("Action", action)
+                        $.ajax({
+                            type: "POST",
+                            url: '/Notification/PostNotificationData',
+                            processData: false,
+                            contentType: false,
+                            data: data,
+                            success: function (result) {
+                                if (result == "Saved") {
+                                    bootbox.alert({
+                                        message: "The draft notification " + NotificationNo.bold() + " created successfully",
+                                        callback: function () {
+                                            window.location.href = "/Notification/CreateNotification?selectedTab=1";
+                                        }
+                                    });
+
+                                }
+
+                                else {
+                                    bootbox.alert("Error while creating the notification")
+                                }
+
+                            }
+                        });
+                    }
+                }
+            });
+
+        }
+    });
+    function checkValidationForFileSize(file1) {
+            //Naik
+            //debugger;
+        var fileTypes = ["docx"];
+            var type = file1[0]["name"].split('.').pop();
+            var fileExists = fileTypes.includes(type)
+        @*var filesizevalue = int.Parse(@System.Configuration.ConfigurationManager.AppSettings["fileSize"]);*@
+
+            if (fileExists == true) {
+                var filesize = ((file1[0].size / 100) / 1024).toFixed(5);
+                if (filesize > 1) {
+                    bootbox.alert("Please upload a file of size less than 100kb.");
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            else {
+                bootbox.alert("Please upload a valid file");
+                return false;
+            }
+
+        }
+
+
+</script>
+
+
+
+<script>
+    $(function () {
+        $('input').keydown(function (e) {
+            if (e.keyCode == 13 || e.keyCode == 9) {
+                debugger;
+                $("Description").focus().click();
+                Generate_Notification_Number();
+            }
+        });
+    });
+
+
+    function GetViewNotificationTable(id) {
+        $('#ViewNotificationModal').modal('show');
+        $.ajax({
+            type: "Get",
+            url: "/Admission/ViewAdmissionNotification",
+            data: { id: ExamNotifyId },
+            success: function (data) {
+                var t = $('#tblViewNotification').DataTable({
+                    data: data,
+                    destroy: true,
+                    columns: [
+                        { 'data': 'slno', 'title': 'Sl.No.', 'className': 'text-center' },
+                        { 'data': 'createdatetime', 'title': 'Date', 'className': 'text-left' },
+                        //{ 'data': 'Exam_Notif_Number', 'title': 'Notification No.', 'className': 'text-left' },
+                        { 'data': 'Role', 'title': 'Officer', 'className': 'text-left' },
+                        {
+                            'title': 'Upload/Download Notification(.doc)',
+                            render: function (data, type, row) {
+                                debugger
+                                return '<div class="row"><div class="col-sm-10"><input type="file" accept="application/docx" name="file" ' + (row.RoleId == $("#hdnSession").data('value') ? 'enabled' : 'disabled') + '/><small class="text-black-50">' + (row.SavePath != null ? row.SavePath.split('/').pop() : "") + '</small></div>' +
+                                    '<div id="NotificationfileAttach" class="col-sm-2"><a href="../../' + row.SavePath + '" class="link" target="_blank" style="color:green;"><img title="Download Notification(doc)" style="width:25px;height:25px" src="/Images/download.png" ' + (row.SavePath == "" ? 'style="display:none;"' : "") + '></a></div></div>';
+                            }
+                        },
+                        {
+                            'title': 'Download Notification(.pdf)',
+                            render: function (data, type, row) {
+                                debugger
+                                return "<a class='btn btn-link' href='../../" + row.Admsn_notif_doc + "' target='_blank'><img src='/Content/img/pdf_logo.png' height='40px' width='40px' title='Download Notification(pdf)'/></a>"
+                            }
+                        },
+                        //{ 'data': 'Status', 'title': 'Status', 'className': 'text-left' },
+                        //{ 'data': 'comments', 'title': 'Remarks Description', 'className': 'text-left' }
+                    ]
+                });
+                t.on('order.dt search.dt', function () {
+                    t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            }
+        });
+    }
+
+
+
+
+
+</script>
+
+
+
+
+
+

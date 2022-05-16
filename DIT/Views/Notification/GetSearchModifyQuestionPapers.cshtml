@@ -1,0 +1,473 @@
+﻿
+@model Models.ExamNotification.ViewModel
+@{
+    ViewBag.Title = "GetSearchModifyQuestionPapers";
+    Layout = null;
+    //  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<script src="~/Content/frontend/js/bootstrap.js"></script>
+    <script src="~/Scripts/bootbox.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/bootbox.locales.min.js"></script>
+    <script src="~/Content/frontend/js/jquery-ui.min.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="~/Content/js/jquery-ui.min.js"></script>
+    <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/css/jquery-ui.min.css" type="text/css">*@
+
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Content/frontend/js/bootstrap.js"></script>
+<script src="~/Scripts/bootbox.js"></script>
+<script src="~/Scripts/bootbox.min.js"></script>
+<script src="~/Scripts/bootbox.locales.min.js"></script>
+<script src="~/Content/frontend/js/jquery-ui.min.js"></script>
+<script src="~/Content/js/moment.min.js"></script>
+<link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Content/js/jquery.datetimepicker.js"></script>
+<script src="~/Content/js/browser.js"></script>
+<script src="~/Content/js/vfs_fonts.min.js"></script>
+<script src="~/Content/js/pdfmake.min.js"></script>
+
+<style>
+    button {
+        background-color: #5A8CD3;
+        color: white;
+    }
+
+    .content-box-gray .content {
+        overflow: hidden;
+        padding: 10px;
+        font-size: 15px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border: 1px solid gray;
+        color: #3385FF;
+    }
+
+    .content-box-gray .title {
+        height: 50px;
+        line-height: 30px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        /*background: #5A8CD3;*/
+        font-size: 18px;
+        font-weight: bold;
+        font-family: verdana;
+        display: block;
+        color: white;
+        display: block;
+        padding: 10px;
+        border: 1px solid gray;
+        border-bottom: none;
+    }
+
+    .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+        color: #fff;
+    }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+            cursor: default;
+            color: #fff !important;
+            border: 1px solid transparent;
+            background: transparent;
+            box-shadow: none;
+        }
+
+    tr {
+        color: black;
+    }
+</style>
+<br /><br /><br />
+
+
+<br />
+<script>
+
+    function GetSubjectList() {
+        debugger;
+        var SubjectTypeId = $('#subject_type_id :selected').val();
+        var CourseTypeId = $('#course_id :selected').val();
+        $.ajax({
+            type: 'POST',
+            url: '/Notification/GetSubjectList',
+            data: { CourseTypeId: CourseTypeId, SubjectTypeId: SubjectTypeId },
+            success: function (data) {
+                if (data.length > 0) {
+                    $("#mySkills").empty();
+                    $.each(data, function (key, value) {
+                        $("#mySkills").append($("<option></option>").val(value.Value).html(value.Text));
+                    });
+                    $("#mySkills").trigger('change');
+                }
+            }
+        });
+    }
+
+
+
+    $(document).ready(function () {
+        $("#btnSearchQP").click(function (e) {
+            debugger;
+            //var Course_Type = document.getElementById("#ct_idmodify").value;
+            var Course_Type = $('#ct_idmodify option:selected').val();
+            //   var Course_Type = ($("#ddlCID option:selected").val());
+            //  var Course_Type = $("#course_id option:selected").val();
+            var Trade_Type = $('#trade_type_idmodify option:selected').val();
+            var Trade = $('#trade_idmodify option:selected').val();
+            var Trade_Year = $('#trade_year_idmodify option:selected').val();
+            var Exam_Type = $('#exam_type_idmodify option:selected').val();
+            var Subject_Type = $('#subject_type_idmodify option:selected').val();
+            //  alert(Course_Type + "," + Trade_Type + "," + Trade_Year + "," + Exam_Type + "," + Subject_Type + "," + Trade);
+            //var Subject = $('#mySkills option:selected')
+            //    .toArray().map(item => item.text).join();
+            //   alert(Course_Type + "," + Trade_Type + "," + Trade_Year + "," + Exam_Type + "," + Subject_Type + "," + Trade + "," + Subject);
+            $.ajax({
+                type: "get",
+                url: '/Notification/GetSearchModifyQuestionPapers1',
+                //data: { CourseTypeID: Course_Type, TradeTypeID: Trade_Type, TradeID: Trade, TradeYearID: Trade_YearExamTypeID, Exam_Type, ExamSubTypeID: Subject_Type, ExamSubID: Subject },
+                data: { CourseTypeID: Course_Type, TradeTypeID: Trade_Type, TradeID: Trade, TradeYearID: Trade_Year, ExamTypeID: Exam_Type, ExamSubTypeID: Subject_Type, ExamSubID: 23 },  //BNM
+                success: function (data) {
+
+                   
+
+                    debugger;
+                    if (data.questionPaperList.length > 0) {
+                        debugger;
+
+                        $("#tbodyQuestionpapersetModifyGrid").empty(); //tbodyModify_Attend
+                        var slNo = 1;
+                        $.each(data.questionPaperList, function (id, modif) {
+                           
+                            //   var pdfUrlPath = "../../Content/Uploads/" + encodeURIComponent(modif.attendSavePath);
+                            // var excelUrlPath = "../../Content/Uploads/" + encodeURIComponent(modif.attendExcelPath);
+                            //var markup = "<tr><td>" + slNo + "</td><td>" + modif.Day + "</td><td>" + dateFormat(new Date(parseInt((modif.ECT_ExamDate).match(/\d+/)[0]))) + "</td><td id = 'startTime'>" + Formattime(new Date(parseInt((modif.ECT_Exam_Start_Time).match(/\d+/)[0]))) + "</td><td>" + Formattime(new Date(parseInt((modif.ECT_Exam_End_Time).match(/\d+/)[0]))) + "</td><td>" + modif.TradeYr + "</td><td>" + modif.Subject + "</td><td>" + modif.BlockNo + "</td><td>" + "<a href=" + pdfUrlPath + " target='_blank'>View</a>" + "<input class= 'btn btn-success' style='align:right; width:100%;' type='file' id='UploadDocsFile' onchange = 'Upload()'>" + "</td><td>" + "<a href=" + excelUrlPath + " target='_blank'>View</a>" + "<input class= 'btn btn-success' style='align:right; width:100%;' type='file' id='UploadExcelFile' onchange = 'ExcelUpload()'>" + "</td></tr>";
+                            var markup = "<tr><td>" + slNo + "</td><td>" + modif.CourseType +
+                                "</td><td>" + modif.TradeType + "</td><td>" +
+                                "</td><td>" + modif.Trade + "</td><td>" +
+                                "</td><td>" + modif.Trade_Year + "</td><td>" +
+                                "</td><td>" + modif.ExamType + "</td><td>" +
+                                "</td><td>" + modif.SubjectType + "</td><td>" +
+                                "</td><td>" + modif.Subject + "</td><td>" + modif.ExamDate + "</td><td>" + modif.QP +
+                                "</td><td>" + modif.QP + "</td><td>" + modif.Subject + "</td></tr>";
+                            $("#tbodyQuestionpapersetModifyGrid").append(markup);  //tbodyModify_Attend
+                            slNo++;
+                        });
+
+
+
+                    }
+                }
+            });
+        });
+    });
+
+
+    function GetExamDate() {
+        debugger;
+        var SubjectId = $('#mySkills :selected').val();
+        $.ajax({
+            type: 'POST',
+            url: '/Notification/GetExamDate',
+            data: { SubjectId: SubjectId },
+            success: function (data) {
+                if (data.length > 0) {
+                    $("#ExamDate").empty();
+
+                    $('#ExamDate').val(data);
+
+
+                    $("#ExamDate").trigger('change');
+                }
+            }
+        });
+    }
+
+
+
+
+
+</script>
+
+
+@*<!DOCTYPE html>
+
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Modify the question papers sets</title>
+    </head>
+    <body>
+        <div>
+        </div>
+    </body>
+    </html>*@
+
+@*<div class="content container tblgrid1" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+    <br /><br />
+          <h4 class="modal-title" style="background-color:cornflowerblue; color:white">Modify the question papers sets</h4><br /><br />
+    <table class="table table-bordered table-hover text-center" style="color:white;" id="tblGrid">*@
+@using (Html.BeginForm("CreateStudent", "GetStudents", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 style="text-align:center">Question papers records</h3>
+                <br /><br />
+                <br /><br />
+                <div class="form-group row">
+                    <div class="col-lg-4 col-md-4">
+                        <div class="col-md-6">
+                            <label for="txtAgencyRegnNo">Course Type<span style="color:red"> *</span></label>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.DropDownListFor(model => model.questionPaperSets.course_id, new SelectList(Model.questionPaperSets.CourseTypeList, "Value", "Text"), new { @class = "form-control select2", @id = "ct_idmodify" })
+
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="col-md-6">
+                            <label for="txtAgencyRegnNo">Trade Type<span style="color:red"> *</span></label>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.DropDownListFor(model => model.questionPaperSets.trade_type_id, new SelectList(Model.questionPaperSets.TradeTypeList, "Value", "Text"), new { @class = "form-control select2", @onchange = "GetTradeList()", @id = "trade_type_idmodify" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="col-md-6">
+                            <label for="txtAgencyRegnNo">Trade<span style="color:red"> *</span></label>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.DropDownListFor(model => model.questionPaperSets.trade_id, new SelectList(Model.questionPaperSets.TradeList, "Value", "Text"), new { @class = "form-control select2", @onchange = "GetTradeYearList()", @id = "trade_idmodify" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+
+                    <div class="col-lg-4 col-md-4">
+                        <div class="col-md-6">
+                            <label for="txtAgencyRegnNo">Trade Year<span style="color:red"> *</span></label>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.DropDownListFor(model => model.questionPaperSets.trade_year_id, new SelectList(Model.questionPaperSets.TradeYearList, "Value", "Text"), new { @class = "form-control select2", @id = "trade_year_idmodify" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="col-md-6">
+                            <label for="txtAgencyRegnNo">Exam Type<span style="color:red"> *</span></label>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.DropDownListFor(model => model.questionPaperSets.exam_type_id, new SelectList(Model.questionPaperSets.ExamTypeList, "Value", "Text"), new { @class = "form-control select2", @id = "exam_type_idmodify" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="col-md-6">
+                            <label for="txtAgencyRegnNo">Subject Type<span style="color:red"> *</span></label>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.DropDownListFor(model => model.questionPaperSets.subject_type_id, new SelectList(Model.questionPaperSets.SubjectTypeList, "Value", "Text"), new { @class = "form-control select2", @onchange = "GetSubjectList()",@id = "subject_type_idmodify" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-4 col-md-4">
+                        <div class="col-md-6">
+                            <label for="txtAgencyRegnNo">Subject<span style="color:red"> *</span></label>
+                        </div>
+                        <div class="col-md-6">
+                            <select id="mySkills" multiple="multiple" required name="mySkillsName" class="form-control select2">
+                                @if (ViewBag.mySkills != null)
+                                {
+                                    foreach (var item in ViewBag.mySkills)
+                                    {
+                                        if (item.Text != null)
+                                        {
+                                            <option value="@item.Value">
+                                                @item.Text
+                                            </option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <input type="button" id="btnSearchQP" value="Search" class="btn btn-success" style="margin-left:15px;width:250px" />   @* onclick="abc()" *@
+
+                </div>
+                @*BNM  Added the below DDL for the Exam Centres Email ID*@
+
+
+
+
+            </div>
+            <br />
+            <br />
+            <table class="table table-bordered table-hover" id="QuestionpapersetModifyGrid">
+                <thead>
+                    <tr>
+                    <tr style="background: limegreen;">
+                        <th>SlNo</th>
+                        <th>Course Type</th>
+                        <th>Trade Type</th>
+                        <th>Trade </th>
+                        <th>Trade Year</th>
+                        <th>Exam Type</th>
+                        <th>Subject Type</th>
+                        <th>Subject</th>
+                        <th>Exam Date</th>
+                        <th>Question Papers</th>
+                        <th>Upload Files</th>
+                        @*<th>Files</th>*@
+                        <th>Select</th>
+                        @*<td style="display:none">SubjectTypeID</td>
+                        <td style="display:none">SubjectId</td>*@
+                    </tr>
+                </thead>
+                <tbody id="tbodyQuestionpapersetModifyGrid">
+                   
+                </tbody>
+                @*<tbody id="tbodySubjectToNotification">
+                        @if (Model.NotifiationListList != null)
+                        {
+                            foreach (var item in Model.NotifiationListList.objSubjectsItem)
+                            {
+                                <tr>
+                                    <td>@item.Exam_Date</td>
+                                    <td>@item.Exam_Time</td>
+                                    <td>@item.Exam_Time</td>
+                                    <td>@item.SubjectTypeID</td>
+                                    <td>@item.SubjectId</td>
+                                    <td><a class="Delete" href="javascript:;">Delete</a></td>
+                                    <td>@item.SubjectId</td>
+                                    <td>@item.SubjectId</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>*@
+
+            </table>
+            <br />
+            <div class="form-group row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="col-md-6 col-lg-offset-3">
+                        <input type="button" value="Edit" class="btn btn-success" style="margin-left:15px; width:250px;" id="btnClearNotification" />
+                        <input type="button" id="btnSaveSendQP" value="Submit" class="btn btn-success" style="margin-left:15px;width:250px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    // debugger;
+    //course_idmodify   trade_type_idmodify   trade_idmodify  trade_year_idmodify exam_type_idmodify  subject_type_idmodify
+    $("#btnSearchQP_NA").click(function (e) {
+        //$(document).ready(function () {
+        //function abc() {
+        // var rollNo = $("#Trainee_Roll_Num").val();
+        //   debugger;
+        //   var Course_Type = $('#course_idmodify option:selected').text();
+        //var Course_Type = $("#course_idmodify option:selected").val();
+
+        //var objQuestionPaperSetsItem = [];
+        //var AddQPToNotificationGrid = $("#QuestionpapersetModifyGrid").DataTable();
+        //AddQPToNotificationGrid.rows().every(function (rowIdx, tableLoop, rowLoop) {
+        //    var d = this.data();
+        //    var obj = new Object();
+        //    obj.CourseTypeId = d[11];
+        //    objQuestionPaperSetsItem.push(obj);
+        //});
+
+
+        //  var strDDLValue = Request.Form["ddlCID"].ToString();
+        var Course_Type = document.getElementById("ddlCID").value;
+
+        //   var Course_Type = ($("#ddlCID option:selected").val());
+        //  var Course_Type = $("#course_id option:selected").val();
+        var Trade_Type = $('#trade_type_idmodify option:selected').val();
+        var Trade = $('#trade_idmodify option:selected').val();
+        var Trade_Year = $('#trade_year_idmodify option:selected').val();
+        var Exam_Type = $('#exam_type_idmodify option:selected').val();
+        var Subject_Type = $('#subject_type_idmodify option:selected').val();
+        //  alert(Course_Type + "," + Trade_Type + "," + Trade_Year + "," + Exam_Type + "," + Subject_Type + "," + Trade);
+        var Subject = $('#mySkills option:selected')
+            .toArray().map(item => item.text).join();
+
+
+        $.ajax({
+            type: "get",
+            url: '/Notification/GetSearchModifyQuestionPapers1',
+            //data: { CourseTypeID: Course_Type, TradeTypeID: Trade_Type, TradeID: Trade, TradeYearID: Trade_YearExamTypeID, Exam_Type, ExamSubTypeID: Subject_Type, ExamSubID: Subject },
+            data: { CourseTypeID: Course_Type, TradeTypeID: Trade_Type, TradeID: Trade, TradeYearID: Trade_Year, ExamTypeID: Exam_Type, ExamSubTypeID: Subject_Type, ExamSubID: 23 },
+            success: function (data) {
+
+
+                // var urlPath = "../../Content/Uploads/Tendering/" + Desc + "/" + encodeURIComponent(document);
+
+                debugger;
+                if (data.questionPaperList.length > 0) {
+                    debugger;
+
+                    $("#tbodyQuestionpapersetModifyGrid").empty(); //tbodyModify_Attend
+                    var slNo = 1;
+                    $.each(data.questionPaperList, function (id, modif) {
+
+                        //   var pdfUrlPath = "../../Content/Uploads/" + encodeURIComponent(modif.attendSavePath);
+                        // var excelUrlPath = "../../Content/Uploads/" + encodeURIComponent(modif.attendExcelPath);
+                        //var markup = "<tr><td>" + slNo + "</td><td>" + modif.Day + "</td><td>" + dateFormat(new Date(parseInt((modif.ECT_ExamDate).match(/\d+/)[0]))) + "</td><td id = 'startTime'>" + Formattime(new Date(parseInt((modif.ECT_Exam_Start_Time).match(/\d+/)[0]))) + "</td><td>" + Formattime(new Date(parseInt((modif.ECT_Exam_End_Time).match(/\d+/)[0]))) + "</td><td>" + modif.TradeYr + "</td><td>" + modif.Subject + "</td><td>" + modif.BlockNo + "</td><td>" + "<a href=" + pdfUrlPath + " target='_blank'>View</a>" + "<input class= 'btn btn-success' style='align:right; width:100%;' type='file' id='UploadDocsFile' onchange = 'Upload()'>" + "</td><td>" + "<a href=" + excelUrlPath + " target='_blank'>View</a>" + "<input class= 'btn btn-success' style='align:right; width:100%;' type='file' id='UploadExcelFile' onchange = 'ExcelUpload()'>" + "</td></tr>";
+                        var markup = "<tr><td>" + modif.Course_Type + "</td><td>" +
+    modif.Trade_Type + "</td><td>" + "</td><td>" +
+    modif.Trade + "</td><td>" + modif.Trade_Year + "</td><td>" +
+    "</td><td>" + "</td><td>" + modif.Exam_Type + "</td><td>" +
+    "</td><td>" + modif.Subject_Type + "</td><td>" +
+    modif.Subject + "</td>" + +"</td></tr>";
+                        $("#tbodyQuestionpapersetModifyGrid").append(markup);  //tbodyModify_Attend
+                        slNo++;
+                    });
+                }
+            }
+        });
+    });
+
+    function GetTradeList() {
+        var TradeTypeId = $('#trade_type_idmodify :selected').val();
+        $.ajax({
+            type: 'POST',
+            url: '/Notification/GetTradeListQP',
+            data: { TradeTypeId: TradeTypeId },
+            success: function (data) {
+                if (data.length > 0) {
+                    $("#TradeId").empty();
+                    $.each(data, function (key, value) {
+                        $("#TradeId").append($("<option></option>").val(value.Value).html(value.Text));
+                    });
+                    $("#TradeId").trigger('change');
+                }
+            }
+        });
+    }
+
+    function GetTradeYearList() {
+        var TradeId = $('#TradeId :selected').val();
+        $.ajax({
+            type: 'POST',
+            url: '/Notification/GetTradeYearList',
+            data: { TradeId: TradeId },
+            success: function (data) {
+                if (data.length > 0) {
+                    $("#TradeYearId").empty();
+                    $.each(data, function (key, value) {
+                        $("#TradeYearId").append($("<option></option>").val(value.Value).html(value.Text));
+                    });
+                    $("#TradeYearId").trigger('change');
+                }
+            }
+        });
+    }
+
+
+</script>

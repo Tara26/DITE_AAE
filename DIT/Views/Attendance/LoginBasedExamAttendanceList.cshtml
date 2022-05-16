@@ -1,0 +1,619 @@
+﻿@model Models.AttendanceDetails.AtendanceDet
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int sno = 1;
+}
+
+<link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Content/frontend/js/bootstrap.js"></script>
+<script src="~/Scripts/bootbox.js"></script>
+<script src="~/Scripts/bootbox.min.js"></script>
+<script src="~/Scripts/bootbox.locales.min.js"></script>
+<script src="~/Content/frontend/js/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="~/Content/css/jquery-ui.min.css" type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+
+<!DOCTYPE html>
+
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>LoginBasedExamAttendanceList</title>
+</head>
+<style>
+    input[type=text], input[type=password] {
+        background-color: darkgray;
+        color: black;
+    }
+
+    tr {
+        color: black;
+    }
+</style>
+<br />
+<br />
+<input type="hidden" id="hdnSession" data-value="@Request.RequestContext.HttpContext.Session["LoginId"]" />
+@if (Session["LoginId"].Equals(Model.RoleId))
+{
+
+    <div class="content container" id="datatable" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+        <br /><br />
+        <h4 class="modal-title" style="background-color:cornflowerblue; color:white"> Status</h4><br /><br />
+        <table class="table table-bordered table-hover text-center" style="color:white;" id="tblGrid">
+            <thead>
+                <tr class="text-center">
+                    <th>SlNo.</th>
+                    <th>Exam Day</th>
+
+                    <th>Block Number</th>
+                    <th>Trainee Roll No.</th>
+                    <th> Status</th>
+                    <th style="display:none">Status_id</th>
+                    <th style="display:none">InvigilatorDairy</th>
+                    <th style="display:none">ExcelInvigilatorDairy</th>
+                    <th>Action(s)</th>
+
+                </tr>
+            </thead>
+
+            <tbody style="color:Black;" id="Texamnotification">
+                @foreach (var item in Model.attendanceList)
+                {
+                <tr>
+                    <td align="center" class="noExport">@item.attenId</td>
+                    <td>@item.Day</td>
+                    <td>@item.BlockNo</td>
+                    <td>@item.Trainee_Roll_Num</td>
+                    <td>@item.status_desc</td>
+                    <td style="display:none">@item.status_id</td>
+                    <td style="display:none">@item.attendSavePath</td>
+                    <td style="display:none">@item.attendExcelPath</td>
+                    <td>
+                        <a class="btn btn-primary RateAnalysis" id="btnView" href='javascript:;'>View</a>
+                    </td>
+                    @*<td style="display:none">@item.Exam_Notif_Id</td>
+        <td style="display:none">@item.exam_notif_status_id</td>
+        <td style="display:none">@item.comments</td>*@
+                </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+}
+
+
+<div class="Container" id="myModal" style="box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin:100px;padding:50px;background-color:white;display:none">
+    <div class="row">
+        <div class="col-lg-2">Attendance ID:</div>
+        <div class="col-lg-2">
+            <label id="attenId"></label>
+        </div>
+        <div class="col-lg-2">Block Number:</div>
+        <div class="col-lg-2">
+            <label id="BlockNo"></label>
+        </div>
+        <div class="col-lg-2">Status Description:</div>
+        <div class="col-lg-2">
+            <label id="status_desc"></label>
+        </div>
+    </div>
+
+    @*<div class="row">
+        <div class="col-lg-2">Status ID:</div>
+        <div class="col-lg-2">
+            <label id="StatusId"></label>
+        </div>
+        <div class="col-lg-2">Status ID :</div>
+        <div class="col-lg-2">
+            <label id="status_id"></label>
+        </div>
+        <div class="col-lg-2">Attedance File Path:</div>
+        <div class="col-lg-2">
+            <label id="attendSavePath"></label>
+        </div>
+
+        <div class="col-lg-2">Attendance Excel fie path</div>
+            <div class="col-lg-2">
+                <label id="attendExcelPath"></label>
+            </div>
+    </div>*@
+    <div class="row">
+        @*<div class="col-lg-2">Received Date:</div>
+            <div class="col-lg-2">
+                <label id="received"></label>
+
+            </div>
+            <div class="col-lg-2">Sent Date:</div>
+            <div class="col-lg-2">
+                <label id="sent"></label>
+            </div>*@
+
+        @*<div class="col-lg-2">Status</div>
+        <div class="col-lg-2">
+            <label id="statusdesc"></label>
+        </div>
+        <div class="col-lg-2">Record Present</div>
+        <div class="col-lg-2">
+            <label id="RecordLevel"></label>
+        </div>*@
+    </div>
+    <br /><br />
+          <div class="row">
+              <div class=" col-lg-offset-3 col-lg-2">
+                  <a style="text-align:center; float:initial" class="btn btn-primary" @*id="filepath"*@ onclick="GetClientReport()">View Attendance Pdf</a>
+              </div>
+              <div class="col-lg-2">
+                  <a style="text-align:center; float:initial" class="btn btn-primary" @*id="filepath"*@ onclick="GetClientReportExcel()">View Attendance Excel</a>
+              </div>
+              <div class="col-lg-4">
+                  <a style="text-align:center; float:initial" class="btn btn-primary" onclick="GetCommentDetails()">View Comments</a>
+              </div>
+          </div>
+    <div class="row">
+        <br />
+        @*<table class="table table-striped table-hover text-center shadow clswidth" id="CommentsGrid" style="width:100% !important" border="1" align="center"></table>*@
+        @*<input type="button" title="View Remarks" value="View Remarks" id="btnViewRemarks" class="btn btn-primary" style="margin-left:8px" onclick="GetCommentDetails()" />*@
+        @*<div class="Container" id="tblMainAlt" style="display:none;margin-left:22px;">
+                <div class="col-lg-12" style="border:1px groove gray; padding: 20px;">
+                    <label id="comments"></label>
+                </div>
+            </div>*@
+    </div>
+    <div class="row">
+        <div class="col-lg-offset-1 col-lg-2">
+            Remarks
+        </div>
+
+        <div class="col-lg-6">
+            @Html.TextAreaFor(Model => Model.comments, new { @class = "form-control", @rows = "10" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+
+        <div class="col-lg-offset-1 col-lg-2">
+            Forward To
+        </div>
+        <div class="col-lg-2">
+            @Html.DropDownListFor(model => model.SelectedRoleId, new SelectList(Model.LoginRoleList, "Value", "Text"), new { @class = "form-control select2" })
+            @*@Html.ValidationMessageFor(x => x.SelectedRoleId, "", new { @class = "text-danger" })*@
+            <span id="spnselectdropdown" class="text-danger" style="display:none;">Please  Select Hierarcy level</span>
+
+        </div>
+
+        <div class="col-lg-7">
+            @*<a class=" btn btn-primary" id="sendBtn1" onclick="SendDetails()">Forward</a>*@
+            <a class=" btn btn-primary" id="sendBtn5" onclick="Reject(102)">Send Back</a>
+            <a class=" btn btn-primary" id="backbtn">Cancel</a>
+            @if (Session["LoginId"].Equals(9) || Session["LoginId"].Equals(11) || Session["LoginId"].Equals(12))
+            {
+                @*<a class=" btn btn-primary sendBtn2" onclick="BackToCW(102)">Changes/Modification</a>*@
+                <a class=" btn btn-primary sendBtn4" onclick="BackToCW(108)" style="display:none">Publish-Modification</a>
+                <a class=" btn btn-primary sendBtn3" onclick="BackToCW(103)">Approve</a>
+
+            }
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="HistoryRemarksCommentsModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Remark Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <table class="table table-striped table-hover text-center shadow clswidth" id="GetCommentRemarksDetails" style="width:100% !important" border="1" align="center"></table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var sessionValue = $("#hdnSession").data('value');
+    $(document).ready(function () {
+
+        //$('#tblGrid thead tr').clone(true).appendTo('#tblGrid thead');
+        //$('#tblGrid thead tr:eq(1) th').each(function (i) {
+        //    var title = $(this).text();
+        //    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+
+        //    $('input', this).on('keyup change', function () {
+        //        if (table.column(i).search() !== this.value) {
+        //            table
+        //                .column(i)
+        //                .search(this.value)
+        //                .draw();
+        //        }
+        //    });
+        //});
+
+        //var table = $('#tblGrid').DataTable({
+        //    orderCellsTop: true,
+        //    fixedHeader: true
+        //});
+
+
+        $("#tblGrid").DataTable();
+
+
+
+        $("#btnView").click(function () {
+            
+            $("#myModal").toggle();
+
+
+
+        });
+
+        $("#backbtn").click(function () {
+            $("#datatable").show();
+            $("#myModal").hide();
+        });
+
+        $("#ViewCommentsbtn").click(function () {
+            //alert("button"); // Remove this line if it worked
+            //$("#tblMain").hide();
+            $("#CommentsGrid").show();
+        });
+
+    });
+
+
+    //$(function () {
+    //    $('#btn1').change(function () {
+    //        if (StatusDesc == "Pending for Approval") {
+    //            // disable the dropdown:
+    //            $('#sendBtn').prop('disabled', false);
+    //        } else {
+    //            $('#sendBtn').prop('disabled', true);
+    //        }
+    //    });
+    //});
+
+    function GetClientReport() {
+        
+        var urlPath = "../../Content//Uploads//" + file + " ";
+       
+        window.open(urlPath, '_blank');
+
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/Notification/GetReport",
+        //    dataType: 'json',
+        //    data: {
+        //        // __RequestVerificationToken: token,
+        //        Filepath: NotifyNum
+
+        //    },
+        //    success: function (response) {
+        //        
+        //        window.open('/Notification/GetReport')
+        //    }, error: function (e) {
+        //        var _msg = "Something went wrong.";
+        //        bootbox.alert(_msg);
+        //        $("#preloder, .loader").hide();
+        //    }
+        //})
+        //window.open('/Notification/GetReport');
+    };
+
+    function  GetClientReportExcel(){
+        
+        
+        var excelurlPath = "../../Content//Uploads//" + excel + " ";
+        window.open(excelurlPath, '_blank');
+    };
+
+    function SendDetails() {
+
+        var dropdown = $("#SelectedRoleId").val();
+        if (dropdown != 0) {
+            $("#spnselectdropdown").hide();
+        }
+        else {
+            $("#spnselectdropdown").show();
+            return false;
+        }
+        
+        var comments1 = $("#comments").val();
+        var RoleId = $('#SelectedRoleId :selected').val();
+        $.ajax({
+            type: "POST",
+            url: "/Notification/UpdateCommentTransStatus",
+            dataType: 'json',
+            data: {
+                Id: ExamNotifyId,
+                Status: StatusID,
+                Loginid: RoleId,
+                //comments: comments,
+                comments: comments1,
+            },
+
+            success: function (response) {
+
+                if (response == "Saved") {
+                    
+                    var _msg = "Sent Successfully";
+                    //alert(_msg);
+                    bootbox.alert({ message: _msg, callback: function () { window.location.href = window.location.href; } });
+
+                }
+                else {
+                    var _msg = "Fail to send";
+                    bootbox.alert(_msg);
+                }
+            }, error: function (e) {
+                var _msg = "Something went wrong1.";
+                bootbox.alert(_msg);
+                $("#preloder, .loader").hide();
+            }
+        })
+    }
+
+    function Reject(statusforCW) {
+        var dropdown = $("#SelectedRoleId").val();
+        if (dropdown != 0) {
+            $("#spnselectdropdown").hide();
+        }
+        else {
+            $("#spnselectdropdown").show();
+            return false;
+        }
+        
+        var comments1 = $("#comments").val();
+        var RoleId = $('#SelectedRoleId :selected').val();
+        $.ajax({
+            type: "POST",
+            url: "/Notification/Reject",
+            dataType: 'json',
+            data: {
+                Id: ExamNotifyId,
+                Status: StatusID,
+                Loginid: RoleId,
+                //comments: comments,
+                comments: comments1,
+                StatusforCW: statusforCW
+            },
+
+            success: function (response) {
+
+                if (response == "Saved") {
+                    var _msg = "Sent Back Successfully";
+                    //alert(_msg);
+                    bootbox.alert({ message: _msg, callback: function () { window.location.href = window.location.href; } });
+                }
+                else {
+                    var _msg = "Fail to send";
+                    bootbox.alert(_msg);
+                }
+            }, error: function (e) {
+                var _msg = "Something went wrong2.";
+                bootbox.alert(_msg);
+                $("#preloder, .loader").hide();
+            }
+        })
+    }
+   
+    var NotifyNum = '';
+    var attenId = '';
+    var StatusID = '';
+    var Commentsappend = '';
+    var StatusDesc = '';
+    var status = '';
+    $("body").on("click", "#tblGrid .RateAnalysis", function () {
+        $("#datatable").hide();
+        
+        var row = $(this).closest("tr");
+        var xid = row.find("td:nth-child(1)");
+        attenId = xid.text().trim();
+
+        $.ajax({
+            type: "POST",
+            url: "/Attendance/AttendanceDtls",
+            dataType: 'json',
+            data: {
+                //__RequestVerificationToken: token,
+                ID: attenId,
+            },
+            success: function (response) {
+                
+                $("#attenId").html(response.attenId);
+                $("#BlockNo").html(response.BlockNo);
+                $("#status_desc").html(response.status_desc);
+                $("#StatusId").html(response.StatusId);
+                $("#status_id").html(response.status_id);
+                $("#attendSavePath").html(response.attendSavePath);
+                $("#attendExcelPath").html(response.attendExcelPath);
+              //  $("#ExamNotificationId").html(response.)
+
+                //var date = new DateTime(long.Parse(response.Exam_notif_date));
+
+                //$("#datenotify").html(dateFormat(new Date(parseInt((response.Exam_notif_date).match(/\d+/)[0]))));
+                $("#filepath").html(response.SavePath);
+                $('#statusdesc').html(response.exam_notif_status_desc);
+                $('#RecordLevel').html(response.RecordLevel);
+                $('#login').html(response.Loginid);
+                status = response.exam_notif_status_id;
+                if (status == 102 || status == 103 || status == 108) {
+                    $('#sentfrom').html(response.updatedbyuser);
+                }
+                else {
+                    $('#sentfrom').html(response.createdbyuser);
+                }
+                $('#received').html(dateFormat(new Date(parseInt((response.creation_datetime).match(/\d+/)[0]))));
+                if (response.updation_datetime != null) {
+                    $('#sent').html(dateFormat(new Date(parseInt((response.updation_datetime).match(/\d+/)[0]))));
+                }
+                $("#myModal").show();
+            }, error: function (e) {
+                var _msg = "Something went wrong3.";
+                bootbox.alert(_msg);
+                $("#preloder, .loader").hide();
+            }
+        })
+
+        var $tdStatusID = row.find("td:nth-child(6)");
+        StatusID = $tdStatusID.text().trim();
+
+        var $tdStatusDesc = row.find("td:nth-child(5)");
+        StatusDesc = $tdStatusDesc.text().trim();
+
+        var $tdAttendanceSaveFile = row.find("td:nth-child(7)");
+        file = $tdAttendanceSaveFile.text().trim();
+
+        var $tdExcelSaveFile = row.find("td:nth-child(8)");
+        excel = $tdExcelSaveFile.text().trim();
+
+        //var $tdComments = row.find("td:nth-child(13)");
+        //Commentsappend = $tdComments.text();
+
+        if (sessionValue == 9) {
+            if (StatusDesc == "Pending for Approval" || StatusDesc == "Published Notification") {
+                $('#sendBtn3').removeAttr('disabled');
+                $('#sendBtn5').removeAttr('disabled');
+                
+            }
+            else {
+                $('#sendBtn3').attr('disabled', 'disabled');
+                $('#sendBtn5').attr('disabled', 'disabled');
+            }
+        }
+
+
+        //if (StatusDesc == "Pending for Approval" || StatusDesc == "Changes/Modifications") {
+        //    $('#sendBtn1').removeAttr('disabled');
+        //    $('#sendBtn5').removeAttr('disabled');
+        //}
+        //else {
+        //    $('#sendBtn1').attr('disabled', 'disabled');
+        //    $('#sendBtn5').attr('disabled', 'disabled');
+        //    if (sessionValue == 9 || sessionValue == 11 || sessionValue == 12) {
+        //        $('.sendBtn2').removeAttr('disabled');
+        //        $('.sendBtn3').removeAttr('disabled');
+        //    }
+        //}
+
+        //if (sessionValue == 9 || sessionValue == 11 || sessionValue == 12) {
+        //    if (StatusDesc == "Sent Back") {
+        //        $('.sendBtn4').attr('disabled', 'disabled');
+        //        $('.sendBtn3').attr('disabled', 'disabled');
+        //    }
+        //}
+
+        //if (StatusDesc == "Published Notification") {
+        //    if (sessionValue == 9 || sessionValue == 11 || sessionValue == 12) {
+        //        $('.sendBtn2').removeAttr('disabled');
+        //        $('.sendBtn2').hide();
+        //        $('.sendBtn4').show();
+        //        $('.sendBtn3').attr('disabled', 'disabled');
+        //        $('#sendBtn5').attr('disabled', 'disabled');
+        //    }
+        //}
+
+        //if (StatusDesc == "Approved - Pending for Publish" || StatusDesc == "Changes/Modifications") {
+        //    $('.sendBtn2').attr('disabled', 'disabled');
+        //    $('.sendBtn3').attr('disabled', 'disabled');
+        //}
+
+        //if (StatusDesc == "ModificationToPublishedNotic") {
+        //    $('.sendBtn4').attr('disabled', 'disabled');
+        //    $('.sendBtn3').attr('disabled', 'disabled');
+        //    $('.sendBtn2').attr('disabled', 'disabled');
+        //}
+    });
+
+    function dateFormat(d) {
+        console.log(d);
+        return (d.getDate() + "").padStart(2, "0")
+            + "/" + ((d.getMonth() + 1) + "").padStart(2, "0")
+            + "/" + d.getFullYear();
+    }
+
+    //Approve the record
+    function BackToCW(statusforCW) {
+        var dropdown = $("#SelectedRoleId").val();
+        if (dropdown != 0) {
+            $("#spnselectdropdown").hide();
+        }
+        else {
+            $("#spnselectdropdown").show();
+            return false;
+        }
+        
+        var comments1 = $("#comments").val();
+        var RoleId = $('#SelectedRoleId :selected').val();
+        $.ajax({
+            type: "POST",
+            url: "/Attendance/AttendBackToCW",
+           // dataType: 'json',
+            data: {
+                Id: attenId,
+                Status: StatusID,
+                Loginid: RoleId,
+                //comments: comments,
+                comments: comments1,
+                StatusforCW: statusforCW
+            },
+
+            success: function (response) {
+
+                if (response == "Saved") {
+                    var _msg = "Sent Successfully";
+                    //alert(_msg);
+                    bootbox.alert({ message: _msg, callback: function () { window.location.href = window.location.href; } });
+                }
+                else {
+                    var _msg = "Fail to send";
+                    bootbox.alert(_msg);
+                }
+            }, error: function (e) {
+                var _msg = "Something went wrong4.";
+                bootbox.alert(_msg);
+                $("#preloder, .loader").hide();
+            }
+        })
+    }
+
+
+
+
+
+    function GetCommentDetails() {
+        $('#HistoryRemarksCommentsModal').modal('show');
+        $.ajax({
+            type: "Post",
+            url: "/Notification/GetCommentDetails",
+            data: { NotificationId: ExamNotifyId },
+            success: function (data) {
+                var t = $('#GetCommentRemarksDetails').DataTable({
+                    data: data,
+                    destroy: true,
+                    columns: [
+                        { 'data': 'creationdatetime', 'title': 'Sl No', 'className': 'text-center' },
+                        { 'data': 'creationdatetime', 'title': 'Date', 'className': 'text-left' },
+                        { 'data': 'Exam_Notif_Number', 'title': 'Notification Number', 'className': 'text-left' },
+                        { 'data': 'comments', 'title': 'Descriptioon', 'className': 'text-left' },
+                        { 'data': 'user_name', 'title': 'Designation', 'className': 'text-left' },
+
+                    ]
+                });
+                t.on('order.dt search.dt', function () {
+                    t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            }
+        });
+    }
+
+</script>

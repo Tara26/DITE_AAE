@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Models.MenuItem.MenuItems>
+<!-- nav -->
+@{
+    Layout = string.Empty;
+}
+<div class="nav_w3pvt text-center ">
+    <div class="header">
+
+        <!-- nav -->
+        <div class="stellarnav">
+            <ul>
+                @if (Session["MenuMappingId"] == null)
+                {
+                    foreach (var item in Model.Where(s => s.ParentMenu == null).Distinct().ToList())
+                    {
+                <li>
+                    @if (item.ParentMenu == null)
+                    {
+                        <a href="../@item.Url">
+                            <span>@item.MenuName</span>
+                        </a>
+                        <ul>
+                            @foreach (var item1 in Model.Where(h => h.MenuId.ToString() != null && h.ParentMenu == item.MenuId).ToList())
+                            {
+                            <li class="views-row views-row-2 views-row-even">
+                                @if (item1.ParentMenu == item.MenuId)
+                                {
+                                    if (item1.Url.Trim().StartsWith("http"))
+                                    {
+                                        <a href="@item1.Url" target="_blank"><span>@item1.MenuName</span></a>
+                                    }
+                                    else
+                                    {
+                                        if (item.Url.Trim() == "")
+                                        {
+                                        <a href="../@item1.Url"><span>@item1.MenuName</span></a>
+                                        }
+                                        else
+                                        {
+                                        <a><span>@item1.MenuName</span></a>
+                                        }
+                                    <ul>
+                                        @foreach (var item2 in Model.Where(h => h.MenuId.ToString() != null && h.ParentMenu == item1.MenuId).ToList())
+                                        {
+                                            <li class="views-row views-row-2 views-row-even">
+                                                @if (item2.ParentMenu == item1.MenuId)
+                                                {
+                                                    <a><span>@item2.MenuName</span></a>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                    }
+                                }
+                            </li>
+                            }
+                        </ul>
+                    }
+                </li>
+                    }
+                }
+                else
+                {
+                    foreach (var item1 in Model.Where(h => h.MenuId.ToString() != null && h.ParentMenu != null && h.Url == "#").ToList())
+                    {
+                        <li class="views-row views-row-1 views-row-odd views-row-first">
+                            @if (item1.Url == "#")
+                            {
+                                <a href="../@item1.Url"><span>@item1.MenuName</span></a>
+                                <ul>
+                                    @foreach (var item2 in Model.Where(h => h.MenuId.ToString() != null && h.ParentMenu == item1.MenuId).ToList())
+                                    {
+                                        <li class="views-row views-row-2 views-row-even">
+                                            @if (item2.ParentMenu == item1.MenuId)
+                                            {
+                                                <a href="../@item2.Url"><span>@item2.MenuName</span></a>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,3153 @@
+﻿
+
+<!--JS References-->
+<script src="~/Scripts/htmltopdf/html2pdf.bundle.js"></script>
+<script src="~/Scripts/table2excel.js"></script>
+<link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+@*<script src="~/Content/js/buttons.html5.min.js"></script>*@
+<script src="~/Content/js/buttons.print.min.js"></script>
+<script src="~/Content/js/dataTables.buttons.min.js"></script>
+<script src="~/Content/js/jszip.min.js"></script>
+<script src="~/Content/js/vfs_fonts.js"></script>
+@*<script src="~/Content/js/pdfmake.min.js"></script>*@
+
+
+<!--CSS References-->
+
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+<link href="~/Content/css/systm.messages.css" rel="stylesheet" />
+<link href="~/Content/css/system.menus.css" rel="stylesheet" />
+<link href="~/Content/css/system.base.css" rel="stylesheet" />
+<link href="~/Content/css/global.system.css" rel="stylesheet" />
+<link href="~/Content/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+<link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/css/jquery.ui.button.min.css" rel="stylesheet" />
+<link href="~/Content/css/jquery.ui.core.min.css" rel="stylesheet" />
+<link href="~/Content/css/jquery.ui.theme.min.css" rel="stylesheet" />
+<link href="~/Content/css/w3.css" rel="stylesheet" />
+
+<style>
+    .form {
+        margin: auto;
+        width: 400px;
+        padding: 20px 30px;
+        background: #fff;
+        border: 1px solid #dfdfdf;
+        transform-style: preserve-3d;
+        perspective-origin: 50px center;
+        perspective: 2000px;
+        transition: transform 1s ease;
+    }
+
+        .form::before, .form::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            left: 0;
+        }
+
+        .form::before {
+            height: 100%;
+            top: 0;
+            transform: translateZ(-100px);
+            background: #333;
+            opacity: 0.3;
+        }
+
+        .form::after {
+            content: "SUCCESS!";
+            transform: translateY(-50%) translateZ(-101px) scaleX(-1);
+            top: 50%;
+            color: #fff;
+            text-align: center;
+            font-weight: bold;
+        }
+
+    .field {
+        position: relative;
+        background: #cfcfcf;
+        transform-style: preserve-3d;
+    }
+
+        .field + .field {
+            margin-top: 10px;
+        }
+
+    .icon {
+        width: 24px;
+        height: 24px;
+        position: absolute;
+        top: calc(50% - 12px);
+        left: 12px;
+        transform: translateZ(50px);
+        transform-style: preserve-3d;
+    }
+
+        .icon::before, .icon::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .icon::after {
+            transform: translateZ(-23px);
+            opacity: 0.5;
+        }
+
+    .input {
+        border: 1px solid #dfdfdf;
+        background: #fff;
+        height: 48px;
+        line-height: 48px;
+        padding: 0 10px 0 48px;
+        width: 100%;
+        transform: translateZ(26px);
+    }
+
+    .button {
+        display: block;
+        width: 100%;
+        border: 0;
+        text-align: center;
+        font-weight: bold;
+        color: #fff;
+        background: linear-gradient(45deg, #e53935, #e35d5b);
+        margin-top: 20px;
+        padding: 14px;
+        position: relative;
+        transform-style: preserve-3d;
+        transform: translateZ(26px);
+        transition: transform 0.3s ease;
+        cursor: pointer;
+    }
+
+        .button:hover {
+            transform: translateZ(13px);
+        }
+
+    .side-top-bottom {
+        width: 100%;
+    }
+
+        .side-top-bottom::before, .side-top-bottom::after {
+            content: "";
+            width: 100%;
+            height: 26px;
+            background: linear-gradient(45deg, #e2231e, #df4745);
+            position: absolute;
+            left: 0;
+        }
+
+        .side-top-bottom::before {
+            transform-origin: center top;
+            transform: translateZ(-26px) rotateX(90deg);
+            top: 0;
+        }
+
+        .side-top-bottom::after {
+            transform-origin: center bottom;
+            transform: translateZ(-26px) rotateX(-90deg);
+            bottom: 0;
+        }
+
+    .side-left-right {
+        height: 100%;
+    }
+
+        .side-left-right::before, .side-left-right::after {
+            content: "";
+            height: 100%;
+            width: 26px;
+            position: absolute;
+            top: 0;
+        }
+
+        .side-left-right::before {
+            background: #e53935;
+            transform-origin: left center;
+            transform: rotateY(90deg);
+            left: 0;
+        }
+
+        .side-left-right::after {
+            background: #e35d5b;
+            transform-origin: right center;
+            transform: rotateY(-90deg);
+            right: 0;
+        }
+
+    .email .icon::before, .email .icon::after {
+        background: url(https://image.flaticon.com/icons/svg/131/131040.svg) center/contain no-repeat;
+    }
+
+    .password .icon::before, .password .icon::after {
+        background: url(https://image.flaticon.com/icons/svg/130/130996.svg) center/contain no-repeat;
+    }
+
+    .face-up-left {
+        transform: rotateY(-30deg) rotateX(30deg);
+    }
+
+    .face-up-right {
+        transform: rotateY(30deg) rotateX(30deg);
+    }
+
+    .face-down-left {
+        transform: rotateY(-30deg) rotateX(-30deg);
+    }
+
+    .face-down-right {
+        transform: rotateY(30deg) rotateX(-30deg);
+    }
+
+    .form-complete {
+        -webkit-animation: formComplete 2s ease;
+        animation: formComplete 2s ease;
+    }
+
+    .form-error {
+        -webkit-animation: formError 2s ease;
+        animation: formError 2s ease;
+    }
+
+    input:active, input:focus, button:active, button:focus {
+        outline: none;
+        border: 1px solid #e77371;
+    }
+
+    @@-webkit-keyframes formComplete {
+        50%, 55% {
+            transform: rotateX(30deg) rotateY(180deg);
+        }
+
+        100% {
+            transform: rotateX(0deg) rotateY(1turn);
+        }
+    }
+
+    @@keyframes formComplete {
+        50%, 55% {
+            transform: rotateX(30deg) rotateY(180deg);
+        }
+
+        100% {
+            transform: rotateX(0deg) rotateY(1turn);
+        }
+    }
+
+    @@-webkit-keyframes formError {
+        0%, 100% {
+            transform: rotateX(0deg) rotateY(0deg);
+        }
+
+        25% {
+            transform: rotateX(-25deg);
+        }
+
+        33% {
+            transform: rotateX(-25deg) rotateY(45deg);
+        }
+
+        66% {
+            transform: rotateX(-25deg) rotateY(-30deg);
+        }
+    }
+
+    @@keyframes formError {
+        0%, 100% {
+            transform: rotateX(0deg) rotateY(0deg);
+        }
+
+        25% {
+            transform: rotateX(-25deg);
+        }
+
+        33% {
+            transform: rotateX(-25deg) rotateY(45deg);
+        }
+
+        66% {
+            transform: rotateX(-25deg) rotateY(-30deg);
+        }
+    }
+
+    small {
+        color: #999;
+        text-align: center;
+        display: block;
+        margin-top: 20px;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+
+    .DateWidth {
+        width: 10% !important;
+        text-align: center;
+    }
+
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    #tblTentativeMeritGradeListIndex_filter {
+        display: none;
+    }
+
+    #tblFinalMeritGradeListIndex_filter {
+        display: none;
+    }
+
+    .buttons-html5 {
+        width: 180px;
+        padding: 5px;
+        border: 1px solid grey;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    body {
+        padding-right: 0px !important;
+    }
+
+    .datagrid {
+        overflow-y: scroll;
+        height: 800px;
+    }
+
+    .table > thead:first-child > tr:first-child > th, .table > caption + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > td, .table > thead:first-child > tr:first-child > td {
+        border-top: 0;
+        text-align: center;
+        width: 5%;
+    }
+
+    /* input[type=text], input[type=password] {
+                width: 120px;
+                padding: 12px 20px;
+                margin: 8px 0;
+                display: inline-block;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+        }
+
+        .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+                background-color: #eee;
+                opacity: 1;
+                width: 120px;
+        }*/
+</style>
+
+<div id="main" class="columns clearfix font" style="font-size:14px;">
+    <main id="content-column" class="content-column" role="main">
+        <div class="content-inner">
+
+            <!-- !Breadcrumbs -->
+            <!-- !Messages and Help -->
+            <!-- !Secondary Content Region -->
+
+            <div id="main-content">
+
+
+                <!-- !Main Content Header -->
+                <!-- !Main Content -->
+                <div id="content" class="region">
+                    <div id="block-system-main" class="block block-system no-title">
+                        <div class="one-column at-panel panel-display clearfix" id="home">
+                            <div class="region region-one-main">
+                                <div class="region-inner clearfix">
+                                    <div class="panel-pane pane-panels-mini pane-home-main-content wrapper no-title block">
+                                        <div class="block-inner clearfix">
+                                            <div class="block-content">
+                                                <div class="col-md-12">
+                                                    <div class="panel-display panel-3col clearfix" id="mini-panel-home_main_content">
+                                                        <div class="panel-panel col-md-4">
+                                                            <div class="inside">
+                                                                <div class="panel-pane pane-custom pane-1 home_heading no-title block">
+                                                                    <div class="block-inner clearfix">
+                                                                        <div class="block-content">
+                                                                            <h2 class="font">News Highlights</h2>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="panel-separator">
+                                                                </div>
+                                                                <div class="panel-pane pane-block pane-quicktabs-none no-title block">
+                                                                    <div class="block-inner clearfix">
+                                                                        <div class="block-content">
+                                                                            <div id="quicktabs-_none_" class="quicktabs-wrapper quicktabs-style-nostyle jquery-once-1-processed">
+                                                                                <div class="item-list item-list-q"><ul class="quicktabs-tabs quicktabs-style-nostyle" role="tablist"><li class="active even first last"><a href="/home?qt-_none_=0#qt-_none_" id="quicktabs-tab-_none_-0" class="active ajax-processed quicktabs-loaded jquery-once-2-processed" role="tab" aria-controls="quicktabs-tabpage-_none_-0" aria-selected="true">News</a></li></ul></div><div id="quicktabs-container-_none_" class="quicktabs_main quicktabs-style-nostyle">
+                                                                                    <div id="quicktabs-tabpage-_none_-0" class="quicktabs-tabpage ">
+
+                                                                                        <div class="view view-news-feeds view-id-news_feeds view-display-id-block view-dom-id-7c5b6891bfc302012ee58602c4c148a7">
+
+                                                                                            <div class="view-content" style="overflow: scroll; height: 300px; font-family: Arial, Helvetica,sans-serif; font-size: 12px; font-weight: 400">
+                                                                                                <marquee direction="up" scrollamount="3" onmouseover="this.stop()" onmouseout="this.start();">
+                                                                                                    <div class="item-list">
+                                                                                                        <ul style="display:none">
+
+                                                                                                            <li class="views-row views-row-2 views-row-even">
+                                                                                                                <a id="NotifPublishIndexInstitute" value="View Affiliate/De-Affiliate Institute List" onclick="IndexInstituteList();" data-toggle='modal' data-target='#IndexInstituteListModel'>
+                                                                                                                    View Affiliate/De-Affiliate Institute List
+                                                                                                                </a>
+                                                                                                            </li>
+                                                                                                            <li class="views-row views-row-3 views-row-odd">
+                                                                                                                <a id="NotiPublishIndexTrade" value="View Active/De-Active Trade List" onclick="IndexTradeList();" data-toggle='modal' data-target='#IndexTradeListModel'>
+                                                                                                                    View Active/De-Active Trade List
+                                                                                                                </a>
+                                                                                                            </li>
+                                                                                                            <li class="views-row views-row-4 views-row-even">
+                                                                                                                <a id="NotiPublishIndexitiInstituteList" value="View Active/De-Active Trade List" onclick="IndexitiInstituteList();" data-toggle='modal' data-target='#IndexitiInstituteListModel'>
+                                                                                                                    View Affiliate ITI Institute Details
+                                                                                                                </a>
+                                                                                                            </li>
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                </marquee>
+                                                                                            </div>
+
+
+
+
+                                                                                            @*<div class="view-footer">
+                                                                                                    <div class="more-link"><a title="More news" href="/news_lists?a524023677">more news..</a></div>
+                                                                                                </div>*@
+
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="inside">
+                                                                <div class="">
+                                                                    <div class="block-inner clearfix">
+
+                                                                    </div>
+                                                                </div>  <div class="panel-separator"></div><div class="panel-pane pane-panels-mini pane-most-view-for-home mostpopular_block accordian no-title block">
+                                                                    <div class="block-inner clearfix">
+                                                                        <div class="block-content">
+                                                                            <div class="panel-display panel-1col clearfix" id="mini-panel-most_view_for_home">
+                                                                                <div class="panel-panel panel-col">
+                                                                                    <div>
+                                                                                        <section class="panel-pane pane-views pane-metadata home-tab block open">
+                                                                                            <div class="block-inner clearfix">
+                                                                                                <h2 class="pane-title block-title" tabindex="0">Forms</h2>
+                                                                                                <div class="block-content">
+                                                                                                    <div class="view view-metadata view-id-metadata view-display-id-block_1 accordion-container view-dom-id-a309976f182ba68c3de699ad580b6791 jquery-once-3-processed jquery-once-2-processed">
+                                                                                                        <div class="view-content" style="">
+                                                                                                            <div class="accordion_body collapsing-section" style="display: block; overflow: scroll; height: 300px;padding-left:35px">
+                                                                                                                @*<ul>
+                                                                                                                        <li class="views-row views-row-1 views-row-odd views-row-first">
+                                                                                                                            <div>
+                                                                                                                                <span><a href="/list-fairs-and-festivals-celebrated-varanasi">List of fairs and festivals celebrated in Varanasi</a></span>
+                                                                                                                            </div>
+                                                                                                                        </li>
+                                                                                                                        <li class="views-row views-row-2 views-row-even">     <div>        <span><a href="/official-website-deposit-insurance-and-credit-guarantee-corporation">Website of Deposit Insurance and Credit Guarantee...</a></span>  </div></li>
+                                                                                                                        <li class="views-row views-row-3 views-row-odd">     <div>        <span><a href="/official-website-board-practical-training-eastern-region">Information on Board of Practical Training of Eastern Region</a></span>  </div></li>
+                                                                                                                        <li class="views-row views-row-4 views-row-even">     <div>        <span><a href="/scheduled-tribes-and-other-traditional-forest-dwellers">Scheduled Tribes and Other Traditional Forest Dwellers</a></span>  </div></li>
+                                                                                                                        <li class="views-row views-row-5 views-row-odd">     <div>        <span><a href="/official-website-central-forensic-science-laboratory">Website of Central Forensic Science Laboratory</a></span>  </div></li>
+                                                                                                                        <li class="views-row views-row-6 views-row-even">     <div>        <span><a href="/official-website-national-institute-plant-genome-research">Website of National Institute of Plant Genome Research</a></span>  </div></li>
+                                                                                                                        <li class="views-row views-row-7 views-row-odd views-row-last">     <div>        <span><a href="/official-website-uttar-pradesh-housing-and-development-board">Website of Uttar Pradesh Housing and Development Board</a></span>  </div></li>
+                                                                                                                        <li class="views-row views-row-7 views-row-odd views-row-last">     <div>        <span><a href="/official-website-uttar-pradesh-housing-and-development-board">Website of Uttar Pradesh Housing and Development Board</a></span>  </div></li>
+                                                                                                                        <li class="views-row views-row-7 views-row-odd views-row-last">     <div>        <span><a href="/official-website-uttar-pradesh-housing-and-development-board">Website of Uttar Pradesh Housing and Development Board</a></span>  </div></li>
+                                                                                                                    </ul>*@
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </section>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="panel-panel col-md-4">
+                                                            <div class="inside">
+                                                                <div class="panel-pane pane-custom pane-1 home_heading no-title block">
+                                                                    <div class="block-inner clearfix">
+                                                                        <div class="block-content">
+                                                                            <h2 class="font">Examination Notifications</h2>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="panel-separator">
+                                                                </div>
+                                                                <div class="panel-pane pane-block pane-quicktabs-none no-title block">
+                                                                    <div class="block-inner clearfix">
+                                                                        <div class="block-content">
+                                                                            <div id="quicktabs-_none_" class="quicktabs-wrapper quicktabs-style-nostyle jquery-once-1-processed">
+                                                                                <div class="item-list item-list-q"><ul class="quicktabs-tabs quicktabs-style-nostyle" role="tablist"><li class="active even first last"><a href="/home?qt-_none_=0#qt-_none_" id="quicktabs-tab-_none_-0" class="active ajax-processed quicktabs-loaded jquery-once-2-processed" role="tab" aria-controls="quicktabs-tabpage-_none_-0" aria-selected="true">News</a></li></ul></div><div id="quicktabs-container-_none_" class="quicktabs_main quicktabs-style-nostyle">
+                                                                                    <div id="quicktabs-tabpage-_none_-0" class="quicktabs-tabpage ">
+
+                                                                                        <div class="view view-news-feeds view-id-news_feeds view-display-id-block view-dom-id-7c5b6891bfc302012ee58602c4c148a7">
+
+                                                                                            <div class="view-content shadow-lg p-3 mb-5 bg-white rounded" style="overflow: scroll; height: 300px; font-family: Arial, Helvetica,sans-serif; font-size: 12px; font-weight: 400 ;">
+                                                                                                <marquee direction="up" scrollamount="3" onmouseover="this.stop()" onmouseout="this.start();">
+                                                                                                    <div class="item-list">
+                                                                                                    </div>
+                                                                                                </marquee>
+                                                                                            </div>
+
+
+
+
+
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="panel-panel col-md-4">
+                                                            <div class="inside">
+                                                                <div class="panel-pane pane-custom pane-1 home_heading no-title block">
+                                                                    <div class="block-inner clearfix">
+                                                                        <div class="block-content">
+                                                                            <h2 class="font">Admission Notification</h2>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="panel-separator">
+                                                                </div>
+                                                                <div class="panel-pane pane-block pane-quicktabs-none no-title block">
+                                                                    <div class="block-inner clearfix">
+                                                                        <div class="block-content">
+                                                                            <div id="quicktabs-_none_" class="quicktabs-wrapper quicktabs-style-nostyle jquery-once-1-processed">
+                                                                                <div class="item-list item-list-q"><ul class="quicktabs-tabs quicktabs-style-nostyle" role="tablist"><li class="active even first last"><a href="/home?qt-_none_=0#qt-_none_" id="quicktabs-tab-_none_-0" class="active ajax-processed quicktabs-loaded jquery-once-2-processed" role="tab" aria-controls="quicktabs-tabpage-_none_-0" aria-selected="true">News</a></li></ul></div><div id="quicktabs-container-_none_" class="quicktabs_main quicktabs-style-nostyle">
+                                                                                    <div id="quicktabs-tabpage-_none_-0" class="quicktabs-tabpage ">
+
+                                                                                        <div class="view view-news-feeds view-id-news_feeds view-display-id-block view-dom-id-7c5b6891bfc302012ee58602c4c148a7">
+
+
+                                                                                            <div class="view-content shadow-lg p-3 mb-5 bg-white rounded" style="overflow: scroll; height: 300px; font-family: Arial, Helvetica,sans-serif; font-size: 12px; font-weight: 400 ;">
+                                                                                                <marquee direction="up" scrollamount="2" onmouseover="this.stop()" onmouseout="this.start();">
+                                                                                                    <div class="item-list">
+                                                                                                        <ul style="display:none">
+                                                                                                            <li class="views-row views-row-1 views-row-odd views-row-first">
+                                                                                                                <a onclick="$('#IndexMeritListModel').modal('show');">Index Merit List </a>
+                                                                                                            </li>
+                                                                                                            <li class="views-row views-row-5 views-row-odd">
+                                                                                                                <a id="NotiPublishfnAdmissionNotifications" value="Admission Notifications" onclick="GetAdmissionNotification();" data-toggle='modal' data-target='#AdmissionNotModel'>
+                                                                                                                    Admission Notifications
+                                                                                                                </a>
+
+                                                                                                            </li>
+
+                                                                                                        </ul>
+
+                                                                                                    </div>
+                                                                                                </marquee>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </main><!-- /end #content-column -->
+    <!-- !Sidebar Regions -->
+
+</div>
+<!-- /end #columns -->
+
+<div class="modal fade" id="SeatMatrixListModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog" style="width: 95%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <h4></h4>
+                    <div id="root">
+                        <div style="text-align:center;">
+                            <img src="/Content/frontend/images/gok-en-wh-sml.png" alt="gok-logo" style="width:5%;">
+                        </div>
+                        <div class="row" id="GridListDiv">
+                            <div class="col-lg-12" style="text-align:center">
+                                <h3 class="headetitle">Seat Matrix Publish List</h3>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left:35%;">
+                            <div class="col-xs-6 col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" />
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" type="submit" id="btnSearch">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left:10px;">
+                            <div class="row">
+                                <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                                    <table id="tblSeatmatrixList" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                                </div>
+                            </div>
+                            <br /><br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div style="text-align:center">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Back to home</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br /><br />
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="IndexMeritListModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog" style="width:95%">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <h4></h4>
+
+                    <div class="row" id="GridListDiv">
+                        <div class="col-lg-12">
+                            <h3 class="headetitle">Gradation List</h3>
+                            <br />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-left:10px;">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <input type="radio" id="tentative" name="merit" value="Tentative" onclick="btnIndexMeritList()" checked>
+                                <label for="tentative">Tentative</label>
+                            </div>
+                            <div class="col-lg-2">
+                                <input type="radio" id="final" name="merit" value="Final" onclick="btnIndexMeritList()">
+                                <label for="Final">Final</label>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <div class="row">
+                            <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                                <table id="tblMeritGradeList" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                        </div>
+                        <br /><br />
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div style="text-align:center">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Back to home</button>
+                                    @*<input type="button" id="btn-cancel" class="btn btn-primary" value="Back to home" onclick='$("#IndexMeritListModel").modal("hide");' />*@
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br /><br />
+                    <input type="hidden" id="SessionId" value="" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade font" id="IndexInstituteListModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog" style="width:95%">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <h4></h4>
+
+                    <div class="row" id="GridListDiv">
+                        <div class="col-lg-12">
+                            <h3 class="head1">Institute List</h3>
+                            <br />
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-left:10px;">
+                        @*<input type="button" class="btn btn-success" value='Export To Excel' style="text-align:center" onclick="ExcelExportTentative();" />*@
+                        <br /><br />
+                        <div class="row">
+                            <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                                <table id="tblInstList" class="table table-striped table-hover text-center shadow clswidth" border="1">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl. No</th>
+                                            <th>Date</th>
+                                            <th>Course Type</th>
+                                            <th>Mis Code</th>
+                                            <th>Institute Name</th>
+                                            <th>Division</th>
+                                            <th>District</th>
+                                            <th>College Address</th>
+                                            <th>Intitute Status</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <br /><br />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div style="text-align:center">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Back to home</button>
+                                    @*<input type="button" id="btn-cancel" class="btn btn-primary" value="Back to home" onclick='$("#IndexInstituteListModel").modal("hide");' />*@
+                                    @*<input type="button" id="btn-cancel" class="btn btn-primary" value="Download PDF" onclick="pdfTentativeDownload()" />*@
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br /><br />
+                    <input type="hidden" id="SessionId" value="" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade font" id="IndexTradeListModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog" style="width:95%">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div>
+                <div class="modal-body">
+                    <h4></h4>
+
+                    <div class="row" id="GridListDiv">
+                        <div class="col-lg-12" style="text-align:center">
+                            <h3 class="head1">Trade Publish  List</h3>
+                            <br />
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-left:10px;">
+
+                        <br /><br />
+                        <div class="row">
+                            <div style="overflow-y:scroll;overflow-x:scroll; width:100%">
+                                <table id="tbltradeList" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                        </div>
+                        <br /><br />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div style="text-align:center">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Back to home</button>
+                                    @*<input type="button" id="btn-cancel" class="btn btn-primary" value="Back to home" onclick='$("#IndexTradeListModel").modal("hide");' />*@
+                                    @*<input type="button" id="btn-cancel" class="btn btn-primary" value="Download PDF" onclick="pdfTradeDownload()" />*@
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br /><br />
+                    <input type="hidden" id="SessionId" value="" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="IndexitiInstituteListModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog" style="width:95%">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <h4></h4>
+                    <div class="card">
+                        <div class="card-body border">
+                            <div class="form-group" style="padding:30px">
+
+                                <h3 class="modal-title a2" style="background-color:#195c9f; color:white; text-align:center">Search by </h3>
+                                <br />
+
+
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <label>Course Type<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-control " id="Courses">
+                                            <option value="">Select</option>
+                                        </select>
+
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label>Division<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-control add-ddl" id="Division-Add" onchange="GetDistrict_Add();">
+                                            <option value="">Select</option>
+                                        </select>
+                                        @*<small class="text-danger validation" id="Division-Add-Required" style="display:none">Division is required</small>*@
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label>District<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-control add-ddl" id="District-Add">
+                                            <option value="">Select</option>
+                                        </select>
+                                        @*<small class="text-danger validation" id="District-Add-Required" style="display:none">District is required</small>*@
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label>Taluka<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-control add-ddl add-dll-clear" id="Taluka-Add">
+                                            <option value="">Select</option>
+                                        </select>
+                                        @*<small class="text-danger validation" id="Taluka-Add-Required" style="display:none">Taluka is required</small>*@
+                                    </div>
+
+                                </div>
+                                <br /><br />
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <label>Constituency<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-control add-ddl" id="Constiteuncy-Add">
+                                            <option value="">Select</option>
+                                        </select>
+                                        @*<small class="text-danger validation" id="Constiteuncy-Add-Required" style="display:none">Constiteuncy is required</small>*@
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <label for="txtAgencyRegnNo">ITI Institute Name<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <select class="form-control add-ddl" id="Institute-Add">
+                                            @*<select id="NewTrade-Insti" class="form-control" style="width: 100%">*@
+                                            <option value="">Select</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-20" align="right">
+                                        <a class=" btn btn-primary search-affiliated1">Search</a>
+                                        @*<a class=" btn btn-primary search-affiliated1" onclick="cancelAffiliatedInstitute();">Cancel</a>*@
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="GridListDiv">
+                        @*<div class="col-lg-12">
+                                            <h3 class="headetitle">View Affiliate ITI Institute Details</h3>
+                                            <br />
+                            </div>*@
+                    </div>
+
+                    <div class="row font" style="margin-left:10px;">
+                        <h3 class="head1">View Affiliate ITI Institute Details</h3>
+                        <br /><br />
+                        <div class="row">
+                            <div style="overflow-y:scroll;overflow-x:scroll; width:99%" class="datagrid">
+                                <table id="tblitiInstList" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                        </div>
+                        <br /><br />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div style="text-align:center">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" @*onclick="pgredirect()"*@ data-dismiss="modal">Back to home</button>
+                                    @*<input type="button" id="btn-cancel" class="btn btn-primary" value="Back to home" onclick='$("#IndexitiInstituteListModel").modal("hide");' />*@
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br /><br />
+                    <input type="hidden" id="SessionId" value="" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="IndexTentativeMeritListModel" tabindex="-1" role="dialog" style="text-align:center;">
+    <div class="modal-dialog" style="width:95%">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body" style="text-align:center;">
+                    <h4></h4>
+                    <div id="root">
+                        <div style="text-align:center;">
+                            <img src="/Content/frontend/images/gok-en-wh-sml.png" alt="gok-logo" style="width:5%;">
+                        </div>
+                        <div class="row" id="GridListDiv">
+                            <div class="col-lg-12">
+                                <h3 class="headetitle" style="text-align:center;"> Tentative Gradation List</h3>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left:35%;">
+                            <div class="col-xs-6 col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" />
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" type="submit" id="btnSearch">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" style="margin-left:10px;">
+                            <div class="row">
+                                <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                                    <table id="tblTentativeMeritGradeListIndex" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                                </div>
+                            </div>
+                            <br /><br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="text-align:center">
+                                <div class="form-group">
+                                    <input type="button" id="btn-cancel" class="btn btn-primary" value="Download PDF" onclick="pdfTentativeDownload()" style="display:none;" />
+                                    @*<input type="button" id="btn-cancel" class="btn btn-primary" value="ExcelExport" onclick="ExcelExportTentative()" />*@
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Back to home</button>
+                                    @*<input type="button" id="btn-cancel" class="btn btn-primary" value="Back to home"
+                                        onclick='$("#IndexTentativeMeritListModel").modal("hide");' />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br /><br />
+                    <input type="hidden" id="SessionId" value="" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="IndexFinalMeritListModel" tabindex="-1" style="text-align:center;" role="dialog">
+    <div class="modal-dialog" style="width:95%">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body" style="text-align:center;">
+                    <h4></h4>
+                    <div id="root">
+                        <div style="text-align:center;">
+                            <img src="/Content/frontend/images/gok-en-wh-sml.png" alt="gok-logo" style="width:5%;">
+                        </div>
+                        <div class="row" id="GridListDiv">
+                            <div class="col-lg-12">
+                                <h3 class="headetitle" style="text-align:center;"> Final Gradation List</h3>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left:35%;">
+                            <div class="col-xs-6 col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" />
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" type="submit" id="btnSearch">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" style="margin-left:10px;">
+                            <div class="row">
+                                <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                                    <table id="tblFinalMeritGradeListIndex" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                                </div>
+                            </div>
+                            <br /><br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="text-align:center">
+                                <div class="form-group">
+                                    <input type="button" id="btn-cancel" class="btn btn-primary" value="Download PDF" onclick="pdfTentativeDownload()" style="display:none;" />
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Back to home</button>
+                                    @*<input type="button" id="btn-cancel" class="btn btn-primary" value="Back to home" onclick='$("#IndexFinalMeritListModel").modal("hide");' />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br /><br />
+                    <input type="hidden" id="SessionId" value="" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="IndexseatavailabilityListModel" tabindex="-1" style="text-align:center;" role="dialog">
+    <div class="modal-dialog" style="width:95%">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body" style="text-align:center;">
+                    <h4></h4>
+                    <div id="root">
+                        <div style="text-align:center;">
+                            <img src="/Content/frontend/images/gok-en-wh-sml.png" alt="gok-logo" style="width:5%;">
+                        </div>
+                        <div class="row" id="seatAvListDiv">
+                            <div class="col-lg-12">
+                                <h3 class="headetitle" style="text-align:center;"> Seat Availability </h3>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left:35%;">
+                            <div class="col-xs-6 col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" id="txtSearchseat" />
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" type="submit" id="btnSearchseat">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" style="margin-left:10px;">
+                            <div class="row">
+                                <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                                    <table id="tblIndexseatavailabilityList" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                                </div>
+                            </div>
+                            <br /><br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="text-align:center">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Back to home</button>
+                                    @*<input type="button" id="btn-cancel" class="btn btn-primary" value="Back to home" onclick='$("#IndexseatavailabilityListModel").modal("hide");' />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br /><br />
+                    <input type="hidden" id="SessionId" value="" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AdmissionNotModel" tabindex="-1" style="text-align:center;" role="dialog">
+    <div class="modal-dialog" style="width:95%">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body" style="text-align:center;">
+                    <h4></h4>
+                    <div id="root">
+                        <div style="text-align:center;">
+                            <img src="/Content/frontend/images/gok-en-wh-sml.png" alt="gok-logo" style="width:5%;">
+                        </div>
+                        <div class="row" id="Admission">
+                            <div class="col-lg-12">
+                                <h3 class="headetitle" style="text-align:center;"> Admission Notifications </h3>
+                                <br />
+                            </div>
+                        </div>
+                        <div id="DivAdmissionNotifications">
+                            <div class="w3l-banner-grids">
+                                <div>
+                                    <div class="content" style="margin-top:-200px;">
+                                        <table class="table table-bordered table-hover text-center " style="color:white; background-color:aliceblue;width:30%;" id="AdmissionNotTable">
+                                            <thead>
+                                                <tr class="text-center" style="color:black">
+                                                    <th>Admission Notifications</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="color:Black;"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="text-align:center">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Back to home</button>
+                                    @*<input type="button" id="btn-cancel" class="btn btn-primary" value="Back to home" onclick='$("#IndexseatavailabilityListModel").modal("hide");' />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br /><br />
+                    <input type="hidden" id="SessionId" value="" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="IndexSeatallocationListModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog" style="width: 95%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <h4></h4>	<div id="root">
+                        <div style="text-align:center;">
+                            <img src="/Content/frontend/images/gok-en-wh-sml.png" alt="gok-logo" style="width:5%;">
+                        </div>
+                        <div class="row" id="GridListDiv">
+                            <div class="col-lg-12" style="text-align:center">
+                                <h3 class="headetitle">Seat Allocation Publish List</h3>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left:35%;">
+                            <div class="col-xs-6 col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" />
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" type="submit" id="btnSearch">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" style="margin-left:10px;">
+
+                            <div class="row">
+                                <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                                    <table id="tblSeatallocationList" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                                </div>
+                            </div>
+                            <br /><br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div style="text-align:center">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Back to home</button>
+                                    @*<input type="button" id="btn-cancel" class="btn btn-primary"
+                                        value="Back to home" onclick='$("#IndexSeatallocationListModel").modal("hide");' />*@
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br /><br />
+                    <input type="hidden" id="SessionId" value="" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ViewListModel1">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>View Seats</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div style="overflow-x:scroll;">
+                        <table class="table table-bordered table-hover" id="tblViewListModel1"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="button" id="btn-cancel" class="btn btn-secondary" value="Close" onclick=$("#ViewListModel1").modal("hide"); />
+        </div>
+    </div>
+</div>
+<input type="hidden" id="seatmatrixround" />
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog">
+    <!-- Modal1 -->
+    <div class="modal-dialog" style="width: 95%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="float:right!important;">&times;</button>
+                <h4>NCVT / SCVT Exams</h4>
+                <img src="~/Content/frontend/images/1.jpg" alt=" " class="img-responsive">
+                <h5>Supplementary Portions</h5>
+                <p>
+                    Industrial Training and Employment (DITE) manages the functioning
+                    of operation of Government Industrial Training Institutes (ITIs) and monitoring of
+                    Government Aided ITIs and Private ITIs.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.mobile-nav-button').on('click', function () {
+            $(".mobile-nav-button .mobile-nav-button__line:nth-of-type(1)").toggleClass("mobile-nav-button__line--1");
+            $(".mobile-nav-button .mobile-nav-button__line:nth-of-type(2)").toggleClass("mobile-nav-button__line--2");
+            $(".mobile-nav-button .mobile-nav-button__line:nth-of-type(3)").toggleClass("mobile-nav-button__line--3");
+
+            $('.mobile-menu').toggleClass('mobile-menu--open');
+            return false;
+		});
+
+        $.expr[':'].regex = function (elem, index, match) {
+            var matchParams = match[3].split(','),
+                validLabels = /^(data|css):/,
+                attr = {
+                    method: matchParams[0].match(validLabels) ?
+                        matchParams[0].split(':')[0] : 'attr',
+                    property: matchParams.shift().replace(validLabels, '')
+                },
+                regexFlags = 'ig',
+                regex = new RegExp(matchParams.join('').replace(/^\s+|\s+$/g, ''), regexFlags);
+            return regex.test(jQuery(elem)[attr.method](attr.property));
+        }
+        Get_Notification_PublishDetails();
+        GetCourseTypes();
+        GetDivisions();
+        //GetDistricts();
+        GetDistrict_Add();
+        GetConstituencies();
+        fngetcaptcha();
+    });
+	//GetTrades();
+	// GetNewTradeDistricts();
+
+	//GetAllAffiliatedInstituteByTaluk(taluk_id);
+
+	//GetNewTradeTaluk(dist_id);
+
+	//GetAdmissionNotification();
+
+
+	function SeatMatrixView() {
+
+		$.ajax({
+			type: "GET",
+			url: '@Url.Action("GetViewSeatMatrixGrid", "Home")',
+			data: { ApplicantTypeId: 1, AcademicYearId: 2, Round: $('#seatmatrixround').val(), InstituteId: 0, DistrictId: 0, DivisionId: 0, TalukId: 0 },
+			contentType: "application/json",
+			success: function (data) {
+				$('#tblSeatmatrixList').show();
+				table1 = $('#tblSeatmatrixList').DataTable({
+					data: data,
+					"destroy": true,
+					"bSort": true,
+					columns: [
+						{ 'data': 'slno', 'title': 'Slno', 'className': 'text-center slno' },
+						{ 'data': 'division_name', 'title': 'Division Name', 'className': 'text-left StatusName' },
+						{ 'data': 'district_ename', 'title': 'District Name', 'className': 'text-left StatusName' },
+						{ 'data': 'taluk_ename', 'title': 'Taluk Name', 'className': 'text-left taluk' },
+						{ 'data': 'MISCode', 'title': 'MISCode', 'className': 'text-center ApplicantTypeDdl' },
+						{ 'data': 'InstituteType', 'title': 'Institute Type', 'className': 'text-left StatusName' },
+						{ 'data': 'InstituteName', 'title': 'Institute Name', 'className': 'text-left StatusName' },
+						{ 'data': 'TradeName', 'title': 'Trade Name', 'className': 'text-left Round' },
+						{
+							'data': 'SeatMaxId',
+							'title': 'Seat allocation view',
+							"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+
+								$(nTd).html("<input type='button' onclick='ShowViewTreadSeatMatrix(" + oData.Round + "," + oData.InstituteId + "," + oData.AcademicYear + "," + oData.TradeId + ")' class='btn btn-primary btn-xs' value='View' id='View'/>");
+							}
+						}
+					],
+				});
+			}
+		});
+		//window.location.replace('@Url.Action("AdmissionSeatMatrix", "Admission")');
+	}
+	function ShowViewTreadSeatMatrix(round, instiId, year, tradeId) {
+		$.ajax({
+			type: "GET",
+			url:'@Url.Action("AdmissionSeatMatrixNested", "Home")',
+			contentType: "application/json",
+			data: { 'round': round, 'instiId': instiId, 'year': year, 'tradeId': tradeId },
+			success: function (data) {
+				if (data != null) {
+					$('#ViewListModel1').modal('show');
+					if (round == 1 || round == 2) {
+						$('#tblViewListModel1').DataTable({
+							data: data,
+							"destroy": true,
+							"bSort": true,
+							"paging": false,
+							"ordering": false,
+							"info": false,
+							bFilter: false,
+							columns: [
+								{ 'data': 'TradeName', 'title': 'Trade Name', 'className': 'text-left' },
+								{ 'data': 'Units', 'title': 'Number of Units', 'className': 'text-left' },
+								{ 'data': 'Seats', 'title': 'Number of Seats', 'className': 'text-left' },
+								{ 'data': 'GMWH', 'title': 'GMW-H', 'className': 'text - left' },
+								{ 'data': 'GMWNH', 'title': 'GMW-NH', 'className': 'text - left' },
+								{ 'data': 'GMPDH', 'title': 'GMPD-H', 'className': 'text - left' },
+								{ 'data': 'GMPDNH', 'title': 'GMPD-NH', 'className': 'text - left' },
+								{ 'data': 'GMEXSH', 'title': 'GMEXS-H', 'className': 'text - left' },
+								{ 'data': 'GMEXSNH', 'title': 'GMEXS-NH', 'className': 'text - left' },
+								{ 'data': 'GMKMH', 'title': 'GMKM-H', 'className': 'text - left' },
+								{ 'data': 'GMKMNH', 'title': 'GMKM-NH', 'className': 'text - left' },
+								{ 'data': 'GMEWSH', 'title': 'GMEWS-H', 'className': 'text - left' },
+								{ 'data': 'GMEWSNH', 'title': 'GMEWS-NH', 'className': 'text - left' },
+								{ 'data': 'GMGPH', 'title': 'GMGP-H', 'className': 'text - left' },
+								{ 'data': 'GMGPNH', 'title': 'GMGP-NH', 'className': 'text - left' },
+								{ 'data': 'SCWH', 'title': 'SCW-H', 'className': 'text - left' },
+								{ 'data': 'SCWNH', 'title': 'SCW-NH', 'className': 'text - left' },
+								{ 'data': 'SCPDH', 'title': 'SCPD-H', 'className': 'text - left' },
+								{ 'data': 'SCPDNH', 'title': 'SCPD-NH', 'className': 'text - left' },
+								{ 'data': 'SCEXSH', 'title': 'SCEXS-H', 'className': 'text - left' },
+								{ 'data': 'SCEXSNH', 'title': 'SCEXS-NH', 'className': 'text - left' },
+								{ 'data': 'SCKMH', 'title': 'SCKM-H', 'className': 'text - left' },
+								{ 'data': 'SCKMNH', 'title': 'SCKM-NH', 'className': 'text - left' },
+								{ 'data': 'SCEWSH', 'title': 'SCEWS-H', 'className': 'text - left' },
+								{ 'data': 'SCEWSNH', 'title': 'SCEWS-NH', 'className': 'text - left' },
+								{ 'data': 'SCGPH', 'title': 'SCGP-H', 'className': 'text - left' },
+								{ 'data': 'SCGPNH', 'title': 'SCGP-NH', 'className': 'text - left' },
+								{ 'data': 'STWH', 'title': 'STW-H', 'className': 'text - left' },
+								{ 'data': 'STWNH', 'title': 'STW-NH', 'className': 'text - left' },
+								{ 'data': 'STPDH', 'title': 'STPD-H', 'className': 'text - left' },
+								{ 'data': 'STPDNH', 'title': 'STPD-NH', 'className': 'text - left' },
+								{ 'data': 'STEXSH', 'title': 'STEXS-H', 'className': 'text - left' },
+								{ 'data': 'STEXSNH', 'title': 'STEXS-NH', 'className': 'text - left' },
+								{ 'data': 'STKMH', 'title': 'STKM-H', 'className': 'text - left' },
+								{ 'data': 'STKMNH', 'title': 'STKM-NH', 'className': 'text - left' },
+								{ 'data': 'STEWSH', 'title': 'STEWS-H', 'className': 'text - left' },
+								{ 'data': 'STEWSNH', 'title': 'STEWS-NH', 'className': 'text - left' },
+								{ 'data': 'STGPH', 'title': 'STGP-H', 'className': 'text - left' },
+								{ 'data': 'STGPNH', 'title': 'STGP-NH', 'className': 'text - left' },
+								{ 'data': 'C1WH', 'title': 'C1W-H', 'className': 'text - left' },
+								{ 'data': 'C1WNH', 'title': 'C1W-NH', 'className': 'text - left' },
+								{ 'data': 'C1PDH', 'title': 'C1PD-H', 'className': 'text - left' },
+								{ 'data': 'C1PDNH', 'title': 'C1PD-NH', 'className': 'text - left' },
+								{ 'data': 'C1EXSH', 'title': 'C1EXS-H', 'className': 'text - left' },
+								{ 'data': 'C1EXSNH', 'title': 'C1EXS-NH', 'className': 'text - left' },
+								{ 'data': 'C1KMH', 'title': 'C1KM-H', 'className': 'text - left' },
+								{ 'data': 'C1KMNH', 'title': 'C1KM-NH', 'className': 'text - left' },
+								{ 'data': 'C1EWSH', 'title': 'C1EWS-H', 'className': 'text - left' },
+								{ 'data': 'C1EWSNH', 'title': 'C1EWS-NH', 'className': 'text - left' },
+								{ 'data': 'C1GPH', 'title': 'C1GP-H', 'className': 'text - left' },
+								{ 'data': 'C1GPNH', 'title': 'C1GP-NH', 'className': 'text - left' },
+								{ 'data': 'TWOAWH', 'title': 'TWOAW-H', 'className': 'text - left' },
+								{ 'data': 'TWOAWNH', 'title': 'TWOAW-NH', 'className': 'text - left' },
+								{ 'data': 'TWOAPDH', 'title': 'TWOAPD-H', 'className': 'text - left' },
+								{ 'data': 'TWOAPDNH', 'title': 'TWOAPD-NH', 'className': 'text - left' },
+								{ 'data': 'TWOAEXSH', 'title': 'TWOAEXS-H', 'className': 'text - left' },
+								{ 'data': 'TWOAEXSNH', 'title': 'TWOAEXS-NH', 'className': 'text - left' },
+								{ 'data': 'TWOAKMH', 'title': 'TWOAKM-H', 'className': 'text - left' },
+								{ 'data': 'TWOAKMNH', 'title': 'TWOAKM-NH', 'className': 'text - left' },
+								{ 'data': 'TWOAEWSH', 'title': 'TWOAEWS-H', 'className': 'text - left' },
+								{ 'data': 'TWOAEWSNH', 'title': 'TWOAEWS-NH', 'className': 'text - left' },
+								{ 'data': 'TWOAGPH', 'title': 'TWOAGP-H', 'className': 'text - left' },
+								{ 'data': 'TWOAGPNH', 'title': 'TWOAGP-NH', 'className': 'text - left' },
+								{ 'data': 'TWOBWH', 'title': 'TWOBW-H', 'className': 'text - left' },
+								{ 'data': 'TWOBWNH', 'title': 'TWOBW-NH', 'className': 'text - left' },
+								{ 'data': 'TWOBPDH', 'title': 'TWOBPD-H', 'className': 'text - left' },
+								{ 'data': 'TWOBPDNH', 'title': 'TWOBPD-NH', 'className': 'text - left' },
+								{ 'data': 'TWOBEXSH', 'title': 'TWOBEXS-H', 'className': 'text - left' },
+								{ 'data': 'TWOBEXSNH', 'title': 'TWOBEXS-NH', 'className': 'text - left' },
+								{ 'data': 'TWOBKMH', 'title': 'TWOBKM-H', 'className': 'text - left' },
+								{ 'data': 'TWOBKMNH', 'title': 'TWOBKM-NH', 'className': 'text - left' },
+								{ 'data': 'TWOBEWSH', 'title': 'TWOBEWS-H', 'className': 'text - left' },
+								{ 'data': 'TWOBEWSNH', 'title': 'TWOBEWS-NH', 'className': 'text - left' },
+								{ 'data': 'TWOBGPH', 'title': 'TWOBGP-H', 'className': 'text - left' },
+								{ 'data': 'TWOBGPNH', 'title': 'TWOBGP-NH', 'className': 'text - left' },
+								{ 'data': 'THREEAWH', 'title': 'THREEAW-H', 'className': 'text - left' },
+								{ 'data': 'THREEAWNH', 'title': 'THREEAW-NH', 'className': 'text - left' },
+								{ 'data': 'THREEAPDH', 'title': 'THREEAPD-H', 'className': 'text - left' },
+								{ 'data': 'THREEAPDNH', 'title': 'THREEAPD-NH', 'className': 'text - left' },
+								{ 'data': 'THREEAEXSH', 'title': 'THREEAEXS-H', 'className': 'text - left' },
+								{ 'data': 'THREEAEXSNH', 'title': 'THREEAEXS-NH', 'className': 'text - left' },
+								{ 'data': 'THREEAKMH', 'title': 'THREEAKM-H', 'className': 'text - left' },
+								{ 'data': 'THREEAKMNH', 'title': 'THREEAKM-NH', 'className': 'text - left' },
+								{ 'data': 'THREEAEWSH', 'title': 'THREEAEWS-H', 'className': 'text - left' },
+								{ 'data': 'THREEAEWSNH', 'title': 'THREEAEWS-NH', 'className': 'text - left' },
+								{ 'data': 'THREEAGPH', 'title': 'THREEAGP-H', 'className': 'text - left' },
+								{ 'data': 'THREEAGPNH', 'title': 'THREEAGP-NH', 'className': 'text - left' },
+								{ 'data': 'THREEBWH', 'title': 'THREEBW-H', 'className': 'text - left' },
+								{ 'data': 'THREEBWNH', 'title': 'THREEBW-NH', 'className': 'text - left' },
+								{ 'data': 'THREEBPDH', 'title': 'THREEBPD-H', 'className': 'text - left' },
+								{ 'data': 'THREEBPDNH', 'title': 'THREEBPD-NH', 'className': 'text - left' },
+								{ 'data': 'THREEBEXSH', 'title': 'THREEBEXS-H', 'className': 'text - left' },
+								{ 'data': 'THREEBEXSNH', 'title': 'THREEEXS-NH', 'className': 'text - left' },
+								{ 'data': 'THREEBKMH', 'title': 'THREEBKM-H', 'className': 'text - left' },
+								{ 'data': 'THREEBKMNH', 'title': 'THREEBKM-NH', 'className': 'text - left' },
+								{ 'data': 'THREEBEWSH', 'title': 'THREEBEWS-H', 'className': 'text - left' },
+								{ 'data': 'THREEBEWSNH', 'title': 'THREEBEWS-NH', 'className': 'text - left' },
+								{ 'data': 'THREEBGPH', 'title': 'THREEBGP-H', 'className': 'text - left' },
+								{ 'data': 'THREEBGPNH', 'title': 'THREEBGP-NH', 'className': 'text - left' },
+
+							]
+						});
+					}
+					else
+						if (round == 6) {
+							$('#tblViewListModel1').DataTable({
+								data: data,
+								"destroy": true,
+								"bSort": true,
+								columns: [
+									{ 'data': 'TradeName', 'title': 'Sl.no', 'className': 'text-center' },
+									{ 'data': 'GMGP', 'title': 'GM-GP', 'className': 'text-left' }
+								]
+							});
+						}
+						else {
+
+							$('#tblViewListModel1').DataTable({
+								data: data,
+								"destroy": true,
+								"bSort": true,
+								columns: [
+									{ 'data': 'TradeName', 'title': 'Trade Name', 'className': 'text-center' },
+									{ 'data': 'GMGP', 'title': 'GM-GP', 'className': 'text-left' },
+									{ 'data': 'SCGP', 'title': 'SC-GP', 'className': 'text-left' },
+									{ 'data': 'STGP', 'title': 'ST-GP', 'className': 'text-left' },
+									{ 'data': 'C1GP', 'title': 'C1-GP', 'className': 'text-left' },
+									{ 'data': 'TWOAGP', 'title': 'TWOA-GP', 'className': 'text-center' },
+									{ 'data': 'TWOBGP', 'title': 'TWOB-GP', 'className': 'text-left' },
+									{ 'data': 'THREEAGP', 'title': 'THREEA-GP', 'className': 'text-left' },
+									{ 'data': 'THREEBGP', 'title': 'THREEB-GP', 'className': 'text-left' }
+								]
+							});
+						}
+				}
+				else {
+					bootbox.alert('No data available');
+				}
+			}, error: function (e) {
+				var _msg = "Something went wrong.";
+				bootbox.alert(_msg);
+				$("#preloder, .loader").hide();
+			}
+		});
+	}
+	function fnSetDTExcelBtnPos() {
+		return "<'row'<'col-sm-4'l><'col-sm-3 text-center'B><'col-sm-5'f>>" +
+			"<'row'<'col-sm-12'tr>>" +
+			"<'row'<'col-sm-5'i><'col-sm-7'p>>";
+	}
+
+	$("#lblSeat").attr("value", "false");
+	$("#SeatallocationListId").click(function () {
+		$("#lblSeat").attr("value", "true");
+	});
+	if ($("#lblSeat").val() == "false") {
+		GetApprovedAllocationSeat();
+	}
+
+	function GetApprovedAllocationSeat() {
+
+		$.ajax({
+			type: "GET",
+			url: "/Home/ViewSeatAutoAllotment",
+			contentType: "application/json",
+			data: {
+				lblstring: $("#lblSeat").val()
+			},
+			success: function (data) {
+
+				$("#SeatallocationListId").show();
+				$("#imgnewSeat").show();
+				$("#linkMarqueSeatallocationId").show();
+				$('#tblSeatallocationList').DataTable({
+					data: data.Response,
+					"destroy": true,
+					"bSort": true,
+					scrollX: true,
+					dom: fnSetDTExcelBtnPos(),
+					buttons: [
+						{
+							extend: 'excel',
+							text: 'Download as Excel',
+							exportOptions: {
+								columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+									16, 17, 18, 19, 20, 21, 22
+								]
+							}
+						}
+					],
+					columns: [
+						{ 'data': 'Slno', 'title': 'Sl.No.', 'className': 'text-center' },
+						{ 'data': 'RankNumber', 'title': 'Rank Number', 'className': 'text-center' },
+						{ 'data': 'Status', 'title': 'Seat Allocation Status - Round', 'className': 'text-center' },
+						{ 'data': 'division_id', 'title': 'Division Code', 'className': 'text-left' },
+						{ 'data': 'division_name', 'title': 'Division Name', 'className': 'text-left' },
+						{ 'data': 'district_id', 'title': 'District Code', 'className': 'text-left' },
+						{ 'data': 'district_ename', 'title': 'District Name', 'className': 'text-left' },
+						{ 'data': 'TalukId', 'title': 'Taluk Code', 'className': 'text-left' },
+						{ 'data': 'TalukName', 'title': 'Taluk Name', 'className': 'text-left' },
+						{ 'data': 'MISCode', 'title': 'MISCode', 'className': 'text-center' },
+						{ 'data': 'InstituteType', 'title': 'Type of Institute', 'className': 'text-left' },
+						{ 'data': 'InstituteName', 'title': 'Institute Name', 'className': 'text-left' },
+						{ 'data': 'TradeCode', 'title': 'Trade Code', 'className': 'text-left' },
+						{ 'data': 'TradeName', 'title': 'Trade Name', 'className': 'text-left' },
+						{ 'data': 'UnitsDet', 'title': 'Unit', 'className': 'text-left' },
+						{ 'data': 'ShiftsDet', 'title': 'Shift', 'className': 'text-left' },
+						{ 'data': 'AllottedCategory', 'title': 'Allotted Vertical Category', 'className': 'text-left' },
+						{ 'data': 'AllottedGroup', 'title': 'Allotted Horizontal Category', 'className': 'text-left' },
+						{ 'data': 'LocalStatus', 'title': 'Local Status (HK/NON-HK)', 'className': 'text-left' },
+						{ 'data': 'PreferenceNumber', 'title': 'Preference Order Number', 'className': 'text-left' },
+						{ 'data': 'FirstName', 'title': 'First Name', 'className': 'text-left' },
+						{ 'data': 'FatherName', 'title': 'Father Name', 'className': 'text-left' },
+						{ 'data': 'Gender', 'title': 'Gender', 'className': 'text-left' }
+
+					]
+				});
+
+
+
+
+			}, error: function (result) {
+				alert("Error", "something went wrong");
+			}
+		});
+	}
+    function GetAdmissionNotification() {
+        //$('#DivAdmissionNotifications').show();
+        $('#AdmissionNotModel').show();
+      /*  $("#AdmissionNotTable").clear();*/
+		$.ajax({
+			url: "/Home/AdmissionNotificationBox",
+			type: 'GET',
+			contentType: 'application/json;',
+			success: function (data) {
+                tableBody = $("#AdmissionNotTable tbody")
+                tableBody.empty();
+				$.each(data, function (key, value) {
+					var date = daterangeformate2(value.Exam_notif_date);
+					var NotifId = value.Exam_Notif_Number.replace(/\//g, '_');
+					NotifId = NotifId.replaceAll('-', '_');
+                    var link = "../../" + value.SavePath;
+					//var link = "../../Content/Template/Notification_" + NotifId + ".pdf";
+					var td = "<tr><td style='text-align:left;'><a style='color:black;' target='_blank' href='" + link + "'>" + value.Exam_Notif_Desc + " (Date : " + date + "<br> Number : " + value.Exam_Notif_Number + ")</td></tr>";
+					tableBody.append(td)
+				});
+
+
+			}, error: function (result) {
+				alert("Error", "something went wrong");
+			}
+		});
+	}
+	//seat matrix notification
+	GetSeatmatrixNotification();
+	$('#seatMatrixNotification').hide();
+	function GetSeatmatrixNotification() {
+		$('#linktext').text('');
+		$.ajax({
+			url: '/Home/GetSeatmatrixNotification',
+			type: 'GET',
+			contentType: 'application/json;',
+			success: function (data) {
+				if (data != 0) {
+					//$('#linkMarquefinalId').hide();
+					$('#seatMatrixNotification').show();
+					$('#seatmatrixnotif').show();
+					if (data == 1) {
+						$('#linktext').text('Released round 1 seat matrix');
+						$('#seatmatrixround').val("1");
+					}
+					else if (data == 2) {
+						$('#linktext').text('Released round 2 seat matrix');
+						$('#seatmatrixround').val("2");
+					}
+					else if (data == 3) {
+						$('#linktext').text('Released round 3 seat matrix');
+						$('#seatmatrixround').val("3");
+					}
+					else if (data == 4) {
+						$('#linktext').text('Released round 4 seat matrix');
+						$('#seatmatrixround').val("4");
+					}
+					else if (data == 5) {
+						$('#linktext').text('Released round 5 seat matrix');
+						$('#seatmatrixround').val("5");
+					}
+					else if (data == 6) {
+						$('#linktext').text('Released round 6 seat matrix');
+						$('#seatmatrixround').val("6");
+					}
+					else {
+						$('#seatMatrixNotification').hide();
+						//$('#linkMarquefinalId').show();
+					}
+				}
+
+			},
+			error: function (result) {
+				bootbox.alert("Error", "something went wrong");
+			}
+		});
+	}
+
+	// end sea matrix notification
+	AdmissionCalendarNotTable();
+	function AdmissionCalendarNotTable() {
+		$.ajax({
+			url: "/Home/AdmissionCalendarNotificationBox",
+			type: 'GET',
+			contentType: 'application/json;',
+			success: function (data) {
+				tableBody = $("#AdmissionCalendarNotTable tbody")
+				$.each(data, function (key, value) {
+					var date = daterangeformate2(value.Exam_notif_date);
+					var NotifId = value.Exam_Notif_Number.replace(/\//g, '_');
+					NotifId = NotifId.replaceAll('-', '_');
+					//var link = "../../Content/Template/Notification_" + value.Exam_Notif_Number + ".pdf";
+					var link = "../../Content/Template/Notification_" + NotifId + ".pdf";
+					var td = "<tr><td style='text-align:left;'><a style='color:black;' target='_blank' href='" + link + "'>" + value.Exam_Notif_Desc + " (Date : " + date + "<br> Number : " + value.Exam_Notif_Number + ")</td></tr>";
+					tableBody.append(td)
+				});
+
+
+			}, error: function (result) {
+				alert("Error", "something went wrong");
+			}
+		});
+	}
+	function daterangeformate2(datetime) {
+		if (datetime == "" || datetime == null) {
+			var openingsd = "";
+			return openingsd;
+		}
+		else {
+			var StartDateOpening = new Date(parseInt(datetime.replace('/Date(', '')))
+			var StartDateOpeningmonth = StartDateOpening.toString().slice(4, 7);
+			var StartDateOpeningdate = StartDateOpening.toString().slice(8, 10);
+			var StartDateOpeningyear = StartDateOpening.toString().slice(11, 15);
+			var statedatemonth1 = "";
+			if (StartDateOpeningmonth == "Jan") { statedatemonth1 = "01"; }
+			if (StartDateOpeningmonth == "Feb") { statedatemonth1 = "02"; }
+			if (StartDateOpeningmonth == "Mar") { statedatemonth1 = "03"; }
+			if (StartDateOpeningmonth == "Apr") { statedatemonth1 = "04"; }
+			if (StartDateOpeningmonth == "May") { statedatemonth1 = "05"; }
+			if (StartDateOpeningmonth == "Jun") { statedatemonth1 = "06"; }
+			if (StartDateOpeningmonth == "Jul") { statedatemonth1 = "07"; }
+			if (StartDateOpeningmonth == "Aug") { statedatemonth1 = "08"; }
+			if (StartDateOpeningmonth == "Sep") { statedatemonth1 = "09"; }
+			if (StartDateOpeningmonth == "Oct") { statedatemonth1 = "10"; }
+			if (StartDateOpeningmonth == "Nov") { statedatemonth1 = "11"; }
+			if (StartDateOpeningmonth == "Dec") { statedatemonth1 = "12"; }
+			var openingsd = StartDateOpeningdate + "-" + statedatemonth1 + "-" + StartDateOpeningyear;
+
+			return openingsd;
+		}
+	}
+
+	//**Start ** Gradation Merit List Home Page Source
+	//Gradation MeritList
+	function IndexMeritList() {
+		btnIndexMeritList();
+	}
+	function btnIndexMeritList() {
+
+		var rbId = $("input[name='merit']:checked").val();
+		$.ajax({
+			type: "GET",
+			url: "/Admission/GetIndexGradationMeritList",
+			data: { rbId: rbId },
+			contentType: "application/json",
+			success: function (data) {
+				$('#tblMeritGradeList').DataTable({
+					data: data,
+					"destroy": true,
+					"bSort": true,
+					columns: [
+						{ 'data': 'slno', 'title': 'Sl. No.', 'className': 'text-center slno' },
+						{ 'data': 'ApplicantNumber', 'title': 'Application Number', 'className': 'text-center ApplicantNumber' },
+						{ 'data': 'ApplicantName', 'title': 'Applicant Name', 'className': 'text-left ApplicantName' },
+						{ 'data': 'FathersName', 'title': 'Father Name', 'className': 'text-left FathersName' },
+						{ 'data': 'Gender', 'title': 'Gender', 'className': 'text-left Gender' },
+						{
+							'data': 'DOB', 'title': 'DOB', 'className': 'text-left DOB',
+							"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+								var date = daterangeformate2(oData.DOB);
+								var hide = "<input type='hidden' class='ApplicationId' value='" + oData.ApplicationId + "' />"
+								$(nTd).html(date + hide);
+							}
+						},
+						{ 'data': 'CategoryName', 'title': 'Category', 'className': 'text-left Category' },
+						{ 'data': 'DiffrentAbled', 'title': 'Differently abled', 'className': 'text-left DiffrentAbled' },
+						{ 'data': 'ExService', 'title': 'Exservicemen', 'className': 'text-left ExService' },
+						{ 'data': 'EconomicWeekerSec', 'title': 'Economic Weaker Section', 'className': 'text-left EconomicWeekerSec' },
+						{ 'data': 'MaxMarks', 'title': 'Max Marks in 10th', 'className': 'text-left MaxMarks' },
+						{ 'data': 'MarksObtained', 'title': 'Obtained Marks in 10th', 'className': 'text-left MarksObtained' },
+						{ 'data': 'locationName', 'title': 'Rural/Urban', 'className': 'text-left locationName' },
+						{ 'data': 'Weitage', 'title': 'Weitage', 'className': 'text-left Weitage' },
+						{ 'data': 'Total', 'title': 'Total Marks', 'className': 'text-left Total' },
+						{ 'data': 'Percentage', 'title': 'Percentage %', 'className': 'text-left Percentage' },
+						{ 'data': 'Qual', 'title': 'Qualification', 'className': 'text-left Qualification' },
+						{ 'data': 'Result', 'title': '10thPass/Fail', 'className': 'text-left Result' },
+						{ 'data': 'Rank', 'title': 'Rank', 'className': 'text-left Rank' }
+					],
+
+				});
+			}
+		});
+	}
+
+	linkMarqueTentativeId();
+	$("#IndexTentativeListId").hide();
+	$("#imgnewTentative").hide();
+	function linkMarqueTentativeId() {
+
+		//var today = new Date();
+		//var dd = String(today.getDate()).padStart(2, '0');
+		//var mm = String(today.getMonth() + 1).padStart(2, '0');
+		//var yyyy = today.getFullYear();
+
+		//today = dd + '-' + mm + '-' + yyyy;
+		$.ajax({
+			type: "GET",
+			url: "/Home/GetIndexTentativeGradationMeritList",
+			contentType: "application/json",
+			success: function (data) {
+				if (data != null && data.length > 0) {
+					var dte = new Date();
+					var d = dte.getUTCDate();
+					var m = dte.getUTCMonth();
+					var y = dte.getUTCFullYear();
+					var final = data[0].final
+					//var FromOnDate = data[0].finalDate.split('/');
+					var FromOnDate = data[0].tentativeDate.replaceAll('/', '-');
+					if (final != true) {
+						var ddd = new Date(FromOnDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+						if (new Date(y, m, d) >= ddd) {
+							$("#IndexTentativeListId").show();
+							$("#imgnewTentative").show();
+						}
+						else {
+							$("#IndexTentativeListId").hide();
+							$("#imgnewTentative").hide();
+						}
+					} else {
+						$("#IndexTentativeListId").hide();
+						$("#imgnewTentative").hide();
+					}
+				}
+				//$.each(data, function () {
+				//    var dte = new Date();
+				//    var d = dte.getUTCDate();
+				//    var m = dte.getUTCMonth();
+				//    var y = dte.getUTCFullYear();
+				//    var FromOnDate = this.tentativeDate.split('/');
+				//    var final = this.final
+				//    if (final != true) {
+				//        var ddd = new Date(FromOnDate[0].replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+				//        if (new Date(y, m, d) >= ddd) {
+				//            $("#IndexTentativeListId").show();
+				//            $("#imgnewTentative").show();
+				//        }
+				//        else {
+				//            $("#IndexTentativeListId").hide();
+				//            $("#imgnewTentative").hide();
+				//        }
+				//    } else {
+				//         $("#IndexTentativeListId").hide();
+				//            $("#imgnewTentative").hide();
+				//    }
+
+				//});
+			}
+		});
+	}
+	//Tentative Gradation MeritList
+	function IndexTentativeList() {
+
+		$.ajax({
+			type: "GET",
+			url: "/Home/GetIndexTentativeGradationMeritList",
+			contentType: "application/json",
+			success: function (data) {
+
+				var t = $('#tblTentativeMeritGradeListIndex').DataTable({
+					data: data,
+					searching: true,
+					"bFilter": false,
+					"destroy": true,
+					"bSort": true,
+					dom: 'Bfrtip',
+					columns: [
+						{ 'data': 'slno', 'title': 'Sl. No.', 'className': 'text-center slno' },
+						{ 'data': 'ApplicantNumber', 'title': 'Application Number', 'className': 'text-center ApplicantNumber' },
+						{ 'data': 'ApplicantName', 'title': 'Applicant Name', 'className': 'text-left ApplicantName' },
+						{ 'data': 'FathersName', 'title': 'Father Name', 'className': 'text-left FathersName' },
+						{ 'data': 'Gender', 'title': 'Gender', 'className': 'text-left Gender' },
+						{ 'data': 'dateofbirth', 'title': 'DOB', 'className': 'text-left DOB' },
+						//{
+						//    'data': 'DOB', 'title': 'DOB', 'className': 'text-left DOB',
+						//    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+						//        var date = daterangeformate2(oData.DOB);
+						//        var hide = "<input type='hidden' class='ApplicationId' value='" + oData.ApplicationId + "' />"
+						//        $(nTd).html(date + hide);
+						//    }
+						//},
+						{ 'data': 'CategoryName', 'title': 'Category', 'className': 'text-left Category' },
+						{ 'data': 'DiffrentAbled', 'title': 'Differently abled', 'className': 'text-left DiffrentAbled' },
+						{ 'data': 'ExService', 'title': 'Exservicemen', 'className': 'text-left ExService' },
+						{ 'data': 'EconomicWeekerSec', 'title': 'Economic Weaker Section', 'className': 'text-left EconomicWeekerSec' },
+						{ 'data': 'MaxMarks', 'title': 'Max Marks in 10th', 'className': 'text-left MaxMarks' },
+						{ 'data': 'MarksObtained', 'title': 'Obtained Marks in 10th', 'className': 'text-left MarksObtained' },
+						{ 'data': 'locationName', 'title': 'Rural/Urban', 'className': 'text-left locationName' },
+						{ 'data': 'Weitage', 'title': 'Weitage', 'className': 'text-left Weitage' },
+						{ 'data': 'Total', 'title': 'Total Marks', 'className': 'text-left Total' },
+						{ 'data': 'Percentage', 'title': 'Percentage %', 'className': 'text-left Percentage' },
+						{ 'data': 'Qual', 'title': 'Qualification', 'className': 'text-left Qualification' },
+						{ 'data': 'Result', 'title': '10thPass/Fail', 'className': 'text-left Result' },
+						{ 'data': 'Rank', 'title': 'Rank', 'className': 'text-left Rank' }
+					],
+					buttons: [
+						{
+							extend: 'excel',
+							text: 'Download as Excel',
+							exportOptions: {
+								columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+							}
+						}//,
+						//{
+						//    extend: 'pdf',
+						//    text: 'Download as Pdf',
+						//    orientation: 'landscape',
+						//    exportOptions: {
+						//        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+						//    }
+						//}
+					],
+
+				});
+
+				$('#btnSearch').click(function () {
+					t.search($("#txtSearch").val()).draw();
+				});
+
+				// EDIT: Capture enter press as well
+				$("#ApplicantName").keypress(function (e) {
+					if (e.which === 13) {
+						e.preventDefault();
+						t.search($(this).val()).draw();
+					}
+				});
+				$("#ApplicantNumber").keypress(function (e) {
+					if (e.which === 13) {
+						e.preventDefault();
+						t.search($(this).val()).draw();
+					}
+				});
+			}
+		});
+	}
+
+
+	linkMarquefinalId();
+	$("#IndexfinalListId").hide();
+	$("#imgnewfinal").hide();
+	function linkMarquefinalId() {
+		$.ajax({
+			type: "GET",
+			url: "/Home/GetIndexFinalGradationMeritList",
+			contentType: "application/json",
+			success: function (data) {
+
+				if (data != null && data.length > 0) {
+					var dte = new Date();
+					var d = dte.getUTCDate();
+					var m = dte.getUTCMonth();
+					var y = dte.getUTCFullYear();
+					//var FromOnDate = data[0].finalDate.split('/');
+					var FromOnDate = data[0].finalDate.replaceAll('/', '-');
+					var ddd = new Date(FromOnDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+					if (new Date(y, m, d) >= ddd) {
+						$("#IndexfinalListId").show();
+						$("#imgnewfinal").show();
+					}
+					else {
+						$("#IndexfinalListId").hide();
+						$("#imgnewfinal").hide();
+					}
+				}
+				//$.each(data, function () {
+				//    var dte = new Date();
+				//    var d = dte.getUTCDate();
+				//    var m = dte.getUTCMonth();
+				//    var y = dte.getUTCFullYear();
+				//    var FromOnDate = this.finalDate.split('/');
+				//    var ddd = new Date(FromOnDate[0].replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+				//    if (new Date(y, m, d) >= ddd) {
+				//        $("#IndexfinalListId").show();
+				//        $("#imgnewfinal").show();
+				//    }
+				//    else {
+				//        $("#IndexfinalListId").hide();
+				//        $("#imgnewfinal").hide();
+				//    }
+				//});
+			}
+		});
+	}
+	function IndexFinalMeritList() {
+
+		$.ajax({
+			type: "GET",
+			url: "/Home/GetIndexFinalGradationMeritList",
+			contentType: "application/json",
+			success: function (data) {
+				var t = $('#tblFinalMeritGradeListIndex').DataTable({
+					data: data,
+					searching: true,
+					"bFilter": false,
+					"destroy": true,
+					"bSort": true,
+					dom: 'Bfrtip',
+					buttons: [
+						{
+							extend: 'excel',
+							text: 'Download as Excel',
+							exportOptions: {
+								columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+							}
+						}//,
+						//{
+						//    extend: 'pdf',
+						//    text: 'Download as Pdf',
+						//    orientation: 'landscape',
+						//    exportOptions: {
+						//        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+						//    }
+						//}
+					],
+					columns: [
+						{ 'data': 'slno', 'title': 'Sl. No.', 'className': 'text-center slno' },
+						{ 'data': 'ApplicantNumber', 'title': 'Application Number', 'className': 'text-center ApplicantNumber' },
+						{ 'data': 'ApplicantName', 'title': 'Applicant Name', 'className': 'text-left ApplicantName' },
+						{ 'data': 'FathersName', 'title': 'Father Name', 'className': 'text-left FathersName' },
+						{ 'data': 'Gender', 'title': 'Gender', 'className': 'text-left Gender' },
+						//{ 'data': 'dateofbirth', 'title': 'DOB', 'className': 'text-left DOB' },
+						{
+							'data': 'dateofbirth', 'title': 'DOB', 'className': 'text-left DOB',
+							"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+								//var date = daterangeformate2(oData.DOB);
+								var date = oData.dateofbirth;
+								var hide = "<input type='hidden' class='ApplicationId' value='" + oData.ApplicationId + "' />"
+								$(nTd).html(date + hide);
+							}
+						},
+						{ 'data': 'CategoryName', 'title': 'Category', 'className': 'text-left Category' },
+						{ 'data': 'DiffrentAbled', 'title': 'Differently abled', 'className': 'text-left DiffrentAbled' },
+						{ 'data': 'ExService', 'title': 'Exservicemen', 'className': 'text-left ExService' },
+						{ 'data': 'EconomicWeekerSec', 'title': 'Economic Weaker Section', 'className': 'text-left EconomicWeekerSec' },
+						{ 'data': 'MaxMarks', 'title': 'Max Marks in 10th', 'className': 'text-left MaxMarks' },
+						{ 'data': 'MarksObtained', 'title': 'Obtained Marks in 10th', 'className': 'text-left MarksObtained' },
+						{ 'data': 'locationName', 'title': 'Rural/Urban', 'className': 'text-left locationName' },
+						{ 'data': 'Weitage', 'title': 'Weitage', 'className': 'text-left Weitage' },
+						{ 'data': 'Total', 'title': 'Total Marks', 'className': 'text-left Total' },
+						{ 'data': 'Percentage', 'title': 'Percentage %', 'className': 'text-left Percentage' },
+						{ 'data': 'Qual', 'title': 'Qualification', 'className': 'text-left Qualification' },
+						{ 'data': 'Result', 'title': '10thPass/Fail', 'className': 'text-left Result' },
+						{ 'data': 'Rank', 'title': 'Rank', 'className': 'text-left Rank' }
+					],
+
+				});
+				$('#btnSearch').click(function () {
+					t.search($("#txtSearch").val()).draw();
+				});
+
+				// EDIT: Capture enter press as well
+				$("#ApplicantName").keypress(function (e) {
+					if (e.which === 13) {
+						e.preventDefault();
+						t.search($(this).val()).draw();
+					}
+				});
+				$("#ApplicantNumber").keypress(function (e) {
+					if (e.which === 13) {
+						e.preventDefault();
+						t.search($(this).val()).draw();
+					}
+				});
+			}
+		});
+	}
+	//**End**//
+
+
+
+	function pdfTentativeDownload() {
+		var today = new Date();
+		var dd = String(today.getDate()).padStart(2, '0');
+		var mm = String(today.getMonth() + 1).padStart(2, '0');
+		var yyyy = today.getFullYear();
+
+		today = dd + '/' + mm + '/' + yyyy;
+
+
+		// Get the element.
+		var element = document.getElementById('tblInstList');
+
+		//// Choose pagebreak options based on mode.
+		var mode = document.getElementById('mode').value;
+		var pagebreak = (mode === 'specify') ?
+			{ mode: '', before: '.before', after: '.after', avoid: '.avoid' } :
+			{ mode: mode };
+
+		// Generate the PDF.
+		////var opt = {
+		////        margin:       1,
+		////        filename: 'DITE Merit List_' + today + '.pdf',
+		////        image:        { type: 'jpeg', quality: 0.98 },
+		////        html2canvas:  { scale: 2 },
+		////        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+		////        };
+		////html2pdf().set(opt).from(element).save();
+		////html2pdf(element, opt);
+		html2pdf().from(element).set({
+			filename: 'Institute Publish List_' + today + '.pdf',
+			pagebreak: { mode: ['css', 'legacy'] },
+			html2canvas: { scale: 2 },
+			jsPDF: { orientation: 'landscape', unit: 'in', format: 'a3', compressPDF: true }
+		}).save();
+	}
+
+    @*function loadCaptcha() {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("generateCaptcha", "Home")',
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                var path = '@Url.Content("~/Content/img/")';
+							path = path + data.Message;
+
+							document.getElementById("captchaText").value = "";
+						                $("#m_imgCaptcha").attr('src', path);
+                document.getElementById("CaptchaImg").value = data.Msgcode;
+                //  alert(document.getElementById("CaptchaImg").value);
+
+            },
+            error: function (data) { alert("Error while loading captcha image") }
+        });
+    }*@
+
+
+
+    function fngetcaptcha() {
+        $.ajax({
+            url: "/Home/GetCaptcha",
+            dataType: 'json',
+            success: function (d) {
+                $("#myCaptcha").text(d);
+
+
+            }
+        })
+    }
+
+
+	function IndexInstituteList() {
+		$.ajax({
+			type: 'GET',
+			url: '/Home/GetInstituteList',
+
+			contentType: 'application/json',
+			success: function (response) {
+
+				$('#tblInstList').DataTable({
+					data: response.list,
+					"destroy": true,
+					"bSort": true,
+                    dom: fnSetDTExcelBtnPos(),
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Download as Excel',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8
+                                ]
+                            }
+                        }
+                    ],
+					columns: [
+						{ 'data': 'slno', 'title': 'Sl. No.', 'className': 'text-center slno' },
+						{ 'data': 'date', 'title': 'Date', 'MisCode': 'text-left Gender' },
+						{ 'data': 'CourseType', 'title': 'Course Type', 'MisCode': 'text-left Gender' },
+                        { 'data': 'MisCode', 'title': 'MIS ITI code', 'MisCode': 'text-left Gender' },
+						{ 'data': 'iti_college', 'title': 'Institute Name', 'className': 'text-center ApplicantNumber' },
+						{ 'data': 'Division', 'title': 'Division', 'MisCode': 'text-left Gender' },
+						{ 'data': 'District', 'title': 'District', 'MisCode': 'text-left Gender' },
+						{ 'data': 'Clg_Adderss', 'title': 'College Address ', 'MisCode': 'text-left Gender' },
+						{
+							'data': 'IsActive', 'title': 'Intitute Status',
+							render: function (data, type, row) {
+								if (row.IsActive == true) {
+									return "Affiliate"
+								}
+								else {
+                                    return 'De-Affiliate'
+								}
+							}
+						},
+
+
+					],
+
+				});
+			},
+			error: function () {
+			}
+		});
+	}
+	function IndexTradeList() {
+		$.ajax({
+			type: 'GET',
+			url: '/Home/GetTradeList',
+
+			contentType: 'application/json',
+			success: function (data) {
+				$('#tbltradeList').DataTable({
+					data: data.listi,
+					"destroy": true,
+					"bSort": true,
+                    dom: fnSetDTExcelBtnPos(),
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Download as Excel',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12
+                                ]
+                            }
+                        }
+                    ],
+					columns: [
+                        { 'data': 'slno', 'title': 'Sl. No.', 'className': 'text-center slno' },
+                        { 'data': 'date', 'title': 'Date', 'className': 'DateWidth Gender ' },
+						{ 'data': 'CourseType', 'title': 'Course Type', 'MisCode': 'text-left Gender' },
+                        { 'data': 'miscode', 'title': 'MIS ITI code', 'MisCode': 'text-left Gender' },
+						{ 'data': 'iti_college', 'title': 'Institute Name', 'className': 'text-center ApplicantNumber' },
+                        { 'data': 'college_Address', 'title': 'Address', 'MisCode': 'text-left Gender' },
+						{ 'data': 'Division', 'title': 'Division', 'MisCode': 'text-left Gender' },
+						{ 'data': 'District', 'title': 'District', 'MisCode': 'text-left Gender' },
+						{ 'data': 'trades', 'title': 'Trade Name', 'MisCode': 'text-left Gender' },
+                        { 'data': 'units', 'title': 'Unit ', 'MisCode': 'text-left Gender' },
+                        { 'data': 'Shifts', 'title': 'Shift', 'MisCode': 'text-left Gender' },
+						{
+							'data': 'Unit Status', 'title': 'Unit Status',
+                            render: function (data, type, row) {
+                                if (row.IsActiveTr == true) {
+                                    return "Active"
+                                }
+                                else {
+                                    return "De-Active"
+                                }
+                            }
+						},
+						{
+							'data': 'IsActive', 'title': 'Trade Status',
+							render: function (data, type, row) {
+								if (row.IsActive == true) {
+									return "Active"
+								}
+								else {
+                                    return "De-Active"
+								}
+							}
+						},
+
+
+					],
+
+				});
+			}
+		});
+	}
+	function pdfTradeDownload() {
+		var today = new Date();
+		var dd = String(today.getDate()).padStart(2, '0');
+		var mm = String(today.getMonth() + 1).padStart(2, '0');
+		var yyyy = today.getFullYear();
+
+		today = dd + '/' + mm + '/' + yyyy;
+
+
+		// Get the element.
+		var element = document.getElementById('tbltradeList');
+
+		//// Choose pagebreak options based on mode.
+		var mode = document.getElementById('mode').value;
+		var pagebreak = (mode === 'specify') ?
+			{ mode: '', before: '.before', after: '.after', avoid: '.avoid' } :
+			{ mode: mode };
+
+		// Generate the PDF.
+		////var opt = {
+		////        margin:       1,
+		////        filename: 'DITE Merit List_' + today + '.pdf',
+		////        image:        { type: 'jpeg', quality: 0.98 },
+		////        html2canvas:  { scale: 2 },
+		////        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+		////        };
+		////html2pdf().set(opt).from(element).save();
+		////html2pdf(element, opt);
+		html2pdf().from(element).set({
+			filename: 'Trade Publish List_' + today + '.pdf',
+			pagebreak: { mode: ['css', 'legacy'] },
+			html2canvas: { scale: 2 },
+			jsPDF: { orientation: 'landscape', unit: 'in', format: 'a3', compressPDF: true }
+		}).save();
+	}
+	//Ram
+	function IndexitiInstituteList() {
+		$.ajax({
+			type: 'GET',
+			url: '/Home/GetInstituteViewList',
+			contentType: 'application/json',
+            success: function (data) {
+                $('#tblitiInstList').DataTable({
+
+                    data: data,
+
+					"destroy": true,
+					"bSort": true,
+                    dom: fnSetDTExcelBtnPos(),
+
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Download as Excel',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+                                    16, 17, 18, 19, 20, 21, 22,23,24,25,26,27,28,29
+                                ]
+                            }
+                        }
+                    ],
+					columns: [
+						{ 'data': 'Slno', 'title': 'Sl. No.', 'className': 'text-center slno' },
+						{ 'data': 'mis_code', 'title': 'MIS ITI Code', 'MisCode': 'text-left Gender' },
+						{ 'data': 'name_of_iti', 'title': 'Name of ITI', 'MisCode': 'text-left Gender' },
+						{ 'data': 'address', 'title': 'Address of ITI', 'MisCode': 'text-left Gender' },
+						{ 'data': 'taluka', 'title': 'Taluka', 'MisCode': 'text-left Gender' },
+						{ 'data': 'division', 'title': 'Division', 'className': 'text-left Gender' },
+						{ 'data': 'state', 'title': 'State', 'className': 'text-center slno' },
+						{ 'data': 'Pincode', 'title': 'Pincode', 'className': 'text-left Gender' },
+						{ 'data': 'constituency', 'title': 'Constituency', 'className': 'text-left Gender' },
+						{ 'data': 'district', 'title': 'District', 'className': 'text-center ApplicantNumber' },
+                        { 'data': 'date', 'title': 'Date of Establishment', 'className': 'text-left Gender' },
+						{ 'data': 'geo_location', 'title': 'Geo Location', 'className': 'text-center ApplicantNumber' },
+						{ 'data': 'type_of_iti', 'title': 'Type of ITI', 'className': 'text-center slno' },
+						{ 'data': 'location_type', 'title': 'Location Type', 'className': 'text-left Gender' },
+						{ 'data': 'sector', 'title': 'Sector Name', 'className': 'text-left Gender' },
+						{ 'data': 'trade', 'title': 'Name of Trades', 'className': 'text-left Gender' },
+						{ 'data': 'trade_code', 'title': 'Trade Code', 'className': 'text-left Gender' },
+						{ 'data': 'trade_type', 'title': 'Trade Type', 'className': 'text-center ApplicantNumber' },
+
+						{ 'data': 'course_name', 'title': 'Course Type', 'className': 'text-left Gender' },
+						{ 'data': 'units', 'title': 'No.of Units', 'className': 'text-left Gender' },
+						{ 'data': 'tshift', 'title': 'No.of Shifts', 'className': 'text-center ApplicantNumber' },
+						{ 'data': 'duration', 'title': 'Duration', 'className': 'text-center slno' },
+						{ 'data': 'batch_size', 'title': 'Batch Size', 'className': 'text-left Gender' },
+						{ 'data': 'AffiliationOrderNo', 'title': 'Affiliation Order No', 'className': 'text-left Gender' },
+                        { 'data': 'order_no_date', 'title': 'Affiliation Date', 'className': 'text-left Gender' },
+						{ 'data': 'phone_number', 'title': 'Principal Phone Number', 'className': 'text-left Gender' },
+						{ 'data': 'Website', 'title': 'Web Site', 'className': 'text-center ApplicantNumber' },
+						{ 'data': 'email', 'title': 'Email Id', 'className': 'text-center ApplicantNumber' },
+                        {
+                            'data': 'FileUploadPath','title': 'Application Acknowledgement',
+                            render: function (data, type, row) {
+                                return "<a class='btn btn-link' href='/Home/DownloadAffiliationDoc?CollegeId=" + row.iti_college_id + "&Trade_Id=" + row.trade_id + "' ><img src='/Content/img/pdf_logo.png' height='40px' width='40px' /></a>"
+                                 @*<a href="~/Affiliation/DownloadAffiliationDoc?CollegeId=@Model.aff_list[i].iti_college_id&Trade_Id=@Model.aff_list[i].trade_id" title="Download Pdf">
+                                                                <img src="~/Content/img/pdf_logo.png" height="40px" width="40px" />
+                                                            </a>*@
+                            }
+                        },
+						//{ 'data': 'FileUploadPath', 'title': 'Affiliation Pdf Doc.', 'className': 'text-center ApplicantNumber' },
+						{ 'data': 'scheme_name', 'title': 'Schemes', 'className': 'text-center ApplicantNumber' },
+
+
+						//{
+						//    'data': 'IsActive', 'title': 'Status',
+						//    render: function (data, type, row) {
+						//        if (row.IsActive == true) {
+						//            return "<input type='text' id='Active_160' value='Affiliate' class='form - control' readonly='readonly'>"
+						//        }
+						//        else {
+						//            return "<input type='text' id='Active_160' value='De-Affiliate' class='form - control' readonly='readonly'>"
+						//        }
+						//    }
+						//},
+						//{ 'data': 'CategoryName', 'title': 'Category', 'className': 'text-left Category' },
+						//{ 'data': 'DiffrentAbled', 'title': 'Differently abled', 'className': 'text-left DiffrentAbled' },
+						//{ 'data': 'ExService', 'title': 'Exservicemen', 'className': 'text-left ExService' },
+						//{ 'data': 'EconomicWeekerSec', 'title': 'Economic Weaker Section', 'className': 'text-left EconomicWeekerSec' },
+						//{ 'data': 'MaxMarks', 'title': 'Max Marks in 10th', 'className': 'text-left MaxMarks' },
+						//{ 'data': 'MarksObtained', 'title': 'Obtained Marks in 10th', 'className': 'text-left MarksObtained' },
+						//{ 'data': 'locationName', 'title': 'Rural/Urban', 'className': 'text-left locationName' },
+						//{ 'data': 'Weitage', 'title': 'Weitage', 'className': 'text-left Weitage' },
+						//{ 'data': 'Total', 'title': 'Total Marks', 'className': 'text-left Total' },
+						//{ 'data': 'Percentage', 'title': 'Percentage %', 'className': 'text-left Percentage' },
+						//{ 'data': 'Qual', 'title': 'Qualification', 'className': 'text-left Qualification' },
+						//{ 'data': 'Result', 'title': '10thPass/Fail', 'className': 'text-left Result' },
+						//{ 'data': 'Rank', 'title': 'Rank', 'className': 'text-left Rank' }
+					],
+
+				});
+			}
+		});
+	}
+
+	//Ram Added Filters 06-07-2021
+	//function GetAllPublishedColleges(courseId, divisionId, districtId, tradeId) {
+
+    function GetAllPublishedColleges(divisionId, districtId, talukId, constituencyId, Coursetype, ITIInstitute) {
+
+        $.ajax({
+            type: 'Get',
+            url: '/Home/FilterPublishedCollegeDetails1',
+            data: { divisionId: divisionId, districtId: districtId, talukId: talukId, constituencyId: constituencyId, Coursetype: Coursetype, iticollegeId: ITIInstitute },
+            // data: { courseId: courseId, divisionId: divisionId, districtId: districtId, tradeId: tradeId },
+            success: function (data) {
+                var index = 1;
+                if (data.length > 0) {
+                    $('#tblitiInstList').DataTable({
+                        //var t = $('#tblGridAffiliatedColleges').DataTable({
+                        data: data,
+                        "destroy": true,
+						"bSort": true,
+                        dom: fnSetDTExcelBtnPos(),
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                text: 'Download as Excel',
+                                exportOptions: {
+                                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+                                        16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
+                                    ]
+                                }
+                            }
+                        ],
+                        columns: [
+                            { 'data': 'Slno', 'title': 'Sl. No.', 'className': 'text-center slno' },
+                            { 'data': 'mis_code', 'title': 'MIS ITI Code', 'MisCode': 'text-left Gender' },
+                            { 'data': 'name_of_iti', 'title': 'Name of ITI', 'MisCode': 'text-left Gender' },
+                            { 'data': 'address', 'title': 'Address of ITI', 'MisCode': 'text-left Gender' },
+                            { 'data': 'taluka', 'title': 'Taluka', 'MisCode': 'text-left Gender' },
+                            { 'data': 'district', 'title': 'District', 'className': 'text-center ApplicantNumber' },
+                            { 'data': 'state', 'title': 'State', 'className': 'text-center slno' },
+                            { 'data': 'Pincode', 'title': 'Pincode', 'className': 'text-left Gender' },
+                            { 'data': 'constituency', 'title': 'Constituency', 'className': 'text-left Gender' },
+                            { 'data': 'division', 'title': 'Division', 'className': 'text-left Gender' },
+                            { 'data': 'date', 'title': 'Date of Establishment', 'className': 'text-left Gender' },
+                            { 'data': 'geo_location', 'title': 'Geo Location', 'className': 'text-center ApplicantNumber' },
+                            { 'data': 'type_of_iti', 'title': 'Type of ITI', 'className': 'text-center slno' },
+                            { 'data': 'location_type', 'title': 'Location Type', 'className': 'text-left Gender' },
+                            { 'data': 'sector', 'title': 'Sector Name', 'className': 'text-left Gender' },
+                            { 'data': 'trade', 'title': 'Name of Trades', 'className': 'text-left Gender' },
+                            { 'data': 'trade_code', 'title': 'Trade Code', 'className': 'text-left Gender' },
+                            { 'data': 'trade_type', 'title': 'Trade Type', 'className': 'text-center ApplicantNumber' },
+
+                            { 'data': 'course_name', 'title': 'Course Type', 'className': 'text-left Gender' },
+                            { 'data': 'units', 'title': 'Unit', 'className': 'text-left Gender' },
+                            { 'data': 'tshift', 'title': 'Shift', 'className': 'text-center ApplicantNumber' },
+                            { 'data': 'duration', 'title': 'Duration', 'className': 'text-center slno' },
+                            { 'data': 'batch_size', 'title': 'Batch Size', 'className': 'text-left Gender' },
+                            { 'data': 'AffiliationOrderNo', 'title': 'Affiliation Order No', 'className': 'text-left Gender' },
+                            { 'data': 'order_no_date', 'title': 'Affiliation Date', 'className': 'text-left Gender' },
+                            { 'data': 'phone_number', 'title': 'Principal Phone Number', 'className': 'text-left Gender' },
+                            { 'data': 'Website', 'title': 'Web Site', 'className': 'text-center ApplicantNumber' },
+                            { 'data': 'email', 'title': 'Email Id', 'className': 'text-center ApplicantNumber' },
+
+                            { 'data': 'FileUploadPath', 'title': 'Affiliation Pdf Doc.', 'className': 'text-center ApplicantNumber' },
+                            { 'data': 'scheme_name', 'title': 'Schemes', 'className': 'text-center ApplicantNumber' },
+
+                        ],
+                        "columnDefs": [{
+                            "render": function (data, type, full, meta) {
+
+                                return index++;
+                            },
+                            "targets": 0
+                        }],
+                    });
+
+                }
+                else {
+                    bootbox.alert("No data found!")
+                    $('#tblGridAffiliatedColleges').DataTable().clear().draw();
+                }
+
+            }, error: function (result) {
+                bootbox.alert("Error", "something went wrong");
+            }
+        });
+    }
+
+
+
+    $(".search-affiliated1").click(function () {
+        var Division = $("#Division-Add").val();
+        var District = $("#District-Add").val();
+        var Taluk = $("#Taluka-Add").val();
+        var Constiteuncy = $("#Constiteuncy-Add").val();
+        var Coursetype = $("#Courses").val();
+        var ITIInstitute = $("#Institute-Add").val();
+        //ITI Institute
+
+        GetAllPublishedColleges(Division, District, Taluk, Constiteuncy, Coursetype, ITIInstitute);
+    });
+
+
+
+	$("#District-Add").change(function () {
+
+		var value = $(this).val();
+		if (value != "") {
+			$("#Taluka-Add").empty();
+			$("#Taluka-Add").append('<option value="">Select</option>');
+			$.ajax({
+				url: "/Home/GetTaluk",
+				type: 'Get',
+				data: { DistId: value },
+				contentType: 'application/json; charset=utf-8',
+				success: function (data) {
+
+					if (data != null || data != '') {
+
+						$.each(data, function () {
+							$("#Taluka-Add").append($("<option/>").val(this.Value).text(this.Text));
+						});
+					}
+
+				}, error: function (result) {
+					bootbox.alert("Error", "something went wrong");
+				}
+			});
+		}
+		else {
+			$("#Taluka-Add").empty();
+			$("#Taluka-Add").append('<option value="">Select</option>');
+		}
+
+	});
+
+	$("#Taluka-Add").change(function () {
+		var value = $(this).val();
+		if (value != "") {
+			$("#Institute-Add").empty();
+			$("#Institute-Add").append('<option value="">Select</option>');
+			$.ajax({
+				url: "/Home/GetAllAffiliatedInstituteByTaluk",
+				type: 'Get',
+				data: { taluk_id: value },
+				contentType: 'application/json; charset=utf-8',
+				success: function (data) {
+
+					if (data != null || data != '') {
+
+						$.each(data, function () {
+							$("#Institute-Add").append($("<option/>").val(this.Value).text(this.Text));
+						});
+					}
+
+				}, error: function (result) {
+					bootbox.alert("Error", "something went wrong");
+				}
+			});
+		}
+		else {
+			$("#Institute-Add").empty();
+			$("#Institute-Add").append('<option value="">Select</option>');
+		}
+
+	});
+
+	function cancelAffiliatedInstitute() {
+		$('#Division-Add').val('choose');
+		$('#District-Add').val('choose');
+		$('#Taluka-Add').val('choose');
+		$('#Constiteuncy-Add').val('choose');
+		$('#Institute-Add').val('choose');
+
+	}
+
+	function GetCourseTypes() {
+		//Add
+		$("#Course-Add").empty();
+		$("#Course-Add").append('<option value="">Select</option>');
+
+		$("#Courses").empty();
+		$("#Courses").append('<option value="">Select</option>');
+		//Update List
+		$("#CourseTypes").empty();
+		$("#CourseTypes").append('<option value="">Select</option>');
+		// Publish
+		$("#CourseTypes_P").empty();
+		$("#CourseTypes_P").append('<option value="">Select</option>');
+		//Affiliated View
+		$("#CourseTypes_Af").empty();
+		$("#CourseTypes_Af").append('<option value="">Select</option>');
+		$.ajax({
+			url: "/Home/GetCourseTypes",
+			type: 'Get',
+			contentType: 'application/json; charset=utf-8',
+			success: function (data) {
+				if (data != null || data != '') {
+					$.each(data, function () {
+						$("#CourseTypes").append($("<option/>").val(this.course_id).text(this.course_name));
+						$("#CourseTypes_P").append($("<option/>").val(this.course_id).text(this.course_name));
+						$("#CourseTypes_Af").append($("<option/>").val(this.course_id).text(this.course_name));
+						$("#Course-Add").append($("<option/>").val(this.course_id).text(this.course_name));
+						$("#Courses").append($("<option/>").val(this.course_id).text(this.course_name));
+					});
+				}
+
+			}, error: function (result) {
+				bootbox.alert("Error", "something went wrong");
+			}
+		});
+	}
+
+	function GetDivisions() {
+		//Update
+		$("#Divisions").empty();
+		$("#Divisions").append('<option value="">Select</option>');
+		//Publish
+		$("#Divisions_P").empty();
+		$("#Divisions_P").append('<option value="">Select</option>');
+		//Affiliated View
+		$("#Divisions_Af").empty();
+		$("#Divisions_Af").append('<option value="">Select</option>');
+		// Add Page
+		$("#Division-Add").empty();
+		$("#Division-Add").append('<option value="">Select</option>');
+		$.ajax({
+			url: "/Home/GetDivisions",
+			type: 'Get',
+			contentType: 'application/json; charset=utf-8',
+			success: function (data) {
+
+				$.each(data, function () {
+					$("#Divisions").append($("<option/>").val(this.division_id).text(this.division_name));
+					$("#Divisions_P").append($("<option/>").val(this.division_id).text(this.division_name));
+					$("#Divisions_Af").append($("<option/>").val(this.division_id).text(this.division_name));
+					$("#Division-Add").append($("<option/>").val(this.division_id).text(this.division_name));
+				});
+
+
+			}, error: function (result) {
+				bootbox.alert("Error", "something went wrong");
+			}
+		});
+	}
+
+	function GetDistrict_Add() {
+
+		var Divisions = $('#Division-Add :selected').val();
+		if (Divisions != "" && Divisions != null) {
+			$("#District-Add").empty();
+			$("#District-Add").append('<option value="">Select</option>');
+			$("#Taluka-Add").empty();
+			$("#Taluka-Add").append('<option value="">Select</option>');
+			$.ajax({
+				type: 'Get',
+				url: '/Home/GetDistrictList',
+				data: { Divisions: Divisions },
+				success: function (data) {
+
+					$.each(data, function () {
+						$("#District-Add").append($("<option/>").val(this.district_id).text(this.district));
+					});
+
+
+				}, error: function (result) {
+					bootbox.alert("Error", "something went wrong");
+				}
+			});
+		}
+		else {
+			$("#District-Add").empty();
+			$("#District-Add").append('<option value="">Select</option>');
+			$("#Taluka-Add").empty();
+			$("#Taluka-Add").append('<option value="">Select</option>');
+		}
+
+	}
+
+	//Get districts for Affiliated View
+	function GetDistrict_Aff() {
+
+		var Divisions = $('#Divisions_Af :selected').val();
+		if (Divisions != null && Divisions != "") {
+			$("#Districts_Af").empty();
+			$("#Districts_Af").append('<option value="">Select</option>');
+			$.ajax({
+				type: 'Get',
+				url: '/Home/GetDistrictList',
+				data: { Divisions: Divisions },
+				success: function (data) {
+
+					$.each(data, function () {
+						$("#Districts_Af").append($("<option/>").val(this.district_id).text(this.district));
+					});
+
+
+				}, error: function (result) {
+					bootbox.alert("Error", "something went wrong");
+				}
+			});
+		}
+
+	}
+
+	function GetTrades() {
+		//Update
+		$("#Trades").empty();
+		$("#Trades").append('<option value="">Select</option>');
+		//Publish
+		$("#Trades_P").empty();
+		$("#Trades_P").append('<option value="">Select</option>');
+		//Affiliated View
+		$("#Trades_Af").empty();
+		$("#Trades_Af").append('<option value="">Select</option>');
+		//default for dynamic trades table
+		$(".trade-multi-select").append('<option value="">Select</option>');
+		$.ajax({
+			type: 'Get',
+			url: '/Affiliation/GetTradesList',
+			success: function (data) {
+				if (data != null || data != '') {
+					$.each(data, function () {
+						$("#Trades").append($("<option/>").val(this.trade_id).text(this.trade_code));
+						$("#Trades_P").append($("<option/>").val(this.trade_id).text(this.trade_code));
+						$("#Trades_Af").append($("<option/>").val(this.trade_id).text(this.trade_code));
+						$(".trade-multi-select").append($("<option/>").val(this.trade_id).text(this.trade_code));
+					});
+				}
+
+			}, error: function (result) {
+				bootbox.alert("Error", "something went wrong");
+			}
+		});
+	}
+
+	function GetNewTradeDistricts() {
+		$("#NewTrade-District").empty();
+		$("#NewTrade-District").append('<option value="">Select</option>');
+		$.ajax({
+			type: 'Get',
+			url: '/Affiliation/GetDistricts',
+			success: function (data) {
+				if (data != null || data != '') {
+
+					$.each(data, function () {
+						$("#NewTrade-District").append($("<option/>").val(this.Value).text(this.Text));
+					});
+				}
+
+			}, error: function (result) {
+				bootbox.alert("Error", "something went wrong");
+			}
+		});
+
+
+	}
+
+	function GetNewTradeTaluk(dist_id) {
+		if (dist_id != 0 && dist_id != "" && dist_id != null) {
+			$("#NewTrade-Taluk").empty();
+			$("#NewTrade-Taluk").append('<option value="">Select</option>');
+			$.ajax({
+				url: "/Affiliation/GetTaluk",
+				type: 'Get',
+				data: { DistId: dist_id },
+				contentType: 'application/json; charset=utf-8',
+				success: function (data) {
+
+					if (data != null || data != '') {
+
+						$.each(data, function () {
+							$("#NewTrade-Taluk").append($("<option/>").val(this.Value).text(this.Text));
+						});
+					}
+
+				}, error: function (result) {
+					bootbox.alert("Error", "something went wrong");
+				}
+			});
+
+			$("#NewTrade-Insti").empty();
+			$("#NewTrade-Insti").append('<option value="">Select</option>');
+			$.ajax({
+				type: 'Get',
+				url: '/Affiliation/GetAllAffiliatedInstituteByDistrict',
+				data: { dist_id: dist_id },
+				success: function (data) {
+					if (data != null || data != '') {
+
+						$.each(data, function () {
+							$("#NewTrade-Insti").append($("<option/>").val(this.Value).text(this.Text));
+						});
+
+						$("#NewTrade-Insti").select2("destroy").select2({
+							placeholder: "Select from " + data.length + " Institutes",
+						});
+					}
+
+				}, error: function (result) {
+					bootbox.alert("Error", "something went wrong");
+				}
+			});
+		}
+		else {
+			$("#NewTrade-Taluk").empty();
+			$("#NewTrade-Taluk").append('<option value="">Select</option>');
+			$("#NewTrade-Insti").empty();
+			$("#NewTrade-Insti").append('<option value="">Select</option>');
+		}
+
+	}
+
+	function GetAllAffiliatedInstituteByTaluk(taluk_id) {
+		if (taluk_id != 0 && taluk_id != "" && taluk_id != null) {
+			$.ajax({
+				type: 'Get',
+				url: '/Affiliation/GetAllAffiliatedInstituteByTaluk',
+				data: { taluk_id: taluk_id },
+				success: function (data) {
+					$("#NewTrade-Insti").empty();
+					$("#NewTrade-Insti").append('<option value="">Select</option>');
+
+					if (data != null || data != '') {
+
+						$.each(data, function () {
+							$("#NewTrade-Insti").append($("<option/>").val(this.Value).text(this.Text));
+						});
+
+						$("#NewTrade-Insti").select2("destroy").select2({
+							placeholder: "Select from " + data.length + " Institutes",
+						});
+					}
+
+				}, error: function (result) {
+					bootbox.alert("Error", "something went wrong");
+				}
+			});
+		}
+		else {
+			var dist_id = $("#NewTrade-District").val();
+			$("#NewTrade-Insti").empty();
+			$("#NewTrade-Insti").append('<option value="">Select</option>');
+			$.ajax({
+				type: 'Get',
+				url: '/Affiliation/GetAllAffiliatedInstituteByDistrict',
+				data: { dist_id: dist_id },
+				success: function (data) {
+					if (data != null || data != '') {
+
+						$.each(data, function () {
+							$("#NewTrade-Insti").append($("<option/>").val(this.Value).text(this.Text));
+						});
+					}
+
+				}, error: function (result) {
+					bootbox.alert("Error", "something went wrong");
+				}
+			});
+		}
+	}
+
+	function cancelAddNewAffiliatedInstitute() {
+		$('#NewTrade-District').val('choose');
+		$('#NewTrade-Taluk').val('choose');
+		$('#NewTrade-Insti').val('choose');
+
+	}
+
+	function GetDistricts() {
+
+
+		$("#District-Add").empty();
+		$("#District-Add").append('<option value="">Select</option>');
+		$.ajax({
+			type: 'Get',
+			url: '/Affiliation/GetDistricts',
+			success: function (data) {
+				if (data != null || data != '') {
+
+					$.each(data, function () {
+						$("#District-Add").append($("<option/>").val(this.Value).text(this.Text));
+					});
+				}
+
+			}, error: function (result) {
+				bootbox.alert("Error", "something went wrong");
+			}
+		});
+	}
+
+	function GetConstituencies() {
+		// var Course = $('#CourseTypes :selected').val();
+		$("#Constiteuncy-Add").empty();
+		$("#Constiteuncy-Add").append('<option value="">Select</option>');
+		$.ajax({
+			type: 'Get',
+			url: '/Home/GetConstituency',
+			//data: { CourseId: Course },
+			success: function (data) {
+
+				if (data != null || data != '') {
+					$.each(data, function () {
+						$("#Constiteuncy-Add").append($("<option/>").val(this.Value).text(this.Text));
+					});
+				}
+
+			}, error: function (result) {
+				bootbox.alert("Error", "something went wrong");
+			}
+		});
+	}
+
+	function IndexseatavailabilityList() {
+
+		$.ajax({
+			type: "GET",
+			url: "/Home/GetIndexseatavailabilityList",
+			contentType: "application/json",
+			success: function (data) {
+				var t = $('#tblIndexseatavailabilityList').DataTable({
+					data: data,
+					searching: true,
+					"bFilter": false,
+					"destroy": true,
+					"bSort": true,
+					dom: 'Bfrtip',
+					buttons: [
+						{
+							extend: 'excel',
+							text: 'Download as Excel',
+							exportOptions: {
+								columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+							}
+						}
+					],
+					columns: [
+						{ 'data': 'Slno', 'title': 'Sl.no', 'className': 'text-center' },
+						{ 'data': 'CourseTypeName', 'title': 'Course Type', 'className': 'text-center' },
+						{ 'data': 'AcademicYearString', 'title': 'Session', 'className': 'text-center' },
+						{ 'data': 'DivisionName', 'title': 'Division Name', 'className': 'text-center taluk' },
+						{ 'data': 'DistrictName', 'title': 'District Name', 'className': 'text-center taluk' },
+						{ 'data': 'TalukName', 'title': 'Taluk Name', 'className': 'text-center taluk' },
+						{ 'data': 'MISCode', 'title': 'MISCode', 'className': 'text-center' },
+						{ 'data': 'ITIName', 'title': 'ITI Name', 'className': 'text-left' },
+						{ 'data': 'TradeName', 'title': 'Trade Name', 'className': 'text-left' },
+						{ 'data': 'Duration', 'title': 'Trade Duration', 'className': 'text-left' },
+						{ 'data': 'Unit', 'title': 'Unit', 'className': 'text-left' },
+						{ 'data': 'Shift', 'title': 'Shift', 'className': 'text-left' },
+						{ 'data': 'SeatName', 'title': 'Seat Type', 'className': 'text-left' },
+						{ 'data': 'batchsize', 'title': 'Batch Size', 'className': 'text-left' },
+						{ 'data': 'GovtSeatAvailability', 'title': 'Govt Seat Availability', 'className': 'text-left' },
+						{ 'data': 'ManagementSeatAvailability', 'title': 'Management Seat Availability', 'className': 'text-left' },
+					]
+
+				});
+				$('#btnSearchseat').click(function () {
+					t.search($("#txtSearchseat").val()).draw();
+				});
+
+				// EDIT: Capture enter press as well
+				$("#MISCode").keypress(function (e) {
+					if (e.which === 13) {
+						e.preventDefault();
+						t.search($(this).val()).draw();
+					}
+				});
+				$("#DivisionName").keypress(function (e) {
+					if (e.which === 13) {
+						e.preventDefault();
+						t.search($(this).val()).draw();
+					}
+				});
+				$("#TalukName").keypress(function (e) {
+					if (e.which === 13) {
+						e.preventDefault();
+						t.search($(this).val()).draw();
+					}
+				});
+			}
+		});
+	}
+
+    function cancelselectfields() {
+        $('#Courses').val('');
+        $('#Division-Add').val('');
+        $('#District-Add').val('');
+        $('#Taluka-Add').val('');
+        $('#Constiteuncy-Add').val('');
+        $('#Institute-Add').val('');
+
+
+	}
+
+    function ExcelExportTentative() {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        today = dd + '/' + mm + '/' + yyyy;
+        $('#tblInstList').DataTable().destroy();
+        $('#tblInstList').DataTable({ "paging": false }).draw(false);
+        $("#tblInstList").table2excel({
+            filename: "View Affiliate/Deaffiliate Institute" + today + ".xls",
+        });
+        $('#tblInstList').DataTable().destroy();
+        $('#tblInstList').DataTable({ "paging": true }).draw(false);
+	}
+
+    function ExcelExportTradeList() {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        today = dd + '/' + mm + '/' + yyyy;
+        $('#tbltradeList').DataTable().destroy();
+        $('#tbltradeList').DataTable({ "paging": false }).draw(false);
+        $("#tbltradeList").table2excel({
+            filename: "View Active/Deactive Trades" + today + ".xls",
+        });
+        $('#tbltradeList').DataTable().destroy();
+        $('#tbltradeList').DataTable({ "paging": true }).draw(false);
+	}
+
+    function ExcelExportAffiliatedInstitute() {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        today = dd + '/' + mm + '/' + yyyy;
+        $('#tblitiInstList').DataTable().destroy();
+        $('#tblitiInstList').DataTable({ "paging": false }).draw(false);
+        $("#tblitiInstList").table2excel({
+            filename: "View Affiliate Institute Trade List" + today + ".xls",
+        });
+        $('#tblitiInstList').DataTable().destroy();
+        $('#tblitiInstList').DataTable({ "paging": true }).draw(false);
+    }
+
+    var myIndex = 0;
+    carousel();
+
+    function carousel() {
+        var i;
+        var x = document.getElementsByClassName("mySlides");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        myIndex++;
+        if (myIndex > x.length) { myIndex = 1 }
+        if (x[myIndex - 1] != null) {
+            x[myIndex - 1].style.display = "block";
+        }
+        setTimeout(carousel, 2000); // Change image every 2 seconds
+    }
+
+    $("#btnSubmit").click(function (e) {
+        var isValid = 1;
+        var userName = $('#txtUserName').val();
+        if (userName == "" || userName == null) {
+            bootbox.alert("Please enter User Name");
+            isValid = 0;
+        }
+        if (isValid) {
+            //	$("#txtUserName").val(hashSHA256(userName));
+            var userPassword = $('#txtPassword').val();
+
+            if (userPassword == "" || userPassword == null) {
+                bootbox.alert("Please enter User Password");
+                isValid = 0;
+            }
+            $("#HDNpwd").val(userPassword);
+            $("#txtPassword").val(hashSHA256(userPassword));
+            userPassword = $('#txtPassword').val();
+        }
+        if (isValid) {
+            
+            //var CapturaText = document.getElementById("CaptchaImg").value;
+            var CapturaText = document.getElementById("myCaptcha").innerHTML.replace(/\s/g, '');
+            var EnteredCapturaText = $('#captchaText').val();
+
+            if (CapturaText != EnteredCapturaText) {
+                bootbox.alert("Please enter valid Captcha.");
+                isValid = 0;
+                $("#captchaText").val("");
+                $("#txtPassword").val("");
+            }
+        }
+        var OriginalPwdCheck = RandomWithPassword($("#HDNpwd").val());
+        //alert(userPassword);
+        if (isValid == 1) {
+            $('#loading').show();
+            $.ajax({
+                url: "/Home/Index",
+                datatype: "json",
+                type: "POST",
+                data: {
+                    UserName: userName,
+                    Password: userPassword,
+                    HDNpwd: OriginalPwdCheck
+
+                },
+                success: function (result) {
+                    $('#loading').hide();
+                    if (result.success != false) {
+                        if (result.subdeptCount > 1) {
+                            GetSubDepartments();
+                            GetLoginRoles();
+                            $('#reg').modal('hide');
+                            $('#ChangePassword').modal('hide');
+                            $('#RoleModal').modal({ backdrop: 'static', keyboard: false });
+                            $('#RoleModal').modal('show');
+                        }
+                        else {
+                            $('#reg').modal('hide');
+                            $('#ChangePassword').modal('hide');
+                            window.location.href = "/Home/Index1";
+                            $('#switchbtn').hide();
+                        }
+                    }
+                    else {
+                        //alert("3");
+                        $('#txtUserName').val('');
+                        $('#txtPassword').val('');
+                        $("#captchaText").val('');
+                       // loadCaptcha();
+                        fngetcaptcha();
+                        bootbox.alert(result.message);
+                    }
+                }, error: function (result) {
+
+                    $('#txtUserName').val('');
+                    $('#txtPassword').val('');
+                    $("#captchaText").val('');
+
+                    bootbox.alert(result.message);
+                }
+            });
+
+        }
+    });
+    function Get_Notification_PublishDetails() {
+
+        $.ajax({
+            url: "/Home/Get_Notification_PublishDetails",
+            datatype: "json",
+            type: "GET",
+            success: function (response) {
+                if (response != null) {
+                    for (let i = 0; i < response.length; i++) {
+                        if (response[i].np_module_id == 1) {
+                            $('#NotiPublishIndexTrade').show();
+                        }
+                        if (response[i].np_module_id == 2) {
+                            $('#NotifPublishIndexInstitute').show();
+                        }
+                        if (response[i].np_module_id == 3) {
+                            $('#NotiPublishIndexitiInstituteList').show();
+                        }
+                        if (response[i].np_module_id == 4) {
+                            $('#NotiPublishfnAdmissionNotifications').show();
+                            //$('#AdmissionNotModel').show();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
+    //function pgredirect() {
+    //    window.location.href = "/Home/Index";
+    //}
+</script>

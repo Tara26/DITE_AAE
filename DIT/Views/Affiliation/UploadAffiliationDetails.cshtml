@@ -1,0 +1,996 @@
+﻿@model Models.AffiliationNested
+@{
+    ViewBag.Title = "UploadAffiliationDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+<style>
+    select {
+        padding-bottom: 50px;
+    }
+</style>
+<div class="row" style="padding-left:50px;padding-top:100px;padding-bottom:100px">
+
+    <ul class="nav nav-tabs font">
+        <li>
+            <a href="#tab_1" id="tab1" data-toggle="tab">Master data entry of affiliated colleges</a>
+        </li>
+        <li>
+            <a href="#tab_2" id="tab2" data-toggle="tab">Update existing college details</a>
+        </li>
+        <li>
+            <a href="#tab_3" id="tab3" data-toggle="tab">Add new affiliated college</a>
+        </li>
+    </ul>
+    <div class="container-fluid" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+        <div class="tab-content">
+            <div class="tab-pane fade" id="tab_1">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h3 style="text-align:center">Master data entry of affiliated colleges</h3>
+                        <br /><br />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <br />
+                                    <label class="form-control" id="FilePath"></label>
+                                    <small class="text-danger"><b>Note: </b>Only .xlx, .xlsx, .csv files are allowed</small>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2 row">
+                                    <div class="col-md-6">
+                                        <input type="file" name="FileUpload" id="FileUpload" style="display: none;" />
+                                        <input type="button" value="Browse" class="btn btn-info" id="BtnUpload" onclick="document.getElementById('FileUpload').click();" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="button" value="Upload" class="btn btn-success" id="btnUpload" />
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+                <div class="text-justify" style="text-align:center">
+                    <div class="form-group">
+                        <input type="button" value="Submit" class="btn btn-primary submit-button" />
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab_2">
+
+                <div id="DataGridDiv">
+                    <br>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-1">
+                                <label for="txtAgencyRegnNo">Course Type</label>
+                            </div>
+                            <div class="col-lg-2">
+                                <select class="form-control filter-change" id="CourseTypes">
+                                    <option value="choose">Select</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-1">
+                                <label for="txtAgencyRegnNo">Division</label>
+                            </div>
+                            <div class="col-lg-2">
+                                <select class="form-control filter-change" id="Divisions" onchange="GetDistrictList(this);">
+                                    <option value="choose">Select</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-1">
+                                <label for="txtAgencyRegnNo">District</label>
+                            </div>
+                            <div class="col-lg-2">
+                                <select class="form-control filter-change" id="Districts">
+                                    <option value="choose">Select</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-1">
+                                <label for="txtAgencyRegnNo">Trades</label>
+                            </div>
+                            <div class="col-lg-2">
+                                <select class="form-control filter-change" id="Trades">
+                                    <option value="choose">Select</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-lg-12" align="right">
+                        <a class=" btn btn-primary sendBtn3">Search</a>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="DivReadyToSentforApproval">
+                                <div class="form-group row">
+                                    <div class="col-lg-12 modal-header">
+                                        <h4 class="modal-title" style="background-color:cornflowerblue; color:white">Update existing college details</h4>
+                                    </div>
+                                </div>
+
+                                <div style="overflow-y:scroll;overflow-x:scroll;">
+                                    <table class="table table-bordered table-hover" id="tblGridUpdateAffiliation">
+                                        <thead>
+                                            <tr>
+                                                <th>SlNo</th>
+                                                <th>Name of ITI</th>
+                                                <th align="center">MISCode</th>
+                                                <th>Type of ITI</th>
+                                                <th>Trades</th>
+                                                <th>State</th>
+                                                <th>District</th>
+                                                <th>Taluka</th>
+                                                <th>Panchayat</th>
+                                                <th>Village</th>
+                                                <th>Constituency</th>
+                                                <th>Built Up area</th>
+                                                <th>Geo Location</th>
+                                                <th>Email Id</th>
+                                                <th>Phone number</th>
+                                                <th>Affiliation Date</th>
+                                                <th>No. of Trades</th>
+                                                <th>No. of Units</th>
+                                                <th>No. of Shifts</th>
+                                                <th>Affiliation Pdf Doc.</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        @if (Model.list != null)
+                                        {
+                                            <tbody id="tbodyReadyToSentGrid">
+                                                @for (var i = 0; i < Model.list.Count(); i++)
+                                                {
+                                                    <tr>
+                                                        <td align="center"></td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].name_of_iti)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].mis_code)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].type_of_iti)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].trade)
+                                                        </td>
+                                                        <td>
+                                                            KARNATAKA
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].district)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].taluka)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].panchayat)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].village)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].constituency)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].build_up_area)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].geo_location)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].email)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].phone_number)
+                                                        </td>
+                                                        <
+                                                        <td>
+                                                            @Convert.ToString(string.Format("{0:dd/MM/yyyy}", @Model.list[i].affiliation_date))
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].no_trades)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].no_units)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(a => a.list[i].no_shifts)
+                                                        </td>
+                                                        <td>
+                                                            <input type="file" name=Files[@i] />
+                                                        </td>
+                                                        <td>
+                                                            <input type="button" value='Edit' class="btn btn-primary" onclick="Update(@Model.list[i].iti_college_id)" />
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        }
+
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="UpdateDiv" style="display:none">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Name of ITI</label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(a => a.aff.name_of_iti, new { id = "ITIName", @class = "form-control update", onkeypress = "ValidateTextBox(event)" })
+                            @Html.HiddenFor(a => a.aff.iti_college_id, new { id = "CollegeId", @class = "update" })
+                        </div>
+                        <div class="col-md-1">
+                            <label>Type of ITI</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control update-ddl" id="TypeOfITI">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <label>Location type</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control update-ddl" id="LocationType">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>MIS Code</label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(a => a.aff.mis_code, new { id = "MISCode", @class = "form-control update", onkeypress = "ValidateTextBox(event)" })
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>Css Code</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control update-ddl" id="CssCode">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>List of Trades</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control update-ddl" id="ListOfTrades" multiple></select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>District</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control update-ddl" id="District">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Taluka</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control update-ddl" id="Taluka">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Constiteuncy</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control update-ddl" id="Constiteuncy">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Panchayat</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control update-ddl" id="Panchayat">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Village</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control update-ddl" id="Village">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Built up area</label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(a => a.aff.build_up_area, new { id = "BuildUpArea", @class = "form-control update", onkeypress = "ValidateTextBox(event)" })
+                        </div>
+                        <div class="col-md-2">
+                            <label>Address</label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextAreaFor(a => a.aff.address, new { id = "Address", @class = "form-control update", onkeypress = "ValidateTextBox(event)" })
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Geo location</label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(a => a.aff.geo_location, new { id = "GeoLocation", @class = "form-control update" })
+                        </div>
+                        <div class="col-md-2">
+                            <label>Email Id</label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(a => a.aff.email, new { id = "Email", type = "email", @class = "form-control update" })
+                        </div>
+
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Pincode</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="Pincode" value="" class="form-control update" />
+                        </div>
+                        <div class="col-md-2">
+                            <label>Phone number</label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(a => a.aff.phone_number, new { id = "PhoneNumber", type = "number", @class = "form-control update", min = 0 })
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Affiliation date</label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(a => a.aff.affiliation_date, new { id = "AffiliationDate", type = "date", @class = "form-control update" })
+                        </div>
+                        <div class="col-md-2">
+                            <label>Units</label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(a => a.aff.no_units, new { id = "Units", @class = "form-control update", type = "number", min = 0 })
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Shift</label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(a => a.aff.no_shifts, new { id = "Shifts", @class = "form-control update", type = "number", min = 0 })
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>Affiliation pdf doc</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="file" name="pdffile" id="AffilicationDoc" class="update" />
+                        </div>
+                    </div>
+
+                    <div class="text-justify" style="text-align:center">
+                        <div class="form-group">
+                            <input type="button" value="Cancel" class="btn btn-danger cancel-button" />
+                            <input type="button" value="Submit" class="btn btn-primary update-button" onclick="SaveUpdates()" />
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="tab-pane fade" id="tab_3">
+                <h3 style="text-align:center">Add new affiliated college</h3>
+            </div>
+
+        </div>
+        <br />
+        <br />
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('.nav-tabs li:eq(0) a').tab('show')
+
+        $('#FileUpload').change(function () {
+            
+            var filePath = $(this).val();
+            $("#FilePath").text(filePath);
+            $("#BtnUpload").val("Change");
+            $("#btnUpload").val("Upload");
+            console.log(filePath);
+        });
+
+        //$('#BtnUpload').click(function () {
+        //    var filePath = $('input[type=file]').val();
+        //    $("#FilePath").text(filePath);
+        //    $("#BtnUpload").val("Change");
+        //    console.log(filePath);
+        //});
+
+        $("#btnUpload").click(function () {
+            
+            // var fileUpload = $('input[type=file]').get(0);
+            var fileUpload = $('#FileUpload').get(0);
+            var files = fileUpload.files;
+            var fileData = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/Affiliation/UploadAffiliationFile',
+                contentType: false,
+                processData: false,
+                data: fileData,
+                success: function (result) {
+                    
+                    if (result.flag == 1) {
+                        $("#btnUpload").val("Uploaded");
+                        $("#btnUpload").prop("disabled", true);
+                        alert(result.status);
+                    }
+                    else {
+                        alert(result.status);
+                    }
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        });
+
+        $("#BtnUpload").click(function () {
+            
+
+            $("#btnUpload").prop("disabled", false);
+            //$("#FilePath").text("");
+            //$('input[type=file]').val(null);
+        });
+
+        $(".submit-button").click(function () {
+            
+            $.ajax({
+                type: 'GET',
+                url: '/Affiliation/SaveUploadFileData',
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    
+                    if (result.flag == 1) {
+
+                        alert(result.status);
+                        $("#btnUpload").val("Upload");
+                        $("#btnUpload").prop("disabled", false);
+                        $("#FilePath").text("");
+                        $("#BtnUpload").val("Browse");
+                        $('input[type=file]').val(null);
+                    }
+                    else {
+                        alert(result.status);
+                    }
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        });
+
+        GetCourseTypes();
+        GetDivisions();
+        GetTrades()
+
+
+        var tblGridSeatAvailability = $('#tblGridUpdateAffiliation').DataTable();
+        tblGridSeatAvailability.on('order.dt arch.dt', function () {
+            tblGridSeatAvailability.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+        $(".sendBtn3").click(function () {
+            
+            var Course_type = $("#CourseTypes").val();
+            var Division = $("#Divisions").val();
+            var District = $("#Districts").val();
+            var Trade = $("#Trades").val();
+
+            $.ajax({
+                type: 'Get',
+                url: '/Affiliation/FilterCollegeDetails',
+                data: { courseId: Course_type, divisionId: Division, districtId: District, tradeId: Trade },
+                success: function (data) {
+                    
+                    if (data.length > 0) {
+                        
+                        var t = $('#tblGridUpdateAffiliation').DataTable({
+                            data: data,
+                            destroy: true,
+                            columns: [
+                                { 'data': 'name_of_iti', 'title': 'Slno', 'className': 'text-center' },
+                                { 'data': 'name_of_iti', 'title': 'Name of ITI', 'className': 'text-center' },
+                                { 'data': 'mis_code', 'title': 'MISCode', 'className': 'text-left' },
+                                { 'data': 'type_of_iti', 'title': 'Type of ITI', 'className': 'text-left' },
+                                { 'data': 'trade', 'title': 'Trades', 'className': 'text-left' },
+                                { 'data': 'state', 'title': 'State', 'className': 'text-left' },
+                                { 'data': 'district', 'title': 'District', 'className': 'text-center' },
+                                { 'data': 'taluka', 'title': 'Taluka', 'className': 'text-left' },
+                                { 'data': 'panchayat', 'title': 'Panchayat', 'className': 'text-left' },
+                                { 'data': 'village', 'title': 'Village', 'className': 'text-left' },
+                                { 'data': 'constituency', 'title': 'Constituency', 'className': 'text-left' },
+                                { 'data': 'build_up_area', 'title': 'Built Up area', 'className': 'text-center' },
+                                { 'data': 'geo_location', 'title': 'Unit', 'Geo Location': 'text-left' },
+                                { 'data': 'email', 'title': 'Email Id', 'className': 'text-left' },
+                                { 'data': 'phone_number', 'title': 'Phone number', 'className': 'text-left' },
+                                { 'data': 'date', 'title': 'Affiliation Date', 'className': 'text-left' },
+                                { 'data': 'no_trades', 'title': 'No. of Trades', 'className': 'text-center' },
+                                { 'data': 'no_units', 'title': 'No. of Units', 'className': 'text-center' },
+                                { 'data': 'no_shifts', 'title': 'No. of Shifts', 'className': 'text-center' },
+                                {
+                                    'data': '',
+                                    render: function () {
+                                        return "<input type='file' name='files' />"
+                                    }
+                                },
+                                {
+                                    'data': 'iti_college_id',
+                                    render: function (data, type, row) {
+
+                                        return "<input type='button' class='btn btn-primary' value='Edit' onclick='Update(" + row.iti_college_id + ")'/>"
+                                    }
+
+                                }
+
+
+                            ]
+                        });
+                        t.on('order.dt search.dt', function () {
+                            t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                                cell.innerHTML = i + 1;
+                            });
+                        }).draw();
+                    }
+                    else {
+                        alert("No data found!")
+                        $('#tblGridUpdateAffiliation').DataTable().clear().draw();
+                    }
+
+                }, error: function (result) {
+                    alert("Error", "something went wrong");
+                }
+            });
+        });
+
+        $("#District").change(function () {
+            var value = $(this).val();
+            $.ajax({
+                url: "/Affiliation/GetTaluk",
+                type: 'Get',
+                data: { DistId: value },
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data != null || data != '') {
+
+                        $.each(data, function () {
+                            $("#Taluka").append($("<option/>").val(this.Value).text(this.Text));
+                        });
+                    }
+
+                }, error: function (result) {
+                    alert("Error", "something went wrong");
+                }
+            });
+        });
+
+        $("#Taluka").change(function () {
+            var value = $(this).val();
+            $.ajax({
+                url: "/Affiliation/GetPanchayat",
+                type: 'Get',
+                data: { TalukId: value },
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data != null || data != '') {
+
+                        $.each(data, function () {
+                            $("#Panchayat").append($("<option/>").val(this.Value).text(this.Text));
+                        });
+                    }
+
+                }, error: function (result) {
+                    alert("Error", "something went wrong");
+                }
+            });
+        });
+
+        $("#Panchayat").change(function () {
+            var value = $(this).val();
+            $.ajax({
+                url: "/Affiliation/GetVillage",
+                type: 'Get',
+                data: { PanchaId: value },
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data != null || data != '') {
+
+                        $.each(data, function () {
+                            $("#Village").append($("<option/>").val(this.Value).text(this.Text));
+                        });
+                    }
+
+                }, error: function (result) {
+                    alert("Error", "something went wrong");
+                }
+            });
+        });
+    });
+
+    function GetCourseTypes() {
+        $("#CourseTypes").empty();
+        $("#CourseTypes").append('<option value="Select">Select</option>');
+        $.ajax({
+            url: "/Affiliation/GetCourseTypes",
+            type: 'Get',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data != null || data != '') {
+
+                    $.each(data, function () {
+                        $("#CourseTypes").append($("<option/>").val(this.course_id).text(this.course_name));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function GetDivisions() {
+        $("#Divisions").empty();
+        $("#Divisions").append('<option value="Select">Select</option>');
+        $.ajax({
+            url: "/Affiliation/GetDivisions",
+            type: 'Get',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data != null || data != '') {
+                    $.each(data, function () {
+                        $("#Divisions").append($("<option/>").val(this.division_id).text(this.division_name));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function GetDistrictList() {
+        
+        var Divisions = $('#Divisions :selected').val();
+        if (Divisions != 0 && Divisions != null && Divisions != "" && Divisions != "Select")
+
+            $("#Districts").empty();
+        $("#Districts").append('<option value="Select">Select</option>');
+        $.ajax({
+            type: 'Get',
+            url: '/Affiliation/GetDistrictList',
+            data: { Divisions: Divisions },
+            success: function (data) {
+                if (data != null || data != '') {
+
+                    $.each(data, function () {
+                        $("#Districts").append($("<option/>").val(this.district_id).text(this.district));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function GetTrades() {
+        // var Course = $('#CourseTypes :selected').val();
+        $("#Trades").empty();
+        $("#Trades").append('<option value="Select">Select</option>');
+        $.ajax({
+            type: 'Get',
+            url: '/Affiliation/GetTradesList',
+            //data: { CourseId: Course },
+            success: function (data) {
+                if (data != null || data != '') {
+                    $.each(data, function () {
+                        $("#Trades").append($("<option/>").val(this.trade_id).text(this.trade_code));
+                    });
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function Update(collegeId) {
+        
+        $("#CollegeId").val(collegeId);
+        $.ajax({
+            type: 'Get',
+            url: '/Affiliation/GetCollegeDetails',
+            data: { collegId: collegeId },
+            success: function (data) {
+                if (data != null) {
+                    
+                    $("#DataGridDiv").hide();
+                    $("#UpdateDiv").show();
+                    if (data.inst_list.length > 0) {
+                        $.each(data.inst_list, function (index, values) {
+                            $("#TypeOfITI").append($("<option/>").val(values.Value).text(values.Text));
+                        });
+                    }
+                    if (data.loca_type_list.length > 0) {
+                        $.each(data.loca_type_list, function (index, values) {
+                            $("#LocationType").append($("<option/>").val(values.Value).text(values.Text));
+                        });
+                    }
+                    if (data.css_code_list.length > 0) {
+                        $.each(data.css_code_list, function (index, values) {
+                            $("#CssCode").append($("<option/>").val(values.Value).text(values.Text));
+                        });
+                    }
+                    if (data.trades_list.length > 0) {
+                        $.each(data.trades_list, function (index, values) {
+                            $("#ListOfTrades").append($("<option/>").val(values.Value).text(values.Text));
+                        });
+                    }
+                    if (data.dist_list.length > 0) {
+                        $.each(data.dist_list, function (index, values) {
+                            $("#District").append($("<option/>").val(values.Value).text(values.Text));
+                        });
+                    }
+
+                    if (data.taluk_list.length > 0) {
+                        $.each(data.taluk_list, function (index, values) {
+                            $("#Taluka").append($("<option/>").val(values.Value).text(values.Text));
+                        });
+                    }
+                    if (data.consti_list.length > 0) {
+                        $.each(data.consti_list, function (index, values) {
+                            $("#Constiteuncy").append($("<option/>").val(values.Value).text(values.Text));
+                        });
+                    }
+                    if (data.pancha_list.length > 0) {
+                        $.each(data.pancha_list, function (index, values) {
+                            $("#Panchayat").append($("<option/>").val(values.Value).text(values.Text));
+                        });
+                    }
+                    if (data.village_list.length > 0) {
+                        $.each(data.village_list, function (index, values) {
+                            $("#Village").append($("<option/>").val(values.Value).text(values.Text));
+                        });
+                    }
+                    
+                    $("#ITIName").val(data.aff.name_of_iti);
+                    $("#TypeOfITI").val(data.aff.type_of_iti_id);
+                    $("#LocationType").val(data.aff.location_type_id);
+                    $("#MISCode").val(data.aff.mis_code);
+                    $("#CssCode").val(data.aff.css_code_id);
+                    $("#ListOfTrades").val(data.aff.list_trades);
+                    $("#District").val(data.aff.dist_id);
+                    $("#Taluka").val(data.aff.taluk_id);
+                    $("#Constiteuncy").val(data.aff.consti_id);
+                    $("#Panchayat").val(data.aff.pancha_id);
+                    $("#Village").val(data.aff.village_id);
+                    $("#BuildUpArea").val(data.aff.build_up_area);
+                    $("#Address").val(data.aff.address);
+                    $("#GeoLocation").val(data.aff.geo_location);
+                    $("#Email").val(data.aff.email);
+                    //$("#Pincode").val(data.aff.geo_location);
+                    $("#PhoneNumber").val(data.aff.phone_number);
+                    $("#AffiliationDate").val(data.aff.affiliation_date);
+                    $("#Units").val(data.aff.no_units);
+                    $("#Shifts").val(data.aff.no_shifts);
+
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+
+    }
+
+    function SaveUpdates() {
+        
+        var fileUpload = $('#AffilicationDoc').get(0);
+        var files = fileUpload.files;
+        var fileData = new FormData();
+        for (var i = 0; i < files.length; i++) {
+            fileData.append(files[i].name, files[i]);
+        }
+        
+        var name = $("#ITIName").val();
+        var type = $("#TypeOfITI").val();
+        var loca = $("#LocationType").val();
+        var mis = $("#MISCode").val();
+        var css = $("#CssCode").val();
+        var trades = $("#ListOfTrades").val();
+        var dist = $("#District").val();
+        var taluk = $("#Taluka").val();
+        var consti = $("#Constiteuncy").val();
+        var pancha = $("#Panchayat").val();
+        var village = $("#Village").val();
+        var buildup = $("#BuildUpArea").val();
+        var address = $("#Address").val();
+        var geo = $("#GeoLocation").val();
+        var email = $("#Email").val();
+        //$("#Pincode").va(data.aff.geo_location);
+        var phone = $("#PhoneNumber").val();
+        var affidate = $("#AffiliationDate").val();
+        var units = $("#Units").val();
+        var shifts = $("#Shifts").val();
+        var collegeId = $("#CollegeId").val();
+        
+
+        var obj = {
+            name_of_iti: name, type_of_iti_id: type, location_type_id: loca, mis_code: mis, css_code_id: css, dist_id: dist, taluk_id: taluk, consti_id: consti,
+            pancha_id: pancha, village_id: village, build_up_area: buildup, address: address, geo_location: geo, email: email, affiliation_date: affidate,
+            phone_number: phone, no_units: units, no_shifts: shifts, list_trades: trades, iti_college_id: collegeId
+        }
+
+        var myJSON = JSON.stringify(obj);
+        //  fileData.append(myJSON);
+        
+        $.ajax({
+            type: 'POST',
+            url: '/Affiliation/UpdateCollegeAffilationDetails',
+            // contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            async: false,
+            contentType: 'application/json',
+            data: myJSON,
+            success: function (result) {
+                
+                if (result.flag == 1) {
+
+                    ClearFields();
+                    alert("Update successful")
+
+                }
+                else {
+                    alert(result.status)
+                }
+            }
+        });
+    }
+
+    function ClearFields() {
+        $(".update").val("");
+        $(".update-dll").empty();
+        $("#DataGridDiv").show();
+        $("#UpdateDiv").hide();
+
+        $.ajax({
+            type: 'Get',
+            url: '/Affiliation/FilterCollegeDetails',
+            data: { courseId: 0, divisionId: 0, districtId: 0, tradeId: 0 },
+            success: function (data) {
+                
+                if (data.length > 0) {
+                    
+                    var t = $('#tblGridUpdateAffiliation').DataTable({
+                        data: data,
+                        destroy: true,
+                        columns: [
+                            { 'data': 'name_of_iti', 'title': 'Slno', 'className': 'text-center' },
+                            { 'data': 'name_of_iti', 'title': 'Name of ITI', 'className': 'text-center' },
+                            { 'data': 'mis_code', 'title': 'MISCode', 'className': 'text-left' },
+                            { 'data': 'type_of_iti', 'title': 'Type of ITI', 'className': 'text-left' },
+                            { 'data': 'trade', 'title': 'Trades', 'className': 'text-left' },
+                            { 'data': 'state', 'title': 'State', 'className': 'text-left' },
+                            { 'data': 'district', 'title': 'District', 'className': 'text-center' },
+                            { 'data': 'taluka', 'title': 'Taluka', 'className': 'text-left' },
+                            { 'data': 'panchayat', 'title': 'Panchayat', 'className': 'text-left' },
+                            { 'data': 'village', 'title': 'Village', 'className': 'text-left' },
+                            { 'data': 'constituency', 'title': 'Constituency', 'className': 'text-left' },
+                            { 'data': 'build_up_area', 'title': 'Built Up area', 'className': 'text-center' },
+                            { 'data': 'geo_location', 'title': 'Unit', 'Geo Location': 'text-left' },
+                            { 'data': 'email', 'title': 'Email Id', 'className': 'text-left' },
+                            { 'data': 'phone_number', 'title': 'Phone number', 'className': 'text-left' },
+                            { 'data': 'date', 'title': 'Affiliation Date', 'className': 'text-left' },
+                            { 'data': 'no_trades', 'title': 'No. of Trades', 'className': 'text-center' },
+                            { 'data': 'no_units', 'title': 'No. of Units', 'className': 'text-center' },
+                            { 'data': 'no_shifts', 'title': 'No. of Shifts', 'className': 'text-center' },
+                            {
+                                'data': '',
+                                render: function () {
+                                    return "<input type='file' name='files' />"
+                                }
+                            },
+                            {
+                                'date': 'iti_college_id',
+                                render: function (data, type, row) {
+
+                                    return "<input type='button' class='btn btn-primary' value='Edit' onclick='Update(" + row.iti_college_id + ")'/>"
+                                }
+
+                            }
+
+
+                        ]
+                    });
+                    t.on('order.dt search.dt', function () {
+                        t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
+                    }).draw();
+                }
+                else {
+                    alert("No data found!")
+                    $('#tblGridUpdateAffiliation').DataTable().clear().draw();
+                }
+
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function ValidateTextBox(e) {
+        
+        var code = ('charCode' in e) ? e.charCode : e.keyCode;
+        if (!(code == 32) && // space
+            !(code == 46) && // full stop.
+            !(code == 44) && // coma,
+            !(code > 47 && code < 58) && // numeric (0-9)
+            !(code > 64 && code < 91) && // upper alpha (A-Z)
+            !(code > 96 && code < 123)) { // lower alpha (a-z)
+            e.preventDefault();
+        }
+    }
+</script>

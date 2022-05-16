@@ -1,0 +1,169 @@
+﻿@model Models.OMRSheetDetails
+@{
+    ViewBag.Title = "ExamCalendarMaster";
+}
+
+<link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Content/frontend/js/bootstrap.js"></script>
+<script src="~/Scripts/bootbox.js"></script>
+<script src="~/Scripts/bootbox.min.js"></script>
+<script src="~/Scripts/bootbox.locales.min.js"></script>
+<script src="~/Content/frontend/js/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+<style>
+    button {
+        background-color: #5A8CD3;
+        color: white;
+    }
+
+    button {
+        background-color: #5A8CD3;
+        color: white;
+    }
+
+    .content-box-gray .content {
+        overflow: hidden;
+        padding: 10px;
+        font-size: 15px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border: 1px solid gray;
+        color: #3385FF;
+    }
+
+    .content-box-gray .title {
+        height: 50px;
+        line-height: 30px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        /*background: #5A8CD3;*/
+        font-size: 18px;
+        font-weight: bold;
+        font-family: verdana;
+        display: block;
+        color: white;
+        display: block;
+        padding: 10px;
+        border: 1px solid gray;
+        border-bottom: none;
+    }
+</style>
+<br /><br /><br />
+<h4>
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="#tab_1" id="tab1" data-toggle="tab">OMR Sheet No. Details</a>
+        </li>
+        <li>
+            <a href="#tab_2" id="tab2" data-toggle="tab">Modify OMR Sheet No. Details</a>
+        </li>
+    </ul>
+</h4>
+<div class="tab-content">
+    <div class="tab-pane fade" id="tab_1">
+        <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px; width: 1350px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 style="text-align:center">Capture of OMR Sheet</h3>
+                    <br /><br />
+                    <div class="form-group row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="col-md-6">
+                                <label for="txtAgencyRegnNo">Division<span style="color:red"> *</span></label>
+                            </div>
+                            <div class="col-md-6">
+                                @Html.DropDownListFor(model => model.division_Id, new SelectList(Model.Division_List, "Value", "Text"), new { @class = "form-control select2", @onchange = "GetDivisionBasedData(this.value)" })
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <div class="col-md-6">
+                                <label for="txtAgencyRegnNo">Exam Center<span style="color:red"> *</span></label>
+                            </div>
+                            <div class="col-md-6">
+                                @Html.DropDownListFor(model => model.Exam_Cntr_Id, new SelectList(Model.Exam_Centr_List, "Value", "Text"), new { @class = "form-control select2" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="col-md-6">
+                                <label for="txtAgencyRegnNo">Exam Date<span style="color:red"> *</span></label>
+                            </div>
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(model => model.Exam_Date, "{0:dd/MM/yyyy}", new { @class = "form-control", autocomplete = "off", @type = "Date", style = " background-position:right; background-size:30px; " })
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <table class="table table-bordered table-hover" id="OMR_Entry_Grid_table">
+                        <thead>
+                            <tr>
+                                <th>Sl No.</th>
+                                <th>DATE</th>
+                                <th>DAY </th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Trade Year</th>
+                                <th>Subject</th>
+                                <th>Room/Block  No.</th>
+                                <th>Invigilator Diary (Scanned Copy)</th>
+                                <th>Invigilator Diary (Editable Copy)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="Add_OMREntryGrid">
+                            @if (Model.OMRSheetDetailsList != null)
+                            {
+                                foreach (var item in Model.OMRSheetDetailsList)
+                                {
+                                        <tr>
+                                            <td>@item.Exam_Date</td>
+                                            <td>@item.Exam_Date</td>
+                                            <td>@item.Exam_Start_date</td>
+                                            <td>@item.Exam_End_date</td>
+                                            <td>@item.TradeYr</td>
+                                            <td>@item.Subject</td>
+                                            <td>@Html.TextBox("Room" + item.RoomNo, item.RoomNo))</td>
+                                        </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <br />
+                    <div class="form-group row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="col-md-6 col-lg-offset-3">
+                                <input type="button" value="Clear" class="btn btn-success" style="margin-left:15px; width:250px;" id="btnClearOMREntry" />
+                                <input type="button" id="btnSaveOMREntry" value="Save" class="btn btn-success" style="margin-left:15px;width:250px" />
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+        <br /><br />
+    </div>
+</div>
+<script type="text/javascript">
+    function GetDivisionBasedData(divId) {
+        $.ajax({
+            type: "Post",
+            url: '/Attendance/GetOMREntry',
+            data: { divId: divId },
+            success: function (data) {
+                if (data.length > 0) {
+                    $("#Add_OMREntryGrid").empty();
+                    var slNo = 1;
+                    $.each(data, function (id, attentdance) {
+                        var markup = "<tr><td>" + slNo + "</td><td>" + attentdance.Day + "</td><td>" + attentdance.EExam_Date + "</td><td id = 'startTime'>" + attentdance.Exam_Start_date + "</td><td>" + attentdance.Exam_End_date + "</td><td>" + attentdance.TradeYr + "</td><td>" + attentdance.Subject + "</td><td style='width:30%;'>" + "<input type='text' id='txtName'  value=''>" + "</td><td>" + "<input class= 'btn btn-success' style='align:center; margin:10px;' type='file' id='UploadDocsFile' onchange = 'Upload()'>" + "</td><td>" + "<input class= 'btn btn-success' style='align:center; margin:10px;' type='file' id='UploadExcelFile' onchange = 'ExcelUpload()'>" + "</td></tr>";
+                        $("#Add_OMREntryGrid").append(markup);
+                        slNo++;
+                    });
+                }
+            }
+        });
+    }
+    </script>

@@ -1,0 +1,1007 @@
+﻿<div class="modal fade" id="myModalGri" role="dialog">
+    <div class="modal-dialog" style="width:80%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <a href="#" class="close" data-dismiss="modal" aria-label="close">&times;</a><br><br>
+                <div class="accordion-option">
+                    <h3 class="title">Application Form Details</h3>
+                    <a href="javascript:void(0)" class="toggle-accordion active" accordion-id="#accordion"></a>
+                </div>
+                <div class="clearfix"></div>
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h3 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Applicant Details
+                                </a>
+                            </h3>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Select the Board type</label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input type="radio" id="RStateBoardType1" name="RStateBoardType1" value="1" checked onchange="OnChangeStateBoardType()" disabled>
+                                            <label>State Board</label>&nbsp;&nbsp;
+                                            <input type="radio" id="RStateBoardType1" name="RStateBoardType1" value="0" onchange="OnChangeStateBoardType()" disabled>
+                                            <label>Other Boards</label>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div id="GetAppliedBasicsForBoardType" class="row">
+                                        <div class="col-md-5">
+                                            <label>Applied for which basics<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            @foreach (var Qlist in ViewBag.QualificationList)
+                                            {
+                                                <input type="radio" name="RAppBasics1" disabled style="width:5%" onchange="OnChangeGetAppliedBasicsForBoardType()" value="@Qlist.QualificationId" checked> <b> @Qlist.Qualification </b>
+                                            }
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div id="GetRollNumberFor10thStd" class="row">
+                                        <div class="col-md-5">
+                                            <label>Enter the Roll Number/Registration Number for 10th Standard<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input name="txtRollNumber1" type="text" id="txtRollNumber1" disabled maxlength="10" autocomplete="off" class="form-control">
+                                            <small class="text-danger" id="txtRollNumber1-Required" style="display:none">RollNumber/Registration Number is required</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label id="AcademicMonths" hidden></label>
+                                        <label id="AcademicYear" hidden></label>
+                                        <div class="col-md-6">
+                                            <label>Select Academic Year<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" id="academicyear2" name="academicyear2" class="form-control date-picker" autocomplete="off" disabled style="background-position:right;background-size:30px;background-image:url(../../Content/img/Calendar.png);background-repeat:no-repeat;">
+                                            <small class="text-danger" id="academicyear2-Required" style="display:none">Date of Birth is required</small>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Applicant Full Name<font class="text-danger">*</font></label>
+                                            <label id="ApplicantId" hidden></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input name="txtApplicantName1" type="text" disabled maxlength="50" id="txtApplicantName1" style="text-transform:uppercase;" autocomplete="off" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Father's Name<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input name="txtFathersName1" type="text" id="txtFathersName1" maxlength="50" autocomplete="off" class="form-control" disabled>
+                                            <small class="text-danger" id="txtFathersName1-Required" style="display:none">FatherName is required*</small>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Upload Photo<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div id="FileAttach"><img class="pull-left" width="100" height="70" alt="No Image" id="ImgPhotoUpload1"></div>
+                                            @*<input type="file" value="PhotoUpload" class="form-control" id="PhotoUpload">*@
+                                            <input type="hidden" id="IsUploaded1" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Parent Occupation<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input name="txtParentOccupation1" type="text" id="txtParentOccupation1" maxlength="50" autocomplete="off" class="form-control" disabled>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Date of Birth<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" disabled id="dateofbirth1" name="dateofbirth1" class="form-control" autocomplete="off" style="background-position:right;background-size:30px;background-image:url(../../Content/img/Calendar.png);background-repeat:no-repeat;">
+                                            <small class="text-danger" id="dateofbirth1-Required" style="display:none">Date of Birth is required*</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Gender<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="Gender1" disabled></select>
+                                            <small class="text-danger" id="Gender1-Required" style="display:none">Gender is required*</small>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Mother's Name<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input name="txtMothersName1" type="text" id="txtMothersName1" maxlength="50" autocomplete="off" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Religion<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="Religion1" disabled>
+                                                <option value="choose">Select Religion</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Category<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="Category1" disabled>
+                                                <option value="choose">Select Category</option>
+                                            </select>
+                                            <small class="text-danger" id="Category1-Required" style="display:none">Category is required*</small>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Minority Category<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="MinorityCategory1" disabled>
+                                                <option value="0">Select Category</option>
+                                                <option value="1">Yes</option>
+                                                <option value="2">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Caste<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="txtCaste1" disabled>
+                                                <option value="0">Select Caste</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Family Annual Income<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input name="txtFamilyAnnualIncome1" type="number" id="txtFamilyAnnualIncome1" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)" disabled>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Applicant Type<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="ApplicantType1" disabled>
+                                                <option value="0">Select Applicant Type</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>AadhaarNumber<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control AadhaarNumberText" autocomplete="off" id="txtAadhaarNumber1" maxlength="14" name="txtAadhaarNumber1" disabled>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Ration Card Number<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" autocomplete="off" id="txtRationCard1" maxlength="10" name="txtAadhaarNumber1" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Aadhaar Based Bank Details</label>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Account Number<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="number" autocomplete="off" id="AccountNumber1" maxlength="16" name="AccountNumber1" onkeypress="IncomeMoneyPhoneValidation(event,this.id)" disabled>
+                                            <small class="text-danger" id="AccountNumber1-Required" style="display:none">Enter Valid 11 to 16 digits Account Number*</small>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Bank Name<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" autocomplete="off" id="BankName1" maxlength="25" name="BankName1" disabled>
+                                            <small class="text-danger" id="BankName1-Required" style="display:none">Enter Valid Bank Name*</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>IFSC Code<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" autocomplete="off" id="IFSCCode1" maxlength="11" name="IFSCCode1" disabled>
+                                            <small class="text-danger" id="IFSCCode1-Required" style="display:none">Enter Valid IFSCCode*</small>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label>Select applicable Reservations</label>
+                                                <label id="DiffAbledCer"></label>
+                                                <label id="KanMedCer"></label>
+                                                <label id="ExServiceCer"></label>
+                                                <label id="LandLoserCer"></label>
+                                                <label id="EcoWeakCer"></label>
+                                                <label id="KMCer"></label>
+                                                <label id="HoraNaduCer"></label>
+                                                <label id="HydKarCer"></label>
+                                                <label id="ExeStuCer"></label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select name="ApplicableReservations1" class="ApplicableReservations1" multiple id="ApplicableReservations1" onchange="getSelectedOptions(this)" disabled></select>
+                                                <small class="text-danger" id="ApplicableReservations1-Required" style="display:none">Reservations is required*</small>
+                                                <small class="text-danger" id="ApplicableReservationsGrivence-Required" style="display:none">Kindly check the appropriate Reservations option to attach the documents*</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Person with Disability</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" id="PhysicallyHanidcapYes1" class="PhysicallyHanidcapInd1" name='PhysicallyHanidcapInd1' value="1" onchange="PhysicallyHanidcapEna1(this)" disabled><b>Yes</b>
+                                            <input type="radio" id="PhysicallyHanidcapNo1" class="PhysicallyHanidcapInd1" name='PhysicallyHanidcapInd1' value="0" onchange="PhysicallyHanidcapEna1(this)" checked disabled><b>No</b>&nbsp;
+                                        </div>
+                                        <div style="display:none" class="col-md-2 PhysicallyHanidcapDivGri1" disabled>
+                                            <label>If Yes, Select the Disability</label>
+                                        </div>
+                                        <div style="display:none" class="col-md-4 PhysicallyHanidcapDivGri1" disabled>
+                                            <select name="PhysicallyHanidcapType1" class="form-control" id="PhysicallyHanidcapType1" disabled></select>
+                                            <small class="text-danger" id="PersonWithDisability1-Required" style="display:none">Person with Disability is required*</small>
+                                            <small class="text-danger" id="PersonWithDisability1Grivence-Required" style="display:none">Person with Disability Documents need to be attached*</small>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>HoraNadu/GadiNadu Kannidagas</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" id="HoraNaduYes1" name='HoraNadu1' value="1" disabled><b>Yes</b>
+                                            <input type="radio" id="HoraNaduNo1" name='HoraNadu1' value="0" checked disabled><b>No</b>&nbsp;
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Exempted from Study Certificate</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" id="ExemptedFromStudyCertificateYes1" name='ExemptedFromStudyCertificate1' value="1" disabled><b>Yes</b>
+                                            <input type="radio" id="ExemptedFromStudyCertificateNo1" name='ExemptedFromStudyCertificate1' value="0" checked disabled><b>No</b>&nbsp;
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Hyderabad Karnataka Region</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" id="HyderabadKarnatakaRegionYes1" name='HyderabadKarnatakaRegion1' class="HyderabadKarnatakaRegion1" value="1" disabled><b>Yes</b>
+                                            <input type="radio" id="HyderabadKarnatakaRegionNo1" name='HyderabadKarnatakaRegion1' class="HyderabadKarnatakaRegion1" value="0" checked disabled><b>No</b>&nbsp;
+                                            <small class="text-danger" id="HyderabadKarnatakaRegion1Grievance-Required" style="display:none">Kindly check the appropriate Region option to attach the documents*</small>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Kannda Medium</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" id="KanndaMediumYes1" name='KanndaMedium1' value="1" disabled><b>Yes</b>
+                                            <input type="radio" id="KanndaMediumNo1" name='KanndaMedium1' value="0" checked disabled><b>No</b>&nbsp;
+                                        </div>
+                                    </div>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                            <h3 class="panel-title">
+                                <a role="button" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                    Education Details
+                                </a>
+                            </h3>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Qualification<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <select class="form-control" id="Qualification1" disabled>
+                                                <option value="choose">Select Qualification</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Applicant Belongs To<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            @foreach (var Rlist in ViewBag.LocationList)
+                                            {
+                                                <input type="radio" disabled name="RuralUrban1" class="RuralUrban1" style="width:5%" value="@Rlist.location_id" required> <b> @Rlist.location_name </b>
+                                            }
+                                            <small class="text-danger" id="RuralUrban1-Required" style="display:none">RuralUrban  is required*</small>
+                                            <small class="text-danger" id="RuralUrban1Grievance-Required" style="display:none">RuralUrban  is required*</small>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Applied for which basics<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            @foreach (var Qlist in ViewBag.QualificationList)
+                                            {
+                                                <input type="radio" name="AppBasics1" style="width:5%" value="@Qlist.QualificationId" required disabled> <b> @Qlist.Qualification </b>
+                                            }
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Have you studied Science and Maths?</label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input type="radio" id="studiedMathsScience1" name="studiedMathsScience1" value="1" checked disabled>
+                                            <label>Yes</label>&nbsp;&nbsp;
+                                            <input type="radio" id="studiedMathsScience1" name="studiedMathsScience1" value="0" disabled>
+                                            <label>No</label>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>10th Board<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            @foreach (var Slist in ViewBag.SyllabusList)
+                                            {
+                                                <input type="radio" name="TenthBoard1" style="width:5%" value="@Slist.Syllabus_type_id" required onchange="TenthBoardStateType()" disabled><b> @Slist.Syllabus_type</b>
+                                            }
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div id="TenthCOBSEType">
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <label>COBSE Board<font class="text-danger">*</font></label>
+                                            </div>
+                                            <div class="col-md-5">
+                                                @foreach (var Slist in ViewBag.SyllabusListCOBSE)
+                                                {
+                                                    <input type="radio" name="TenthCOBSEBoard1" style="width:5%" value="@Slist.Syllabus_type_id" required checked onchange="TenthCOBSEBoardType()" disabled><b> @Slist.Syllabus_type</b>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Institute studied as per Qualification<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input name="txtInstituteStudied1" type="text" id="txtInstituteStudied1" maxlength="20" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Maximum Marks as per Qualification<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input name="txtMaximumMarks1" disabled type="number" id="txtMaximumMarks1" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                            <small class="text-danger" id="txtMaximumMarks1-Required" style="display:none">Maximum Marks  is required*</small>
+                                            <small class="text-danger" id="CalculationMaximumMarks1-Required" style="display:none">Maximum Marks should be less than Marks Obtained*</small>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Minimum marks<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input name="txtMinMarks1" disabled type="number" id="txtMinMarks1" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                            <small class="text-danger" id="txtMinMarks1-Required" style="display:none">Minimum Marks should be less than Marks Obtained/Maximum Marks*</small>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Marks Obtained as per Qualification<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input name="txtMarksObtained1" disabled type="number" id="txtMarksObtained1" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Percentage</label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label id="lblPercAsPerMarks1">100%</label>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Select results as per Qualification<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="Results1" disabled>
+                                                <option value="0">Select Results</option>
+                                                <option value="1">Pass</option>
+                                                <option value="2">Fail</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <label id="HydKarnGrivApplied" hidden></label>
+                    <label id="RuralGrivApplied" hidden></label>
+                    <label id="EduGrivApplied" hidden></label>
+                    <label id="EWSGrivApplied" hidden></label>
+                    <label id="DiffAbledGrivApplied" hidden></label>
+                    <label id="ExServGrivApplied" hidden></label>
+                    <label id="CasteGrivApplied" hidden></label>
+                    <label id="UIDGrivApplied" hidden></label>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingFour">
+                            <h3 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                    Documents
+                                </a>
+                            </h3>
+                        </div>
+                        <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <table class="table table-bordered table-hover text-center" id="tblGrid">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>Document Type</th>
+                                                <th>Document File</th>
+                                                <th width="2%">Link</th>
+                                                <th>Document Status</th>
+                                                <th>Document Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="color:Black;" id="SeatRulesValues">
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Educational certificate</b>
+                                                    <div id="DocEduCerAcceptedImg1">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocEduCerRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="EduCertificate1" class="form-control" id="EduCertificate1" disabled>
+                                                    <small class="text-danger" id="EduCertificate1-Required" style="display:none">Educational Certificate is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aEduCertificate1" href="" class="link EduFileAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Education Documents" class="pull-left" id="aEduCertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="EduDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocEduStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtEduCertRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtEduCertRemarks1" maxlength="50" class="form-control" rows="4" cols="20"></textarea>
+                                                    <small class="text-danger" id="WithoutDocEduRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Caste certificate</b>
+                                                    <div id="DocCasCerAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocCasCerRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="CasteCertificate1" class="form-control" id="CasteCertificate1" disabled>
+                                                    <small class="text-danger" id="CasteCertificate1-Required" style="display:none">Caste Certificate is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aCasteCertificate1" href="" class="link CasteFileAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Caste Documents" class="pull-left" id="aCasteCertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="CasDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocCasStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtCasteCertRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtCasteCertRemarks1" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocCasRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Ration card</b>
+                                                    <div id="DocRatCerAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocRatCerRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Rationcard1" class="form-control" id="Rationcard1" disabled>
+                                                    <small class="text-danger" id="Rationcard1-Required" style="display:none">Ration card is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aRationCard1" href="" class="link RationFileAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Ration Documents" class="pull-left" id="aRationCard1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="RationDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocRatStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtRationCardRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtRationCardRemarks1" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocRatRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Income certificate</b>
+                                                    <div id="DocIncCerAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocIncCerRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Incomecertificate1" class="form-control" id="Incomecertificate1" disabled>
+                                                    <small class="text-danger" id="Incomecertificate1-Required" style="display:none">UID Number is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aIncomeCertificate1" href="" class="link IncomeCertificateAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Income Documents" class="pull-left" id="aIncomeCertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="IncCerDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocIncStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtIncCertRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtIncCertRemarks1" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocIncRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>UID Number</b>
+                                                    <div id="DocUIDCerAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocUIDCerRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="UIDNumber1" class="form-control" id="UIDNumber1" disabled>
+                                                    <small class="text-danger" id="UIDNumber1-Required" style="display:none">UID Number is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aUIDNumber1" href="" class="link UIDFileAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Income Documents" class="pull-left" id="aUIDNumber1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="UIDDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocUIDStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtUIDRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtUIDRemarks1" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocUIDRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Rural certificate</b>
+                                                    <div id="DocRurCerAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocRurCerRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Ruralcertificate1" class="form-control" id="Ruralcertificate1" disabled>
+                                                    <small class="text-danger" id="Ruralcertificate1-Required" style="display:none">Rural certificate is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aRuralcertificate1" href="" class="link RuralcertificateAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Income Documents" class="pull-left" id="aRuralcertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="RcerDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocRurStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtRurCertRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtRurCertRemarks1" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocRurRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Kannada medium Certificate</b>
+                                                    <div id="DocKanMedCerAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocKanMedCerRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="KannadamediumCertificate1" class="form-control" id="KannadamediumCertificate1" disabled>
+                                                    <small class="text-danger" id="KannadamediumCertificate1-Required" style="display:none">Kannada medium Certificate is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aKannadamediumCertificate1" href="" class="link KannadamediumCertificateAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Kannada Documents" class="pull-left" id="aKannadamediumCertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="KanMedCerDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocKMCStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtKanMedRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtKanMedRemarks1" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocKMCRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Person with disability certificate</b>
+                                                    <div id="DocDidAblCerAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocDidAblCerRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" disabled value="Differentlyabledcertificate1" class="form-control" id="Differentlyabledcertificate1">
+                                                    <small class="text-danger" id="Differentlyabledcertificate1-Required" style="display:none">Person with disability certificate is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aDifferentlyabledcertificate1" href="" class="link DifferentlyabledcertificateAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Person with disability Documents" class="pull-left" id="aDifferentlyabledcertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="DiffAblDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocDAStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtDiffAbledCertRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtDiffAbledCertRemarks1" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocDARemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Exempted from study Certificate</b>
+                                                    <div id="DocExStuCerAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocExStuCerRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="ExemptedCertificate1" class="form-control" id="ExemptedCertificate1" disabled>
+                                                    <small class="text-danger" id="ExemptedCertificate1-Required" style="display:none">Exempted from study Certificate is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aExemptedCertificate1" href="" class="link ExemptedCertificateAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Person with disability Documents" class="pull-left" id="aExemptedCertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="ExCerDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocECStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtExeCertRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtExeCertRemarks1" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocECRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Hyderabad Karnataka Region</b>
+                                                    <div id="DocHyKarRegAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocHyKarRegRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="HyderabadKarnatakaRegion1" class="form-control" id="HyderabadKarnatakaRegion1" disabled>
+                                                    <small class="text-danger" id="HyderabadKarnatakaRegion1-Required" style="display:none">Hyderabad Karnataka Region is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aHyderabadKarnatakaRegion1" href="" class="link HyderabadKarnatakaRegionAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Region Documents" class="pull-left" id="aHyderabadKarnatakaRegion1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="HyKarDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocHKRStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtHydKarnRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtHydKarnRemarks1" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocHKRRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Horanaadu/Gadinaadu Kannadiga's</b>
+                                                    <div id="DocHorGadKanAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocHorGadKanRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="HoranaaduKannadiga1" class="form-control" id="HoranaaduKannadiga1" disabled>
+                                                    <small class="text-danger" id="HoranaaduKannadiga1-Required" style="display:none">Horanaadu/Gadinaadu's Kannadiga Document is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aHoranaaduKannadiga1" href="" class="link HoranaaduKannadigaAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Horanaadu/Gadinaadu Kannadiga's Documents" class="pull-left" id="aHoranaaduKannadiga1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="HorKanDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocHorKanStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtHorGadKannadigaRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtHorGadKannadigaRemarks1" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocHorKanRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Other Certificates</b>
+                                                    <div id="DocOthCerAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocOthCerRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="OtherCertificates1" class="form-control" id="OtherCertificates1" disabled>
+                                                    <small class="text-danger" id="OtherCertificates1-Required" style="display:none">Other Certificates is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aOtherCertificates1" href="" class="link OtherCertificatesAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Others Certificate Documents" class="pull-left" id="aOtherCertificates1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="OtherCerDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocOCStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtOtherCertRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtOtherCertRemarks1" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocOCRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Ex serviceman</b>
+                                                    <div id="DocExSerAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocExSerRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Exserviceman1" disabled class="form-control FileUpload" id="Exserviceman1" accept=".pdf,.PDF">
+                                                    <small class="text-danger" id="Exserviceman1-Required" style="display:none">EWSCertificate is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aExserviceman1" href="" class="link ExservicemanAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached Ex-serviceman Documents" class="pull-left" id="aExserviceman1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="ExserDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocExSerStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtExservicemanRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtExservicemanRemarks1" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocExSerRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Economically Weaker Sections</b>
+                                                    <div id="DocEWSAcceptedImg1">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocEWSRejectedImg1" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" disabled value="EWSCertificate1" class="form-control FileUpload" id="EWSCertificate1" accept=".pdf,.PDF">
+                                                    <small class="text-danger" id="EWSCertificate1-Required" style="display:none">EWSCertificate is required*</small>
+                                                </td>
+                                                <td>
+                                                    <a id="aEWSCertificate1" href="" class="link EWSCertificateAttach1" target="_blank" style="color:green;">
+                                                        <img title="Download attached EWSCertificate Documents" class="pull-left" id="aEWSCertificate1" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="EWSDocStatus1" disabled>Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocEWSStatus1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtEWSCertificateRemarks1" disabled style="resize: none;width: 90%" type="text" id="txtEWSCertificateRemarks1" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocEWSRemarks1-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <label id="EDocAppId" hidden></label>
+                                    <label id="ECreatedBy" hidden></label>
+                                    <label id="CDocAppId" hidden></label>
+                                    <label id="CCreatedBy" hidden></label>
+                                    <label id="RDocAppId" hidden></label>
+                                    <label id="RCreatedBy" hidden></label>
+                                    <label id="IDocAppId" hidden></label>
+                                    <label id="ICreatedBy" hidden></label>
+                                    <label id="UDocAppId" hidden></label>
+                                    <label id="UCreatedBy" hidden></label>
+                                    <label id="RUDocAppId" hidden></label>
+                                    <label id="RUCreatedBy" hidden></label>
+                                    <label id="KDocAppId" hidden></label>
+                                    <label id="KCreatedBy" hidden></label>
+                                    <label id="DDocAppId" hidden></label>
+                                    <label id="DCreatedBy" hidden></label>
+                                    <label id="ExDocAppId" hidden></label>
+                                    <label id="ExCreatedBy" hidden></label>
+                                    <label id="HDocAppId" hidden></label>
+                                    <label id="HCreatedBy" hidden></label>
+                                    <label id="HGKDocAppId" hidden></label>
+                                    <label id="HGKCreatedBy" hidden></label>
+                                    <label id="ODocAppId" hidden></label>
+                                    <label id="OCreatedBy" hidden></label>
+                                    <label id="KMDocAppId" hidden></label>
+                                    <label id="KMCreatedBy" hidden></label>
+                                    <label id="ExSDocAppId" hidden></label>
+                                    <label id="ExSCreatedBy" hidden></label>
+                                    <label id="LLDocAppId" hidden></label>
+                                    <label id="LLCreatedBy" hidden></label>
+                                    <label id="EWSDocAppId" hidden></label>
+                                    <label id="EWSCreatedBy" hidden></label>
+                                    <label id="ApplStatus" hidden></label>
+                                    <div class="row">
+                                        <div class="text-justify" style="text-align:center">
+                                            <div class="form-group">
+                                                <large class="text-danger">
+                                                    Note : Before Click on Save button, Make sure the document file has selected to update the appropriate document wise status and remarks*
+                                                </large>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Other Remarks<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <textarea name="txtRemarks1" style="resize: none;" type="text" id="txtRemarks1" maxlength="250" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                            <small class="text-danger" id="txtRemarks1-Required" style="display:none">Remarks is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="saveDocumentsRemarksDetDiv1">
+                                        <div class="text-justify" style="text-align:right;margin-right:100px;">
+                                            <input type="button" id="saveDocumentsRemarksDet" value="Save Data and Verified" class="btn btn-success" onclick="UpdateStatus(1)" />
+                                        </div>
+                                        <br>
+                                    </div>
+                                    <div id="saveDocumentsRemarksDetDiv2" class="panel panel-default">
+                                        <br>
+                                        <div class="row">
+                                            <div class="text-justify" style="text-align:center">
+                                                <div class="form-group">
+                                                    <large class="text-danger">
+                                                        Note : Grievance Verified and Updated
+                                                    </large>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="saveDocumentsRemarksDetDiv3" class="panel panel-default">
+                                        <br>
+                                        <div class="row">
+                                            <div class="text-justify" style="text-align:center">
+                                                <div class="form-group">
+                                                    <large class="text-danger">
+                                                        Note : Verification officer send to applicant for correction in Grievance documents
+                                                    </large>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="saveDocumentsRemarksDetDiv4" class="panel panel-default">
+                                        <br>
+                                        <div class="row">
+                                            <div class="text-justify" style="text-align:center">
+                                                <div class="form-group">
+                                                    <large class="text-danger">
+                                                        Note : Verification officer rejected the grievance raised by the applicant
+                                                    </large>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="EligibleGrievanceVerificationForm" class="panel panel-default">
+                                        <br>
+                                        <div class="row">
+                                            <div class="text-justify" style="text-align:center">
+                                                <div class="form-group">
+                                                    <large class="text-danger">
+                                                        Note : You're not eligible to upload the grievance documents because the current date not yet reached the committed date.
+                                                    </large>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<label hidden id="CalenderNotificationGriEligibleInd"></label>
+@Scripts.Render("~/bundles/ApplicationDetails")

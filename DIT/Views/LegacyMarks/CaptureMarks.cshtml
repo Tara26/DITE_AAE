@@ -1,0 +1,241 @@
+﻿@model Models.MarksUpload
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br /><br /><br /><br />
+@using (Html.BeginForm("CaptureMarks", "LegacyMarks", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+{
+    <div class="container" style="text-align:center;background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-header"><h4 class="card-title">Capture Marks of offline Examination</h4></div><hr />
+                <div class="card-body">
+
+                    <div class="forms-sample">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+
+                                Code Marks Sheet Number
+                            </div>
+                            <div class="form-group col-md-1">
+                                :
+                            </div>
+                            <div class="form-group col-md-3">
+                                @Html.TextBoxFor(model => model.code_marks_sheet_num, new { @class = "form-control", @id = "txtcodemarksID", @maxlength = "18" })
+                                <span id="spnEPropertyID" class="text-danger" style="display:none;">Please Enter  Code Marks Sheet Number.</span>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-4">
+
+                                subject
+                            </div>
+                            <div class="form-group col-md-1">
+                                :
+                            </div>
+                            <div class="form-group col-md-3">
+                                @Html.DropDownListFor(model => model.subject_id, Model.SubjectList, new { @class = "form-control select2" })
+                                <span id="spnepropertyid" class="text-danger" style="display:none;">please select subject.</span>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-4">
+
+                                trade sector
+                            </div>
+                            <div class="form-group col-md-1">
+                                :
+                            </div>
+                            <div class="form-group col-md-3">
+                                @Html.DropDownListFor(model => model.tradesector_id, Model.Tradesector, new { @class = "form-control select2" })
+                                <span id="spnepropertyid" class="text-danger" style="display:none;">please select subject.</span>
+                            </div>
+
+                        </div>
+
+                        @*<div class="row">
+                                <div class="form-group col-md-4">
+
+                                    trade scheme
+                                </div>
+                                <div class="form-group col-md-1">
+                                    :
+                                </div>
+                                <div class="form-group col-md-3">
+                                    @html.dropdownlistfor(model => model.tradescheme_id, new selectlist(model.tradescheme, "value", "text"), new { @class = "form-control select2", @id = "subjectname" })
+                                    <span id="spnepropertyid" class="text-danger" style="display:none;">please select subject.</span>
+                                </div>
+
+                            </div>*@
+
+                        @*<div class="row">
+                                <div class="form-group col-md-4">
+
+                                    trade type
+                                </div>
+                                <div class="form-group col-md-1">
+                                    :
+                                </div>
+                                <div class="form-group col-md-3">
+                                    @html.dropdownlistfor(model => model.tradetype_id, new selectlist(model.tradetype, "value", "text"), new { @class = "form-control select2", @id = "subjectname" })
+                                    <span id="spnepropertyid" class="text-danger" style="display:none;">please select subject.</span>
+                                </div>
+
+                            </div>*@
+
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <input type="submit" value="Search" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        @if (Model.marksUploads != null)
+        {
+            @Html.HiddenFor(Model => Model.code_marks_sheet_num, new { @id = "cmnum" });
+            <table id="tblDetails" class="table table-striped table-bordered" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>Trainee roll num</th>
+                        <th>Unique Numnber</th>
+                        <th>Marks</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodydetails">
+
+                    @foreach (var item in Model.marksUploads)
+                    {
+                        <tr>
+                            <td>@item.trainee_roll_num</td>
+                            <td>@item.unique_identification_code</td>
+                            @*<td><input type="text" id="inputval"/></td>*@
+                            @*<td> @Html.TextBoxFor(model => model.exam_marks, "exam_marks"+ @item.trainee_roll_num, new { @class = "form-control"})</td>*@
+                            <td>@Html.TextBox("exam_marks" + item.trainee_roll_num)</td>
+
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        }
+        <div class="row">
+            <div class="form-group col-md-10">
+            </div>
+            <div class="form-group col-md-2">
+                <input type="submit" value="Submit" class="btn btn-primary" onclick="SaveMarks()" />
+            </div>
+        </div>
+    </div>
+}
+
+<br /><br />
+
+<script>
+    var codemarks = $('#cmnum').val();
+    var subject = '';
+    var tradesector = '';
+    function GetSubjectList(subjectId) {
+        subject = subjectId;
+    }
+    function GetTradeSectorList(tradesectorId) {
+        tradesector = tradesectorId;
+    }
+    function Search() {
+        var cmsnum = $("#txtcodemarksID").val()
+        
+        $.ajax({
+            type: 'POST',
+            url: '/LegacyMarks/CaptureMarks',
+            dataType: 'json',
+            data: {
+                code_marks_sheet_num: cmsnum,
+                //subject_id: subject,
+            },
+            success: function (result) {
+                if (result == "Saved") {
+                    var _msg = "Saved Sucessfully.";
+                    bootbox.alert({ message: _msg, callback: function () { window.location.href = window.location.href; } });
+                    $('#UploadDocsFile').val("");
+                }
+                else {
+                    var _msg = result;
+                    bootbox.alert({ message: _msg, callback: function () { window.location.href = window.location.href; } });
+                }
+            },
+            error: function () {
+                bootbox.alert("Error");
+            }
+        });
+    }
+
+
+    function SaveMarks() {
+        
+        //var cnt = 0;
+        if ($(".dataTables_empty").length != 1) {
+            if (confirm("Are you sure, you want to submit?")) {
+                
+                var AddDetails = new Array();
+                //$("#tblDetails TBODY TR").each(function () {
+                //    cnt++;
+                //});
+                // alert(imageContainer.length);
+                $("#tblDetails TBODY TR").each(function () {
+                    var row = $(this);
+                    var Details = {};
+                    
+                    Details.trainee_roll_num = row.find("TD").eq(0).html();
+                    Details.unique_identification_code = row.find("TD").eq(1).html();
+                    Details.exam_marks = $("#exam_marks" + Details.trainee_roll_num).val();//row.find("TD").eq(2).html();
+                    //Details.OTD_OWNER_PINCODE = row.find("TD").eq(3).html();
+                    //Details.OTD_OWNER_ADDRESS = row.find("TD").eq(4).html();
+                    //Details.OTD_OWNER_DUMMY1 = row.find("TD").eq(5).html();
+                    //alert(Details.exam_marks);
+                    AddDetails.push(Details);
+                });
+                
+                var viewModel = {
+                    'code_marks_sheet_num': $('#cmnum').val(),
+                    'subject_id': $('#subject_id :selected').val(),
+                    'tradesector_id': $("#tradesector_id").val(),
+                    'marksUploads': AddDetails
+                };
+                
+                $.ajax({
+                    url: '/LegacyMarks/ExamMarks',
+                    data: JSON.stringify(viewModel),//JSON.stringify(),
+                    async: false,
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (result) {
+                        confirm("Details Updated Successfully!")
+                        window.location.href = "/LegacyMarks/ExamMarks"
+                        //window.location.reload();
+                        // ClearFields();
+                    }, error: function (result) {
+
+                    }
+                });
+            } else {
+                confirm("Please Add Details!")
+            }
+        } else {
+            confirm("Please Add Details?")
+        }
+    }
+</script>

@@ -1,0 +1,372 @@
+﻿@model Models.AttendanceDetails.AtendanceDet
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Content/frontend/js/bootstrap.js"></script>
+<script src="~/Scripts/bootbox.js"></script>
+<script src="~/Scripts/bootbox.min.js"></script>
+<script src="~/Scripts/bootbox.locales.min.js"></script>
+<script src="~/Content/frontend/js/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="~/Content/css/jquery-ui.min.css" type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+@*<!DOCTYPE html>*@
+
+<html>
+@*<head>
+        <meta name="viewport" content="width=device-width" />
+        <title>AttendanceDet</title>
+    </head>*@
+<body>
+
+    <br />
+    <br />
+    <br />
+    @if (Session["UserName"].ToString().Equals("Data Entry Operator"))
+    {
+        <h4>
+            <ul class="nav nav-tabs">
+                <li id="tabli1">
+                    <a href="#AttendDet" data-toggle="tab">Exam Attendance Details</a>
+                </li>
+                @*<li id="tabli2">
+                    <a href="#ModifDet" data-toggle="tab">Modify Exam Attendance Details</a>
+                </li>*@
+
+            </ul>
+        </h4>
+
+
+
+        <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+
+            <div class="col-lg-12 borderedtext" align="left">
+                <h3 style="color:white;background-color:cornflowerblue;">Upload Exam Attendance Details</h3>
+            </div>
+            <br />
+            <br />
+            
+            <div class="form-group row">
+                <!--Section1-->
+                <div class="col-lg-6 col-md-6">
+                    <div class="col-md-3 offset-2">
+                        <label for="txtAgencyRegnNo">Division<span style="color:red">*</span></label>
+                    </div>
+                    <div class="col-md-6">
+
+                        @Html.DropDownListFor(model => model.divId, new SelectList(Model.divisionList, "Value", "Text"), new { @class = "form-control select2", @onchange = "GetDivisionBasedData(this.value)" })
+                        @Html.ValidationMessageFor(x => x.divId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6">
+                    <div class="col-md-3 offset-2">
+                        <label for="txtAgencyRegnNo" style="padding:1%;margin:0%;">ExamCenter.</label>
+                    </div>
+                    <div class="col-md-6">
+
+                        @Html.DropDownListFor(model => model.divId, new SelectList(Model.divisionList, "Value", "Text"), new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(x => x.ExamCntrId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div> <!--Section1-->
+
+            <div class="form-group row">
+                <!--Section1-->
+                <div class="col-lg-6 col-md-6">
+                    <div class="col-md-3 offset-2">
+                        <label for="txtAgencyRegnNo">ExamDate<span style="color:red">*</span></label>
+                    </div>
+                    <div class="col-md-6">
+
+                        @Html.TextBoxFor(model => model.ExamDate, "{0:dd/MM/yyyy}", new { @class = "form-control", autocomplete = "off", style = " background-position:right; background-size:30px; background-image:  url(../../Content/img/Calendar.png);background-repeat: no-repeat;" })
+                        @Html.ValidationMessageFor(x => x.ExamDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            @*//Table*@
+
+            <table class="table table-bordered" id="excltable">
+                <tr style="color:royalblue">
+                    <th style="background-color:greenyellow; padding:6px;">SlNo</th>
+                    <th style="background-color:greenyellow; padding:6px;">Day</th>
+                    <th style="background-color:greenyellow; padding:6px;">ExamDate</th>
+                    <th style="background-color:greenyellow; padding:6px;">StartTime</th>
+                    <th style="background-color:greenyellow; padding:6px;">EndTime</th>
+                    <th style="background-color:greenyellow; padding:6px;">TradeYesr</th>
+                    <th style="background-color:greenyellow; padding:6px;">Subject</th>
+                    <th style="background-color:greenyellow; padding:6px;">BlockNo</th>
+                    <th style="background-color:greenyellow; padding:6px;">InvigilatorScannedCopy</th>
+                    <th style="background-color:greenyellow; padding:6px;">InvigilatorEditableCopy</th>
+                    @*<th style="background-color:greenyellow; padding:6px;">Delete</th>*@
+                </tr>
+                <tbody id="tbody_add_Grid">
+                    @if (Model.AttendanceDetList != null)
+                    {
+                        int slNo = 0;
+                        foreach (var cd in Model.AttendanceDetList)
+                        {
+                            slNo++;
+                            <tr>
+                                <td> @slNo </td>
+                                <td>@cd.Day</td>
+                                <td>@cd.ExamDate</td>
+                                <td>@cd.StartTime</td>
+                                <td>@cd.EndTime</td>
+                                <td>@cd.TradeYear</td>
+                                <td>@cd.Subject</td>
+                                <td>@cd.BlockNo</td>
+                                <td>
+                                    @*<a href="@Url.Content("../../" + @cd.InvigilatorSacannedCopy+"//"+@cd.InvigilatorDairyEditableCopy)" data-toggle="tooltip" data-placement="top" title="View Existing File" class="View" style="color:black" target="_blank">View</a>*@
+
+                                </td>
+                                <td>
+                                    @*<a href="@Url.Content("../../" + @cd.InvigilatorSacannedCopy+"//"+@cd.InvigilatorDairyEditableCopy)" data-toggle="tooltip" data-placement="top" title="View Existing File" class="View" style="color:black" target="_blank">View</a>*@
+                                </td>
+                                @*<td>
+                            <a class="Delete" onclick="doesFileExist('../../' + @cd.Path+'//'+@cd.FileName')">Delete</a>
+                            <a class="Delete" href="javascript:;">Delete</a>
+                        </td>*@
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+            </table>
+            <br />
+            <br />
+
+            <div class="form-group row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="col-md-6 col-lg-offset-5">
+                        <input type="button" value="Clear" class="btn btn-success" style="margin-left:15px; width:250px;" id="btnMClear" />
+                        <input type="button" id="SaveAttendancedet" value="Save" class="btn btn-success" style="margin-left:15px;width:250px" />
+                    </div>
+                </div>
+            </div>
+            <br/>
+           
+        </div>
+    }
+</body>
+</html>
+    
+<script>
+
+    $(document).ready(function () {
+        
+
+        $('#ExamDate').datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+            onSelect: function (selected) {
+                //var arr = selected.split("/");
+                //var minimumDate = new Date(arr[2], arr[1] - 1, arr[0]);
+                //var maximumDate = new Date(arr[2], arr[1] - 1, arr[0]);
+                //minimumDate.setDate(minimumDate.getDate() + 90);
+                //$("#ExamDate").datepicker("option", "minDate", minimumDate)
+                //maximumDate.setDate(maximumDate.getDate() + 365);
+                //$("#ExamDate").datepicker("option", "maxDate", maximumDate)
+
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        
+        $('#EndDate').datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#ExamDate').datepicker({
+            dateFormat: 'dd/mm/yy',
+            minDate: 0.,
+            changeMonth: true,
+            changeYear: true,
+            onSelect: function (selected) {
+                var arr = selected.split("/");
+                var minimumDate = new Date(arr[2], arr[1] - 1, arr[0]);
+                //var minimumDate = new Date(arr[2], arr[1] - 1, arr[0]);
+                //var maximumDate = new Date(arr[2], arr[1] - 1, arr[0]);
+                //minimumDate.setDate(minimumDate.getDate() + 90);
+                //$("#ExamDate").datepicker("option", "minDate", minimumDate)
+                //maximumDate.setDate(maximumDate.getDate() + 365);
+                $("#ExamDate").datepicker("option", "minDate", minimumDate)
+
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        
+        $('#EndDate').datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true
+        });
+    });
+</script>
+
+<script>
+    function GetDivisionBasedData(divId) {
+        // var divValue = $(this).val();
+
+        
+        $.ajax({
+            type: "Post",
+            url: '/Attendance/getAttendanceDet',
+            data: { divId: divId },
+            success: function (data) {
+                if (data.length > 0) {
+                    
+
+                    $("#tbody_add_Grid").empty();
+                    var slNo = 1;
+                    $.each(data, function (id, attentdance) {
+
+                        var markup = "<tr><td>" + slNo + "</td><td>" + attentdance.Day + "</td><td>" + dateFormat(new Date(parseInt((attentdance.ECT_ExamDate).match(/\d+/)[0]))) + "</td><td id = 'startTime'>" + Formattime(new Date(parseInt((attentdance.ECT_Exam_Start_Time).match(/\d+/)[0]))) + "</td><td>" + Formattime(new Date(parseInt((attentdance.ECT_Exam_End_Time).match(/\d+/)[0]))) + "</td><td>" + attentdance.TradeYr + "</td><td>" + attentdance.Subject + "</td><td style='width:10%;'>" + "<input type='text' id='txtName'  value=''>" + "</td><td>" + "<input class= 'btn btn-success' style='align:right; width:100%;' type='file' id='UploadDocsFile' onchange = 'Upload()'>" + "</td><td>" + "<input class= 'btn btn-success' style='align:right; width:100%;' type='file' id='UploadExcelFile' onchange = 'ExcelUpload()'>" + "</td></tr>";
+                        $("#tbody_add_Grid").append(markup);
+                        slNo++;
+                    });
+                }
+            }
+        });
+    }
+
+    
+
+    function dateFormat(d) {
+        console.log(d);
+        return (d.getDate() + "").padStart(2, "0")
+            + "/" + ((d.getMonth() + 1) + "").padStart(2, "0")
+            + "/" + d.getFullYear();
+    }
+
+    function Formattime(t) {
+        console.log(t);
+        return (t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + "");//.padStart(2, "0")
+        //+ "/" + ((d.getMonth() + 1) + "").padStart(2, "0")
+        //+ "/" + d.getFullYear();
+    }
+</script>
+<script>
+    $("#SaveAttendancedet").click(function (e) {
+        
+        var divDesc = $("#divId option:selected").text();
+        var fileData = new FormData();
+        var table = document.getElementById('excltable');
+        var rowLength = table.rows.length;
+
+        for (var i = 1; i < rowLength; i += 1) {
+
+            var row = table.rows[i];
+
+            // get Start date column details
+            var startDateCell = row.cells[2];
+            var ExamDate = startDateCell.innerText;
+
+            // get Start time column details
+            var startTimeCell = row.cells[3];
+            var StartTime = startTimeCell.innerText;
+
+            // get End time column details
+            var endTimeCell = row.cells[4];
+            var EndTime = endTimeCell.innerText;
+
+            // get End time column details
+            var tradeYearCell = row.cells[5];
+            var TradeYear = tradeYearCell.innerText;
+
+            // get subject column details
+            var subjectCell = row.cells[6];
+            var Subject = subjectCell.innerText;
+
+
+
+            // get Block# column details
+            // var blockNoCell = row.find("input");
+            var blockNoCell = row.cells[7].childNodes[0];
+            var BlockNo = blockNoCell.value;
+
+
+
+            var upladFileCell = row.cells[8].childNodes[0];
+            var attendSavePath = upladFileCell.files[0].name;
+
+            //model.UploadPdf = upladFileCell.files[0];
+            fileData.append(attendSavePath, upladFileCell.files[0]);
+            //fileData.append(i, model);
+
+            //excel
+            var upladFileExcel = row.cells[9].childNodes[0];
+            var attendExcelPath = upladFileExcel.files[0].name;
+            // model.UploadXcel = upladFileExcel.files[0];
+            fileData.append(attendExcelPath, upladFileExcel.files[0]);
+
+            var obj = {
+                divDesc: divDesc, ExamDate: ExamDate, StartTime: StartTime, EndTime: EndTime,
+                TradeYear: TradeYear, Subject: Subject, BlockNo: BlockNo, attendSavePath: attendSavePath,
+                attendExcelPath: attendExcelPath
+            };
+            var myJSON = JSON.stringify(obj);
+            fileData.append(i, myJSON);
+        }
+
+
+        if (divDesc == "Select Division") {
+            bootbox.alert("Please select the Division.");
+            return;
+        }
+        //if (examDate == " ") {
+        //    bootbox.alert("Please select the Exam Date.");
+        //    return;
+        //}
+        // model.divDesc = divDesc,
+        $.ajax({
+            type: 'POST',
+            url: '/Attendance/saveExamattendanceDetails',
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            async: false,
+            data: fileData,
+            success: function (result) {
+                if (result != "Failed") {
+                    bootbox.alert("Saved Sucessfully.");
+                    clearEntry();
+                }
+                else {
+                    bootbox.alert("Error while Saving Data");
+                }
+            }
+        });
+    });
+
+    function ValidateData() {
+        var regex = /^[A-Za-z0-9 ]+$/
+        var isValid = regex.test($("#Course").value);
+        var isValid1 = regex.test($("#TradeTypeName").value);
+        var isValid2 = regex.test($("#TradeName").value);
+        var isValid3 = regex.test($("#ExamTypeName").value);
+        var isValid4 = regex.test($("#ExamSemName").value);
+        var isValid5 = regex.test($("#SubjectTypeName").value);
+        var isValid6 = regex.test($("#SubjectName").value);
+
+        if (!isValid || !isValid1 || !isValid2 || !isValid3 || !isValid4 || !isValid5 || !isValid6) {
+            bootbox("Please do not Enter the Special Characters.");
+            return false;
+        }
+        else
+            return true;
+    }
+</script>
+

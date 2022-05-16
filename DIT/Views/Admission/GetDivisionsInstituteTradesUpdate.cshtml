@@ -1,0 +1,384 @@
+﻿@model IEnumerable<Models.Admission.DivisionUpdateModel>
+
+<style>
+    /*******************************
+    * Does not work properly if "in" is added after "collapse".
+    * Get free snippets on bootpen.com
+    *******************************/
+    .panel-group .panel {
+        border-radius: 0;
+        box-shadow: none;
+        border-color: #EEEEEE;
+    }
+
+    .panel-default > .panel-heading {
+        padding: 0;
+        border-radius: 0;
+        color: #212121;
+        background-color: #FAFAFA;
+        border-color: #EEEEEE;
+    }
+
+    .panel-title {
+        font-size: 14px;
+    }
+
+        .panel-title > a {
+            display: block;
+            padding: 15px;
+            text-decoration: none;
+        }
+
+    .more-less {
+        float: right;
+        color: #212121;
+    }
+
+    .panel-default > .panel-heading + .panel-collapse > .panel-body {
+        border-top-color: #EEEEEE;
+    }
+
+    /* ----- v CAN BE DELETED v ----- */
+    body {
+        //background-color: #26a69a;
+    }
+
+    .demo {
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+</style>
+
+@*<div id="MyPrivateDiv">*@
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    @if (Model != null)
+    {
+        foreach (var item in Model.Where(s => s.DivisionId != 0).Distinct().ToList())
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading" style="background-color:Highlight;color:white;" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#@string.Concat(@item.DivisionName,@item.DivisionId)" aria-expanded="true" aria-controls="@string.Concat(@item.DivisionName,@item.DivisionId)">
+                            <i class="more-less glyphicon glyphicon-plus"> </i>
+                            @item.DivisionName
+                        </a>
+                    </h4>
+                </div>
+                <div id="@string.Concat(@item.DivisionName,@item.DivisionId)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body" style="overflow-y:scroll;height:400px;">
+                        <div class="panel-group" id="accordion11" role="tablist" aria-multiselectable="true">
+                            @if (item.Institutes.Count <= 1)
+                            {
+                                <span> No Institute available</span>
+                            }
+                            @{foreach (var insti in item.Institutes.Where(x => x.InstituteId != 0).Distinct().ToList())
+                                {
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingTwo">
+                                            <h4 class="panel-title">
+                                                <a role="button" data-toggle="collapse" data-parent="#accordion11" href="#@string.Concat(insti.InstituteName.Replace(".", "").Replace(",", "").Replace("'", "").Replace("-", "").Replace(" ", "").Trim(), @item.DivisionId)" aria-expanded="true" aria-controls="@string.Concat(insti.InstituteName.Replace(".", "").Replace(",", "").Replace("'", "").Replace("-", "").Replace(" ", "").Trim(), @item.DivisionId)">
+                                                    <i class="more-less glyphicon glyphicon-plus"> </i>
+                                                    @insti.InstituteName
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="@string.Concat(insti.InstituteName.Replace(".", "").Replace(",", "").Replace("'", "").Replace("-", "").Replace(" ", "").Trim(), @item.DivisionId)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                            <div class="panel-body" style="overflow-x:scroll;">
+                                                <table class="table table-bordered new" id="@string.Concat("updateTable",insti.InstituteId)">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Trades</th>
+                                                            <th>Trade Year</th>
+                                                            <th>number of units</th>
+                                                            <th>Number of seats</th>
+                                                            <th>Modified seats</th>
+                                                            @if (insti.Round == 6)
+                                                            {
+                                                                <th title="General Merit General Pool"> GM-GP</th>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (insti.Round == 3 || insti.Round == 4 || insti.Round == 5)
+                                                                {
+                                                                    <th title="General Merit General Pool"> GM-GP</th>
+                                                                    <th title="Schedule Castes General Pool"> SC-GP</th>
+                                                                    <th title="Schedule Tribes General Pool"> ST-GP</th>
+                                                                    <th title="C1 General Pool"> C1-GP</th>
+                                                                    <th title="IIA General Pool"> IIA-GP</th>
+                                                                    <th title="IIB General Pool"> IIB-GP</th>
+                                                                    <th title="IIIA General Pool"> IIIA-GP</th>
+                                                                    <th title="IIIB General Pool"> IIIB-GP</th>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <th title="General Merit Womens Hyderabad"> GM-W-H</th>
+                                                                    <th title="General Merit Womens Non Hyderabad"> GM-W-NH</th>
+                                                                    <th title="General Merit Physically Handicapped Hyderabad"> GM-PWD-H</th>
+                                                                    <th title="General Merit Physically Handicapped Non Hyderabad"> GM-PWD-NH</th>
+                                                                    <th title="General Merit Ex-Service Hyderabad"> GM-EX-H</th>
+                                                                    <th title="General Merit Ex-Service Non Hyderabad"> GM-EX-NH</th>
+                                                                    <th title="General Merit Kannada Medium Hyderabad"> GM-KM-H</th>
+                                                                    <th title="General Merit Kannada Medium Non Hyderabad"> GM-KM-NH</th>
+                                                                    <th title="General Merit Economically Weaker Section Hyderabad"> GM-EWS-H</th>
+                                                                    <th title="General Merit Economically Weaker Section Non Hyderabad"> GM-EWS-NH</th>
+                                                                    <th title="General Merit General Pool Hyderabad"> GM-GP-H</th>
+                                                                    <th title="General Merit General Pool Non Hyderabad"> GM-GP-NH</th>
+                                                                    <th title="Schedule Castes Womens Hyderabad"> SC-W-H</th>
+                                                                    <th title="Schedule Castes Womens Non Hyderabad"> SC-W-NH</th>
+                                                                    <th title="Schedule Castes Physically Handicapped Hyderabad"> SC-PWD-H</th>
+                                                                    <th title="Schedule Castes Physically Handicapped Non Hyderabad"> SC-PWD-NH</th>
+                                                                    <th title="Schedule Castes Ex-Service Hyderabad"> SC-EX-H</th>
+                                                                    <th title="Schedule Castes Ex-Service Non Hyderabad"> SC-EX-NH</th>
+                                                                    <th title="Schedule Castes Kannada Medium Hyderabad"> SC-KM-H</th>
+                                                                    <th title="Schedule Castes Kannada Medium Non Hyderabad"> SC-KM-NH</th>
+                                                                    <th class="hidden" title="Schedule Castes Economically Weaker Section Hyderabad Hyderabad"> SC-EWS-H</th>
+                                                                    <th class="hidden" title="Schedule Castes Economically Weaker Section Hyderabad Non Hyderabad"> SC-EWS-NH</th>
+                                                                    <th title="Schedule Castes General Pool Hyderabad"> SC-GP-H</th>
+                                                                    <th title="Schedule Castes General Pool Non Hyderabad"> SC-GP-NH</th>
+                                                                    <th title="Schedule Tribes Womens Hyderabad"> ST-W-H</th>
+                                                                    <th title="Schedule Tribes Womens Non Hyderabad"> ST-W-NH</th>
+                                                                    <th title="Schedule Tribes Physically Handicapped Hyderabad"> ST-PWD-H</th>
+                                                                    <th title="Schedule Tribes Physically Handicapped Non Hyderabad"> ST-PWD-NH</th>
+                                                                    <th title="Schedule Tribes Ex-Service Hyderabad"> ST-EX-H</th>
+                                                                    <th title="Schedule Tribes Ex-Service Non Hyderabad"> ST-EX-NH</th>
+                                                                    <th title="Schedule Tribes Kannada Medium Hyderabad"> ST-KM-H</th>
+                                                                    <th title="Schedule Tribes Kannada Medium Non Hyderabad"> ST-KM-NH</th>
+                                                                    <th class="hidden" title="Schedule Tribes Economically Weaker Section Hyderabad"> ST-EWS-H</th>
+                                                                    <th class="hidden" title="Schedule Tribes Economically Weaker Section Non Hyderabad"> ST-EWS-NH</th>
+                                                                    <th title="Schedule Tribes General Pool Hyderabad"> ST-GP-H</th>
+                                                                    <th title="Schedule Tribes General Pool Non Hyderabad"> ST-GP-NH</th>
+                                                                    <th title="C1 Womens Hyderabad"> C1-W-H</th>
+                                                                    <th title="C1 Womens Non Hyderabad"> C1-W-NH</th>
+                                                                    <th title="C1 Physically Handicapped Hyderabad"> C1-PWD-H</th>
+                                                                    <th title="C1 Physically Handicapped Non Hyderabad"> C1-PWD-NH</th>
+                                                                    <th title="C1 Ex-Service Hyderabad"> C1-EX-H</th>
+                                                                    <th title="C1 Ex-Service Non Hyderabad"> C1-EX-NH</th>
+                                                                    <th title="C1 Kannada Medium Hyderabad"> C1-KM-H</th>
+                                                                    <th title="C1 Kannada Medium Non Hyderabad"> C1-KM-NH</th>
+                                                                    <th class="hidden" title="C1 Economically Weaker Section Hyderabad"> C1-EWS-H</th>
+                                                                    <th class="hidden" title="C1 Economically Weaker Section Non Hyderabad"> C1-EWS-NH</th>
+                                                                    <th title="C1 General Pool Hyderabad"> C1-GP-H</th>
+                                                                    <th title="C1 General Pool Non Hyderabad"> C1-GP-NH</th>
+                                                                    <th title="IIA Womens Hyderabad"> IIA-W-H</th>
+                                                                    <th title="IIA Womens Non Hyderabad"> IIA-W-NH</th>
+                                                                    <th title="IIA Physically Handicapped Hyderabad"> IIA-PWD-H</th>
+                                                                    <th title="IIA Physically Handicapped Non Hyderabad"> IIA-PWD-NH</th>
+                                                                    <th title="IIA Ex-Service Hyderabad"> IIA-EX-H</th>
+                                                                    <th title="IIA Ex-Service Non Hyderabad"> IIA-EX-NH</th>
+                                                                    <th title="IIA Kannada Medium Hyderabad"> IIA-KM-H</th>
+                                                                    <th title="IIA Kannada Medium Non Hyderabad"> IIA-KM-NH</th>
+                                                                    <th class="hidden" title="IIA Economically Weaker Section Hyderabad"> IIA-EWS-H</th>
+                                                                    <th class="hidden" title="IIA Economically Weaker Section Non Hyderabad"> IIA-EWS-NH</th>
+                                                                    <th title="IIA General Pool Hyderabad"> IIA-GP-H</th>
+                                                                    <th title="IIA General Pool Non Hyderabad"> IIA-GP-NH</th>
+                                                                    <th title="IIB Womens Hyderabad"> IIB-W-H</th>
+                                                                    <th title="IIB Womens Non Hyderabad"> IIB-W-NH</th>
+                                                                    <th title="IIB Physically Handicapped Hyderabad"> IIB-PWD-H</th>
+                                                                    <th title="IIB Physically Handicapped Non Hyderabad"> IIB-PWD-NH</th>
+                                                                    <th title="IIB Ex-Service Hyderabad"> IIB-EX-H</th>
+                                                                    <th title="IIB Ex-Service Non Hyderabad"> IIB-EX-NH</th>
+                                                                    <th title="IIB Kannada Medium Hyderabad"> IIB-KM-H</th>
+                                                                    <th title="IIB Kannada Medium Non Hyderabad"> IIB-KM-NH</th>
+                                                                    <th class="hidden" title="IIB Economically Weaker Section Hyderabad"> IIB-EWS-H</th>
+                                                                    <th class="hidden" title="IIB Economically Weaker Section Non Hyderabad"> IIB-EWS-NH</th>
+                                                                    <th title="IIB General Pool Hyderabad"> IIB-GP-H</th>
+                                                                    <th title="IIB General Pool Non Hyderabad"> IIB-GP-NH</th>
+                                                                    <th title="IIIA Womens Hyderabad"> IIIA-W-H</th>
+                                                                    <th title="IIIA Womens Non Hyderabad"> IIIA-W-NH</th>
+                                                                    <th title="IIIA Physically Handicapped Hyderabad"> IIIA-PWD-H</th>
+                                                                    <th title="IIIA Physically Handicapped Non Hyderabad"> IIIA-PWD-NH</th>
+                                                                    <th title="IIIA Ex-Service Hyderabad"> IIIA-EX-H</th>
+                                                                    <th title="IIIA Ex-Service Non Hyderabad"> IIIA-EX-NH</th>
+                                                                    <th title="IIIA Kannada Medium Hyderabad"> IIIA-KM-H</th>
+                                                                    <th title="IIIA Kannada Medium Non Hyderabad"> IIIA-KM-NH</th>
+                                                                    <th class="hidden" title="IIIA Economically Weaker Section Hyderabad"> IIIA-EWS-H</th>
+                                                                    <th class="hidden" title="IIIA Economically Weaker Section Non Hyderabad"> IIIA-EWS-NH</th>
+                                                                    <th title="IIIA General Pool Hyderabad"> IIIA-GP-H</th>
+                                                                    <th title="IIIA General Pool Non Hyderabad"> IIIA-GP-NH</th>
+                                                                    <th title="IIIB Womens Hyderabad"> IIIB-W-H</th>
+                                                                    <th title="IIIB Womens Non Hyderabad"> IIIB-W-NH</th>
+                                                                    <th title="IIIB Physically Handicapped Hyderabad"> IIIB-PWD-H</th>
+                                                                    <th title="IIIB Physically Handicapped Non Hyderabad"> IIIB-PWD-NH</th>
+                                                                    <th title="IIIB Ex-Service Hyderabad"> IIIB-EX-H</th>
+                                                                    <th title="IIIB Ex-Service Non Hyderabad"> IIIB-EX-NH</th>
+                                                                    <th title="IIIB Kannada Medium Hyderabad"> IIIB-KM-H</th>
+                                                                    <th title="IIIB Kannada Medium Non Hyderabad"> IIIB-KM-NH</th>
+                                                                    <th class="hidden" title="IIIB Economically Weaker Section Hyderabad"> IIIB-EWS-H</th>
+                                                                    <th class="hidden" title="IIIB Economically Weaker Section Non Hyderabad"> IIIB-EWS-NH</th>
+                                                                    <th title="IIIB General Pool Hyderabad"> IIIB-GP-H</th>
+                                                                    <th title="IIIB General Pool Non Hyderabad"> IIIB-GP-NH</th>
+                                                                }
+                                                            }
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (insti.Trades.Count <= 1)
+                                                        {
+                                                            <tr>
+                                                                <td colspan="90"> No Trades available</td>
+                                                            </tr>
+                                                        }
+                                                        @foreach (var trad in insti.Trades.Where(a => a.TradeId != 0).ToList())
+                                                        {
+
+                                                            <tr id="tr_@insti.InstituteId@trad.TradeId">
+                                                                <td>@trad.TradeName <input type="hidden" class="form-control" style="width:70px;" value="@trad.TradeId" /></td>
+                                                                <td>@trad.TradeYear </td>
+                                                                <td>@trad.Units </td>
+                                                                <td>@trad.Seats <input type="hidden" class="form-control" style="width:70px;" value="@insti.Round" /> </td>
+                                                                <td></td>
+                                                                @if (insti.Round == 6)
+                                                                {
+                                                                    <td><input type="text" class="form-control" style="width:70px;" value="@trad.GMGP" /> </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (insti.Round == 3 || insti.Round == 4 || insti.Round == 5)
+                                                                    {
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMGP" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCGP" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STGP" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1GP" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAGP" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBGP" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAGP" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBGP" /> </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMWH" /></td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMWNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMPDH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMPDNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMEXSH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMEXSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMKMH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMKMNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMEWSH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMEWSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMGPH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.GMGPNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCWH" /></td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCWNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCPDH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCPDNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCEXSH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCEXSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCKMH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCKMNH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCEWSH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCEWSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCGPH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.SCGPNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STWH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STWNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STPDH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STPDNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STEXSH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STEXSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STKMH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STKMNH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STEWSH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STEWSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STGPH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.STGPNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1WH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1WNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1PDH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1PDNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1EXSH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1EXSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1KMH" /></td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1KMNH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1EWSH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1EWSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1GPH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.C1GPNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAWH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAWNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAPDH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAPDNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAEXSH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAEXSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAKMH" /></td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAKMNH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAEWSH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAEWSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAGPH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOAGPNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBWH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBWNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBPDH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBPDNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBEXSH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBEXSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBKMH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBKMNH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBEWSH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBEWSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBGPH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.TWOBGPNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAWH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAWNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAPDH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAPDNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAEXSH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAEXSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAKMH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAKMNH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAEWSH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAEWSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAGPH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEAGPNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBWH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBWNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBPDH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBPDNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBEXSH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBEXSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBKMH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBKMNH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBEWSH" /> </td>
+                                                                        <td class="hidden"><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBEWSNH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBGPH" /> </td>
+                                                                        <td><input type="text" class="form-control" onchange="EachInputCount(@insti.InstituteId@trad.TradeId)" style="width:70px;" value="@trad.THREEBGPNH" /> </td>
+                                                                    }
+                                                                }
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                @if (insti.Trades.Count > 1)
+                                                {
+                                                    if (Session["RoleId"].Equals(5))
+                                                    {
+                                                        <input type="submit" class="btn btn-primary update" onclick="UpdateSeatMatrixCollegeWise('updateTable'+@insti.InstituteId,@insti.InstituteId)" value="Update" /><span style="color:green;"> Total Seats :@insti.TotalSeats</span>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    }
+
+</div>
+@*</div>*@
+<script>
+    function toggleIcon(e) {
+        $(e.target)
+            .prev('.panel-heading')
+            .find(".more-less")
+            .toggleClass('glyphicon-plus glyphicon-minus');
+    }
+    $('.panel-group').on('hidden.bs.collapse', toggleIcon);
+    $('.panel-group').on('shown.bs.collapse', toggleIcon);
+    $('.panel-group .panel-group').on('hidden.bs.collapse', toggleIcon);
+    $('.panel-group .panel-group').on('shown.bs.collapse', toggleIcon);
+</script>

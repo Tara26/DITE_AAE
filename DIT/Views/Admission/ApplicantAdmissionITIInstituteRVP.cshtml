@@ -1,0 +1,602 @@
+﻿@model Models.Admission.AssignDataBasedOnTabs
+@{
+
+    ViewBag.Title = "ApplicantAdmissionITIInstituteRVP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .RemovePadding {
+    padding-right: 0px;
+    padding-left: 0px;
+    }
+</style>
+<script src="~/Scripts/Admission/bootstrap-multiselect.js"></script>
+<link href="~/Scripts/Admission/bootstrap-multiselect.css" rel="stylesheet" />
+<link href="~/Scripts/Admission/ApplicantOnlineApplicationForm.css" rel="stylesheet" />
+
+<br />
+<br />
+<br />
+
+<ul class="nav nav-tabs">
+    <li>
+        <a href="#tab_1" id="tab1" data-toggle="tab">Applicant Admitted Details</a>
+    </li>
+    <li>
+        <a href="#tab_2" id="tab2" data-toggle="tab">Applicant Rejected Details</a>
+    </li>
+</ul>
+@{
+    Model.SessionValue = "SessionYearA";
+    Model.SessionValueErr = "SessionValueA-Required";
+    Model.CourseType = "CourseTypeA";
+    Model.CourseTypeErr = "CourseTypeA-Required";
+    Model.ApplicantType = "ApplicantTypeA";
+    Model.ApplicantTypeErr = "ApplicantTypeA-Required";
+    Model.RoundOption = "RoundOptionA";
+    Model.RoundOptionErr = "RoundOptionA-Required";
+    Model.Division = "DivisionA";
+    Model.DivisionErr = "DivisionA-Required";
+    Model.District = "DistrictA";
+    Model.DistrictErr = "DistrictA-Required";
+    Model.Taluk = "TalukA";
+    Model.TalukErr = "TalukA-Required";
+    Model.ITIInstitute = "ITIInstituteA";
+    Model.ITIInstituteErr = "ITIInstituteA-Required";
+    Model.PhysicallyHanidcapInd = "PhysicallyHanidcapIndA";
+    Model.ApplicantSeatDetails = "ApplicantSeatDetailsA";
+    Model.AcademicMonths = "AcademicMonthsA";
+    Model.AcademicYear = "AcademicYearA";
+    Model.academicyear1 = "academicyear1A";
+    Model.ImgPhotoUpload = "ImgPhotoUploadA";
+    Model.IsUploaded = "IsUploadedA";
+    Model.ApplicantId = "ApplicantIdA";
+    Model.CredatedBy = "CredatedByA";
+    Model.txtApplicantName = "txtApplicantNameA";
+    Model.dateofbirth = "dateofbirthA";
+    Model.txtFathersName = "txtFathersNameA";
+    Model.txtMothersName = "txtMothersNameA";
+    Model.txtParentOccupation = "txtParentOccupationA";
+    Model.Gender = "GenderA";
+    Model.txtCaste = "txtCasteA";
+    Model.Religion = "ReligionA";
+    Model.ApplicantTypeSelect = "ApplicantTypeSelectA";
+    Model.MinorityCategory = "MinorityCategoryA";
+    Model.txtRationCard = "txtRationCardA";
+    Model.AadhaarNumberDuplicate = "AadhaarNumberDuplicateA";
+    Model.txtAadhaarNumber = "txtAadhaarNumberA";
+    Model.txtFamilyAnnualIncome = "txtFamilyAnnualIncomeA";
+    Model.AccountNumber = "AccountNumberA";
+    Model.BankName = "BankNameA";
+    Model.IFSCCode = "IFSCCodeA";
+    Model.DiffAbledCer = "DiffAbledCerA";
+    Model.KanMedCer = "KanMedCerA";
+    Model.ExServiceCer = "ExServiceCerA";
+    Model.LandLoserCer = "LandLoserCerA";
+    Model.EcoWeakCer = "EcoWeakCerA";
+    Model.KMCer = "KMCerA";
+    Model.HoraNaduCer = "HoraNaduCerA";
+    Model.HydKarCer = "HydKarCerA";
+    Model.ExeStuCer = "ExeStuCerA";
+    Model.ApplicableReservations = "ApplicableReservationsA";
+    Model.PhysicallyHanidcapYes = "PhysicallyHanidcapYesA";
+    Model.PhysicallyHanidcapNo = "PhysicallyHanidcapNoA";
+    Model.PhysicallyHanidcapInd = "PhysicallyHanidcapIndA";
+    Model.PhysicallyHanidcapDiv1 = "PhysicallyHanidcapDiv1A";
+    Model.PhysicallyHanidcapDiv2 = "PhysicallyHanidcapDiv2A";
+    Model.PhysicallyHanidcapType = "PhysicallyHanidcapTypeA";
+    Model.HoraNaduYes = "HoraNaduYesA";
+    Model.HoraNaduNo = "HoraNaduNoA";
+    Model.HoraNadu = "HoraNaduA";
+    Model.ExemptedFromStudyCertificateYes = "ExemptedFromStudyCertificateYesA";
+    Model.ExemptedFromStudyCertificateNo = "ExemptedFromStudyCertificateNoA";
+    Model.ExemptedFromStudyCertificate = "ExemptedFromStudyCertificateA";
+    Model.HyderabadKarnatakaRegionYes = "HyderabadKarnatakaRegionYesA";
+    Model.HyderabadKarnatakaRegionNo = "HyderabadKarnatakaRegionNoA";
+    Model.HyderabadKarnatakaRegion = "HyderabadKarnatakaRegionA";
+    Model.KanndaMediumYes = "KanndaMediumYesA";
+    Model.KanndaMediumNo = "KanndaMediumNoA";
+    Model.KanndaMedium = "KanndaMediumA";
+    Model.RuralUrban = "RuralUrbanA";
+    Model.AppBasics = "AppBasicsA";
+    Model.studiedMathsScience = "studiedMathsScienceA";
+    Model.TenthBoard = "TenthBoardA";
+    Model.TenthCOBSEBoard = "TenthCOBSEBoardA";
+    Model.txtInstituteStudied = "txtInstituteStudiedA";
+    Model.txtMaximumMarks = "txtMaximumMarksA";
+    Model.txtMarksObtained = "txtMarksObtainedA";
+    Model.lblPercAsPerMarks = "lblPercAsPerMarksA";
+    Model.Results = "ResultsA";
+    Model.txtCommunicationAddress = "txtCommunicationAddressA";
+    Model.Districts = "DistrictsA";
+    Model.Talukas = "TalukasA";
+    Model.txtPincode = "txtPincodeA";
+    Model.chkSameAsCommunicationAddress = "chkSameAsCommunicationAddressA";
+    Model.txtPermanentAddress = "txtPermanentAddressA";
+    Model.PermanentDistricts = "PermanentDistrictsA";
+    Model.PermanentTalukas = "PermanentTalukasA";
+    Model.txtPermanentPincode = "txtPermanentPincodeA";
+    Model.txtApplicantPhoneNumber = "txtApplicantPhoneNumberA";
+    Model.txtFathersPhoneNumber = "txtFathersPhoneNumberA";
+    Model.txtEmailId = "txtEmailIdA";
+    Model.DocEduCerAcceptedImg = "DocEduCerAcceptedImgA";
+    Model.DocEduCerRejectedImg = "DocEduCerRejectedImgA";
+    Model.EduCertificate = "EduCertificateA";
+    Model.aEduCertificate = "aEduCertificateA";
+    Model.EduDocStatus = "EduDocStatusA";
+    Model.txtEduCertRemarks = "txtEduCertRemarksA";
+    Model.DocCasCerAcceptedImg = "DocCasCerAcceptedImgA";
+    Model.DocCasCerRejectedImg = "DocCasCerRejectedImgA";
+    Model.CasteCertificate = "CasteCertificateA";
+    Model.aCasteCertificate = "aCasteCertificateA";
+    Model.CasDocStatus = "CasDocStatusA";
+    Model.txtCasteCertRemarks = "txtCasteCertRemarksA";
+    Model.DocRatCerAcceptedImg = "DocRatCerAcceptedImgA";
+    Model.DocRatCerRejectedImg = "DocRatCerRejectedImgA";
+    Model.Rationcard = "RationcardA";
+    Model.aRationCard = "aRationCardA";
+    Model.RationDocStatus = "RationDocStatusA";
+    Model.txtRationCardRemarks = "txtRationCardRemarksA";
+    Model.DocIncCerAcceptedImg = "DocIncCerAcceptedImgA";
+    Model.DocIncCerRejectedImg = "DocIncCerRejectedImgA";
+    Model.Incomecertificate = "IncomecertificateA";
+    Model.aIncomeCertificate = "aIncomeCertificateA";
+    Model.IncCerDocStatus = "IncCerDocStatusA";
+    Model.txtIncCertRemarks = "txtIncCertRemarksA";
+    Model.DocUIDCerAcceptedImg = "DocUIDCerAcceptedImgA";
+    Model.DocUIDCerRejectedImg = "DocUIDCerRejectedImgA";
+    Model.UIDNumber = "UIDNumberA";
+    Model.aUIDNumber = "aUIDNumberA";
+    Model.UIDDocStatus = "UIDDocStatusA";
+    Model.txtUIDRemarks = "txtUIDRemarksA";
+    Model.DocRurCerAcceptedImg = "DocRurCerAcceptedImgA";
+    Model.DocRurCerRejectedImg = "DocRurCerRejectedImgA";
+    Model.Ruralcertificate = "RuralcertificateA";
+    Model.RcerDocStatus = "RcerDocStatusA";
+    Model.txtRurCertRemarks = "txtRurCertRemarksA";
+    Model.DocKanMedCerAcceptedImg = "DocKanMedCerAcceptedImgA";
+    Model.DocKanMedCerRejectedImg = "DocKanMedCerRejectedImgA";
+    Model.KannadamediumCertificate = "KannadamediumCertificateA";
+    Model.aKannadamediumCertificate = "aKannadamediumCertificateA";
+    Model.KanMedCerDocStatus = "KanMedCerDocStatusA";
+    Model.txtKanMedRemarks = "txtKanMedRemarksA";
+    Model.DocDidAblCerAcceptedImg = "DocDidAblCerAcceptedImgA";
+    Model.DocDidAblCerRejectedImg = "DocDidAblCerRejectedImgA";
+    Model.Differentlyabledcertificate = "DifferentlyabledcertificateA";
+    Model.aDifferentlyabledcertificate = "aDifferentlyabledcertificateA";
+    Model.DiffAblDocStatus = "DiffAblDocStatusA";
+    Model.txtDiffAbledCertRemarks = "txtDiffAbledCertRemarksA";
+    Model.DocExStuCerAcceptedImg = "DocExStuCerAcceptedImgA";
+    Model.DocExStuCerRejectedImg = "DocExStuCerRejectedImgA";
+    Model.ExemptedCertificate = "ExemptedCertificateA";
+    Model.aExemptedCertificate = "aExemptedCertificateA";
+    Model.ExCerDocStatus = "ExCerDocStatusA";
+    Model.txtExeCertRemarks = "txtExeCertRemarksA";
+    Model.DocHyKarRegAcceptedImg = "DocHyKarRegAcceptedImgA";
+    Model.DocHyKarRegRejectedImg = "DocHyKarRegRejectedImgA";
+    Model.HyderabadKarnatakaRegion = "HyderabadKarnatakaRegionA";
+    Model.aHyderabadKarnatakaRegion = "aHyderabadKarnatakaRegionA";
+    Model.HyKarDocStatus = "HyKarDocStatusA";
+    Model.txtHydKarnRemarks = "txtHydKarnRemarksA";
+    Model.DocHorGadKanAcceptedImg = "DocHorGadKanAcceptedImgA";
+    Model.DocHorGadKanRejectedImg = "DocHorGadKanRejectedImgA";
+    Model.HoranaaduKannadiga = "HoranaaduKannadigaA";
+    Model.aHoranaaduKannadiga = "aHoranaaduKannadigaA";
+    Model.HorKanDocStatus = "HorKanDocStatusA";
+    Model.txtHorGadKannadigaRemarks = "txtHorGadKannadigaRemarksA";
+    Model.DocOthCerAcceptedImg = "DocOthCerAcceptedImgA";
+    Model.DocOthCerRejectedImg = "DocOthCerRejectedImgA";
+    Model.OtherCertificates = "OtherCertificatesA";
+    Model.aOtherCertificates = "aOtherCertificatesA";
+    Model.OtherCerDocStatus = "OtherCerDocStatusA";
+    Model.txtOtherCertRemarks = "txtOtherCertRemarksA";
+    Model.DocExSerAcceptedImg = "DocExSerAcceptedImgA";
+    Model.DocExSerRejectedImg = "DocExSerRejectedImgA";
+    Model.Exserviceman = "ExservicemanA";
+    Model.aExserviceman = "aExservicemanA";
+    Model.ExserDocStatus = "ExserDocStatusA";
+    Model.txtExservicemanRemarks = "txtExservicemanRemarksA";
+    Model.DocEWSAcceptedImg = "DocEWSAcceptedImgA";
+    Model.DocEWSRejectedImg = "DocEWSRejectedImgA";
+    Model.EWSCertificate = "EWSCertificateA";
+    Model.aEWSCertificate = "aEWSCertificateA";
+    Model.aRuralcertificate = "aRuralcertificateA";
+    Model.EWSDocStatus = "EWSDocStatusA";
+    Model.txtEWSCertificateRemarks = "txtEWSCertificateRemarksA";
+    Model.EDocAppId = "EDocAppIdA";
+    Model.ECreatedBy = "ECreatedByA";
+    Model.CDocAppId = "CDocAppIdA";
+    Model.CCreatedBy = "CCreatedByA";
+    Model.RDocAppId = "RDocAppIdA";
+    Model.RCreatedBy = "RCreatedByA";
+    Model.IDocAppId = "IDocAppIdA";
+    Model.ICreatedBy = "ICreatedByA";
+    Model.UDocAppId = "UDocAppIdA";
+    Model.UCreatedBy = "UCreatedByA";
+    Model.RUDocAppId = "RUDocAppIdA";
+    Model.RUCreatedBy = "RUCreatedByA";
+    Model.KDocAppId = "KDocAppIdA";
+    Model.KCreatedBy = "KCreatedByA";
+    Model.DDocAppId = "DDocAppIdA";
+    Model.DCreatedBy = "DCreatedByA";
+    Model.ExDocAppId = "ExDocAppIdA";
+    Model.ExCreatedBy = "ExCreatedByA";
+    Model.HDocAppId = "HDocAppIdA";
+    Model.HCreatedBy = "HCreatedByA";
+    Model.HGKDocAppId = "HGKDocAppIdA";
+    Model.HGKCreatedBy = "HGKCreatedByA";
+    Model.ODocAppId = "ODocAppIdA";
+    Model.OCreatedBy = "OCreatedByA";
+    Model.KMDocAppId = "KMDocAppIdA";
+    Model.KMCreatedBy = "KMCreatedByA";
+    Model.ExSDocAppId = "ExSDocAppIdA";
+    Model.ExSCreatedBy = "ExSCreatedByA";
+    Model.LLDocAppId = "LLDocAppIdA";
+    Model.LLCreatedBy = "LLCreatedByA";
+    Model.EWSDocAppId = "EWSDocAppIdA";
+    Model.EWSCreatedBy = "EWSCreatedByA";
+    Model.ApplStatus = "ApplStatusA";
+    Model.ApplCredatedBy = "ApplCredatedByA";
+    Model.ApplFlowId = "ApplFlowIdA";
+    Model.academicyear2 = "academicyear2A";
+    Model.ApplicationNumber = "ApplicationNumberA";
+    Model.ApplicationName = "ApplicationNameA";
+    Model.RankNumber = "RankNumberA";
+    Model.DivisionName = "DivisionNameA";
+    Model.DistrictName = "DistrictNameA";
+    Model.TalukName = "TalukNameA";
+    Model.MISCode = "MISCodeA";
+    Model.InstituteName = "InstituteNameA";
+    Model.InstituteType = "InstituteTypeA";
+    Model.VerticalCategory = "VerticalCategoryA";
+    Model.HorizontalCategory = "HorizontalCategoryA";
+    Model.TradeName = "TradeNameA";
+    Model.Units = "UnitsA";
+    Model.Shifts = "ShiftsA";
+    Model.DualType = "DualTypeA";
+    Model.TraineeType = "TraineeTypeA";
+    Model.ITIUnderPPP = "ITIUnderPPPA";
+    Model.AdmisionTime = "AdmisionTimeA";
+    Model.AdmisionFee = "AdmisionFeeA";
+    Model.SaveSeatAllocationFeePay = "SaveSeatAllocationFeePayA";
+    Model.PaymentGenerationGrid = "PaymentGenerationGridA";
+    Model.PaymentDate = "PaymentDateA";
+    Model.SearchFrom = "A";
+    Model.DownloadReceipt = "DownloadReceiptA";
+    Model.AdmFeePaidStatus = "AdmFeePaidStatusA";
+    Model.ReceiptNumber = "ReceiptNumberA";
+    Model.AdmissionRegistrationNumber = "AdmissionRegistrationNumberA";
+    Model.StateRegistrationNumber = "StateRegistrationNumberA";
+    Model.RollNumber = "RollNumberA";
+    Model.AdmittedStatus = "AdmittedStatusA";
+    Model.txtRemarks = "txtRemarksA";
+}
+<div class="tab-content">
+    <div class="tab-pane fade" id="tab_1">
+        @Html.Partial("~/Views/Admission/ApplicantAdmissionITIInstitutePartial.cshtml", Model)
+        
+
+
+    </div>
+</div>
+@{
+    Model.SessionValue = "SessionYearR";
+    Model.SessionValueErr = "SessionValueR-Required";
+    Model.CourseType = "CourseTypeR";
+    Model.CourseTypeErr = "CourseTypeR-Required";
+    Model.ApplicantType = "ApplicantTypeR";
+    Model.ApplicantTypeErr = "ApplicantTypeR-Required";
+    Model.RoundOption = "RoundOptionR";
+    Model.RoundOptionErr = "RoundOptionR-Required";
+    Model.Division = "DivisionR";
+    Model.DivisionErr = "DivisionR-Required";
+    Model.District = "DistrictR";
+    Model.DistrictErr = "DistrictR-Required";
+    Model.Taluk = "TalukR";
+    Model.TalukErr = "TalukR-Required";
+    Model.ITIInstitute = "ITIInstituteR";
+    Model.ITIInstituteErr = "ITIInstituteR-Required";
+    Model.PhysicallyHanidcapInd = "PhysicallyHanidcapIndR";
+    Model.ApplicantSeatDetails = "ApplicantSeatDetailsR";
+    Model.AcademicMonths = "AcademicMonthsR";
+    Model.AcademicYear = "AcademicYearR";
+    Model.academicyear1 = "academicyear1R";
+    Model.ImgPhotoUpload = "ImgPhotoUploadR";
+    Model.IsUploaded = "IsUploadedR";
+    Model.ApplicantId = "ApplicantIdR";
+    Model.CredatedBy = "CredatedByR";
+    Model.txtApplicantName = "txtApplicantNameR";
+    Model.dateofbirth = "dateofbirthR";
+    Model.txtFathersName = "txtFathersNameR";
+    Model.txtMothersName = "txtMothersNameR";
+    Model.txtParentOccupation = "txtParentOccupationR";
+    Model.Gender = "GenderR";
+    Model.txtCaste = "txtCasteR";
+    Model.Religion = "ReligionR";
+    Model.ApplicantTypeSelect = "ApplicantTypeSelectR";
+    Model.MinorityCategory = "MinorityCategoryR";
+    Model.txtRationCard = "txtRationCardR";
+    Model.AadhaarNumberDuplicate = "AadhaarNumberDuplicateR";
+    Model.txtAadhaarNumber = "txtAadhaarNumberR";
+    Model.txtFamilyAnnualIncome = "txtFamilyAnnualIncomeR";
+    Model.AccountNumber = "AccountNumberR";
+    Model.BankName = "BankNameR";
+    Model.IFSCCode = "IFSCCodeR";
+    Model.DiffAbledCer = "DiffAbledCerR";
+    Model.KanMedCer = "KanMedCerR";
+    Model.ExServiceCer = "ExServiceCerR";
+    Model.LandLoserCer = "LandLoserCerR";
+    Model.EcoWeakCer = "EcoWeakCerR";
+    Model.KMCer = "KMCerR";
+    Model.HoraNaduCer = "HoraNaduCerR";
+    Model.HydKarCer = "HydKarCerR";
+    Model.ExeStuCer = "ExeStuCerR";
+    Model.ApplicableReservations = "ApplicableReservationsR";
+    Model.PhysicallyHanidcapYes = "PhysicallyHanidcapYesR";
+    Model.PhysicallyHanidcapNo = "PhysicallyHanidcapNoR";
+    Model.PhysicallyHanidcapInd = "PhysicallyHanidcapIndR";
+    Model.PhysicallyHanidcapDiv1 = "PhysicallyHanidcapDiv1R";
+    Model.PhysicallyHanidcapDiv2 = "PhysicallyHanidcapDiv2R";
+    Model.PhysicallyHanidcapType = "PhysicallyHanidcapTypeR";
+    Model.HoraNaduYes = "HoraNaduYesR";
+    Model.HoraNaduNo = "HoraNaduNoR";
+    Model.HoraNadu = "HoraNaduR";
+    Model.aUIDNumber = "aUIDNumberR";
+    Model.ExemptedFromStudyCertificateYes = "ExemptedFromStudyCertificateYesR";
+    Model.ExemptedFromStudyCertificateNo = "ExemptedFromStudyCertificateNoR";
+    Model.ExemptedFromStudyCertificate = "ExemptedFromStudyCertificateR";
+    Model.HyderabadKarnatakaRegionYes = "HyderabadKarnatakaRegionYesR";
+    Model.HyderabadKarnatakaRegionNo = "HyderabadKarnatakaRegionNoR";
+    Model.HyderabadKarnatakaRegion = "HyderabadKarnatakaRegionR";
+    Model.KanndaMediumYes = "KanndaMediumYesR";
+    Model.KanndaMediumNo = "KanndaMediumNoR";
+    Model.KanndaMedium = "KanndaMediumR";
+    Model.RuralUrban = "RuralUrbanR";
+    Model.AppBasics = "AppBasicsR";
+    Model.studiedMathsScience = "studiedMathsScienceR";
+    Model.TenthBoard = "TenthBoardR";
+    Model.TenthCOBSEBoard = "TenthCOBSEBoardR";
+    Model.txtInstituteStudied = "txtInstituteStudiedR";
+    Model.txtMaximumMarks = "txtMaximumMarksR";
+    Model.txtMarksObtained = "txtMarksObtainedR";
+    Model.lblPercAsPerMarks = "lblPercAsPerMarksR";
+    Model.Results = "ResultsR";
+    Model.txtCommunicationAddress = "txtCommunicationAddressR";
+    Model.Districts = "DistrictsR";
+    Model.Talukas = "TalukasR";
+    Model.txtPincode = "txtPincodeR";
+    Model.chkSameAsCommunicationAddress = "chkSameAsCommunicationAddressR";
+    Model.txtPermanentAddress = "txtPermanentAddressR";
+    Model.PermanentDistricts = "PermanentDistrictsR";
+    Model.PermanentTalukas = "PermanentTalukasR";
+    Model.txtPermanentPincode = "txtPermanentPincodeR";
+    Model.txtApplicantPhoneNumber = "txtApplicantPhoneNumberR";
+    Model.txtFathersPhoneNumber = "txtFathersPhoneNumberR";
+    Model.txtEmailId = "txtEmailIdR";
+    Model.DocEduCerAcceptedImg = "DocEduCerAcceptedImgR";
+    Model.DocEduCerRejectedImg = "DocEduCerRejectedImgR";
+    Model.EduCertificate = "EduCertificateR";
+    Model.aEduCertificate = "aEduCertificateR";
+    Model.EduDocStatus = "EduDocStatusR";
+    Model.txtEduCertRemarks = "txtEduCertRemarksR";
+    Model.DocCasCerAcceptedImg = "DocCasCerAcceptedImgR";
+    Model.DocCasCerRejectedImg = "DocCasCerRejectedImgR";
+    Model.CasteCertificate = "CasteCertificateR";
+    Model.aCasteCertificate = "aCasteCertificateR";
+    Model.CasDocStatus = "CasDocStatusR";
+    Model.txtCasteCertRemarks = "txtCasteCertRemarksR";
+    Model.DocRatCerAcceptedImg = "DocRatCerAcceptedImgR";
+    Model.DocRatCerRejectedImg = "DocRatCerRejectedImgR";
+    Model.Rationcard = "RationcardR";
+    Model.aRationCard = "aRationCardR";
+    Model.RationDocStatus = "RationDocStatusR";
+    Model.txtRationCardRemarks = "txtRationCardRemarksR";
+    Model.DocIncCerAcceptedImg = "DocIncCerAcceptedImgR";
+    Model.DocIncCerRejectedImg = "DocIncCerRejectedImgR";
+    Model.Incomecertificate = "IncomecertificateR";
+    Model.aIncomeCertificate = "aIncomeCertificateR";
+    Model.IncCerDocStatus = "IncCerDocStatusR";
+    Model.txtIncCertRemarks = "txtIncCertRemarksR";
+    Model.DocUIDCerAcceptedImg = "DocUIDCerAcceptedImgR";
+    Model.DocUIDCerRejectedImg = "DocUIDCerRejectedImgR";
+    Model.UIDNumber = "UIDNumberR";
+    Model.UIDDocStatus = "UIDDocStatusR";
+    Model.txtUIDRemarks = "txtUIDRemarksR";
+    Model.DocRurCerAcceptedImg = "DocRurCerAcceptedImgR";
+    Model.DocRurCerRejectedImg = "DocRurCerRejectedImgR";
+    Model.Ruralcertificate = "RuralcertificateR";
+    Model.RcerDocStatus = "RcerDocStatusR";
+    Model.txtRurCertRemarks = "txtRurCertRemarksR";
+    Model.DocKanMedCerAcceptedImg = "DocKanMedCerAcceptedImgR";
+    Model.DocKanMedCerRejectedImg = "DocKanMedCerRejectedImgR";
+    Model.KannadamediumCertificate = "KannadamediumCertificateR";
+    Model.aKannadamediumCertificate = "aKannadamediumCertificateR";
+    Model.KanMedCerDocStatus = "KanMedCerDocStatusR";
+    Model.txtKanMedRemarks = "txtKanMedRemarksR";
+    Model.DocDidAblCerAcceptedImg = "DocDidAblCerAcceptedImgR";
+    Model.DocDidAblCerRejectedImg = "DocDidAblCerRejectedImgR";
+    Model.Differentlyabledcertificate = "DifferentlyabledcertificateR";
+    Model.aDifferentlyabledcertificate = "aDifferentlyabledcertificateR";
+    Model.DiffAblDocStatus = "DiffAblDocStatusR";
+    Model.txtDiffAbledCertRemarks = "txtDiffAbledCertRemarksR";
+    Model.DocExStuCerAcceptedImg = "DocExStuCerAcceptedImgR";
+    Model.DocExStuCerRejectedImg = "DocExStuCerRejectedImgR";
+    Model.ExemptedCertificate = "ExemptedCertificateR";
+    Model.aExemptedCertificate = "aExemptedCertificateR";
+    Model.ExCerDocStatus = "ExCerDocStatusR";
+    Model.txtExeCertRemarks = "txtExeCertRemarksR";
+    Model.DocHyKarRegAcceptedImg = "DocHyKarRegAcceptedImgR";
+    Model.DocHyKarRegRejectedImg = "DocHyKarRegRejectedImgR";
+    Model.HyderabadKarnatakaRegion = "HyderabadKarnatakaRegionR";
+    Model.aHyderabadKarnatakaRegion = "aHyderabadKarnatakaRegionR";
+    Model.HyKarDocStatus = "HyKarDocStatusR";
+    Model.txtHydKarnRemarks = "txtHydKarnRemarksR";
+    Model.DocHorGadKanAcceptedImg = "DocHorGadKanAcceptedImgR";
+    Model.DocHorGadKanRejectedImg = "DocHorGadKanRejectedImgR";
+    Model.HoranaaduKannadiga = "HoranaaduKannadigaR";
+    Model.aHoranaaduKannadiga = "aHoranaaduKannadigaR";
+    Model.HorKanDocStatus = "HorKanDocStatusR";
+    Model.txtHorGadKannadigaRemarks = "txtHorGadKannadigaRemarksR";
+    Model.DocOthCerAcceptedImg = "DocOthCerAcceptedImgR";
+    Model.DocOthCerRejectedImg = "DocOthCerRejectedImgR";
+    Model.OtherCertificates = "OtherCertificatesR";
+    Model.aOtherCertificates = "aOtherCertificatesR";
+    Model.OtherCerDocStatus = "OtherCerDocStatusR";
+    Model.txtOtherCertRemarks = "txtOtherCertRemarksR";
+    Model.DocExSerAcceptedImg = "DocExSerAcceptedImgR";
+    Model.DocExSerRejectedImg = "DocExSerRejectedImgR";
+    Model.Exserviceman = "ExservicemanR";
+    Model.aExserviceman = "aExservicemanR";
+    Model.ExserDocStatus = "ExserDocStatusR";
+    Model.txtExservicemanRemarks = "txtExservicemanRemarksR";
+    Model.DocEWSAcceptedImg = "DocEWSAcceptedImgR";
+    Model.DocEWSRejectedImg = "DocEWSRejectedImgR";
+    Model.EWSCertificate = "EWSCertificateR";
+    Model.aEWSCertificate = "aEWSCertificateR";
+    Model.aRuralcertificate = "aRuralcertificateR";
+    Model.EWSDocStatus = "EWSDocStatusR";
+    Model.txtEWSCertificateRemarks = "txtEWSCertificateRemarksR";
+    Model.EDocAppId = "EDocAppIdR";
+    Model.ECreatedBy = "ECreatedByR";
+    Model.CDocAppId = "CDocAppIdR";
+    Model.CCreatedBy = "CCreatedByR";
+    Model.RDocAppId = "RDocAppIdR";
+    Model.RCreatedBy = "RCreatedByR";
+    Model.IDocAppId = "IDocAppIdR";
+    Model.ICreatedBy = "ICreatedByR";
+    Model.UDocAppId = "UDocAppIdR";
+    Model.UCreatedBy = "UCreatedByR";
+    Model.RUDocAppId = "RUDocAppIdR";
+    Model.RUCreatedBy = "RUCreatedByR";
+    Model.KDocAppId = "KDocAppIdR";
+    Model.KCreatedBy = "KCreatedByR";
+    Model.DDocAppId = "DDocAppIdR";
+    Model.DCreatedBy = "DCreatedByR";
+    Model.ExDocAppId = "ExDocAppIdR";
+    Model.ExCreatedBy = "ExCreatedByR";
+    Model.HDocAppId = "HDocAppIdR";
+    Model.HCreatedBy = "HCreatedByR";
+    Model.HGKDocAppId = "HGKDocAppIdR";
+    Model.HGKCreatedBy = "HGKCreatedByR";
+    Model.ODocAppId = "ODocAppIdR";
+    Model.OCreatedBy = "OCreatedByR";
+    Model.KMDocAppId = "KMDocAppIdR";
+    Model.KMCreatedBy = "KMCreatedByR";
+    Model.ExSDocAppId = "ExSDocAppIdR";
+    Model.ExSCreatedBy = "ExSCreatedByR";
+    Model.LLDocAppId = "LLDocAppIdR";
+    Model.LLCreatedBy = "LLCreatedByR";
+    Model.EWSDocAppId = "EWSDocAppIdR";
+    Model.EWSCreatedBy = "EWSCreatedByR";
+    Model.ApplStatus = "ApplStatusR";
+    Model.ApplCredatedBy = "ApplCredatedByR";
+    Model.ApplFlowId = "ApplFlowIdR";
+    Model.academicyear2 = "academicyear2R";
+    Model.ApplicationNumber = "ApplicationNumberR";
+    Model.ApplicationName = "ApplicationNameR";
+    Model.RankNumber = "RankNumberR";
+    Model.DivisionName = "DivisionNameR";
+    Model.DistrictName = "DistrictNameR";
+    Model.TalukName = "TalukNameR";
+    Model.MISCode = "MISCodeR";
+    Model.InstituteName = "InstituteNameR";
+    Model.InstituteType = "InstituteTypeR";
+    Model.VerticalCategory = "VerticalCategoryR";
+    Model.HorizontalCategory = "HorizontalCategoryR";
+    Model.TradeName = "TradeNameR";
+    Model.Units = "UnitsR";
+    Model.Shifts = "ShiftsR";
+    Model.DualType = "DualTypeR";
+    Model.TraineeType = "TraineeTypeR";
+    Model.ITIUnderPPP = "ITIUnderPPPR";
+    Model.AdmisionTime = "AdmisionTimeR";
+    Model.AdmisionFee = "AdmisionFeeR";
+    Model.SaveSeatAllocationFeePay = "SaveSeatAllocationFeePayR";
+    Model.PaymentGenerationGrid = "PaymentGenerationGridR";
+    Model.PaymentDate = "PaymentDateR";
+    Model.SearchFrom = "R";
+    Model.DownloadReceipt = "DownloadReceiptR";
+    Model.AdmFeePaidStatus = "AdmFeePaidStatusR";
+    Model.ReceiptNumber = "ReceiptNumberR";
+    Model.AdmissionRegistrationNumber = "AdmissionRegistrationNumberR";
+    Model.StateRegistrationNumber = "StateRegistrationNumberR";
+    Model.RollNumber = "RollNumberR";
+    Model.AdmittedStatus = "AdmittedStatusR";
+    Model.txtRemarks = "txtRemarksR";
+}
+<div class="tab-content">
+    <div class="tab-pane fade" id="tab_2">
+        @Html.Partial("~/Views/Admission/ApplicantAdmissionITIInstitutePartial.cshtml", Model)
+        <div class="row FinalButton" style="text-align:center;display:none;">
+            <div>
+                <a class="btn btn-primary" id="OnClickPublish" onclick="OnClickPublish()">Publish</a>
+                <a class="btn btn-primary" id="OnClickSubmit" onclick="OnClickSubmit()">Submit</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal" id="HistoryRemarksCommentsModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Remarks</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <table class="table table-striped table-hover text-center shadow clswidth" id="GetCommentRemarksDetails" style="width:100% !important" border="1" align="center"></table>
+            <div class="modal-footer">               
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="AddHistoryRemarksCommentsModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Remarks</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" style=" min-height: 200px;">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="ExistingRemark">Last Remarks<span style="color:red">*</span></label>                                 
+                                </div>
+                                <div class="col-md-8">
+                                    <textarea name="ExistingRemark"  style="resize: none;" type="text" id="ExistingRemark" maxlength="50" class="form-control" rows="4" cols="50" readonly>
+                                            </textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="AddRemark">Add Remarks<span style="color:red">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <textarea name="AddRemark" style="resize: none;" type="text" id="AddRemark" maxlength="50" class="form-control" rows="4" cols="50">
+                                            </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <label type='hidden' id="PopUpRemarksID"></label>
+                <button type="button" class="btn btn-primary" style="width: 20%;" id="btnAddRemarks" onclick="onclickAddRemarks()">ADD</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="hdnSession" data-value='@Request.RequestContext.HttpContext.Session["RoleId"]' />
+<input type="hidden" id="UserDivionId" data-value='@ViewBag.UserDivionId' />
+
+@Scripts.Render("~/bundles/ApplicantAdmissionITIInstituteRVP")

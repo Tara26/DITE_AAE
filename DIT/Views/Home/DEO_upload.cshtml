@@ -1,0 +1,401 @@
+﻿
+@{
+    ViewBag.Title = "Print_admin";
+}
+
+<style>
+
+    .banner {
+        background-image: url('../../Content/frontend/images/inner-bann.png');
+        padding: 0 0;
+        min-height: 150px !important;
+        background-color: transparent;
+        display: block;
+    }
+
+    .banner-dott {
+        background: none !important;
+    }
+
+    .clearfix {
+        margin-bottom: 10px;
+    }
+
+    element.style {
+    }
+
+    .card {
+        box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        margin-bottom: 1rem;
+    }
+
+    .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1.25rem;
+    }
+
+    .card {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        margin: 2rem 0;
+        padding: 2em 2em;
+    }
+
+    .input-group-text {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: .375rem .75rem;
+        margin-bottom: 0;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        text-align: center;
+        white-space: nowrap;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+    }
+
+    .custom-file-input {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: calc(2.25rem + 2px);
+        margin: 0;
+        opacity: 0;
+    }
+
+    .input-group {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-align: stretch;
+        align-items: stretch;
+        width: 100%;
+    }
+
+        .input-group > .custom-file {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+        .input-group > .input-group-append > .btn, .input-group > .input-group-append > .input-group-text, .input-group > .input-group-prepend:first-child > .btn:not(:first-child), .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child), .input-group > .input-group-prepend:not(:first-child) > .btn, .input-group > .input-group-prepend:not(:first-child) > .input-group-text {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .input-group > .custom-file, .input-group > .custom-select, .input-group > .form-control, .input-group > .form-control-plaintext {
+            position: relative;
+            -ms-flex: 1 1 0%;
+            flex: 1 1 0%;
+            min-width: 0;
+            margin-bottom: 0;
+        }
+
+    .custom-file-label {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1;
+        height: calc(2.25rem + 2px);
+        padding: .375rem .75rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        box-shadow: none;
+    }
+
+    .input-group-append, .input-group-prepend {
+        display: -ms-flexbox;
+        display: flex;
+    }
+
+    .custom-control-label::before, .custom-file-label, .custom-select {
+        transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    label {
+        display: inline-block;
+        margin-bottom: .5rem;
+    }
+
+    .form-group {
+        margin: 20px 20px;
+        min-height: 30px;
+    }
+
+    .agile-logologinblock {
+    }
+
+    .card-header h3 {
+        text-align: center;
+    }
+
+    select, textarea {
+        min-width: 200px;
+        padding: 7px 10px;
+    }
+
+    .card {
+        position: inherit !important;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        margin: 5rem 0 !important;
+        padding: 2em 2em;
+    }
+</style>
+<div class="classes" id="classes" style="min-height:738px;">
+
+
+        <div class="col-md-2"></div>
+
+
+        <div class="col-md-8">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Data Entry Operator View &amp; Upload Data</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+
+                <div class="card-body">
+                    <div class="form-group">
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="uname"><b> Archive (Select Year)</b></label>
+                            </div>
+                            <div class="col-md-4">
+                                <select>
+                                    <option value="">-- Select --</option>
+                                    <option value="">2020</option>
+                                    <option value="">2019</option>
+                                    <option value="">2018</option>
+                                    <option value="">2017</option>
+                                    <option value="">2018</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="card-footer">
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#samp1">View</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+                        <div class="clearfix"></div>
+                        <hr />
+
+
+
+
+                        <!--DIT-->
+                        <div class="modal fade" id="samp1" role="dialog">
+                            <div class="modal-dialog">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" style="float:right!important; width: 0%;">&times;</button>
+                                        <h4 class="modal-title">View</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="col-md-12">
+                                            <div class="table-responsive">
+                                                <table id="example" class="display table-bordered" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <td><p>Roll    No.</p></td>
+                                                            <td><p>Name</p></td>
+                                                            <td>
+                                                                <p>
+                                                                    Father<br />
+                                                                    Name
+                                                                </p>
+                                                            </td>
+                                                            <td>
+                                                                <p>
+                                                                    ITI<br />
+                                                                    Name
+                                                                </p>
+                                                            </td>
+                                                            <td><p>Date    of Birth</p></td>
+                                                            <td><p>Marks-I</p></td>
+                                                            <td><p>Marks-II</p></td>
+                                                            <td><p>Marks-III</p></td>
+                                                            <td><p>Marks-IV</p></td>
+                                                            <td><p>Marks-V</p></td>
+                                                            <td><p>Total</p></td>
+                                                            <td><p>Grade</p></td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><p>&nbsp;</p></td>
+                                                            <td><p>&nbsp;</p></td>
+                                                            <td><p>&nbsp;</p></td>
+                                                            <td><p>&nbsp;</p></td>
+                                                            <td><p>&nbsp;</p></td>
+                                                            <td><p>&nbsp;</p></td>
+                                                            <td><p>&nbsp;</p></td>
+                                                            <td><p>&nbsp;</p></td>
+                                                            <td><p>&nbsp;</p></td>
+                                                            <td><p>&nbsp;</p></td>
+                                                            <td><p>&nbsp;</p></td>
+                                                            <td><p>&nbsp;</p></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" style="width: 20%;">Submit</button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">Close</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="uname"><b> Select Year to Upload</b></label>
+                            </div>
+                            <div class="col-md-4">
+                                <select>
+                                    <option value="">-- Select --</option>
+                                    <option value="">2020</option>
+                                    <option value="">2019</option>
+                                    <option value="">2018</option>
+                                    <option value="">2017</option>
+                                    <option value="">2018</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+
+                        <br />
+                        <div class="clearfix"></div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label for="exampleInputFile"><b>Attach File</b>&nbsp;&nbsp;&nbsp;</label><br />
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="exampleInputFile">
+                                        <label class="custom-file-label" for="exampleInputFile">Choose</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">Upload</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+                        <div class="clearfix"></div>
+                        <hr />
+
+
+
+
+
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3">
+                                <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#myModal1">Preview</button>
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+
+                        </div>
+
+
+                        <!-- modal popup -->
+                        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog">
+                            <!-- Modal1 -->
+                            <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" style="float:right!important; width:0%;">&times;</button>
+                                        <h4>NCVT / SCVT Exams</h4>
+                                        <img src="~/Content/frontend/images/1.jpg" alt=" " class="img-responsive">
+                                        <h5>Supplementary Portions</h5>
+                                        <p>
+                                            Industrial Training and Employment (DITE) manages the functioning
+                                            of operation of Government Industrial Training Institutes (ITIs) and monitoring of
+                                            Government Aided ITIs and Private ITIs.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- //Modal1 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-2"></div>
+
+   
+</div>
+<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript" class="init">
+
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+
+</script>

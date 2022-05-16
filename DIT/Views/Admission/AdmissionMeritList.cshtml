@@ -1,0 +1,1080 @@
+﻿@model Models.Admission.nestedMeritList
+@{
+    ViewBag.Title = "AdmissionMeritList";
+    int sno = 1;
+    int GradationTypeId = 1;
+}
+
+
+<style>
+    .btn-alert-yes {
+        float: left;
+        width: 48%;
+    }
+
+    .btn-alert-no {
+        width: 48%;
+    }
+</style>
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+<link href="~/Scripts/Admission/MeritList.css" rel="stylesheet" />
+
+<br />
+<br />
+<br />
+@if (Session["RoleId"].Equals(5))
+{
+    <h4>
+        <ul class="nav nav-tabs font bg-light">
+            <li>
+                <a href="#tab_1" id="GradApplist" data-toggle="tab">Generate Gradation Applicant List</a>
+            </li>
+            <li>
+                <a href="#tab_2" id="Gradliststatus" data-toggle="tab">Gradation list Status</a>
+            </li>
+            <li>
+                <a href="#tab_3" id="viewGradlist" data-toggle="tab">View Gradation list </a>
+            </li>
+            @*<li>
+                    <a href="#tab_4" data-toggle="tab">Gradation list </a>
+                </li>*@
+        </ul>
+    </h4>
+}
+@if (Session["RoleId"].Equals(12))
+{
+    <ul class="nav nav-tabs font bg-light">
+        <li>
+            <a href="#tab_2" data-toggle="tab">Gradation list Status</a>
+        </li>
+        <li>
+            <a href="#tab_3" data-toggle="tab">View Gradation list </a>
+        </li>
+        @*<li>
+                <a href="#tab_4" data-toggle="tab">Gradation list </a>
+            </li>*@
+    </ul>
+}
+
+
+else if (Session["RoleId"].Equals(6) || Session["RoleId"].Equals(4))
+{
+    <h4>
+        <ul class="nav nav-tabs font bg-light">
+            <li>
+                <a href="#tab_10" data-toggle="tab">Review Gradation Applicant List</a>
+            </li>
+            @*<li>
+                    <a href="#tab_5" data-toggle="tab">Review Gradation Applicant List</a>
+                </li>*@
+            @*<li>
+                    <a href="#tab_2" data-toggle="tab">Gradation list Status</a>
+                </li>*@
+            <li>
+                <a href="#tab_3" data-toggle="tab">View Gradation list </a>
+            </li>
+            @*<li>
+                    <a href="#tab_4" data-toggle="tab">Gradation list </a>
+                </li>*@
+
+        </ul>
+    </h4>
+}
+
+else if (Session["RoleId"].Equals(1))
+{
+    <h4>
+        <ul class="nav nav-tabs font bg-light">
+            <li>
+                <a href="#tab_9" data-toggle="tab">Approve Gradation Applicant List</a>
+            </li>
+            @*<li>
+                    <a href="#tab_7" data-toggle="tab">Review Gradation Applicant List</a>
+                </li>*@
+            @*<li>
+                    <a href="#tab_2" data-toggle="tab">Gradation list Status</a>
+                </li>*@
+            <li>
+                <a href="#tab_3" data-toggle="tab">View Gradation list </a>
+            </li>
+            @*<li>
+                    <a href="#tab_4" data-toggle="tab">Gradation list </a>
+                </li>*@
+
+        </ul>
+    </h4>
+}
+else if (Session["RoleId"].Equals(2))
+{
+    <h4>
+        <ul class="nav nav-tabs font bg-light">
+            <li>
+                <a href="#tab_9" data-toggle="tab">Approve Gradation Applicant List</a>
+            </li>
+            @*<li>
+                    <a href="#tab_7" data-toggle="tab">Review Gradation Applicant List</a>
+                </li>*@
+            @*<li>
+                    <a href="#tab_2" data-toggle="tab">Gradation list Status</a>
+                </li>*@
+            <li>
+                <a href="#tab_3" data-toggle="tab">View Gradation list </a>
+            </li>
+            @*<li>
+                    <a href="#tab_4" data-toggle="tab">Gradation list </a>
+                </li>*@
+
+        </ul>
+    </h4>
+}
+
+else if (Session["RoleId"].Equals(10))
+{
+    <h4>
+        <ul class="nav nav-tabs font bg-light">
+            <li>
+                <a href="#tab_4" data-toggle="tab">Gradation Rank </a>
+            </li>
+
+            @*<li>
+                    <a href="#tab_6" data-toggle="tab">Applicant Rank</a>
+                </li>*@
+        </ul>
+    </h4>
+}
+<br />
+
+<div class="tab-content">
+    <div class="tab-pane fade" id="tab_1">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);padding:5px;">
+            <div class="row border">
+                <div class="row" id="GridListDiv">
+                    <div class="col-lg-12">
+                        <h3 class="head1">Generate Gradation Applicant List</h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="row" style="margin-left:10px;">
+                    <div class="row">
+                        <span style="display:none" id="id"></span>
+                        <div class="col-lg-1"><label>Session:</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlAcademicYearDD">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="AcademicyearErr">Select the Session </span>
+                        </div>
+                        <div class="col-lg-1"><label>Notification Type:<font class="text-danger">*</font></label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlApplicantType" onchange="GetAdmissionRounds(this.id)">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="ApplicantTypeErr">Select the Notification Type</span>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtCourseType">Round<font class="text-danger">*</font></label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlRound" onchange="OnChangeFilters(this.id)">
+                                <option value="choose">Choose</option>
+                            </select>
+                            <span class="spanred" id="ddlRound-Required" style="display:none">Round is required*</span>
+                        </div>
+                        <div class="col-lg-1"><label>Gradation Type :<font class="text-danger">*</font></label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlGradationType">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="GradationTypeErr">Select the gradation type </span>
+                        </div>
+                    </div>
+                    <br><br />
+                    <div class="row" style="text-align: center">
+                        <div class="col-lg-12">
+                            <input type="submit" id="btnGenerate" class="btn btn-primary" name="submit" value="Generate" onclick="GenerateMeritList()" />
+                        </div>
+                    </div>
+                    <br /><br />
+                    @*<div class="row" style="margin-left:76%;width:47%" id="divSearchboxDD">
+                            <div class="col-xs-6 col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" id="txtSearchMeritDD" />
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" type="submit" id="btnSearchMeritDD">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab_2">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);padding:5px;">
+            <div class="row border">
+                <div class="row" id="GridListDiv">
+                    <div class="col-lg-12">
+                        <h3 class="head1">Gradation list Status</h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="row" style="margin-left:10px;">
+                    <br /><br />
+                    <div class="row">
+                        @*<table id="AdmissionCalendarTable" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>*@
+                        <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                            <table id="tblGradationListstatus" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab_3">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+            <div class="row border">
+                <div class="row" id="GridListDiv">
+                    <div class="col-lg-12">
+                        <h3 class="head1">View Gradation Applicant List</h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="row" style="margin-left:10px;">
+                    <div class="row">
+                        <span style="display:none" id="id"></span>
+                        @*<div class="col-lg-4">
+                                <div class="col-sm-3"><label>Session:</label></div>
+                                <div class="col-sm-7">
+                                    <select class="form-control" id="ddlAcademicYearview">
+                                        <option value="Select">Select</option>
+                                    </select>
+                                    <span id="AcademicyearviewErr" style="color:red;font-size:12px;">Select The Session</span>
+                                </div>
+                            </div>*@
+                        <div class="col-lg-1"><label>Session:</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlAcademicYearview">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="AcademicyearviewErr">Select The Session </span>
+                        </div>
+                        <div class="col-lg-1"><label>Notification Type:</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlApplicantTypeview" onchange="GetAdmissionRounds(this.id)">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="ApplicantTypeviewErr">Select The Notification Type </span>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtCourseType">Round<font class="text-danger">*</font></label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlRoundview" onchange="OnChangeFilters(this.id)">
+                                <option value="choose">Choose</option>
+                            </select>
+                            <span class="spanred" id="ddlRoundview-Required" style="display:none">Round is required*</span>
+                        </div>
+                        <div class="col-lg-1"><label>Gradation Type :</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlGradationTypeview">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="GradationTypeviewErr">Select The Gradation Type </span>
+                        </div>
+
+                        @*<div class="col-lg-4">
+                                <div class="col-sm-3">
+                                    <label>Search :</label>
+                                </div>
+                                <div class="search-container">
+                                    <div class="col-sm-7"><input type="text" placeholder="search..." name="search" id="txtSearchGradation" class="form-control" style="width:210px" disabled></div>
+                                    <div class="col-sm-2"><button type="submit" id="btnsearch" class="form-control" disabled><i class="fa fa-search" style="position:center"></i></button></div>
+                                </div>
+                            </div>*@
+                    </div>
+                    <br /><br />
+                    <div class="row" style="display:none;">
+                        <div class="col-lg-2"><label>Division:</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlDivision" onchange="GetDistrict()">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="divisionviewErr">Select the Division </span>
+                        </div>
+                        <div class="col-lg-2"><label>District:</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlDistrict">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="districtviewErr">Select the District </span>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:center;">
+                        <div class="col-lg-12">
+                            @*<a class=" btn btn-primary" id="btnView" onclick="btnviewMeritList()">View</a>*@
+                            <input type="submit" id="btnGenerate" class="btn btn-primary" name="submit" value="Search" onclick="btnviewMeritList()" />
+                        </div>
+                    </div>
+                    <br />
+                    @*<div class="row" style="margin-left:76%;width:47%" id="divSearchboxView">
+                            <div class="col-xs-6 col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" id="txtSearchView" />
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" type="submit" id="btnSearchView">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="row" id="tbldivview">
+                        <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                            <div class="row" style="display:none;" id="lblRoundCntview">
+                                <h4 class="txtRoundCls">Rank List for Round : <span class="text-dark" id="spnRoundview">#round</span></h4>
+                            </div>
+                            <table id="tblGradationListView" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                    <br /><br />
+                    <br /><br />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab_4">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+            <div class="row border">
+                <div class="row" id="GridListDiv">
+                    <div class="col-lg-12">
+                        <h3 class="head1">Gradation List</h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="row" style="margin-left:10px;">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <input type="radio" id="tentative" name="merit" value="Tentative" onclick="GrdationList()" checked>
+                            <label for="tentative">Tentative</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <input type="radio" id="final" name="merit" value="Final" onclick="GrdationList()">
+                            <label for="Final">Final</label>
+                        </div>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                            <table id="tblMeritGradeList" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab_5">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);padding:5px;">
+            <div class="row border">
+                <div class="row" id="GridListDiv">
+                    <div class="col-lg-12">
+                        <h3 class="head1">Gradation Applicant List</h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="row" style="margin-left:10px;">
+                    <div class="row">
+                        <span style="display:none" id="id"></span>
+                        <div class="col-lg-2"><label>Notification Type:</label></div>
+
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlApplicantTypeReview" onchange="GetAdmissionRounds(this.id)">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="ddlApplicantTypeReviewErr">Select the Notification Type </span>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtCourseType">Round<font class="text-danger">*</font></label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlRoundReview" onchange="OnChangeFilters(this.id)">
+                                <option value="choose">Choose</option>
+                            </select>
+                            <span class="spanred" id="ddlRoundReview-Required" style="display:none">Round is required*</span>
+                        </div>
+                        <div class="col-lg-1"><label>Session:</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlAcademicYearReview">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="ddlAcademicYearReviewErr">Select the Session </span>
+                        </div>
+                        <div class="col-lg-2"><label>Gradation Type :</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlGradationTypeReview">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="ddlGradationTypeReviewErr">Select the gradation type </span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" style="text-align:center;">
+                        <div class="col-lg-12">
+                            <input type="submit" id="btnReviewdata" class="btn btn-primary" name="submit" value="Generate" onclick="btnSubmit()" />
+                        </div>
+                    </div>
+                    <br /><br />
+                    <div class="row" id="tbldivReview">
+                        <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                            <table id="tblReviewGradationMeritList" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                    <br /><br />
+                    <div class="row" id="divRemarks">
+                        <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+                            Remarks
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" multiple style="height:auto;" id="remarksDC" value="Sent for Review" class="form-control" />
+                            <span class="spanred" id="remarksErr">Please Enter The Remarks </span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" id="divSendToDC">
+                        <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+                            Send to
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="usersAdToDC" onchange="funSentFromADC()"></select>
+                            <span class="spanred" id="spnselectdropdown">Please  Select Hierarcy level</span>
+                        </div>
+                        <div class="col-lg-7" id="btnSendToDC">
+                            <a class=" btn btn-primary" id="btnSend" onclick="SendforDirector()">Send</a>
+                            <a class=" btn btn-success" id="btnpublish" onclick="btnPublishedMeritList()" style="display:none;">Publish</a>
+                            @*<a class=" btn btn-primary" id="sendBtnchanges" onclick="btnChangesMeritList()" style="display:none;">Changes/Modification</a>*@
+                            <a class=" btn btn-primary" id="CancelBtnAd" onclick="CancelBtnAd()">Back</a>
+                        </div>
+                    </div>
+                    <br /><br />
+                </div>
+                <br /><br />
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tab-pane fade" id="tab_7">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);padding:5px;">
+            <div class=" row border">
+                <div class="row" id="GridListDiv">
+                    <div class="col-lg-12">
+                        <h3 class="head1">Gradation Applicant List</h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="row" style="margin-left:10px;">
+                    <div class="row">
+                        <span style="display:none" id="id"></span>
+                        <div class="col-lg-2"><label>Notification Type:</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlApplicantTypeDir" onchange="GetAdmissionRounds(this.id)">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="ApplicantTypeDirErr">Select the Notification Type</span>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtCourseType">Round<font class="text-danger">*</font></label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlRoundDir" onchange="OnChangeFilters(this.id)">
+                                <option value="choose">Choose</option>
+                            </select>
+                            <span class="spanred" id="ddlRoundDir-Required" style="display:none">Round is required*</span>
+                        </div>
+                        <div class="col-lg-1"><label>Session:</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlAcademicYearDir">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="ddlAcademicYearDirErr">Select the Session </span>
+                        </div>
+                        <div class="col-lg-2"><label>Gradation Type :</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlGradationTypeDir">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="GradationTypeDirErr">Select the gradation type </span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" style="text-align:center;">
+                        @*<a class=" btn btn-primary" id="btnReviewdataDir" onclick="btnReviewdataDir()">ShowList</a>*@
+                        <input type="submit" id="btnReviewdataDir" class="btn btn-primary" name="submit" value="Generate" onclick="btnReviewdataDir()" />
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <div style="overflow-y:scroll;overflow-x:scroll; width:99%" id="tblDirCom">
+                            <table id="tblMeritlistDirector" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            @*<table id="tblMeritlistDirectorfirstPage" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>*@
+                        </div>
+                    </div>
+                    <br /><br />
+                    <div class="row" id="divRemarksDirCom">
+                        <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+                            Remarks
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" multiple style="height:auto;" id="remarksDir" class="form-control" value="Approve and Publish" disabled />
+                        </div>
+                    </div>
+                    <br />
+                    @*<div class="row">
+                            <div class="col-lg-7" style="text-align:right;" id="divDirCom">
+                                <a class=" btn btn-success" id="btnpublishByCD" onclick="btnPublishedMeritList()">Publish</a>
+                                <a class=" btn btn-primary" id="sendBtnchanges" onclick="btnChangesMeritList()" style="display:none;">Changes/Modification</a>
+                                <a class=" btn btn-primary" id="CancelBtnAd" onclick="btnCancelBtnCD()">Cancel</a>
+                            </div>
+                        </div>*@
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab_6">
+        <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);padding:5px;">
+            <div class="row border">
+                <div class="row" id="GridListDiv">
+                    <div class="col-lg-12">
+                        <h3 class="head1"> Gradation Applicant Rank</h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="row" style="margin-left:10px;margin-right:10px;">
+                    <div class="row">
+                        <table id="tblApplicantRank" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <a class=" btn btn-primary" id="CancelBtn">Back</a>
+                        </div>
+                    </div>
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab_8">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+            <div class="row border">
+                <div class="row" id="GridListDiv">
+                    <div class="col-lg-12">
+                        <h3 class="headetitle"> Gradation Applicant Rank</h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="row" style="margin-left:10px;">
+                    <div class="row">
+                        <table id="tblApplicantRank" class="table table-striped table-hover text-center shadow clswidth" border="1">
+                            @*
+                                <thead>
+                                    <tr>
+                                        <th>Slno</th>
+                                        <th>ApplicationId</th>
+                                        <th>Application Name</th>
+                                        <th>Fathers Name</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    @for (var i = 0; i < Model.lists.Count(); i++)
+                                    {
+                                    <tr>
+                                        <td align="center">
+                                            @(i + 1)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(a => a.)
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>*@
+                        </table>
+                        <
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <a class=" btn btn-primary" id="CancelBtn">Back</a>
+                        </div>
+                    </div>
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Use Case 26 - Director/Commissioner (Approve)*@
+    <div class="tab-pane fade" id="tab_9">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);padding:5px;">
+            <div class="row border">
+                <div class="row" id="GridListDiv">
+                    <div class="col-lg-12">
+                        <h3 class="head1">Approve Gradation Applicant List</h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="row" style="margin-left:10px;">
+                    <div class="row">
+                        <span style="display:none" id="id"></span>
+                        <div class="col-lg-1"><label>Session:</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlAcademicYearDirNew" onchange="GetAcademicYearDDc(this.id)">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="ddlAcademicYearDirNewErr">Select the Session </span>
+                        </div>
+                        <div class="col-lg-1"><label>Notification Type:</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlApplicantTypeDirNew" onchange="GetAdmissionRounds(this.id)" @*onchange="GetApplicantTypeDirC()"*@>
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="ApplicantTypeDirNewErr">Select the Notification Type</span>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtCourseType">Round<font class="text-danger">*</font></label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlRoundDirNew" onchange="OnChangeFilters(this.id)">
+                                <option value="choose">Choose</option>
+                            </select>
+                            <span class="spanred" id="ddlRoundDirNew-Required" style="display:none">Round is required*</span>
+                        </div>
+                        <div class="col-lg-1"><label>Gradation Type :</label></div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ddlGradationTypeNewDir">
+                                <option value="Select">Select</option>
+                            </select>
+                            <span class="spanred" id="GradationTypeDirNewErr">Select the gradation type </span>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row" style="text-align:center;">
+                    @*<a class=" btn btn-primary" id="btnReviewdataDir" onclick="btnReviewdataDir()">ShowList</a>*@
+                    <input type="submit" id="btnGenerate" class="btn btn-primary" name="submit" value="Search" onclick="GetAcademicYearDDc(this.id)" />
+                </div>
+                <br /><br />
+                <div class="row">
+                    <div style="overflow-y:scroll;overflow-x:scroll; width:99%" id="tblMeritListDirComNewId">
+                        <table id="tblMeritlistDirectorfirstPage" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                    </div>
+                </div>
+                <br /><br />
+                @*<div class="row">
+                        <div class="col-lg-7">
+                            <a class=" btn btn-primary" id="CancelBtnNew" onclick="CancelBtnNew()">Back</a>
+                        </div>
+                    </div>
+                    <br /><br />*@
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab_10">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+            <div class="row border">
+                <div class="row" id="GridListDiv">
+                    <div class="col-lg-12">
+                        <h3 class="head1">Review Gradation Applicant List</h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="row">
+                    <span style="display:none" id="id"></span>
+                    <div class="col-lg-1"><label>Session:</label></div>
+                    <div class="col-lg-2">
+                        <select class="form-control" id="ddlAcademicYearADNew" onchange="GetAcademicYearADNew(this.id)">
+                            <option value="0">Select</option>
+                        </select>
+                        <span class="spanred" id="ddlAcademicYearADNewErr">Select the Session </span>
+                    </div>
+                    <div class="col-lg-1"><label>Notification Type:</label></div>
+                    <div class="col-lg-2">
+                        <select class="form-control" id="ddlApplicantTypeADNew" onchange="GetAdmissionRounds(this.id)" @*onchange="GetApplicantTypeADNew()"*@>
+                            <option value="0">Select</option>
+                        </select>
+                        <span class="spanred" id="ApplicantTypeADNewErr">Select the Notification Type</span>
+                    </div>
+                    <div class="col-lg-1">
+                        <label for="txtCourseType">Round<font class="text-danger">*</font></label>
+                    </div>
+                    <div class="col-lg-2">
+                        <select class="form-control" id="ddlRoundOptionADNew" onchange="OnChangeFilters(this.id)">
+                            <option value="choose">Choose</option>
+                        </select>
+                        <span class="spanred" id="ddlRoundOptionADNew-Required" style="display:none">Round is required*</span>
+                    </div>
+                    <div class="col-lg-1"><label>Gradation Type :</label></div>
+                    <div class="col-lg-2">
+                        <select class="form-control" id="ddlGradationTypeNewAD" onchange="funGradationTypeAD()">
+                            <option value="Select">Select</option>
+                        </select>
+                        <span id="GradationTypeADNewErr" style="color:red;font-size:12px;">Select the gradation type </span>
+                    </div>
+                    <br /><br />
+                </div>
+                <div class="row" style="text-align:center;">
+                    <div class="col-lg-12">
+                        <input type="submit" id="btnViewShow" class="btn btn-primary" name="submit" value="Search" onclick="GetAcademicYearADNew(this.id)" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="overflow-y:scroll;overflow-x:scroll; width:99%" id="tblDivADReviewNewId">
+                        <table id="tblMeritlistADReviewNew" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                    </div>
+                </div>
+                <br /><br />
+                @*<div class="row">
+                        <div class="col-lg-7">
+                            <a class=" btn btn-primary" id="CancelBtnADNew" onclick="CancelBtnADNew()">Back</a>
+                        </div>
+                    </div>
+                    <br /><br />*@
+
+            </div>
+
+        </div>
+    </div>
+</div>
+    <div class="modal fade" id="ReviewListModel" tabindex="-1">
+        <!-- Modal content-->
+        <div class="modal-content" style="width: 84%;margin-left :8%;">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <h4></h4>
+                    <h3 class="head1">Gradation Applicant List</h3>
+                    <br />
+                    @*<div class="row" style="margin-left:76%;width:47%" id="divSearchboxDC">
+                            <div class="col-xs-6 col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" id="txtSearchMeritDC" />
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" type="submit" id="btnSearchMeritDC">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />*@
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                                <table id="tblMeritlistDirectorNewDemo" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div>
+                            <div class="col-md-3" style="text-align:right;">
+                                Status
+                            </div>
+                            <div class="col-lg-2">
+                                <select class="form-control" id="RevStatusDir" onchange="RevStatusApprove()"></select>
+                                @*<span id="spnselectRevStatus" class="text-danger" style="display:none;">Please  Select Status</span>*@
+                            </div>
+                            @*<div class="col-lg-2">
+            <a class=" btn btn-primary" id="sendBtnchangesDirtoDD" onclick="btnChangesMeritList()">SendBack</a>
+        </div>*@
+                            <div class="row" id="sedbackdiv">
+                                <div class="col-md-2" style="text-align:right;">
+                                    Send Back
+                                </div>
+                                <div class="col-md-2">
+                                    @*<select class="form-control" id="users1" onchange="disablesendToRoles('users1','users','sendBtn1','sendBtn3')"></select>*@
+                                    <select class="form-control" id="backusersDirector" onchange="funSentBackDIRlg()"></select>
+                                    <span class="spanred" id="spnselectdropdown1">Please  Select Hierarcy level</span>
+                                </div>
+                                <div class="col-md-2">
+                                    <a class=" btn btn-primary" id="sendBtnchangesDirtoDD" onclick="btnChangesMeritList()">SendBack</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3" style="text-align:right;">
+                            Remarks
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" multiple style="height:auto;" id="ReviewremarksDir" class="form-control" />
+                        </div>
+                        <div id="divForwardDirtoCom">
+                            <div class="col-md-1">
+                                Send to
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-control" id="usersDirToCom" onchange="funusersDirToCom()"></select>
+                                <span class="spanred" id="spnselectdropdown">Please  Select Hierarcy level</span>
+                            </div>
+                            <div class="col-md-2" id="btnSendToCom">
+                                <a class=" btn btn-primary" id="btnSendCom" onclick="SendforCommissioner()">Send</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-7" style="text-align:right;" id="divDirCom">
+                            <a class=" btn btn-success" id="btnpublishByCD" onclick="btnPublishedMeritList()" style="padding-left:3%;">Approve & Publish</a>
+                            @*<a class=" btn btn-primary" id="sendBtnchangesDirtoDD" onclick="btnChangesMeritList()">Changes/Modification</a>*@
+                            <input type="button" id="btn-cancel" class="btn btn-danger" value="Back" data-dismiss="modal" @*onclick=$("#ReviewListModel").modal("hide");*@ />
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <input type="hidden" id="SessionId" value="" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ADReviewListModel" tabindex="-1">
+        <!-- Modal content-->
+        <div class="modal-content" style="width: 84%;margin-left :8%;">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <div class="row" id="">
+                        <div class="col-lg-12">
+                            <h3 class="head1">Gradation Applicant List</h3>
+                            <br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <span style="display:none" id="id"></span>
+                    </div>
+                    <br />
+                    @*<div class="row" style="margin-left:76%;width:47%" id="divSearchboxAD">
+                            <div class="col-xs-6 col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" id="txtSearchMeritAD" />
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" type="submit" id="btnSearchMeritAD">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                                <table id="tblMeritlistADNewDemoId" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div id="popupmeritListValidate">
+                        <div class="row">
+
+                            <div class="col-lg-2" style="text-align:right;">
+                                Status
+                            </div>
+                            <div class="col-lg-3">
+                                <select class="form-control" id="ADRevStatus" onchange="funStatusAD()"></select>
+                                @*<span id="spnselectRevStatus" class="text-danger" style="display:none;">Please  Select Status</span>*@
+                            </div>
+                            <div class="col-md-2 text-right">
+                                Send Back
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-control" id="backusersAd" onchange="funSentBackToDD()"></select>
+                                <span class="spanred" id="spnselectdropdown1">Please  Select Hierarcy level</span>
+                            </div>
+                            <div class="col-md-1" style="padding-left:3%;">
+                                @*<a class=" btn btn-primary" id="sendBackADBtn" onclick="">Send Back</a>*@
+                                <input type="button" class="btn-primary" id="sendBackADBtn" value="Send Back" onclick="sendBackADtoDD()" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-2" style="text-align:right;">
+                                Remarks
+                            </div>
+                            <div class="col-lg-3">
+                                <input type="text" style="height:auto;" id="ADReviewremarks" class="form-control" />
+                                <span type="hidden" id="testhdn" value="" />
+                            </div>
+
+                            <div class="col-md-2" style="text-align:right;">
+                                Send to
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-control" id="ADReusers" onchange="funSentfrmADToDir()"></select>
+                                <span class="spanred" id="spnADReusersdropdown">Please  Select Hierarcy level</span>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div style="text-align:center">
+                                    <div class="form-group">
+                                        <input type="button" class="btn-primary" id="btnSendDir" value="Send" onclick="SendforDirectorNew();" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row text-center" id="sedbackdiv">
+                            <input type="button" id="btn-cancel" class="btn btn-danger" value="Back" data-dismiss="modal" @*onclick=$("#ADReviewListModel").modal("hide");*@ />
+                        </div>
+                        <br />
+                        <input type="hidden" id="SessionId" value="" />
+                        <input type="hidden" id="hdnSession" data-value="@Request.RequestContext.HttpContext.Session["RoleId"]" />
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+@*status view popup*@
+<div class="modal fade" id="MeritStatusModel" tabindex="-1">
+    <!-- Modal content-->
+    <div class="modal-content" style="width: 84%;margin-left :8%;">
+        <div class="modal-header">
+            <div class="modal-body">
+                <div class="row" id="">
+                    <div class="col-lg-12">
+                        <h3 class="head1"> Gradation Applicant List Status</h3>
+                        <br />
+                    </div>
+                </div>
+                <br />
+                @*<div class="row">
+            <span style="display:none" id="id"></span>
+        </div>
+        <br />
+        <div class="row" style="margin-left:76%;width:47%" id="divSearchboxAD">
+            <div class="col-xs-6 col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" id="txtSearchMeritAD" />
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary" type="submit" id="btnSearchMeritAD">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />*@
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div style="overflow-y:scroll;overflow-x:scroll; width:99%">
+                            <table id="tblMeritStatusViewpopup" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div style="text-align:center">
+                            <div class="form-group">
+                                <input type="button" id="btn-cancel" class="btn btn-danger" value="Back" data-dismiss="modal" @*onclick=$("#MeritStatusModel").modal("hide");*@ />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="text-align:center">
+                        @*<input type="button" id="btn-cancel" class="btn btn-primary" value="ExcelExport" onclick="ExcelExportTentativeADL()" />*@
+                    </div>
+                </div>
+                <br /><br />
+                <input type="hidden" id="SessionId" value="" />
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="container-fluid font" id="ShowHideGenerateRankList">
+    <div class="border">
+    <div class="row" id="tbldivMerit" style="overflow-y:scroll;overflow-x:scroll; width:99%">
+        <div class="row" style="display:none;" id="lblRoundCnt">
+            <h4 class="txtRoundCls">Rank List for Round : <span class="text-dark" id="spnRound">#round</span></h4>
+        </div>
+        <table id="tblGradationMeritList" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+    </div>
+    <br /><br />
+    <div class="row" id="divRemarksDD" style="display:none;">
+        <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+            Remarks
+        </div>
+        <div class="col-lg-6">
+            <input type="text" style="height:auto;" id="RemarksDD" class="form-control" />
+            <span type="hidden" id="testhdn" value="" />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div id="disSentTo">
+            <div class="col-lg-offset-1 col-lg-2" style="text-align:right;">
+                Send to
+            </div>
+            <div class="col-lg-2">
+                <select class="form-control" id="users" onchange="funSentTo()"></select>
+                <span class="spanred" id="spnselectdropdown">Please  Select Hierarcy level</span>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div id="btnapprove" style="display:none; text-align:right;">
+                @*<a class=" btn btn-success" id="sendBtn1" onclick="btnAproveMeritListDD()">Publish</a>*@
+                <a class=" btn btn-success" id="sendBtn1" onclick="btnAproveMeritListDDCal()">Publish</a>
+                <a class=" btn btn-primary" id="CancelBtnDD" onclick="btnCancelBtnDD()">Back</a>
+            </div>
+            <div id="btnForward" style="display:none;">
+                <a class=" btn btn-primary" id="sendBtn3" onclick="btnForwardMeritListDD()"> Send </a>
+                <a class=" btn btn-danger" id="CancelBtn2" onclick="btnCancelBtnDD2()"> Back </a>
+            </div>
+            @*<div id="btnpublishDD" style="display:none;">
+                    <a class=" btn btn-success" id="btnpublish" onclick="btnPublishedMeritList()">PUBLISH</a>
+                </div>*@
+        </div>
+    </div>
+    <br /><br />
+</div>
+</div>
+
+
+
+<div class="modal fade" id="RemarksCommentsModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h3 class="head1">Remark Details</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <table class="table table-striped table-hover text-center shadow clswidth" id="CommentsTable" style="width:100% !important" border="1" align="center"></table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/AdmissionMeritList")

@@ -1,0 +1,882 @@
+﻿@model Models.Admission.SeatAllocation
+@{
+    ViewBag.Title = "SeatAllocation";
+    int sno = 1;
+}
+
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+ <style>
+     .btn-alert-yes {
+         float: left;
+         width: 48%;
+     }
+
+     .btn-alert-no {
+         width: 48%;
+     }
+ </style>
+<br><br><br>
+
+<h4>
+    <ul class="nav nav-tabs font bg-light">
+        <li>
+            <a href="#tab_3" id="tab3" data-toggle="tab">Review seat allocation rules</a>
+        </li>
+        <li>
+            <a href="#tab_4" id="tab4" data-toggle="tab">View seat allocation rules</a>
+        </li>
+    </ul>
+</h4>
+
+<div class="tab-content">
+    <div class="tab-pane fade" id="tab_3">
+        <div class="container-fluid font" id="datatable" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+            @*<br /><br />
+        <h4 class="modal-title" style="background-color:cornflowerblue; color:white">Approve Seat Allocation Status</h4><br /><br />
+        @if (Model.seatAllocationmodel.Count > 0)
+        {
+            <table class="table table-bordered table-hover text-center" id="tblGrid">
+                <thead>
+                    <tr class="text-center">
+                        <th>SlNo</th>
+                        <th>Session</th>
+                        <th>CourseName</th>
+                        <th>Status</th>
+                        <th>Forwarded To</th>
+                        <th>Remarks</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody style="color:Black;" id="SeatRulesValues">
+                    @foreach (var item in Model.seatAllocationmodel)
+                    {
+                        <tr>
+                            <td>@(sno++)</td>
+                            <td>@item.ExamYear</td>
+                            <td>@item.CourseName</td>
+                            <td>@item.StatusName</td>
+                            <td>@item.FormwardFrom</td>
+                            <td>
+                                <a style="text-align:center; float:initial" class="btn btn-primary" onclick="GetCommentDetails(@item.Rules_allocation_masterid)">View</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary RateAnalysis" id="btn1" href='javascript:;'>Edit</a>
+                            </td>
+                            <td style="display:none">@item.Rules_allocation_masterid</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="table table-bordered table-hover text-center" style="color:white;" id="tblGrid">
+                <thead>
+                    <tr class="text-center"></tr>
+                </thead>
+                <tbody style="color:Black;" id="SeatRulesValues">
+                <td>No Data Available</td>
+                </tbody>
+            </table>
+        }*@
+            <div class="row border">
+                <div class="col-lg-12">
+                    <div>
+                        <div class="form-group row">
+                            <div class="col-lg-12 modal-header">
+                                <h3 class="head1">Review Seat Allocation Rules</h3>
+                            </div>
+                        </div>
+                        <br />
+                        <div style="overflow-y:scroll;overflow-x:scroll;">
+                            <table class="table table-bordered table-hover" id="tblGetAllocationSeatofRuletoUpdate"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab_4">
+        <div class="container-fluid font" id="EnableDataGridTab2" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+            <div class="row border">
+                <div class="col-lg-12">
+                    <div>
+                        <div class="form-group row">
+                            <div class="col-lg-12 modal-header">
+                                <h3 class="head1">View Seat Allocation Rules</h3>
+                            </div>
+                        </div>
+                        <br />
+                        <div style="overflow-y:scroll;overflow-x:scroll;">
+                            <table class="table table-bordered table-hover" id="tblGetApprovedAllocationSeatofRuletoView"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="ApprovedViewPanel" class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+        <div class="row border">
+            <div class="col-lg-12">
+                <div>
+                    <div class="form-group row">
+                        <div class="col-lg-12 modal-header">
+                            <h3 class="head1">Rules Of Seat Allocation</h3>
+                        </div>
+                    </div>
+                    <br />
+                    <label id="SeatAllocationViewId" style="display:none"></label>
+                    <div>
+                        <div class="col-lg-1">
+                            <label for="txtExamYear">Academic Year</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <select class="form-control" id="ViewExamYear" onchange="ViewExamYearOnChange()">
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtCourseType">Course Type</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <select class="form-control" id="ViewCourseTypes" onchange="ViewExamYearOnChange()">
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span>Vertical Reservation Rules</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-12">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label>Vertical rules</label></td>
+                                            <td width="100" align="center"><label>GM</label></td>
+                                            <td width="100" align="center"><label>SC</label></td>
+                                            <td width="100" align="center"><label>ST</label></td>
+                                            <td width="100" align="center"><label>C1</label></td>
+                                            <td width="100" align="center"><label>IIA</label></td>
+                                            <td width="100" align="center"><label>IIB</label></td>
+                                            <td width="100" align="center"><label>IIIA</label></td>
+                                            <td width="100" align="center"><label>IIIB</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label>Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewGMPerc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewSCPerc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewSTPerc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewC1Perc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewIIAPerc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewIIBPerc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewIIIAPerc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewIIIBPerc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span>Horizontal Reservation Rules</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-12">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label>Horizontal rules</label></td>
+                                            <td width="100" align="center"><label>Women</label></td>
+                                            <td width="100" align="center"><label>Persons with disabilities</label></td>
+                                            <td width="100" align="center"><label>Ex-Service</label></td>
+                                            <td width="100" align="center"><label>Kannada medium</label></td>
+                                            @*<td width="100" align="center"><label>Land Loser</label></td>
+                                        <td width="100" align="center"><label>Kashmiri Migrants</label></td>*@
+                                            <td width="100" align="center"><label>Economic weaker section</label></td>
+                                            <td width="100" align="center"><label>General Pool</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label>Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewWomenPerc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewPerDisabilitiesperc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewExServicePerc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewKanMediumPerc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                            @*<td width="100" align="center">
+                                            <input type="text" id="ViewLandLoserPerc" readonly style="width:100px;height:46px;"> %
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="text" id="ViewKashmiriMigrPerc" readonly style="width:100px;height:46px;"> %
+                                        </td>*@
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewEconomicWeakerPerc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="text" id="ViewGPPerc" readonly style="width:100px;height:46px;"> %
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span>Hyderabad And Non Hyderabad Region</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="col-lg-6"></div>
+                    <div class="col-lg-6">
+                        <label>Reservation Rules </label>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-1">
+
+                            </div>
+                            <div class="col-lg-2" valign="center">
+                                <label>Hyderabad Region </label>
+                            </div>
+                            <div class="col-lg-7">
+                                <table class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label>Hyderabad Candidate</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewHyderabadRegion" id="ViewHyderabadRegion" readonly style="width:100px;height:46px;"> %
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>Non-Hyderabad Candidate</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewNonHyderabadRegion" id="ViewNonHyderabadRegion" readonly style="width:100px;height:46px;"> %
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div class="col-lg-1">
+
+                            </div>
+                            <div class="col-lg-2" valign="center">
+                                <label>Non - Hyderabad Region </label>
+                            </div>
+                            <div class="col-lg-7">
+                                <table class="display table-bordered" style="width:100%">
+                                    <tr>
+                                        <td width="100" align="center"><label>Hyderabad Region</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewNHyderabadRegion" id="ViewNHyderabadRegion" readonly style="width:100px;height:46px;"> %
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100" align="center"><label>Non-Hyderabad Region</label></td>
+                                        <td width="100" align="center">
+                                            <input type="text" name="ViewNNonHyderabadRegion" id="ViewNNonHyderabadRegion" readonly style="width:100px;height:46px;"> %
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            @*<div class="row">
+            <div class="col-lg-12">
+                <div>
+                    <div>
+                        <div class="col-lg-6">
+                            <label>Grade to Percentage details</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <label>Reservation Rules </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-12">
+                <div>
+                    <div>
+                        <div class="col-lg-1">
+                            <label>Syllabus</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ViewSyllabus">
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-9">
+                            <table class="display table-bordered" style="width:100%">
+                                <tr>
+                                    <td width="100" align="center"><label>Grades</label></td>
+                                    <td width="100" align="center"><label>A1</label></td>
+                                    <td width="100" align="center"><label>A2</label></td>
+                                    <td width="100" align="center"><label>B1</label></td>
+                                    <td width="100" align="center"><label>B2</label></td>
+                                    <td width="100" align="center"><label>C1</label></td>
+                                    <td width="100" align="center"><label>C2</label></td>
+                                    <td width="100" align="center"><label>D</label></td>
+                                    <td width="100" align="center"><label>E1</label></td>
+                                    <td width="100" align="center"><label>E2</label></td>
+
+                                </tr>
+                                <tr>
+                                    <td width="100" align="center"><label>Percentage</label></td>
+                                    <td width="100" align="center">
+                                        <input type="text" name="ViewGradespercA1" id="ViewGradespercA1" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="text" name="ViewGradespercA2" id="ViewGradespercA2" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="text" name="ViewGradespercB1" id="ViewGradespercB1" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="text" name="ViewGradespercB2" id="ViewGradespercB2" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="text" name="ViewGradespercC1" id="ViewGradespercC1" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="text" name="ViewGradespercC2" id="ViewGradespercC2" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="text" name="ViewGradespercD" id="ViewGradespercD" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="text" name="ViewGradespercE1" id="ViewGradespercE1" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="text" name="ViewGradespercE2" id="ViewGradespercE2" readonly style="width:100px;height:46px;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>*@
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span>Other Reservation rules</span>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-2">
+                            <label>Rural</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" readonly id="ViewReservationRural" style="margin-left:15px;" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="col-lg-2">
+                            <label>Transgender</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" readonly id="ViewReservationTransgender" style="margin-left:15px;" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-5">
+                    </div>
+                    <div class="col-lg-6">
+                        <a style="text-align:center; float:initial" class="btn btn-primary" onclick="CancelDetailsApprovedView()">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid font" id="EditPanel" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);padding:5px;">
+        <div class="row border">
+            <div class="col-lg-12">
+                <div class="form-group row">
+                    <div class="col-lg-12 modal-header">
+                        <h3 class="head1">Rules Of Seat Allocation</h3>
+                    </div>
+                </div>
+                <div>
+                    <br />
+                    <label id="SeatAllocationReviewId" style="display:none"></label>
+                    <div>
+                        <div class="col-lg-1">
+                            <label for="txtExamYear">Exam Year</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <select class="form-control" id="ApproveExamYear" disabled>
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="txtCourseType">Course Type</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <select class="form-control" id="ApproveCourseTypes" disabled>
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span>Vertical Reservation Rules</span>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-12">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label>Vertical rules</label></td>
+                                            <td width="100" align="center"><label>GM</label></td>
+                                            <td width="100" align="center"><label>SC</label></td>
+                                            <td width="100" align="center"><label>ST</label></td>
+                                            <td width="100" align="center"><label>C1</label></td>
+                                            <td width="100" align="center"><label>IIA</label></td>
+                                            <td width="100" align="center"><label>IIB</label></td>
+                                            <td width="100" align="center"><label>IIIA</label></td>
+                                            <td width="100" align="center"><label>IIIB</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label>Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <input name="ApproveGMPerc" type="number" id="ApproveGMPerc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveSCPerc" id="ApproveSCPerc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveSTPerc" id="ApproveSTPerc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveC1Perc" id="ApproveC1Perc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveIIAPerc" id="ApproveIIAPerc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveIIBPerc" id="ApproveIIBPerc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveIIIAPerc" id="ApproveIIIAPerc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveIIIBPerc" id="ApproveIIIBPerc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span>Horizontal Reservation Rules</span>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-12">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label>Horizontal rules</label></td>
+                                            <td width="100" align="center"><label>Women</label></td>
+                                            <td width="100" align="center"><label>Persons with disabilities</label></td>
+                                            <td width="100" align="center"><label>Ex-Service</label></td>
+                                            <td width="100" align="center"><label>Kannada medium</label></td>
+                                            @*<td width="100" align="center"><label>Land Loser</label></td>
+                                        <td width="100" align="center"><label>Kashmiri Migrants</label></td>*@
+                                            <td width="100" align="center"><label>Economic weaker section</label></td>
+                                            <td width="100" align="center"><label>General Pool</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label>Percentage</label></td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveWomenPerc" id="ApproveWomenPerc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApprovePerDisabilitiesperc" id="ApprovePerDisabilitiesperc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveExServicePerc" id="ApproveExServicePerc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveKanMediumPerc" id="ApproveKanMediumPerc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                            @*<td width="100" align="center">
+                                            <input type="number" name="ApproveLandLoserPerc" id="ApproveLandLoserPerc" readonly style="width:100px;height:46px;">
+                                        </td>
+                                        <td width="100" align="center">
+                                            <input type="number" name="ApproveKashmiriMigrPerc" id="ApproveKashmiriMigrPerc" readonly style="width:100px;height:46px;">
+                                        </td>*@
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveEconomicWeakerPerc" id="ApproveEconomicWeakerPerc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveGPPerc" id="ApproveGPPerc" readonly style="width:100px;height:46px;">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span>Hyderabad and Non Hyderabad region </span>
+                        </div>
+                        <div class="col-lg-6"></div>
+                        <div class="col-lg-6">
+                            <label>Reservation Rules </label>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-1">
+
+                                </div>
+                                <div class="col-lg-2" valign="center">
+                                    <label>Hyderabad Region </label>
+                                </div>
+                                <div class="col-lg-7">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label>Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveHyderabadRegion" id="ApproveHyderabadRegion" readonly style="width:100px;height:46px;">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label>Non-Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveNonHyderabadRegion" id="ApproveNonHyderabadRegion" readonly style="width:100px;height:46px;">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="col-lg-1">
+
+                                </div>
+                                <div class="col-lg-2" valign="center">
+                                    <label>Non - Hyderabad Region </label>
+                                </div>
+                                <div class="col-lg-7">
+                                    <table class="display table-bordered" style="width:100%">
+                                        <tr>
+                                            <td width="100" align="center"><label>Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveNHyderabadRegion" id="ApproveNHyderabadRegion" readonly style="width:100px;height:46px;">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="center"><label>Non-Hyderabad Candidate</label></td>
+                                            <td width="100" align="center">
+                                                <input type="number" name="ApproveNNonHyderabadRegion" id="ApproveNNonHyderabadRegion" readonly style="width:100px;height:46px;">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            @*<div class="row">
+            <div class="col-lg-12">
+                <div>
+                    <div>
+                        <div class="col-lg-6">
+                            <label>Grade to Percentage details</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <label>Reservation Rules </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+            <br>
+            @*<div class="row">
+            <div class="col-lg-12">
+                <div>
+                    <div>
+                        <div class="col-lg-1">
+                            <label>Syllabus</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="ApproveSyllabus" disabled>
+                                <option value="choose">Select</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-9">
+                            <table class="display table-bordered" style="width:100%">
+                                <tr>
+                                    <td width="100" align="center"><label>Grades</label></td>
+                                    <td width="100" align="center"><label>A1</label></td>
+                                    <td width="100" align="center"><label>A2</label></td>
+                                    <td width="100" align="center"><label>B1</label></td>
+                                    <td width="100" align="center"><label>B2</label></td>
+                                    <td width="100" align="center"><label>C1</label></td>
+                                    <td width="100" align="center"><label>C2</label></td>
+                                    <td width="100" align="center"><label>D</label></td>
+                                    <td width="100" align="center"><label>E1</label></td>
+                                    <td width="100" align="center"><label>E2</label></td>
+
+                                </tr>
+                                <tr>
+                                    <td width="100" align="center"><label>Percentage</label></td>
+                                    <td width="100" align="center">
+                                        <input type="number" name="ApproveGradespercA1" id="ApproveGradespercA1" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="number" name="ApproveGradespercA2" id="ApproveGradespercA2" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="number" name="ApproveGradespercB1" id="ApproveGradespercB1" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="number" name="ApproveGradespercB2" id="ApproveGradespercB2" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="number" name="ApproveGradespercC1" id="ApproveGradespercC1" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="number" name="ApproveGradespercC2" id="ApproveGradespercC2" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="number" name="ApproveGradespercD" id="ApproveGradespercD" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="number" name="ApproveGradespercE1" id="ApproveGradespercE1" readonly style="width:100px;height:46px;">
+                                    </td>
+                                    <td width="100" align="center">
+                                        <input type="number" name="ApproveGradespercE2" id="ApproveGradespercE2" readonly style="width:100px;height:46px;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+            <br>
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span>Other Reservation rules</span>
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-2">
+                            <label>Rural</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="number" id="ApproveReservationRural" readonly style="width:100px;height:46px;">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="col-lg-2">
+                            <label>Transgender</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="number" id="ApproveReservationTransgender" readonly style="width:100px;height:46px;">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-2">
+                            <label>Remarks</label>
+                        </div>
+                        <div class="col-lg-10">
+                            <textarea id="RemarksTxt" name="RemarksTxt" style="resize:none;height:50px !important"> </textarea>
+                            <small class="text-danger" id="Remarks-Required" style="display:none">Remarks is required</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-2">
+                            <label>Status</label>
+                        </div>
+                        <div class="col-lg-5">
+                            <select class="form-control" id="StatusId" onchange="OnchangeStatus()"></select>
+                            <small class="text-danger" id="StatusId-Required" style="display:none">Status ID is required</small>
+                        </div>
+                    </div>
+                    <div id="EnableForwardTo" class="col-lg-6" style="display:none">
+                        <div class="col-lg-4">
+                            <label>Send To</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <select class="form-control" id="ForwardTo"></select>
+                            <small class="text-danger" id="ForwardTo-Required" style="display:none">ForwardTo is required</small>
+                        </div>
+                    </div>
+                    <br />
+                    <br>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-5"></div>
+                    <div class="col-lg-6">
+                        <a class=" btn btn-primary" id="submitbtn" data-dismiss="modal" onclick="UpdateRemarksDetailsForSeat()">Submit</a>
+                        @*<a style="text-align:center; float:initial" class="btn btn-primary" onclick="GetCommentDetails()">View Comments</a>*@
+                        <a style="text-align:center; float:initial" class="btn btn-primary" onclick="CancelDetails()">Back</a>
+                    </div>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="hdnSession" data-value='@Request.RequestContext.HttpContext.Session["RoleId"]' />
+</div>
+<div class="modal fade" id="HistoryRemarksCommentsModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Remarks</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <table class="table table-striped table-hover text-center shadow clswidth" id="GetCommentRemarksDetails" style="width:100% !important" border="1" align="center"></table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/SeatAllocationApproveView")

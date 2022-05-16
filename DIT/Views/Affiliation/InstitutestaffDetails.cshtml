@@ -1,0 +1,888 @@
+﻿@*@model IEnumerable<Models.Affiliation.StaffInstituteDetails>*@
+@{
+    ViewBag.Title = "InstitutestaffDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+<script src="~/Content/multiselect/popper.js"></script>
+<!-- jQuery -->
+<script src="~/Content/multiselect/jquery 3.3.1.min.js"></script>
+
+@*<link href="~/Content/multiselect/bootstrap-multiselect.css" rel="stylesheet" />*@
+<script src="~/Content/multiselect/bootstrap-multiselect.js"></script>
+<script src="~/Content/frontend/js/bootstrap.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Content/frontend/js/bootstrap.min.js"></script>
+<link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+
+<style>
+    table.dataTable thead tr {
+        background-color: cornflowerblue;
+        color: white;
+    }
+
+    .headetitle {
+        text-align: center;
+        background-color: cornflowerblue;
+        color: white;
+        border-radius: 5px;
+        height: 35px;
+    }
+
+    /*ul.multiselect-container.dropdown-menu.show {
+        position: fixed !important;
+        transform: translate3d(5px, 42px, 0px) !important;
+        top: 630px !important;
+        left: 316px !important;
+        will-change: transform !important;
+    }*/
+    .wid{
+        width: 120px;
+        padding: 12px 20px;
+        margin: 0px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+   /* body{
+        padding-right:0px !important;
+    }*/
+</style>
+<br />
+<br />
+<br />
+<h4>
+    <input type="hidden" id="uservalue" data-value="@Request.RequestContext.HttpContext.Session["RoleId"]" />
+    <ul class="nav nav-tabs font bg-light">
+
+        @if (Session["RoleId"].ToString().Equals("9"))
+        {
+            <li class="in active">
+                <a href="#tab_1" id="tab1" data-toggle="tab">Add Staff Details</a>
+            </li>
+            <li>
+                <a href="#tab_2" id="tab2" data-toggle="tab">Staff Details Status</a>
+            </li>
+            <li>
+                <a href="#tab_3" id="tab3" data-toggle="tab">View Staff Details</a>
+            </li>
+        }
+    </ul>
+</h4>
+
+
+<div class="tab-content">
+    <div class="tab-pane fade in active" id="tab_1">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:20px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Staff Detail</span></div>
+                    <br /><br />
+                    <h2 class="head1">Add Staff Details</h2>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="col-sm-5">
+                                <label>Session:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="Session12" style="width:100px;"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="col-sm-5">
+                                <label>Quarter:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="Quarter_ID" style="width:100px;">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" style="float:right;">
+                            <input type="button" style="float:right;" onclick="ClearOfficerFields('OfficerModal')" class="btn btn-success" id="Addstaffbtn" @*data-toggle="modal" data-target="#OfficerModal"*@ value="Add Staff" />
+                        </div>
+
+                        @*<div class="col-sm-2">
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary" style="width:100px;" onclick="GetStaffOnsearch()">Search</button>
+                                </div>
+                            </div>*@
+                    </div>
+                    @*<br />
+                        <br />
+
+                        <br />*@
+                    <hr />
+
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover text-center shadow clswidth table-responsive" border="1" id="OfficerTable1"></table>
+                    </div>
+                    </div>
+
+                <div id="showhidediv">
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <div class="col-md-2"></div>
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label for="status">Status<span style="color:red;font-size:12px;">*</span></label>
+                                    <select class="form-control" id="status"></select>
+                                    <span id="statusErr" style="color:red;font-size:12px;"></span>
+                                </div>&nbsp;&nbsp;
+                                <div class="form-group">
+                                    <label for="remarks">Remarks</label>
+                                    <textarea class="form-control" style="width:300px;height:100px;" id="remarks" rows="2"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <div class="col-sm-3">
+
+                            </div>
+                            <div class="col-sm-3">
+
+                            </div>
+                            <div class="col-sm-2">
+                                <button class="btn btn-primary" id="Submit-btn" onclick="SubmitstaffDetails()">Submit</button>
+                            </div>
+                            <div class="col-sm-2">
+                                <button class="btn btn-primary" onclick="cancelSeatAvailability()">Cancel</button>
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--START ADD OFFICER MODAL POPUP-->
+        <div class="modal enabledisable" id="OfficerModal" tabindex="-1" role="dialog" aria-labelledby="OfficerModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="head1" id="exampleModalLabel">
+                            Add Staff Details
+                        </h2>
+                    </div>
+                    <div class="modal-body" style=" min-height: 200px;">
+                        <div class="row clearfield">
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="StaffName">Photo<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <img id="previewimage" src="~/Images/ProfilePic.png" alt="selected file preview image" width="50" height="50" />
+                                            <input type="file" value="PhotoUpload" class="form-control" id="PhotoUpload" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);">
+                                            <input type="hidden" id="IsUploaded" value="" />
+
+                                            <small class="text-danger" id="PhotoUpload-Required" style="display:none">Photo is required*</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="StaffName">Course Type<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select class="form-control" style="width:100px;" id="Course-Add"></select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="StaffName">Staff Name<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="StaffName" class="form-control" maxlength="30" onkeypress="return Validate(event,this.id);" />
+                                            <span id="StaffNameErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    @*<div class="row">
+            <div class="col-md-4">
+                <label for="Photo">Photo<span style="color:red">*</span></label>
+            </div>
+            <div class="col-lg-8">
+                <input type="file" id="uploadfile" />
+                <small class="text-danger" id="dd-Photo" style="display:none">file is required</small>
+
+            </div>
+        </div>*@
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="txtAgencyRegnNo">Gender</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select id="Gender" class="form-control clear"></select>
+                                            <small class="text-danger" id="Gender-Required"></small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="PhoneNo">Phone No<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="PhoneNo" class="form-control" />
+                                            <span id="PhoneNoErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="EmailId">Email ID<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="EmailId" class="form-control" />
+                                            <span id="EmailIdErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="Qualification">Qualification<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="Qualification" class="form-control" maxlength="50" onkeypress="return Validate(event,this.id);" />
+                                            <span id="QualificationErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="Experience">Years of Experience<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="dd-Experience" class="form-control" maxlength="50" />
+                                            <span id="QualificationErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="Experience">CITS<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="radio" id="yes" name="cits" value="true">
+                                            <label for="Yes">Yes</label><br>
+                                            <input type="radio" id="no" name="cits" value="false">
+                                            <label for="No">No</label><br>
+                                            <span id="QualificationErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="StaffType">Staff Type<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select id="dd-stafftype" class="form-control clear" onchange='CheckColors();'></select>
+                                            <small class="text-danger" id="dd-stafftype_Required"></small>
+                                            <input type="text" name="other" id="others" style='display:none;' />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="Designation">Designation<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select id="dd-designation" class="form-control clear"></select>
+                                            <small class="text-danger" id="designationmsg"></small>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="TeachingSubject">Teaching Subject<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-lg-8" @*Onclick="Enablemultiselect()"*@>
+                                            <select name="dd-Subject" class="form-control clear" id="dd-Subject" multiple></select>
+                                            <small class="text-danger" id="dd-Subject_Required"></small>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="Trade">Trade<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-lg-8" @*Onclick="Enablemultiselect()"*@>
+                                            <select id="dd-trade" class="form-control clear" multiple></select>
+                                            <small class="text-danger" id="dd-trade_Required"></small>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" onclick="fnCloseModalWindow('OfficerModal')" value="Close" />
+                        <input type="button" class="btn btn-primary" onclick="Addstaff()" value="Add" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--END ADD OFFICER-->
+        <!--START EDIT OFFICER MODAL POPUP-->
+        <div class="modal enabledisable" id="EditOfficerModal" tabindex="-1" role="dialog" aria-labelledby="EditOfficerModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="head1" id="exampleModalLabel">
+                            Edit Staff
+                        </h2>
+                    </div>
+                    <div class="modal-body" style=" min-height: 200px;">
+                        <div class="row">
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Photo<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <img id="Edit_previewimage" src="~/Images/ProfilePic.png" alt="selected file preview image" width="50" height="50" />
+                                            <input type="file" value="Edit_PhotoUpload" class="form-control" id="Edit_PhotoUpload" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);">
+                                            <input type="hidden" id="IsUploaded" value="" />
+
+                                            <small class="text-danger" id="PhotoUpload-Required" style="display:none">Photo is required*</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="courseTypeEdit">Course Type<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select class="form-control" style="width:100px;" id="Course-Edit"></select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input type="hidden" id="OfficerIdEdit" />
+                                            <label for="OfficerNameEdit">Staff Name<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="OfficerNameEdit" class="form-control" />
+                                            <span id="OfficerNameEditErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="txtAgencyRegnNo">Gender</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select id="Genderid" class="form-control clear"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="PhoneNoEdit">Phone No<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="PhoneNoEdit" class="form-control" />
+                                            <span id="PhoneNoErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="EmailIdEdit">Email ID<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="EmailIdEdit" class="form-control" />
+                                            <span id="EmailIdErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="QualificationEdit">Qualification<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="QualificationEdit" class="form-control" />
+                                            <span id="QualificationErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="Experience">Years of Experience<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="edit-Experience" class="form-control" maxlength="50" />
+                                            <span id="QualificationErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="edit_Experience">CITS<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="radio" id="yes" class="btn-select" name="cits" value="true">
+                                            <label for="Yes">Yes</label><br>
+                                            <input type="radio" id="no" class="btn-select" name="cits" value="false">
+                                            <label for="No">No</label><br>
+                                            <span id="QualificationErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Staff Type<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select id="stafftypeEdit" class="form-control clear" onchange='CheckColors();'></select>
+                                            <input type="text" name="other" id="edit_others" style='display:none;' />
+                                            <small class="text-danger" id="dd-stafftype_Required" style="display:none">Staff Type is required</small>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Designation<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select id="DesignationEdit" class="form-control clear"></select>
+                                            <small class="text-danger" id="DesignationEditErr" style="display:none">Designation is required</small>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Teaching Subject<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select id="SubjectEdit" class="form-control" multiple></select>
+                                            <small class="text-danger" id="dd-Subject_Required" style="display:none">subject is required</small>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Trade<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select id="tradeEdit" class="form-control " multiple></select>
+                                            <small class="text-danger" id="dd-trade_Required" style="display:none">Trade is required</small>
+
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" onclick="fnCloseModalWindow('EditOfficerModal')" value="Close" />
+                        <input type="button" class="btn btn-primary" onclick="UpdateStaff()" value="Update" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--END EDIT OFFICER-->
+        <br /><br />
+    </div>
+
+    <div class="tab-pane fade" id="tab_2">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Staff Details Status</span></div>
+            <br /><br />
+            <h2 class="head1">Staff Details Status</h2>
+            <br /><br />
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="col-sm-5">
+                        <label>Session:</label>
+                    </div>
+                    <div class="col-sm-7">
+                        <select class="form-control" id="year" style="width:100px;">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="col-sm-6">
+                        <label>Course Type:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <select class="form-control" style="width:100px;" id="CourseTypes"></select>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="col-sm-6">
+                        <label>Quarter:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <select class="form-control" id="Quarter_sear" style="width:100px;">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="col-sm-6">
+                        <button class="btn btn-primary" style="width:100px;" onclick="GetStaffstatusOnSearch()">Search</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button class=" btn btn-primary" onclick="cancelselectfields();">Cancel</button>
+                    </div>
+                </div>
+               
+                   
+               
+            </div>
+            <br />
+            <br />
+            <div class="table-responsive">
+                <table class="table table-striped table-hover text-center shadow clswidth table-responsive" border="1" id="StaffStatusTable">
+                </table>
+            </div>
+        </div>
+
+
+
+        <div class="modal enabledisable" id="EditStaffViewModal" tabindex="-1" role="dialog" aria-labelledby="EditStaffViewModal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" style="width: 90%" role="dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="head1" id="exampleModalLabel">
+                            Staff Details For Edit
+                        </h2>
+                    </div>
+                    <div class="row">
+                        <h2 class="modal-title a1" style="color:#195c9f; text-align:center; font-weight:700"> Staff Details</h2>
+                        <br />
+                        <div class="col-md-12" style="width:100%; overflow-x:scroll">
+
+                            <table id="tblEditStaffViewMode" class="table table-bordered">
+                            </table>
+                        </div>
+                        <br />
+                        <br />
+                        <p><span class="head1">* Records Displayed in Blue are Deleted</span></p>
+                        <div id="remarksDiv">
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-1">
+                                    <label for="status" class="form-text">
+                                        Status<span style="color:red;font-size:12px;">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-control" id="statussub"></select>
+                                    <span id="statusErr" style="color:red;font-size:12px;"></span>
+                                </div>
+                                <div class="col-md-1"> <label class="form-text" for="remarks">Remarks</label></div>
+                                <div class="col-md-4"> <textarea class="form-control" style="width:100%;" id="remark" rows="2"></textarea></div>
+
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary" id="savebtn" onclick="SubmitstaffDetails1()">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" onclick="fnCloseModalWindow('EditStaffViewModal')" value="Close" />
+                        @*<input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" value="Close" />*@
+                        @*<input type="button" class="btn btn-primary" onclick="UpdateOfficer()" value="Update" />*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal enabledisable" id="EditStaffModal" tabindex="-1" role="dialog" aria-labelledby="EditStaffModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="head1" id="exampleModalLabel">
+                            View Staff
+                        </h2>
+                    </div>
+                    <div class="modal-body" style=" min-height: 200px;">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="#Course-Edit">Course Type<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select class="form-control" style="width:100px;" id="Course-staff"></select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input type="hidden" id="OfficerIdEdit" />
+                                            <label>Photo<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <img id="Edit_previewimage_2" src="~/Images/ProfilePic.png" alt="selected file preview image" width="50" height="50" />
+                                            <input type="file" value="Edit_PhotoUpload" class="form-control" id="Edit_PhotoUpload_2" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);">
+                                            <input type="hidden" id="IsUploaded" value="" />
+
+                                            <small class="text-danger" id="PhotoUpload-Required" style="display:none">Photo is required*</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="Experience">Years of Experience<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="edit-Experience_2" class="form-control" maxlength="50" />
+                                            <span id="QualificationErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="edit_Experience">CITS<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="radio" id="yes" name="cits" value="true">
+                                            <label for="Yes">Yes</label><br>
+                                            <input type="radio" id="no" name="cits" value="false">
+                                            <label for="No">No</label><br>
+                                            <span id="QualificationErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input type="hidden" id="OfficerIdEdit" />
+                                            <label>Staff Name<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="OfficerNamestatus" class="form-control" />
+                                            <span id="OfficerNameEditErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Designation<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select id="DesignationStatus" class="form-control clear"></select>
+                                            <small class="text-danger" id="DesignationEditErr" style="display:none">Designation is required</small>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Qualification<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="Qualificationstatus" class="form-control" />
+                                            <span id="QualificationErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="StaffType">Staff Type<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select id="stafftypestatus" class="form-control clear"></select>
+                                            <small class="text-danger" id="dd-stafftype_Required" style="display:none">Staff Type is required</small>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="TeachingSubject">Teaching Subject<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select id="Subjectstatus" class="form-control clear" multiple></select>
+                                            <small class="text-danger" id="dd-Subject_Required" style="display:none">subject is required</small>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Trade<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select id="tradestatus" class="form-control clear" multiple></select>
+                                            <small class="text-danger" id="dd-trade_Required" style="display:none">Trade is required</small>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Phone No<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="PhoneNostatus" class="form-control" />
+                                            <span id="PhoneNoErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="EmailIdEdit">Email ID<span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="EmailIdstatus" class="form-control" />
+                                            <span id="EmailIdErr" style="color:red;"></span>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" onclick="fnCloseModalWindow('EditStaffModal')" value="Close" />
+                        <input type="button" class="btn btn-primary" onclick="UpdateStaffstatus()" value="Update" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade " id="tab_3">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:20px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Staff Detail</span></div>
+                    <br /><br />
+                    <h2 class="head1">View Staff Details</h2>
+                    <br /><br />
+                          <div class="row">
+                              <div class="col-sm-3">
+                                  <div class="col-sm-5">
+                                      <label>Session:</label>
+                                  </div>
+                                  <div class="col-sm-7">
+                                      <select class="form-control" id="Academicyear" style="width:100px;">
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="col-sm-3">
+                                  <div class="col-sm-6">
+                                      <label>Course Type:</label>
+                                  </div>
+                                  <div class="col-sm-6">
+                                      <select class="form-control" style="width:100px;" id="CourseTypeview"></select>
+                                  </div>
+                              </div>
+                              <div class="col-sm-3">
+                                  <div class="col-sm-6">
+                                      <label>Quarter:</label>
+                                  </div>
+                                  <div class="col-sm-6">
+                                      <select class="form-control" id="Quarter_view" style="width:100px;">
+                                          <option value="1">1</option>
+                                          <option value="2">2</option>
+                                          <option value="3">3</option>
+                                          <option value="4">4</option>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="col-sm-3">
+                                  <div class="col-sm-6">
+                                      <button class="btn btn-primary" style="width:100px;" onclick="GetApprovedstaffOnSearch()">Search</button>
+
+                                  </div>
+                                  <div class="col-sm-6">
+                                      <button class=" btn btn-primary" onclick="cancelselectfields();">Cancel</button>
+                                  </div>
+
+                              </div>
+
+                          </div>
+                    <br />
+                    <br />
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="tblViewStaffDetails"></table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal enabledisable" id="StaffViewModal" tabindex="-1" role="dialog" aria-labelledby="StaffViewModal" aria-hidden="true">
+        <div class="modal-dialog modal-xl" style="width: 90%" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="head1" id="exampleModalLabel">
+                        View Staff Details
+                    </h2>
+                </div>
+                <div class="row ">
+                    <h2 class="modal-title a1 " style="color:#195c9f; text-align:center; font-weight:700"> Staff View Details</h2>
+                    <br />
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table id="tblStaffViewMode" class="table table-bordered">
+                            </table>
+                        </div>
+
+                        <p><span style="color: #5691f0">* Records Displayed in Blue are Deleted</span></p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" onclick="fnCloseModalWindow('StaffViewModal')" value="Close" />
+                    @*<input type="button" class="btn btn-primary" onclick="UpdateOfficer()" value="Update" />*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal enabledisable" id="ViewStaffModal" tabindex="-1" role="dialog" aria-labelledby="ViewStaffModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title a1" style="color:#195c9f; text-align:center; font-weight:700">
+                        View Staff History
+                    </h2>
+                </div>
+                <div class="row">
+                    <h2 class="modal-title a1" style="color:#195c9f; text-align:center; font-weight:700"> Staff Remarks Details</h2>
+                    <br />
+                    <div class="col-md-12">
+                        <table id="tblViewStaff" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Sl.No</th>
+                                    <th>Date</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" onclick="fnCloseModalWindow('ViewStaffModal')" value="Close" />
+                    @*<input type="button" class="btn btn-primary" onclick="UpdateOfficer()" value="Update" />*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/Staffdetails")
+<script>
+    var RoleId='@Session["RoleId"]';
+</script>

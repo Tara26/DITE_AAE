@@ -1,0 +1,854 @@
+﻿
+@{
+    ViewBag.Title = "SeatSeatAvailability";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
+<link href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css" />
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+<style>
+    table.dataTable thead tr {
+        background-color: cornflowerblue;   
+        color: white;
+    }
+    .taluk{
+        display:none;
+    }
+    .buttons-html5 {
+        border-radius: 5px;
+        height: 40px;
+        width: 100px;
+        background: cornflowerblue;
+    }
+
+    .headetitle {
+        text-align: center;
+        background-color: cornflowerblue;
+        color: white;
+        border-radius: 5px;
+        height: 35px;
+    }
+
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted black;
+    }
+
+    .tooltiptext {
+        visibility: hidden;
+        width: 200px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+    }
+
+    #viewbtn:hover .tooltiptext {
+        visibility: visible;
+    }
+
+    .buttons-html5 {
+        width: 180px;
+    }
+    .btn-alert-yes {
+        float: left;
+        width: 48%;
+    }
+
+    .btn-alert-no {
+        width: 48%;
+    }
+
+</style>
+<br />
+<br />
+<br />
+
+<h4>
+    <ul class="nav nav-tabs font bg-light">
+        @if (Session["RoleId"].ToString().Equals("9"))
+        {
+            <li class="in active">
+                <a href="#tab_1" data-toggle="tab">Seat Availability Data</a>
+            </li>
+            <li>
+                <a href="#tab_2" data-toggle="tab">Seat Availability Status</a>
+            </li>
+        }
+        else
+        {
+            <li class="in active">
+                <a href="#tab_2" data-toggle="tab">Seat Availability Status</a>
+            </li>
+            <li>
+                <a href="#tab_3" data-toggle="tab">Seat Availability Approved Data</a>
+            </li>
+        }
+    </ul>
+</h4>
+
+<br />
+<div class="tab-content">
+    <div class="tab-pane fade in active" id="tab_1">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font">
+                    <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Seat Availability Data</span>
+                </div>
+                <br />		<br />
+                <h2 class="head1">Seat Availability Data</h2>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="col-sm-6">
+                            <div class="text-right">
+                                <label for="academicyear">Session<span style="color:red;font-size:12px;">*</span> :</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-left">
+                                <input type="text" id="academicyear" name="academicyear1" class="form-control date-picker" autocomplete="off" style="background-position:right;background-size:30px;background-image:url(../../Content/img/Calendar.png);background-repeat:no-repeat;">
+                                <span id="academicYearErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="col-sm-6">
+                            <div class="text-right">
+                                <label for="txtAgencyRegnNo">Course Type<span style="color:red;font-size:12px;">*</span> :</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-left">
+                                <select class="form-control" id="CourseTypes" onchange="GetSeatAvailability()">
+                                    <option value="choose">Select</option>
+                                </select>
+                                <span id="coursetypeErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12" style="overflow-x: scroll;">
+                        <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="seatAvailabilityTable"></table>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <div class="col-md-2"></div>
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label for="status">Status<span style="color:red;font-size:12px;">*</span></label>
+                                <select class="form-control" id="status"></select>
+                                <span id="statusErr" style="color:red;font-size:12px;"></span>
+                            </div>&nbsp;&nbsp;
+                            <div class="form-group">
+                                <label for="remarks">Remarks<span style="color:red;font-size:12px;">*</span></label>
+                                <textarea class="form-control" style="width:300px;height:100px;" id="remarks" rows="2"></textarea>
+                                <span id="remarksErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <div class="col-sm-3">
+                            <div class="text-right">
+                                <label for="status">Send To<span style="color:red;font-size:12px;">*</span></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <select class="form-control" id="users"></select>
+                            <span id="roleIdErr" style="color:red;font-size:12px;"></span>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-primary" onclick="SubmitSeatAvailability()">Submit</button>
+                        </div>
+                        @*<div class="col-sm-2">
+                            <button class="btn btn-primary" onclick="cancelSeatAvailability()">Back</button>
+                        </div>*@
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </div>
+        </div>
+        <br /><br />
+    </div>
+
+    <div class="tab-pane fade" id="tab_2">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Seat Availability Status</span></div>
+                <br /><br />
+                <h2 class="head1">Seat Availability Status</h2>
+                @if (Session["RoleId"].ToString().Equals("9"))
+                {
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="col-sm-5">
+                                <label>Session:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="Session" style="width:100px;">
+                                    <option value="choose">choose</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="col-sm-5">
+                                <label>Course Type:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" style="width:100px;" id="CourseType2"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="submit" id="btnsearch" class="btn btn-primary" name="submit" value="Search" onclick="btnsearchFiltertable(1)" />
+                        </div>
+                    </div>
+
+                }
+                @if (Session["RoleId"].ToString().Equals("16"))
+                {
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>Session:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="Session">
+                                    <option value="choose">choose</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>Course Type:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="CourseType2"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>District:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="districtDdp" onchange="GetTaluksData('districtDdp','talukDdp','1')"></select>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>Taluk:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="talukDdp" onchange="GetTaluksData('talukDdp','instituteDdp','2')"><option value="choose">choose</option></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>Institute:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="instituteDdp"><option value="choose">choose</option></select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row" style="text-align:center;">
+                        <input type="submit" id="btnsearch" class="btn btn-primary" name="submit" value="Search" onclick="btnsearchFiltertable(2)" />
+                        <input type="button" id="btnCancel" class="btn btn-primary" name="cancel" value="Cancel" onclick="fnClearFields()" />
+                    </div>
+                }
+                @if (Session["RoleId"].ToString().Equals("5"))
+                {
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>Session:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="Session" @*onchange="FilterTable()"*@></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>Course Type:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="CourseType2"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>Division:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="divisionDdp" onchange="getfilter('divisionDdp',1)" @*onchange="GetDistrictData('divisionDdp','districtDdp1','1')"*@></select>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>District:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="districtDdp1" onchange="getfilter('districtDdp1',2)" @*onchange="GetTaluksData('districtDdp1','talukDdp','1')"*@><option value="choose">choose</option></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>Taluk:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="talukDdp" onchange="getfilter('talukDdp',3)" @*onchange="GetTaluksData('talukDdp','instituteDdp','2')"*@><option value="choose">choose</option></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>Institute:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" onchange="getfilter('instituteDdp',0)" id="instituteDdp"><option value="choose">choose</option></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:center;">
+                        <input type="submit" id="btnsearch" class="btn btn-primary" name="submit" value="Search" onclick="btnsearchFiltertable(3)" />
+                        <input type="button" id="btnCancel" class="btn btn-primary" name="cancel" value="Cancel" onclick="fnClearFields()" />
+                    </div>
+                }
+                <br />
+
+                <div style="overflow-x: scroll;overflow-y: scroll;">
+                    <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="seatAvailabilityStatusTable"></table>
+                </div>
+
+                <br />
+                <div class="row" id="forwardJd">
+                    <div class="col-md-1"></div>
+                    <!--<div class="col-md-10">
+        <div class="col-sm-3"></div>
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="statusdp">Status<span style="color:red;font-size:12px;">*</span></label>
+                <select class="form-control" onchange="disableRole()" id="statusdp"></select>
+            </div>
+            <div class="form-group">
+                <label for="remarks">Remarks<span style="color:red;font-size:12px;">*</span></label>
+                <textarea class="form-control" style="width:250px;height:100px;" id="jdremarks" rows="2"></textarea>
+                <span id="jdremarksErr" style="color:red;font-size:12px;"></span>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-3">
+                <div class="text-right">
+                    <label for="status">Send To<span style="color:red;font-size:12px;">*</span></label>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <select class="form-control" id="DepartmentUsers"></select>
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-primary" id="submitbtn" onclick="ForwardToDD(2)">Submit</button>
+                <button class="btn btn-primary" id="Forwadbtn" onclick="ForwardToDD(1)">Submit</button>
+            </div>-->
+                    @*<div class="col-sm-2">
+                <button class="btn btn-primary" onclick="cancelForward()">Back</button>
+            </div>*@
+                    <!--<div class="col-sm-1"></div>
+            </div>
+        </div>-->
+
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-2">
+
+                                <label for="statusdp" class="text-right">Status<span style="color:red;font-size:12px;">*</span></label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control" id="statusdp" onchange="disableRole()"></select>
+                                @*<span id="statusDDErr" style="color:red;font-size:12px;">Status is required</span>*@
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-2">
+                                <label for="status" class="text-right">Sent To<span style="color:red;font-size:12px;">*</span></label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control" id="DepartmentUsers"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="remarks">Remarks<span style="color:red;font-size:12px;">*</span></label>
+                            <textarea class="form-control" style="width:250px;height:100px;" id="jdremarks" rows="2"></textarea>
+                            <span id="jdremarksErr" style="color:red;font-size:12px;"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-5"></div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-primary" id="submitbtn" onclick="ForwardToDD(2)">Submit</button>
+                            <button class="btn btn-primary" id="Forwadbtn" onclick="ForwardToDD(1)">Submit</button>
+                        </div>
+                        <div class="col-sm-2">
+                        </div>
+                        <div class="col-sm-3"></div>
+                    </div>
+
+                </div>
+                <div class="row" id="approveDD">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-2">
+
+                                <label for="status" class="text-right">Status</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control" id="statusDD" onchange="onchangeStatusSentTo()"></select>
+                                <span id="statusDDErr" style="color:red;font-size:12px;">Status is required</span>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="hideSentoDD">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-2">
+                                <label for="status" class="text-right">Sent To</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control" id="sentTo"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="remarks">Remarks<span style="color:red;font-size:12px;">*</span></label>
+                            <textarea class="form-control" style="width:300px;height:100px;" id="ddremarks" rows="2"></textarea>
+                            <span id="ddremarksErr" style="color:red;font-size:12px;">Remarks is required</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-5"></div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-primary" onclick="ApproveSeatAvailability()">Submit</button>
+                        </div>
+                        <div class="col-sm-2">
+                        </div>
+                        <div class="col-sm-3"></div>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+        </div>
+
+    <div class="tab-pane fade" id="tab_3">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Seat Availability Approved Data</span></div>
+                <br /><br />
+                <h2 class="head1">Seat Availability Approved Data</h2>
+                @if (Session["RoleId"].ToString().Equals("16"))
+                {
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="col-sm-5">
+                        <label>Session:</label>
+                    </div>
+                    <div class="col-sm-7">
+                        <select class="form-control" id="Session3">
+                            <option value="choose">choose</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="col-sm-5">
+                        <label>Course Type:</label>
+                    </div>
+                    <div class="col-sm-7">
+                        <select class="form-control" id="CourseType3"></select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="col-sm-5">
+                        <label>District:</label>
+                    </div>
+                    <div class="col-sm-7">
+                        <select class="form-control" id="districtDdp3" onchange="GetTaluksData('districtDdp3','talukDdp3','1')"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>Taluk:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="talukDdp3" onchange="GetTaluksData('talukDdp3','instituteDdp3','2')"><option value="choose">choose</option></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>Institute:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="instituteDdp3"><option value="choose">choose</option></select>
+                            </div>
+                        </div>
+                        @*<div class="col-sm-2" style="">
+                            <div class="col-sm-6">
+                                <button class="btn btn-primary" style="width:100px;" onclick="seatAvailabilityDataNew()">Search</button>
+                            </div>
+                        </div>*@
+                    </div>
+                }
+                @if (Session["RoleId"].ToString().Equals("5"))
+                {
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="col-sm-5">
+                        <label>Session:</label>
+                    </div>
+                    <div class="col-sm-7">
+                        <select class="form-control" id="Session3" @*onchange="seatAvailabilityDataNew()"*@></select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="col-sm-5">
+                        <label>Course Type:</label>
+                    </div>
+                    <div class="col-sm-7">
+                        <select class="form-control" id="CourseType3"></select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="col-sm-5">
+                        <label>Division:</label>
+                    </div>
+                    <div class="col-sm-7">
+                        <select class="form-control" id="divisionDdp3" onchange="getfilterNew('divisionDdp3',1)" @*onchange="GetDistrictData('divisionDdp','districtDdp1','1')"*@></select>
+                    </div>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="col-sm-5">
+                            <label>District:</label>
+                        </div>
+                        <div class="col-sm-7">
+                            <select class="form-control"  id="districtDdp3" onchange="getfilterNew('districtDdp3',2)" @*onchange="GetTaluksData('districtDdp1','talukDdp','1')"*@><option value="choose">choose</option></select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="col-sm-5">
+                            <label>Taluk:</label>
+                        </div>
+                        <div class="col-sm-7">
+                            <select class="form-control"  id="talukDdp3" onchange="getfilterNew('talukDdp3',3)" @*onchange="GetTaluksData('talukDdp','instituteDdp','2')"*@><option value="choose">choose</option></select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="col-sm-5">
+                            <label>Institute:</label>
+                        </div>
+                        <div class="col-sm-7">
+                            <select class="form-control" onchange="getfilterNew('instituteDdp3',0)" id="instituteDdp3"><option value="choose">choose</option></select>
+                        </div>
+                    </div>
+                </div>
+                }
+            <div class="row" style="text-align:center;">
+                <input type="submit" id="btnsearchtab" class="btn btn-primary" name="submit" value="Search" onclick="btnsearchTab()" />
+                <input type="button" id="btnCancel" class="btn btn-primary" name="cancel" value="Cancel" onclick="fnClearFields()" />
+            </div>
+                <br />
+                @if (Session["RoleId"].ToString().Equals("5"))
+                {
+                <div class="row">
+                    <div class="col-sm-5"></div>
+                    <div class="col-sm-2">
+                        <button class="btn btn-success" onclick="AddSeatAvailabilityData()">Add Seat Availability</button>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                }
+                <div style="overflow-x: scroll;overflow-y: scroll;">
+                    <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="seatAvailabilityStatusTableTab3"></table>
+                </div>
+
+                <br />
+            </div>
+        </div>
+    </div>
+    <div class="modal fade font" id="RemarksModal" role="dialog">
+        <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+            <div class="modal-content" style="padding:15px;">
+                <div class="modal-header">
+                    <h2 class="head1">Remark Details</h2>
+                </div>
+                <table class="table table-striped table-hover text-center shadow clswidth" id="RemarksTable" style="width:100% !important" border="1" align="center"></table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 15%;background-color:grey;color:white;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade font" id="SeatViewModal" role="dialog">
+        <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+            <div class="modal-content" style="padding:15px;">
+                <div class="modal-header">
+                    <h2 class="head1">View Details</h2>
+                    <span style="color:red;">Review the seat availability data in concurrence with MIS portal</span>
+                </div>
+                <div style="overflow-x: scroll;">
+                    <table class="table table-striped table-hover text-center shadow clswidth" id="SeatViewTable" style="width:100% !important" border="1" align="center"></table>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 15%;background-color:grey;color:white;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="SeatEditModal" role="dialog">
+        <div class="modal-dialog modal-xl" style="width: 80%; margin: 30px auto; padding: 2px;">
+            <div class="modal-content" style="padding:15px;">
+                <div class="modal-header">
+                    <h2 class="head1">Edit Details</h2>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3">
+                        <div class="col-sm-6">
+                            <div class="text-right">
+                                <label for="txtAgencyRegnNo">Course Type <span style="color:red;font-size:12px;">*</span></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-left">
+                                <select class="form-control" id="CourseTypesEdit">
+                                    <option value="choose">Select</option>
+                                </select>
+                                <span id="CourseTypesEditErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="col-sm-6">
+                            <div class="text-right">
+                                <label for="txtAgencyRegnNo">Session:<span style="color:red;font-size:12px;">*</span> </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-left">
+                                <input type="text" id="academicyearEdit" name="academicyear1" class="form-control date-picker" autocomplete="off" style="background-position:right;background-size:30px;background-image:url(../../Content/img/Calendar.png);background-repeat:no-repeat;">
+                                <span id="academicyearEditErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div style="overflow-x:scroll;">
+                    <table class="table table-striped table-hover text-center shadow clswidth" id="SeatEditTable" style="width:100% !important" border="1" align="center"></table>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="row">
+
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-1">
+                            <br />
+                            <label for="statusEdit">Status<span style="color:red;font-size:12px;">*</span></label>
+                        </div>
+												<div class="col-sm-3">
+													<select class="form-control" id="statusEdit"></select>
+													<span id="statusErrs" style="color:red;font-size:12px;"></span>
+												</div>
+
+                        <div class="col-sm-1">
+                            <div class="text-left">
+                                <br />
+                                <label for="remarksEdit">Remarks<span style="color:red;font-size:12px;">*</span></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 overout">
+													<div class="text-right">
+														<textarea class="form-control" id="remarksEdit" title="remarks" rows="2"></textarea>
+                                <span id="remarksEditErrs" style="color:red;font-size:12px;"></span>
+													</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="text-right">
+                                <label>Send To<span style="color:red;font-size:12px;">*</span></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <select class="form-control" id="usersEdit"></select>
+                            <span id="usersErr" style="color:red;font-size:12px;"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-left">
+                                @if (Session["RoleId"].ToString().Equals("5") || Session["RoleId"].ToString().Equals("16"))
+                                {
+                                    <button type="button" class="btn btn-primary" onclick="ApprovedUpdateSeatAvailability()" style="width: 15%;">Update</button><button type="button" class="btn btn-default" data-dismiss="modal" style="width: 15%;background-color:grey;color:white;">Close</button>
+
+                                }
+                                @if (Session["RoleId"].ToString().Equals("9"))
+                                {
+                                <button type="button" class="btn btn-primary" onclick="UpdateSeatAvailability()" style="width: 15%;">Update</button><button type="button" class="btn btn-default" data-dismiss="modal" style="width: 15%;background-color:grey;color:white;">Close</button>
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="SeatADDModal" role="dialog">
+        <div class="modal-dialog modal-xl" style="width: 80%; margin: 30px auto; padding: 2px;">
+            <div class="modal-content" style="padding:15px;">
+                <div class="modal-header">
+                    <h2 class="head1">Add Seat Availability Details</h2>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-sm-6">
+                            <div class="text-right">
+                                <label for="txtAgencyRegnNo">Enter MIS Code<span style="color:red;font-size:12px;">*</span></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-left">
+                                <input type="text" name="txtMIScodeAdd" id="txtMIScodeAdd" maxlength="50" class="form-control" style="text-transform:uppercase;">
+                                <span id="MIScodeAddErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-sm-6">
+                            <div class="text-left">
+                                <button type="button" class="btn btn-primary" onclick="btnMISSearch()" >Search</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-6"></div>
+                    </div>
+                </div>
+                <div class="row" id="divcourseyear">
+                    <div class="col-md-5">
+                        <div class="col-sm-6">
+                            <div class="text-right">
+                                <label for="academicyear">Session<span style="color:red;font-size:12px;">*</span> :</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-left">
+                                <input type="text" id="academicyearTab3" name="academicyearTab3" class="form-control date-picker" autocomplete="off" style="background-position:right;background-size:30px;background-image:url(../../Content/img/Calendar.png);background-repeat:no-repeat;">
+                                <span id="academicYearTab3Err" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="col-sm-6">
+                            <div class="text-right">
+                                <label for="txtAgencyRegnNo">Course Type<span style="color:red;font-size:12px;">*</span> :</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-left">
+                                <select class="form-control" id="CourseTypesTab3">
+                                    <option value="choose">Select</option>
+                                </select>
+                                <span id="CourseTypesTab3Err" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1"></div>
+                </div>
+                <div style="overflow-x:scroll;" id="scrSeatAddTable">
+                    <table class="table table-striped table-hover text-center shadow clswidth" id="SeatAddTable" style="width:100% !important" border="1" align="center"></table>
+                </div>
+
+                <div class="modal-footer" id="AddfooterId">
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-1">
+                            <div class="text-left">
+                                <br />
+                                <label for="remarksAdd">Remarks</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 overout">
+                            <div class="text-right">
+                                <textarea class="form-control" id="remarksAdd" title="Maximum characters allowed" rows="2"></textarea>
+                                <span id="remarksAddErr" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*<div class="col-sm-4">
+                            <div class="text-right">
+                                <label>Send To<span style="color:red;font-size:12px;">*</span></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <select class="form-control" id="usersEdit" ></select>
+                            <span id="usersErr" style="color:red;font-size:12px;"></span>
+                        </div>*@
+                        <div class="col-sm-12">
+                            <div class="text-center">
+                                <button type="button" class="btn btn-primary" onclick="ADDSeatData()" style="width: 15%;">ADD</button><button type="button" class="btn btn-default" data-dismiss="modal" style="width: 15%;background-color:grey;color:white;">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/SeatAvailability")
+<script>
+    var RoleId='@Session["RoleId"]';
+</script>
+

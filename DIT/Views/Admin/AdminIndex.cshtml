@@ -1,0 +1,948 @@
+@model Models.Admin.clsEditProfile
+@{
+    ViewBag.Title = "AdminIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/scripts/jquery.validate.min.js" type="text/javascript"></script>
+<script src="~/scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+
+
+<style>
+
+    .ipeWidth {
+        width: 100px;
+    }
+
+    .box {
+        color: #fff;
+        padding: 20px;
+        display: none;
+        margin-top: 10px;
+    }
+
+    .link:hover {
+        color: red;
+    }
+
+    input[type="file"] {
+        display: block;
+    }
+
+    .imageThumb {
+        max-height: 75px;
+        border: 2px solid;
+        padding: 1px;
+        cursor: pointer;
+    }
+
+    .pip {
+        display: inline-block;
+        margin: 10px 10px 0 0;
+    }
+
+    .remove {
+        display: block;
+        background: #444;
+        border: 1px solid black;
+        color: white;
+        text-align: center;
+        cursor: pointer;
+    }
+
+        .remove:hover {
+            background: white;
+            color: black;
+        }
+
+    .collapsible {
+        background-color: #777;
+        color: white;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+    }
+
+    body {
+        padding-right: 0px !important;
+    }
+
+    .content {
+        padding: 18px 18px;
+        display: none;
+        overflow: hidden;
+        background-color: #f1f1f1;
+    }
+</style>
+<br />
+<br />
+<html>
+<body>
+    <div class="row" style="padding-top:20px">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs font">
+                <li class="active">
+                    <a href="#tab_5" id="tab5" class="tab-5" data-toggle="tab" aria-expanded="true">User Details</a>
+                </li>
+                <li class="">
+                    <a href="#tab_1" id="tab1" class="tab-1" data-toggle="tab" aria-expanded="true">Add Roles</a>
+                </li>
+                <li class="">
+                    <a href="#tab_2" id="tab2" class="tab-2" data-toggle="tab" aria-expanded="false">Role Mapping</a>
+                </li>
+                <li class="">
+                    <a href="#tab_3" id="tab3" class="tab-3" data-toggle="tab" aria-expanded="false">Role Mapping Details</a>
+                </li>
+                <li class="">
+                    <a href="#tab_4" id="tab4" class="tab-4" data-toggle="tab" aria-expanded="false">User Mapping</a>
+                </li>
+                <li class="">
+                    <a href="#tab_6" id="tab6" class="tab-6" data-toggle="tab" aria-expanded="false">User Gallery</a>
+                </li>
+            </ul>
+        </div>
+        <!--<div class="col-md-1">
+            <div id="FileAttach"><img class="pull-left" width="50" height="50" src="~/Images/ProfilePic.png" id="ImgPhotoUpload">-->
+        @*&emsp;&emsp;<span style="font-size:medium; font-weight:bold">Super Admin</span>*@<!--</div>-->
+        @*<select class="form-control bg" id="ddlUserMgmt" onchange="fnShowProfileScreen(this.id);">
+                <option hidden></option>
+                <option value="0">Edit Profile</option>
+            </select>*@
+        <!--</div>
+        <div class="row">
+            <div class="col-md-11">
+            </div>
+                <div class="col-md-1 text-center">
+                    <a class="link" onclick="fnShowProfileScreen(1);" href="#">Profile</a>
+                </div>
+            </div>
+        </div>-->
+    </div>
+    <div class="tab-content">
+        <div id="tab_1" class="tab-pane fade">
+            <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+                <div class="row border form-group">
+                    <div class="breadcrumb font">
+                        <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span> <span class="inline odd last">Add Roles</span>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <h3 class="head1" id="head1">Add Roles</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1">
+                            <label>Role Name<font class="text-danger">*</font></label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="txtRoleName" maxlength="50" class="form-control">
+                            <small class="text-danger" id="txtRoleName-Required" style="display:none">Role Name is required*</small>
+                        </div>
+                        <div class="col-sm-1">
+                            <label id="lblUnitMultiSelect">Units<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control clear" id="ddlUnitSelect" multiple>
+                                <option value="0">Choose</option>
+                                <option value="1">Head Office</option>
+                                <option value="2">Division</option>
+                                <option value="3">ITI Institute</option>
+                                <option value="4">ITOT</option>
+                                <option value="5">STARC</option>
+                                <option value="6">Public</option>
+                                <option value="7">Exam Centers</option>
+                            </select>
+                            <small class="text-danger" id="txtUnit-Required" style="display:none">Unit is required*</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5"></div>
+                        <div class="col-md-6">
+                            <input type="button" value="Submit" onclick="fnAddRoles();" class="btn btn-primary">
+                            <input type="button" value="Cancel" onclick="fnClearAddRoles();" class="btn btn-danger">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table id="tblAddRoles" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="tab_2" class="tab-pane fade">
+            <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+                <div class="row border form-group">
+                    <div class="breadcrumb font">
+                        <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span> <span class="inline odd last">Role Mapping</span>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <h3 class="head1" id="head1">Role Mapping</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Unit<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlUnits" onchange="UpdateLocation(this.id, 'ddlWing', 'ddlRole')"></select>
+                            <small class="text-danger" id="ddlUnits-Required" style="display:none">Unit is required*</small>
+                        </div>
+                        <div class="col-md-3 clsWing">
+                            <label>Wing<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlWing" onchange="UpdateLocation(this.id, 'ddlSection', '')"></select>
+                            <small class="text-danger" id="ddlWing-Required" style="display:none">Wing is required*</small>
+                        </div>
+                        <div class="col-md-3" style="display:none">
+                            <label>Location<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlLocation"></select>
+                            <small class="text-danger" id="ddlLocation-Required" style="display:none">Location is required*</small>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Section<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlSection" onchange="fnGetRoleMapData(this.id)"></select>
+                            <small class="text-danger" id="ddlSection-Required" style="display:none">Section is required*</small>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Role<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlRole"></select>
+                            <small class="text-danger" id="ddlRole-Required" style="display:none">Role is required*</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table id="tblRoleMapping" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5"></div>
+                        <div class="col-md-6">
+                            <input type="button" value="Submit" onclick="fnRoleMapping()" class="btn btn-primary">
+                            <input type="button" value="Cancel" onclick="fnClearRoleMapping()" class="btn btn-danger">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="tab_3" class="tab-pane fade">
+            <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+                <div class="row border form-group">
+                    <div class="breadcrumb font">
+                        <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span> <span class="inline odd last">Role Mapping Details</span>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <h3 class="head1" id="head1">Role Mapping Details</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Unit<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlUnits1" onchange="UpdateLocation(this.id, 'ddlWing1', 'ddlRole1')"></select>
+                            <small class="text-danger" id="ddlUnits1-Required" style="display:none">Unit is required*</small>
+                        </div>
+                        <div class="col-md-3 clsWing">
+                            <label>Wing<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlWing1" onchange="UpdateLocation(this.id, 'ddlSection1', '')"></select>
+                            <small class="text-danger" id="ddlWing1-Required" style="display:none">Wing is required*</small>
+                        </div>
+                        <div class="col-md-3" style="display:none">
+                            <label>Location<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlLocation1"></select>
+                            <small class="text-danger" id="ddlLocation1-Required" style="display:none">Location is required*</small>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Section<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlSection1"></select>
+                            <small class="text-danger" id="ddlSection1-Required" style="display:none">Section is required*</small>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Role<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlRole1"></select>
+                            <small class="text-danger" id="ddlRole1-Required" style="display:none">Role is required*</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5"></div>
+                        <div class="col-md-6">
+                            <input type="button" value="Search" onclick="fnGetRoleMapDetailsData(1)" class="btn btn-primary" style="margin-left:15px">
+                            <input type="button" value="Cancel" onclick="fnClearRoleMappingDetails()" class="btn btn-danger" style="margin-left:8px">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12" style="text-align: center;">
+                            <table id="tblRoleMappingDetails" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab_4" class="tab-pane fade">
+            <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+                <div class="row border form-group">
+                    <div class="breadcrumb font">
+                        <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span> <span class="inline odd last">User Mapping</span>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <h3 class="head1" id="head1">User Mapping</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input type="checkbox" name="cbxDITE" class="cbxDITE" id="cbxDiteEe" value="1" checked />
+                            <label>DITE Employee</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" name="cbxDITE" class="cbxDITE" id="cbxNonDiteEe" value="0" />
+                            <label>Non-DITE Employee</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label id="lblKGIDUserId"></label>
+                            <input type="text" id="txtKGIDUserId" class="form-control" onfocusout="fnGetUserDataFromKGIDNumber()">
+                            <small class="text-danger" id="txtKGIDUserId-Required" style="display:none">KGID Number is required*</small>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Name of the Employee<font class="text-danger">*</font></label>
+                            <input type="text" id="txtEEName" maxlength="50" class="form-control" disabled>
+                            <small class="text-danger" id="txtEEName-Required" style="display:none">Employee Name is required*</small>
+                        </div>
+                        <div class="col-md-2">
+                            <label>DOB<font class="text-danger">*</font></label>
+                            <input type="text" id="dateofbirth" class="form-control" autocomplete="off" placeholder="dd/mm/yyyy" style="background-position:right;background-size:30px;background-image:url(../../Content/img/Calendar.png);background-repeat:no-repeat;" disabled>
+                            <small class="text-danger" id="dateofbirth-Required" style="display:none">DOB is required*</small>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Phone Number<font class="text-danger">*</font></label>
+                            <input type="text" id="txtPhoneNum" maxlength="50" class="form-control" disabled>
+                            <small class="text-danger" id="txtPhoneNum-Required" style="display:none">Phone Number is required*</small>
+                        </div>
+                        <div class="col-md-2">
+                            <label>E-Mail Id<font class="text-danger">*</font></label>
+                            <input type="text" id="txtEmail" maxlength="50" class="form-control" disabled>
+                            <small class="text-danger" id="txtEmail-Required" style="display:none">Email-Id is required*</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*<div class="col-md-2 NonDITEPassword" style="display:none">
+                                <label>Password<font class="text-danger">*</font></label>
+                                <input type="text" id="txtPwd" maxlength="50" class="form-control">
+                                <small class="text-danger" id="txtPwd-Required" style="display:none">Password is required*</small>
+                            </div>*@
+                        <div class="col-md-2">
+                            <label>Unit<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlUnits2" onchange="UpdateLocation(this.id, 'ddlLocation2', 'ddlRole2')"></select>
+                            <small class="text-danger" id="ddlUnits2-Required" style="display:none">Unit is required*</small>
+                        </div>
+                        <div class="col-md-2 clsWing">
+                            <label>Wing<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlWing2" onchange="UpdateLocation(this.id, 'ddlSection2', '')"></select>
+                            <small class="text-danger" id="ddlWing2-Required" style="display:none">Wing is required*</small>
+                        </div>
+                        <div class="col-md-2">
+                            <label id="lblLocation">Location<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlLocation2" onchange="UpdateLocation(this.id, 'ddlDistrict2', '')"></select>
+                            <small class="text-danger" id="ddlLocation2-Required" style="display:none">Location is required*</small>
+                        </div>
+                        <div class="clsITIDetails">
+                            <div class="col-md-2">
+                                <label>District<font class="text-danger">*</font></label>
+                                <select class="form-control" id="ddlDistrict2" onchange="UpdateLocation(this.id, 'ddlTaluk2', '')">
+                                    <option value="choose">Choose</option>
+                                </select>
+                                <small class="text-danger" id="ddlDistrict2-Required" style="display:none">District is required*</small>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Taluk<font class="text-danger">*</font></label>
+                                <select class="form-control" id="ddlTaluk2" onchange="UpdateLocation(this.id, 'ddlITIName2', '')">
+                                    <option value="choose">Choose</option>
+                                </select>
+                                <small class="text-danger" id="ddlTaluk2-Required" style="display:none">Taluk is required*</small>
+                            </div>
+                            <div class="col-md-2">
+                                <label>ITI Institute Name<font class="text-danger">*</font></label>
+                                <select class="form-control" id="ddlITIName2">
+                                    <option value="choose">Choose</option>
+                                </select>
+                                <small class="text-danger" id="ddlITIName2-Required" style="display:none">ITI Institute Name is required*</small>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Section<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlSection2" onchange="UpdateLocation('ddlUnits2', this.id, 'ddlRole2')"></select>
+                            <small class="text-danger" id="ddlSection2-Required" style="display:none">Section is required*</small>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Role<font class="text-danger">*</font></label>
+                            <select class="form-control" id="ddlRole2"></select>
+                            <small class="text-danger" id="ddlRole2-Required" style="display:none">Role is required*</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5"></div>
+                        <div class="col-md-6">
+                            <input type="button" value="Submit" id="btnSubmitUserMap" onclick="fnAddUserMapping()" class="btn btn-primary" style="margin-left:15px" />
+                            <input type="button" id="btnCancelUserMap" onclick="fnClearUserMapping()" value="Cancel" class="btn btn-danger" style="margin-left:8px" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12" style="text-align: center;">
+                            <table id="tblUserMapping" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab_5" class="tab-pane fade active in">
+            <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+                <div class="row border form-group">
+                    <div class="breadcrumb font">
+                        <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span> <span class="inline odd last">User Details</span>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <h3 class="head1" id="head1">User Details</h3>
+                    </div>
+                    <div class="row">
+                        <input type="button" style="float:right;" class="btn btn-success" data-toggle="modal" data-target="#addStaffModal" value="Add User" />
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12" style="text-align: center;">
+                            <table id="tblUserDetails" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab_6" class="tab-pane fade">
+            <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:5px;">
+                <div class="row border form-group">
+                    <div class="breadcrumb font">
+                        <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span> <span class="inline odd last">User Gallery</span>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <h3 class="head1" id="head1">User Gallery</h3>
+                    </div>
+                    <!--<div class="row">
+                    <div class="col-md-2">
+                        <label>Gallery Photos</label>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="field" align="left">
+                            <h3>Upload your images</h3>
+                            <input type="file" id="files" name="files[]" multiple accept="image/png, image/gif, image/jpeg" />
+                        </div>-->
+                    @*<input type="file" id="gImages" accept="image/png, image/gif, image/jpeg" />*@
+                    <!--</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Scrolling photos</label>
+                        </div>
+                        <div class="col-md-4">
+
+                            <input type="file" id="sImages" accept="image/png, image/gif, image/jpeg" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Holiday List</label>
+                        </div>
+                        <div class="col-md-4">
+
+                            <input type="file" id="hList" accept="image/png, image/gif, image/jpeg" />
+                        </div>
+                    </div>-->
+
+
+                    <button type="button" class="collapsible">Gallery Photos</button>
+                    <div class="content">
+                        @using (Html.BeginForm("UploadFiles", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken();
+                            <div class="form-horizontal">
+                                <hr />
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.files, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextBoxFor(model => model.files, "", new { @type = "file", @multiple = "multiple", accept = "image/png, image/gif, image/jpeg" })
+                                        @Html.ValidationMessageFor(model => model.files, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" value="Upload" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                            </div>
+                            if (ViewBag.GalleryImgList != null)
+                            {
+                                foreach (var item in ViewBag.GalleryImgList)
+                                {
+                                    var srcPath = "../../Content/img/Gallery/" + @item;
+                                    <span class="pip ">
+                                        <img class="imageThumb" src=@srcPath onclick="fnDeleteImg(this.src)" />
+                                        <span class="remove">Remove image</span>
+                                    </span>
+                                }
+                            }
+                        }
+
+                    </div>
+
+
+                    <button type="button" class="collapsible">Scrolling Photos</button>
+                    <div class="content">
+                        @using (Html.BeginForm("UploadFiles", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken();
+                            <div class="form-horizontal">
+                                <hr />
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.files1, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextBoxFor(model => model.files1, "", new { @type = "file", @multiple = "multiple", accept = "image/png, image/gif, image/jpeg" })
+                                        @Html.ValidationMessageFor(model => model.files1, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" value="Upload" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                            </div>
+                            if (ViewBag.ScrollingImgList != null)
+                            {
+                                foreach (var item in ViewBag.ScrollingImgList)
+                                {
+                                    var srcPath = "../../Content/img/Scrolling/" + @item;
+                                    <span class="pip">
+                                        <img class="imageThumb" src=@srcPath onclick="fnDeleteImg(this.src)" />
+                                        <span class="remove">Remove image</span>
+                                    </span>
+                                }
+                            }
+                        }
+                    </div>
+                    <button type="button" class="collapsible">Holiday List</button>
+                    <div class="content">
+                        <div class="col-md-12">
+                            <div class="field" align="left">
+                                <h3>Upload your Holiday list</h3>
+                                <div class="row">
+                                    <div class="col-md-5"></div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addHolidayList"  id="AddHolidaybutton">
+                                            Add Holiday
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <table id="tblHolidayList" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="addHolidayList" tabindex="-1" role="dialog" aria-labelledby="addHolidayList" aria-hidden="true" data-backdrop="false" data-keyboard="false" dara-dismiss="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="head1" id="exampleHoliday">
+                        Add Holiday List
+                    </h2>
+                </div>
+                <div class="modal-body" style=" min-height: 200px;">
+                    <div class="row border form-group">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Date<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="date" id="txtHolidaydate" class="form-control" style="width: 180px;" min="2000-01-02">
+                                        <small class="text-danger" id="txtHolidaydate-Required" style="display:none">Holiday Date is required*</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Day<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" id="txtHolidayDay" class="form-control" style="width: 180px;" maxlength="30" readonly>
+                                        <small class="text-danger" id="txtHolidayDay-Required" style="display:none">Holiday Day is required*</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Holiday Name<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" id="txtHolidayName" maxlength="50" class="form-control" style="width: 180px;" @*onkeypress="return blockSpecialChar1(event)"*@>
+                                        <small class="text-danger" id="txtHolidayName-Required" style="display:none">Holiday Name is required*</small>
+                                        <span id="lblHolidayError" style="color: red"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-danger" data-dismiss="modal" value="Close" />
+                    <input type="button" class="btn btn-primary" id="btn_addholiday" onclick="fnUpdtHolidayList(0);" value="Add" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addStaffModal" tabindex="-1" role="dialog" aria-labelledby="addStaffModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        @using (@Html.BeginForm("", "", FormMethod.Post, new { @id = "UserAddform", @style = "width:100%" }))
+        {
+            //@Html.AntiForgeryToken();
+
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="head1" id="exampleModalLabel">
+                            Add User Details
+                        </h2>
+                    </div>
+                    <div class="modal-body" style=" min-height: 200px;">
+                        <div class="row border form-group">
+                            <div class="row">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-8">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="checkbox" name="DITENONDITE" class="DITENONDITE" id="DITE" value="1" checked />
+                                            <label>DITE </label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="checkbox" name="DITENONDITE" class="DITENONDITE" id="NONDITE" value="0" />
+                                            <label>Non DITE </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" id="DIVHIdeKGID">
+                                        <div class="col-md-5">
+                                            @Html.LabelFor(model => model.EmployeeKGIDNumber)
+                                            <span><font class="text-danger">*</font></span>
+                                        </div>
+                                        <div class="col-md-7">
+                                            @Html.TextBoxFor(m => m.EmployeeKGIDNumber, new { @autocomplete = "off", @placeholder = "KGID Number", @onKeyPress = "if(this.value.length==7) return false;", @class = "form-control numericOnly", @title = "Enter The KGID Number" })
+                                            @Html.ValidationMessageFor(m => m.EmployeeKGIDNumber, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            @*<label>Name<font class="text-danger">*</font></label>*@
+                                            @Html.LabelFor(model => model.UserName)
+                                            <span><font class="text-danger">*</font></span>
+
+                                        </div>
+                                        <div class="col-md-7">
+                                            @Html.TextBoxFor(m => m.UserName, new { @autocomplete = "off", @placeholder = "User Name", @maxlength = "50", @class = "form-control", @title = "Enter The User Name" })
+                                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+
+                                            @*<input type="text" id="txtNameAddStaff" maxlength="50" class="form-control" style="width: 180px;">
+                                                <small class="text-danger" id="txtNameAddStaff-Required" style="display:none">Name is required*</small>*@
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            @Html.LabelFor(model => model.FatherName)
+                                            <span><font class="text-danger">*</font></span>
+                                        </div>
+                                        <div class="col-md-7">
+                                            @Html.TextBoxFor(m => m.FatherName, new { @autocomplete = "off", @placeholder = "User Father Name", @maxlength = "50", @class = "form-control", @title = "Enter The User Father Name" })
+                                            @Html.ValidationMessageFor(m => m.FatherName, "", new { @class = "text-danger" })
+
+                                            @*<input type="text" id="txtFatherNameAddStaff" maxlength="50" class="form-control" style="width: 180px;">
+                                                <small class="text-danger" id="txtFatherNameAddStaff-Required" style="display:none">Name is required*</small>*@
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Gender<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            @Html.DropDownListFor(model => model.Gender, Model.EmployeeGenderList, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            @Html.LabelFor(model => model.EmployeeDOB)
+                                            <span><font class="text-danger">*</font></span>
+
+                                        </div>
+                                        <div class="col-md-7">
+                                            @Html.EditorFor(model => model.EmployeeDOB, new { htmlAttributes = new { @class = "form-control", @type = "date", placeholder = "Date Of Birth" } })
+
+                                            @*@Html.EditorFor(model => model.EmployeeDOB, "{0:dd/MM/yyyy}", new { htmlAttributes = new { @class = "form-control", @type = "date", placeholder = "Date Of Birth" } })*@
+                                            @Html.ValidationMessageFor(x => x.EmployeeDOB, "", new { @class = "text-danger", Value = "" })
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            @Html.LabelFor(model => model.Email)
+                                            <span><font class="text-danger">*</font></span>
+                                        </div>
+                                        <div class="col-md-7">
+                                            @*<input type="text" id="txtEmailAddStaff" class="form-control" style="width: 180px;">
+                                                <small class="text-danger" id="txtEmailAddStaff-Required" style="display:none">Email is required*</small>*@
+                                            @Html.TextBoxFor(m => m.Email, new { @autocomplete = "off", @placeholder = "User Email", @maxlength = "50", @class = "form-control", @title = "Enter The User Email", @type = "email" })
+                                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            @Html.LabelFor(model => model.Designation)
+                                            <span><font class="text-danger">*</font></span>
+                                        </div>
+                                        <div class="col-md-7">
+                                            @*<input type="text" id="txtEmailAddStaff" class="form-control" style="width: 180px;">
+                                                <small class="text-danger" id="txtEmailAddStaff-Required" style="display:none">Email is required*</small>*@
+                                            @Html.TextBoxFor(m => m.Designation, new { @autocomplete = "off", @placeholder = "Designation", @maxlength = "50", @class = "form-control", @title = "Enter The Designationl" })
+                                            @Html.ValidationMessageFor(m => m.Designation, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            @Html.LabelFor(model => model.Mobile)
+                                            <span><font class="text-danger">*</font></span>
+                                        </div>
+                                        <div class="col-md-7">
+                                            @Html.TextBoxFor(m => m.Mobile, new { @autocomplete = "off", @placeholder = "User Mobile Number", @maxlength = "10", @class = "form-control numericOnly", @title = "Enter The User Mobile Number" })
+                                            @Html.ValidationMessageFor(x => x.Mobile, "", new { @class = "text-danger" })
+
+                                            @*<input type="text" id="txtMobileAddStaff" maxlength="10" class="form-control ipeWidth" style="width: 180px;">
+                                                <small class="text-danger" id="txtMobileAddStaff-Required" style="display:none">Mobile is required*</small>*@
+                                        </div>
+                                    </div>
+                                    <div class="row" style="display:none">
+                                        <div class="col-md-5">
+                                            <label>Photo Upload<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div id="FileAttach"><img class="pull-left" width="50" height="50" src="~/Images/ProfilePic.png" id="ImgPhotoUpload">@*&emsp;&emsp;<span style="font-size:medium; font-weight:bold">Super Admin</span>*@</div>
+                                            <input type="file" value="PhotoUpload" class="form-control" id="PhotoUpload" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" style="width: 180px;">
+                                            <input type="hidden" id="PhotoUpload" value="" />
+                                            <small class="text-danger" id="PhotoUpload-Required" style="display:none">Photo is required*</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                        <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" aria-label="Close" value="Close" />
+                        <input type="button" class="btn btn-primary" id="BtnAddUser" onclick="AddUserPostData()" value="Add" />
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="userId" style="display:none" value="0" />
+        }
+    </div>
+    <span type="hidden" id="hdnHolidayId" value="" />
+
+    <script>
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        $("#txtHolidaydate").focusout(function () {
+            $("#txtHolidayDay").val(days[new Date($("#txtHolidaydate").val()).getDay()]);
+        });
+
+
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+
+        //function ShowMessage1(message) {
+
+        //    bootbox.alert(message);
+        //}
+
+        $(document).ready(function () {
+
+            $('#addStaffModal').on('hidden.bs.modal', function () {
+                $("#EmployeeKGIDNumber").val('');
+
+                $("#UserName").val('');
+
+                $("#FatherName").val('');
+
+                $("#Email").val('');
+                $("#Gender").val('');
+                $("#EmployeeDOB").val('');
+
+                $("#Mobile").val('');
+                $("#Designation").val('');
+            })
+            $(".DITENONDITE").change(function () {
+                $(".DITENONDITE").not(this).prop('checked', false);
+                functionCkDITENonDITE();
+            });
+
+            function functionCkDITENonDITE() {
+                if ($("#DITE").prop('checked') == true) {
+                    $("#DIVHIdeKGID").show();
+                }
+                else {
+                    $("#DIVHIdeKGID").hide();
+                }
+            }
+
+            $("#AddHolidaybutton").click(function () {
+                
+            var  holid = 0;
+                if (holid == "0") {
+                    $("#btn_addholiday").val('');
+                    $("#exampleHoliday").text('');
+
+                    $("#btn_addholiday").val('Add');
+                    $("#exampleHoliday").text('Add Holiday List');
+                }
+                else {
+
+                    $("#exampleHoliday").text('Edit Holiday List');
+
+                    $("#btn_addholiday").val('Update');
+                }
+            });
+
+        });
+
+
+        $('#addHolidayList').on('hidden.bs.modal', function () {
+            $("#txtHolidaydate").val('');
+            $("#txtHolidayDay").val('');
+            $("#txtHolidayName").val('');
+        })
+
+
+        //function Redirect() {
+        //    window.location = ".tab_2";
+        //}
+
+
+
+        $(".numericOnly").bind('keypress', function (e) {
+            if (e.keyCode == '9' || e.keyCode == '16') {
+                return;
+            }
+            var code;
+            if (e.keyCode) code = e.keyCode;
+            else if (e.which) code = e.which;
+            if (e.which == 46)
+                return false;
+            if (code == 8 || code == 46)
+                return true;
+            if (code < 48 || code > 57)
+                return false;
+        });
+
+
+
+        var validator = $("#addStaffModal").validate();
+        $('#addStaffModal').on('shown.bs.modal', function () {
+            validator.resetForm();
+        });
+
+
+
+        $(function () {
+            var dtToday = new Date();
+
+            var month = dtToday.getMonth() + 1;
+            var day = dtToday.getDate();
+            var year = dtToday.getFullYear();
+            if (month < 10)
+                month = '0' + month.toString();
+            if (day < 10)
+                day = '0' + day.toString();
+
+            var maxDate = year + '-' + month + '-' + day;
+            $('#txtHolidaydate').attr('min', maxDate);
+        });
+
+    </script>
+
+
+
+    <script type="text/javascript">
+        $(function () {
+            $("#txtHolidayName").keypress(function (e) {
+                var keyCode = e.keyCode || e.which;
+
+                $("#lblHolidayError").html("");
+
+                //Regex for Valid Characters i.e. Alphabets.
+                var regex = /^[.a-zA-Z ]+$/;
+
+                //Validate TextBox value against the Regex.
+                var isValid = regex.test(String.fromCharCode(keyCode));
+                if (!isValid) {
+                    $("#lblHolidayError").html("Only Alphabets allowed.");
+                }
+
+                return isValid;
+            });
+        });
+    </script>
+    @if (ViewBag.JavaScriptFunction != null)
+    {
+        <script type="text/javascript">
+        @Html.Raw(ViewBag.JavaScriptFunction)
+        </script>
+    }
+    @if (ViewBag.JavaScriptFunction1 != null)
+    {
+        <script type="text/javascript">
+        @Html.Raw(ViewBag.JavaScriptFunction1)
+        </script>
+    }
+</body>
+</html>
+
+@Scripts.Render("~/bundles/AdminIndex")

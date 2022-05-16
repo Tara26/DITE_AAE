@@ -1,0 +1,755 @@
+﻿
+@{
+    ViewBag.Title = "InstitutestaffApproval";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+<input type="hidden" id="hdnDiv_ID" data-value="@ViewBag.UserDivionId" />
+<style>
+    body {
+        padding-right: 0px !important;
+    }
+</style>
+<br /><br />
+<ul class="nav nav-tabs font">
+    @if (Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.CaseWorker || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.CaseWorkerDiv)
+    {
+        <li>
+            <a href="#tab_1" id="tab1" class="tab-1" data-toggle="tab">Review Staff Details</a>
+        </li>
+    }
+    else if (Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.OFFICE_SUPERINTENDENT || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Office_Supeintendent_Div
+        || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Assistant_Director || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Assistant_Director_Div
+        || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Deputy_Director_Div)
+    {
+        <li>
+            <a href="#tab_2" id="tab2" class="tab-2" data-toggle="tab">Review Staff status</a>
+        </li>
+    }
+
+    <li>
+        <a href="#tab_3" id="tab3" class="tab-3" data-toggle="tab">View Staff Details</a>
+    </li>
+
+</ul>
+
+<div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);padding:5px;">
+
+    <div class="tab-content">
+
+        <div class="tab-pane fade" id="tab_1">
+            <div class="row" style="border:1px solid black">
+                <div class="row">
+                    <div class="col-lg-12">
+                    </div>
+                </div>
+                @if (Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.CaseWorker || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.CaseWorkerDiv)
+                {
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-12" id="=tblGridUpdateTrade">
+
+                                <div id="DistrictWiseFilter" class="form-group">
+                                    <h2 class="head1">GIA-Private Staff Details </h2>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-lg-1">
+                                            <label>Session:</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Session12">
+                                                @*<option value="choose">choose</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>*@
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label class="control-label" for="txtAgencyRegnNo">Quarter</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Quarter1">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label class="control-label" for="txtAgencyRegnNo">Course Type</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control filter-change" id="CourseTypes">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4"></div>
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-primary" onclick="GetStaffOnsearch()">Search</button>
+                                           </div>
+                                        <div class="col-md-2">
+                                            <button class=" btn btn-primary " onclick="cancelselectfields();">Cancel</button>
+                                        </div>
+                                        
+                                    </div>
+                                    <br />  <br />
+                                </div>
+
+                                <div style="overflow-y:scroll" id="tblGridUpdateAffiliation_wrapper">
+                                    <table class="table table-bordered table-hover" border="1" id="StaffStatusTable1"></table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal fade enabledisable" id="ViewStaffModal" tabindex="-1" role="dialog" aria-labelledby="ViewStaffModal" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="modal-title a1" style="color:#195c9f; text-align:center; font-weight:700">
+                                        View Staff History
+                                    </h2>
+                                </div>
+                                <div class="row">
+                                    <h2 class="modal-title a1" style="color:#195c9f; text-align:center; font-weight:700"> Staff Remarks Details</h2>
+                                    <br />
+                                    <div class="col-md-12">
+                                        <table id="tblViewStaff" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sl.No</th>
+                                                    <th>Date</th>
+                                                    <th>From</th>
+                                                    <th>To</th>
+                                                    <th>Remarks</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" value="Close" />
+                                    @*<input type="button" class="btn btn-primary" onclick="UpdateOfficer()" value="Update" />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade enabledisable" id="StaffViewModal" tabindex="-1" role="dialog" aria-labelledby="StaffViewModal" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" style="width: 90%" role="dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="head1" id="exampleModalLabel">
+                                        View Staff Details
+                                    </h2>
+                                </div>
+                                <div class="row">
+                                    <h4 class="modal-title a1" style="color:#195c9f; text-align:center; font-weight:700"> staff View Details</h4>
+                                    <br />
+                                    <div class="col-md-12">
+                                        <table id="tblStaffViewMode" class="table table-bordered">
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" value="Close" />
+                                    @*<input type="button" class="btn btn-primary" onclick="UpdateOfficer()" value="Update" />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade enabledisable" id="EditStaffViewModal" tabindex="-1" role="dialog" aria-labelledby="EditStaffViewModal" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" style="width: 90%" role="dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="head1" id="exampleModalLabel">
+                                        Staff Details For Edit
+                                    </h2>
+                                </div>
+                                <div class="row">
+                                    <h2 class="modal-title a1" style="color:#195c9f; text-align:center; font-weight:700"> Staff Details</h2>
+                                    <br />
+                                    <div class="col-md-12">
+                                        <input type="hidden" id="InstituteId" value="" />
+                                        <table id="tblEditStaffViewMode" class="table table-bordered">
+                                        </table>
+
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <p><span style="color: #5691f0">* Records Displayed in Blue are Deleted</span></p>
+                                </div>
+
+                                <div>
+                                    <div class="card-body border" style="padding:30px">
+
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="col-lg-4">
+                                                    <div class="col-lg-4">
+                                                        <label class="control-label">Status</label>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <select id="dd-status" class="form-control clear"></select>
+                                                        <small class="text-danger" id="Send-status" style="display:none"> Status is required</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="col-md-4">
+                                                        <label class="control-label"> Send To:</label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <select id="dd-flow" class="form-control clear"></select>
+                                                        <small class="text-danger" id="Send-Required" style="display:none"> Send To is required</small>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-md-4">
+                                                    <div class="col-md-4">
+                                                        <label class="control-label">Remarks</label>
+                                                    </div><div class="col-md-8">
+                                                        <textarea id="Remarks" class="form-control clear" style="margin:-10px"></textarea>
+                                                        <small class="text-danger" id="remarks-Required" style="display:none">Remarks Required</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row"></div>
+                                            <div class="row"></div>
+                                            @*<div class="row">
+                                                    <div class="col-md-5"></div>
+                                                    <div class="col-md-2">
+                                                        <input type="button" id="snd" class="btn btn-primary" value="Submit" onclick="SaveStaffDetails();" />
+
+                                                        <input type="button" id="" class="btn btn-danger" value="Cancel" onclick="clearView()" />
+                                                    </div>
+                                                    <div class="col-md-5"></div>
+                                                </div>*@
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10">
+                                            <div class="col-sm-3">
+
+                                            </div>
+                                            <div class="col-sm-3">
+
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <button class="btn btn-primary" onclick="SaveStaffDetails()" data-dismiss="modal">Submit</button>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" value="Close" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                </div>
+                                @*<div class="modal-footer">
+                                    <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" value="Close" />*@
+                                @*<input type="button" class="btn btn-primary" onclick="UpdateOfficer()" value="Update" />*@
+                                @*</div>*@
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                }
+
+            </div>
+        </div>
+        <div class="tab-pane fade" id="tab_2">
+            <div class="row" style="border:1px solid black">
+                <div class="row">
+                    <div class="col-lg-12">
+                    </div>
+                </div>
+                <input type="hidden" id="hdnSession" data-value="@Request.RequestContext.HttpContext.Session["UserId"]" />
+                <input type="hidden" id="uservalue" data-value="@Request.RequestContext.HttpContext.Session["RoleId"]" />
+                @if (Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Office_Supeintendent_Div
+                    || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Assistant_Director
+                    || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Assistant_Director_Div
+                    //|| Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Deputy_Director
+                    || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Deputy_Director_Div)
+
+                {
+
+                    <div class="row font">
+                        <div class="form-group">
+                            <div class="col-md-12" id="=tblGridUpdateTrade">
+
+                                <div id="DistrictWiseFilter" class="form-group" style="padding:30px">
+                                    <h2 class="head1">GIA-Private Staff Details </h2>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-lg-1">
+                                           
+                                                <label>Session:</label>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <select class="form-control" id="YearOs">
+                                                    @*<option value="choose">Select</option>
+                                                        <option value="2020">2020</option>
+                                                        <option value="2021">2021</option>*@
+                                                </select>
+                                            </div>
+                                    
+                               
+                                        <div class="col-lg-1">
+                                            <label class="control-label" for="txtAgencyRegnNo">Quarter</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="QuarterOs">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label class="control-label" for="txtAgencyRegnNo">Course Type</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control filter-change" id="Course-OS">
+                                                <option value="0">Select</option>
+                                            </select>
+                                        </div>
+
+
+                                    </div>
+                                    <br />  <br />
+                                    <div class="row">
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-2">
+                                            <button class="btn btn-primary" onclick="GetStaffOnsearchForOSAD()">Search</button>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button class=" btn btn-primary search-affiliated" onclick="cancelselectfields();">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="overflow-y:scroll" id="tblGridUpdateAffiliation_wrapper">
+                                    <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="StaffStatusTable"></table>
+                                </div>
+                            </div>
+
+                            @*test*@
+
+                            <div id="Staffdetails_view1">
+                                <div class="form-group" style="border:1px solid black;padding:20px">
+                                    <div class="row" style="padding:30px">
+                                        <div class="card a5">
+                                            <div class="card-body">
+
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <span>Staff Details</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <label class="control-label">Name Staff</label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <span class="text-name clear"></span>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <label class="control-label">Designation</label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <span class="text-Designation clear"></span>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="control-label">Qualification</label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <span class="text-Qualification clear"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <label class="control-label">Staff Type</label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <span class="text-stafftype clear"></span>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="control-label">Teaching Subject</label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <span class="text-Teachingsubject clear"></span>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="control-label">Trade</label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <span class="text-Trade clear"></span>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <label class="control-label">Mobile Nmber</label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <span class="text-mobileNum clear"></span>
+                                                        <input type="hidden" id="StaffId" value="0" />
+
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="control-label">Email Id</label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <span class="text-email clear"></span>
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="card">
+                                            <div class="card-body border" style="padding:30px">
+
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="col-lg-4">
+                                                            <div class="col-lg-4">
+                                                                <label class="control-label">Status</label>
+                                                            </div>
+                                                            <div class="col-lg-8">
+                                                                <select id="dd-status" class="form-control clear"></select>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="col-md-4">
+                                                                <label class="control-label"> Send To:</label>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <select id="dd-flow" class="form-control clear"></select>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="col-md-4">
+                                                            <div class="col-md-4">
+                                                                <label class="control-label">Remarks</label>
+                                                            </div><div class="col-md-8">
+                                                                <textarea id="Remarks" class="form-control clear" style="margin:-10px"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row"></div>
+                                                    <div class="row"></div>
+                                                    <div class="row">
+                                                        <div class="col-md-5"></div>
+                                                        <div class="col-md-2">
+                                                            <input type="button" id="snd" class="btn btn-primary" value="Submit" onclick="SaveStaffDetails();" data-dismiss="modal" />
+
+                                                            <input type="button" id="" class="btn btn-danger" value="Cancel" onclick="clearView()" />
+                                                        </div>
+                                                        <div class="col-md-5"></div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade enabledisable" id="ViewStaffModal" tabindex="-1" role="dialog" aria-labelledby="ViewStaffModal" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="modal-title a1" style="color:#195c9f; text-align:center; font-weight:700">
+                                        View Staff History
+                                    </h2>
+                                </div>
+                                <div class="row">
+                                    <h2 class="modal-title a1" style="color:#195c9f; text-align:center; font-weight:700"> Staff Remarks Details</h2>
+                                    <br />
+                                    <div class="col-md-12">
+                                        <table id="tblViewStaff" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sl.No</th>
+                                                    <th>Date</th>
+                                                    <th>From</th>
+                                                    <th>To</th>
+                                                    <th>Remarks</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" value="Close" />
+                                    @*<input type="button" class="btn btn-primary" onclick="UpdateOfficer()" value="Update" />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade enabledisable" id="StaffViewModal" tabindex="-1" role="dialog" aria-labelledby="StaffViewModal" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" style="width: 90%" role="dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="head1" id="exampleModalLabel">
+                                        View Staff Details
+                                    </h2>
+                                </div>
+                                <div class="row">
+                                    <h4 class="modal-title a1" style="color:#195c9f; text-align:center; font-weight:700"> staff View Details</h4>
+                                    <br />
+                                    <div class="col-md-12">
+                                        <table id="tblStaffViewMode" class="table table-bordered">
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" value="Close" />
+                                    @*<input type="button" class="btn btn-primary" onclick="UpdateOfficer()" value="Update" />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade enabledisable" id="EditStaffViewModal" tabindex="-1" role="dialog" aria-labelledby="EditStaffViewModal" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" style="width: 90%" role="dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="head1" id="exampleModalLabel">
+                                        Staff Details For Edit
+                                    </h2>
+                                </div>
+                                <div class="row">
+                                    <h2 class="modal-title a1" style="color:#195c9f; text-align:center; font-weight:700"> Staff Details</h2>
+                                    <br />
+                                    <div class="col-md-12">
+                                        <input type="hidden" id="InstituteId" value="" />
+                                        <table id="tblEditStaffViewMode" class="table table-bordered">
+                                        </table>
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <p><span style="color: #5691f0">* Records Displayed in Blue are Deleted</span></p>
+                                </div>
+                                <div>
+                                    <div class="card-body border" style="padding:30px">
+
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="col-lg-4">
+                                                    <div class="col-lg-4">
+                                                        <label class="control-label">Status</label>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <select id="status" class="form-control clear"></select>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="col-md-4">
+                                                        <label class="control-label"> Send To:</label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <select id="flow" class="form-control clear"></select>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-md-4">
+                                                    <div class="col-md-4">
+                                                        <label class="control-label">Remarks</label>
+                                                    </div><div class="col-md-8">
+                                                        <textarea id="Remark" class="form-control clear" style="margin:-10px"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row"></div>
+                                            <div class="row"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10">
+                                            <div class="col-sm-3">
+
+                                            </div>
+                                            <div class="col-sm-3">
+
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <button class="btn btn-primary" onclick="SaveStaffDetailsOSAD()" data-dismiss="modal">Submit</button>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" value="Close" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="tab-pane fade" id="tab_3">
+            <div class="row" style="border:1px solid black">
+                <div class="row">
+                    <div class="col-lg-12">
+                    </div>
+                </div>
+                <input type="hidden" id="hdnSession" data-value="@Request.RequestContext.HttpContext.Session["UserId"]" />
+                <input type="hidden" id="uservalue" data-value="@Request.RequestContext.HttpContext.Session["RoleId"]" />
+                @if (Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.CaseWorker || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.CaseWorkerDiv
+                    || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.OFFICE_SUPERINTENDENT || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Office_Supeintendent_Div
+                    || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Assistant_Director || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Assistant_Director_Div
+                    || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Deputy_Director || Convert.ToInt32(Session["RoleId"]) == (int)Models.Affiliation.CsystemType.getCommon.Deputy_Director_Div)
+
+                {
+
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-12" id="=tblGridUpdateTrade">
+
+                                <div id="DistrictWiseFilter" class="form-group" style="padding:30px">
+                                    <h2 class="head1">GIA-Private Staff Details </h2>
+                                    <br />
+                                    <div class="row a">
+
+                                        <div class="col-lg-1">
+                                            <label>Session:</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Year"></select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label>Quarter:</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Quarter">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label class="control-label" for="txtAgencyRegnNo">Course Type</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control filter-change" id="Course-Add">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">Division</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control filter-change" id="Divisions" onchange="GetDistrictList(this);">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">District</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control filter-change district" id="Districts" onchange="GetInstitutes(this);">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="txtAgencyRegnNo">Institute Name</label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control filter-change" id="InstituteName">
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br />  <br />
+                                    <div class="col-lg-12" align="center">
+                                        <a class=" btn btn-primary" onclick="ViewStaffOnsearch();">Search</a>
+                                        <a class=" btn btn-primary search-affiliated" onclick="cancelselectfields();">Cancel</a>
+                                    </div>
+                                </div>
+
+                                <div style="overflow-y:scroll" id="tblGridUpdateAffiliation_wrapper">
+                                    <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="StaffDetailsViewTable"></table>
+                                </div>
+                            </div>
+
+                            @*test*@
+
+
+                        </div>
+                    </div>
+
+                    <div class="modal fade enabledisable" id="ApproveStaffViewModal" tabindex="-1" role="dialog" aria-labelledby="ApproveStaffViewModal" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" style="width: 90%" role="dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="head1" id="exampleModalLabel">
+                                        View Approved Staff Details
+                                    </h2>
+                                </div>
+                                <div class="row">
+                                    @*<h4 class="modal-title a1" style="color:#195c9f; text-align:center; font-weight:700"> Approved Staff Details</h4>*@
+                                    <br />
+                                    <div class="col-md-12">
+                                        <table id="tblApproveStaffViewMode" class="table table-bordered">
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" value="Close" />
+                                    @*<input type="button" class="btn btn-primary" onclick="UpdateOfficer()" value="Update" />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<input type="hidden" id="hdnSession" data-value="@Request.RequestContext.HttpContext.Session["UserId"]" />
+@Scripts.Render("~/bundles/StaffApprovalJs")
+@*@Scripts.Render("~/bundles/affiliationMainJs")*@
+@Scripts.Render("~/bundles/DataTable")

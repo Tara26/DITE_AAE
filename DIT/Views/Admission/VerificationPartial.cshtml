@@ -1,0 +1,2011 @@
+﻿@{
+    ViewBag.TitleTab1 = @ViewBag.Header + " Officer Details";
+    ViewBag.TitleTab2 = "Applicant Details";
+    ViewBag.TitleTab3 = "Mapping of " + @ViewBag.Header + " Officer to Applicants";
+    ViewBag.TitleTab4 = "Re-Mapping of " + @ViewBag.Header + " Officer to Applicants";
+    ViewBag.TitleTab5 = "Reconcile Document Verification Fee";
+    ViewBag.TitleTab6 = "Document Verification Status";
+}
+
+<script src="~/Scripts/Admission/bootstrap-multiselect.js"></script>
+<link href="~/Scripts/Admission/bootstrap-multiselect.css" rel="stylesheet" />
+<link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+<script src="~/Scripts/table2excel.js"></script>
+
+<style>
+    table.dataTable thead tr {
+        background-color: cornflowerblue;
+        color: white;
+    }
+
+    .headetitle {
+        text-align: center;
+        background-color: cornflowerblue;
+        color: white;
+        border-radius: 5px;
+        height: 35px;
+    }
+
+    .btn-alert-yes {
+        float: left;
+        width: 48%;
+    }
+
+    .btn-alert-no {
+        width: 48%;
+    }
+</style>
+<br />
+<br />
+<br />
+
+<h4>
+    <ul class="nav nav-tabs font bg-light">
+        @if (Session["RoleId"].Equals(9))
+        {
+
+            <li class="in active">
+                <a href="#tab_1" data-toggle="tab">@ViewBag.TitleTab1</a>
+            </li>
+            <li>
+                <a href="#tab_2" data-toggle="tab">@ViewBag.TitleTab2</a>
+            </li>
+            <li>
+                <a href="#tab_3" data-toggle="tab">@ViewBag.TitleTab3</a>
+            </li>
+
+            <li>
+                <a href="#tab_4" data-toggle="tab">@ViewBag.TitleTab4</a>
+            </li>
+            <li>
+                <a href="#tab_5" data-toggle="tab">@ViewBag.TitleTab5</a>
+            </li>
+            <li>
+                <a href="#tab_6" data-toggle="tab">@ViewBag.TitleTab6</a>
+            </li>
+        }
+        @if (Session["RoleId"].Equals(5) || Session["RoleId"].Equals(16))
+        {
+            <li class="in active">
+                <a href="#tab_5" data-toggle="tab">@ViewBag.TitleTab5</a>
+            </li>
+            <li>
+                <a href="#tab_6" data-toggle="tab">@ViewBag.TitleTab6</a>
+            </li>
+        }
+    </ul>
+</h4>
+
+
+<div class="tab-content">
+    <div class="tab-pane fade in active" id="tab_1">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6); padding:20px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">@ViewBag.TitleTab1</span></div>
+                    <br /><br />
+                    <h2 class="head1">@ViewBag.TitleTab1</h2>
+                    <br /><br />
+                    <input type="button" style="float:right;" onclick="ClearOfficerFields()" class="btn btn-success" data-toggle="modal" data-target="#OfficerModal" value="Add Officer" />
+                    <br />
+                    <hr />
+                    <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="OfficerTable1"></table>
+                </div>
+            </div>
+        </div>
+
+
+        <br /><br />
+    </div>
+
+    <div class="tab-pane fade" id="tab_2">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">@ViewBag.TitleTab2</span></div>
+            <br /><br />
+            <h2 class="head1">@ViewBag.TitleTab2</h2>
+            <br /><br />
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="col-sm-4">
+                        <label>Session:</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="Session12" style="width:40%;">
+                            <option value="choose">choose</option>
+                            @*<option value="2020">2020</option>
+                                <option value="2021">2021</option>*@
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="col-sm-4">
+                        <label>Course Type:</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <select class="form-control" style="width:40%;" id="ApplicantType"></select>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="col-sm-6">
+                        <button id="btnSearch" class="btn btn-primary" style="width:100px;" onclick="GetApplicants(this.id)">Search</button>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="ApplicantTable"></table>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab_3">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">@ViewBag.TitleTab3</span></div>
+            <br /><br />
+            <h2 class="head1">@ViewBag.TitleTab3</h2>
+
+            <br /><br />
+            <label>Total No. of Officers : </label>&nbsp;&nbsp;<span style="font-weight:bold;color:red;" id="officers"></span><br />
+            <label>Total No. of New Applicants :</label>&nbsp;&nbsp;<span style="font-weight:bold;color:red;" id="Applicants"></span>&nbsp;&nbsp;<input type="button" value="assign to officers" class="btn btn-success btn-xs" onclick="MapApplicantToOfficer()" /><br />
+            <hr />
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="col-sm-4">
+                        <label>Session:</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="Session" style="width:40%;">
+                            <option value="choose">choose</option>
+                            @*<option value="2020">2020</option>
+                                <option value="2021">2021</option>*@
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="col-sm-4">
+                        <label>Course Type:</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <select class="form-control" style="width:40%;" id="CourseType"></select>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="col-sm-6">
+                        <button class="btn btn-primary" style="width:100px;" onclick="GetverificationMapping()">Search</button>
+                    </div>
+                </div>
+            </div>
+            <input type="button" class="btn btn-success" value='Export To Excel' style="text-align:center" id="btnverificationTableExportData" onclick="ExcelExportTentative();" />
+            <br />
+            <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="verificationTable"></table>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab_4">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="breadcrumb font"><span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">@ViewBag.TitleTab4</span></div>
+            <br /><br />
+            <h2 class="head1">@ViewBag.TitleTab4</h2>
+
+            <br /><br />
+            <label>Total No. of Officers : </label>&nbsp;&nbsp;<span style="font-weight:bold;color:red;" id="ReassignOfficers"></span><br />
+            <label>Total No. of Applicants :</label>&nbsp;&nbsp;<span style="font-weight:bold;color:red;" id="ReassignApplicants"></span>&nbsp;&nbsp;<input type="button" value="Re-assign to officers" class="btn btn-success btn-xs" onclick="ReMapApplicantToOfficer()" />&nbsp;&nbsp;<input type="button" value="Re-assign Individual Officers" class="btn btn-success btn-xs" onclick="ResetTable()" /><br />
+            <hr />
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="col-sm-4">
+                        <label>Session:</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="Session1" style="width:40%;">
+                            <option value="choose">choose</option>
+                            @*<option value="2020">2020</option>
+                                <option value="2021">2021</option>*@
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="col-sm-4">
+                        <label>Course Type:</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <select class="form-control" style="width:40%;" id="CourseType1"></select>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="col-sm-6">
+                        <button class="btn btn-primary" style="width:100px;" onclick="GetInActiveOfficernMapping()">Search</button>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <table class="table table-striped table-hover text-center shadow clswidth" border="1" id="ReassignTable"></table>
+        </div>
+        <!--START Re-assign OFFICER MODAL POPUP-->
+        <div class="modal fade enabledisable" id="ReassignOfficerModal" tabindex="-1" role="dialog" aria-labelledby="ReassignOfficerModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" style="color: #010480; font-size: 20px; text-align: center; font-family: sans-serif;">
+                            Re-assign Officer
+                        </h5>
+                    </div>
+                    <div class="modal-body" style=" min-height: 200px;">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="text-right">
+                                                <label>Total No. of Applicants :</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <span style="font-weight:bold;color:red;" id="ReassignApplicants1"></span>
+                                            <input style="float:right;" type="button" class="btn btn-primary" value="Add Officer" id="add-row-new" />
+                                        </div>
+                                    </div><br />
+                                    <div class="row">
+                                        <table class="table table-bordered" id="Table-Trade">
+                                            <thead>
+                                                <tr>
+                                                    <th>Officer Name</th>
+                                                    <th>Applicants</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <select class="form-control" id="officerNames"></select>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" style="width:100px;" class="form-control" id="tabApplicants" />
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-danger add-trade-remove">X</button>
+                                                        <input type="hidden" class="form-control" id="NoApplicants" />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" value="Close" />
+                        <input type="button" class="btn btn-primary" onclick="ReMapApplicantIndividualOff()" value="Add" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--END Re-assign OFFICER-->
+    </div>
+
+    <div class="tab-pane fade" id="tab_5">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font">
+                    <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Document Verification Fee</span>
+                </div>
+                <div class="col-lg-12">
+                    <h3 class="head1"> Document Verification Fee </h3>
+                    <br /><br />
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="col-sm-4">
+                                    <label>Session:</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="ddlSessionDvF" style="width:40%;"></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="col-sm-4">
+                                    <label>Course Type:</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" style="width:40%;" id="ddlCourseTypeDvF"></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="col-sm-4">
+                                    <label>Appication Mode</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="ddlApplicantTypeDvF" name="ddlApplicantTypeDvF" style="width:40%;">
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        @if (Session["RoleId"].ToString() != "9")
+                        {
+                            <div class="row">
+                        @if (Session["RoleId"].ToString() == "5")
+                        {
+                            <div class="col-sm-4">
+                                <div class="col-sm-5">
+                                    <label>Division:</label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <select class="form-control" id="divisionDdp" onchange="GetDistrictsDDp('districtDdp1', $('#divisionDdp').val())"></select>
+                                </div>
+                            </div>
+                        }
+                        
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>District:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="districtDdp1" onchange="GetTaluksDDp('talukDdp', $('#districtDdp1').val())"><option value="choose">choose</option></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-5">
+                                <label>Taluk:</label>
+                            </div>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="talukDdp" onchange="GetColleges('instituteDdp',$('#talukDdp').val())"><option value="choose">choose</option></select>
+                            </div>
+                        </div>
+                    </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="col-sm-5">
+                                        <label>Institute:</label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <select class="form-control" id="instituteDdp"><option value="choose">choose</option></select>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary" style="width:100px;" onclick="GetDataDocumentsVerificationFee()">Search</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <br>
+                        <div class="row" style="overflow-x:scroll; width:99%">
+                            <table id="tblDocumentVerifyFee" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab_6">
+        <div class="container-fluid font" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+            <div class="row border">
+                <div class="breadcrumb font">
+                    <span class="inline odd first"><a href="/Home/index">Home</a></span> <span class="delimiter">&gt;</span>  <span class="inline odd last">Verify documents of the applicants</span>
+                </div>
+                <div class="col-lg-12">
+                    <h3 class="head1">Document Verification Status</h3>
+                    <br /><br />
+                          <div class="card-body">
+                              <div class="row">
+                                  <div class="col-sm-4">
+                                      <div class="col-sm-5">
+                                          <label>Session:</label>
+                                      </div>
+                                      <div class="col-sm-7">
+                                          <select class="form-control" id="Session22" style="width:100px;">
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="col-sm-6">
+                                          <label>Course Type:</label>
+                                      </div>
+                                      <div class="col-sm-6">
+                                          <select class="form-control" style="width:100px;" id="CourseType22"></select>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="col-sm-6">
+                                          <label>Application Mode</label>
+                                      </div>
+                                      <div class="col-sm-6">
+                                          <select class="form-control" id="ApplicantTypeSelect" name="ApplicantTypeSelect">
+                                          </select>
+                                      </div>
+                                  </div>
+                                  @*<div class="col-sm-2">
+                                      <div class="col-sm-6">
+                                          <button class="btn btn-primary" style="width:100px;" onclick="GetDataToVerifyDocuments()">Search</button>
+                                      </div>
+                                  </div>*@
+                              </div>
+
+                              @if (Session["RoleId"].ToString() != "9")
+                              {
+                                  <div class="row">
+                                      @if (Session["RoleId"].ToString() == "5")
+                                      {
+                                          <div class="col-sm-4">
+                                              <div class="col-sm-5">
+                                                  <label>Division:</label>
+                                              </div>
+                                              <div class="col-sm-7">
+                                                  <select class="form-control" id="divisionverificationstatus" onchange="GetDistrictsDDp('districtverificationstatus', $('#divisionverificationstatus').val())"></select>
+                                              </div>
+                                          </div>
+                                      }
+
+                                      <div class="col-sm-4">
+                                          <div class="col-sm-5">
+                                              <label>District:</label>
+                                          </div>
+                                          <div class="col-sm-7">
+                                              <select class="form-control" id="districtverificationstatus" onchange="GetTaluksDDp('talukverificationstatus', $('#districtverificationstatus').val())"><option value="choose">choose</option></select>
+                                          </div>
+                                      </div>
+                                      <div class="col-sm-4">
+                                          <div class="col-sm-5">
+                                              <label>Taluk:</label>
+                                          </div>
+                                          <div class="col-sm-7">
+                                              <select class="form-control" id="talukverificationstatus" onchange="GetColleges('instituteverificationstatus',$('#talukverificationstatus').val())"><option value="choose">choose</option></select>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-sm-4">
+                                          <div class="col-sm-5">
+                                              <label>Institute:</label>
+                                          </div>
+                                          <div class="col-sm-7">
+                                              <select class="form-control" id="instituteverificationstatus"><option value="choose">choose</option></select>
+                                          </div>
+                                      </div>
+                                  </div>
+                              }
+                              <div class="row">
+                                  <div class="col-sm-4">
+                                      <div class="col-sm-6">
+                                          <button class="btn btn-primary" style="width:100px;" onclick="GetDataToVerifyDocuments()">Search</button>
+                                      </div>
+                                  </div>
+
+                              </div>
+                              <br>
+                              <input type="button" class="btn btn-success" value='Export To Excel' style="text-align:center" onclick="ExcelExportDocVerification();" />
+                              <div class="row" style="overflow-x:scroll; width:99%">
+                                  <table id="VerifyDocumentsTable" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                              </div>
+                          </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--reconcile Remarks MODAL POPUP-->
+<div class="modal fade" id="HisVerificatiobnFeeRemarksModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Remarks</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <table class="table table-striped table-hover text-center shadow clswidth" id="tblVerificationFeeCommentDetails" style="width:100% !important" border="1" align="center"></table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--reconcile Remarks MODAL POPUP END-->
+<!----- Document Verification MODAL POP UP Remarks-->
+
+<div class="modal fade" id="HistoryRemarksCommentsModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Remarks</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <table class="table table-striped table-hover text-center shadow clswidth" id="GetCommentRemarksDetails" style="width:100% !important" border="1" align="center"></table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--- End Remarks POP UP For Remarks -->
+<!----- Action POP UP -->
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog" style="width:80%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <a href="#" class="close" data-dismiss="modal" aria-label="close">&times;</a><br><br>
+                <div class="accordion-option">
+                    <h3 class="title">Application Form Details</h3>
+                    <a href="javascript:void(0)" class="toggle-accordion active" accordion-id="#accordion"></a>
+                </div>
+                <div class="clearfix"></div>
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h3 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Applicant Details
+                                </a>
+                            </h3>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Select the Board type</label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input type="radio" id="RStateBoardType" name="RStateBoardType" value="1" checked onchange="OnChangeStateBoardType()" disabled>
+                                            <label>State Board</label>&nbsp;&nbsp;
+                                            <input type="radio" id="RStateBoardType" name="RStateBoardType" value="0" onchange="OnChangeStateBoardType()" disabled>
+                                            <label>Other Boards</label>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div id="GetAppliedBasicsForBoardType" class="row">
+                                        <div class="col-md-5">
+                                            <label>Applied for which basics<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            @foreach (var Qlist in ViewBag.QualificationList)
+                                            {
+                                                <input type="radio" name="RAppBasics" disabled style="width:5%" onchange="OnChangeGetAppliedBasicsForBoardType()" value="@Qlist.QualificationId" checked> <b> @Qlist.Qualification </b>
+                                            }
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div id="GetRollNumberFor10thStd" class="row">
+                                        <div class="col-md-5">
+                                            <label>Enter the Roll Number/Registration Number for 10th Standard<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input name="txtRollNumber" type="text" id="txtRollNumber" disabled maxlength="10" autocomplete="off" class="form-control">
+                                            <small class="text-danger" id="txtRollNumber-Required" style="display:none">Roll Number/Registration is required</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label id="AcademicMonths" hidden></label>
+                                        <label id="AcademicYear" hidden></label>
+                                        <div class="col-md-6">
+                                            <label>Select Academic Year<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" id="academicyear1" name="academicyear1" class="form-control date-picker" autocomplete="off" disabled style="background-position:right;background-size:30px;background-image:url(../../Content/img/Calendar.png);background-repeat:no-repeat;">
+                                            <small class="text-danger" id="academicyear1-Required" style="display:none">Date of Birth is required</small>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Applicant Full Name<font class="text-danger">*</font></label>
+                                            <label id="ApplicantId" hidden></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input name="txtApplicantName" type="text" disabled maxlength="50" id="txtApplicantName" style="text-transform:uppercase;" autocomplete="off" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Father's Name<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input name="txtFathersName" type="text" disabled id="txtFathersName" maxlength="50" autocomplete="off" class="form-control">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Upload Photo<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div id="FileAttach"><img class="pull-left" width="100" height="70" alt="No Image" id="ImgPhotoUpload"></div>
+                                            @*<input type="file" value="PhotoUpload" class="form-control" id="PhotoUpload">*@
+                                            <input type="hidden" id="IsUploaded" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Parent Occupation<font class="text-danger"></font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input name="txtParentOccupation" type="text" id="txtParentOccupation" maxlength="50" autocomplete="off" class="form-control" disabled>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Date of Birth<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" id="dateofbirth" name="dateofbirth" class="form-control" autocomplete="off" style="background-position:right;background-size:30px;background-image:url(../../Content/img/Calendar.png);background-repeat:no-repeat;" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Gender<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="Gender" disabled></select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Mother's Name<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input name="txtMothersName" type="text" id="txtMothersName" maxlength="50" autocomplete="off" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Religion<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="Religion" disabled>
+                                                <option value="choose">Select Religion</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Category<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="Category" disabled>
+                                                <option value="choose">Select Category</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Minority Category<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="MinorityCategory" disabled>
+                                                <option value="0">Select Category</option>
+                                                <option value="1">Yes</option>
+                                                <option value="2">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Caste<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="txtCaste" disabled>
+                                                <option value="0">Select Caste</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Family Annual Income<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input name="txtFamilyAnnualIncome" type="number" id="txtFamilyAnnualIncome" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)" disabled>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Applicant Type<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="ApplicantType" disabled>
+                                                <option value="0">Select Applicant Type</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>AadhaarNumber<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control AadhaarNumberText" autocomplete="off" id="txtAadhaarNumber" maxlength="14" name="txtAadhaarNumber" disabled>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Ration Card Number<font class="text-danger"></font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" autocomplete="off" id="txtRationCard" maxlength="10" name="txtAadhaarNumber" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Aadhaar Based Bank Details</label>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Account Number<font class="text-danger"></font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="number" autocomplete="off" id="AccountNumber" maxlength="16" name="AccountNumber" onkeypress="IncomeMoneyPhoneValidation(event,this.id)" disabled>
+                                            <small class="text-danger" id="AccountNumber-Required" style="display:none">Enter Valid 11 to 16 digits Account Number*</small>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Bank Name<font class="text-danger"></font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" autocomplete="off" id="BankName" maxlength="25" name="BankName" disabled>
+                                            <small class="text-danger" id="BankName-Required" style="display:none">Enter Valid Bank Name*</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>IFSC Code<font class="text-danger"></font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" autocomplete="off" id="IFSCCode" maxlength="11" name="IFSCCode" disabled>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    @*hide*@
+                                    <div class="row" style="display:none;">
+                                        <div class="col-md-2">
+                                            <label>Select applicable Reservations</label>
+                                            <label id="DiffAbledCer"></label>
+                                            <label id="KanMedCer"></label>
+                                            <label id="ExServiceCer"></label>
+                                            <label id="LandLoserCer"></label>
+                                            <label id="EcoWeakCer"></label>
+                                            <label id="KMCer"></label>
+                                            <label id="HoraNaduCer"></label>
+                                            <label id="HydKarCer"></label>
+                                            <label id="ExeStuCer"></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select name="ApplicableReservations" multiple id="ApplicableReservations" onchange="getSelectedOptions(this)" disabled></select>
+                                            <small class="text-danger" id="ApplicableReservations-Required" style="display:none">Reservations is required*</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Person with Disability</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" id="PhysicallyHanidcapYes" name='PhysicallyHanidcapInd' class="PhysicallyHanidcapInd" value="1" onchange="PhysicallyHanidcapEna(this)" disabled><b>Yes</b>
+                                            <input type="radio" id="PhysicallyHanidcapNo" name='PhysicallyHanidcapInd' class="PhysicallyHanidcapInd" value="0" onchange="PhysicallyHanidcapEna(this)" checked disabled><b>No</b>&nbsp;
+                                            <small class="text-danger" id="PersonWithDisabilityUploadDoc-Required" style="display:none">As you uploaded the document for Person with disability, you have to choose Disability Type*</small>
+                                        </div>
+                                        <div id="PhysicallyHanidcapDiv1" class="col-md-2 PhysicallyHanidcapInd">
+                                            <label>If Yes, Select the Disability</label>
+                                        </div>
+                                        <div id="PhysicallyHanidcapDiv2" class="col-md-4 PhysicallyHanidcapInd">
+                                            <select name="PhysicallyHanidcapType" class="form-control PhysicallyHanidcapInd" id="PhysicallyHanidcapType" disabled></select>
+                                            <small class="text-danger" id="PersonWithDisability-Required" style="display:none">Person with Disability is required*</small>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>HoraNadu/GadiNadu Kannidagas</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" id="HoraNaduYes" name='HoraNadu' value="1" disabled><b>Yes</b>
+                                            <input type="radio" id="HoraNaduNo" name='HoraNadu' value="0" checked disabled><b>No</b>&nbsp;
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Exempted from Study Certificate</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" id="ExemptedFromStudyCertificateYes" name='ExemptedFromStudyCertificate' value="1" disabled><b>Yes</b>
+                                            <input type="radio" id="ExemptedFromStudyCertificateNo" name='ExemptedFromStudyCertificate' value="0" checked disabled><b>No</b>&nbsp;
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Hyderabad Karnataka Region</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" id="HyderabadKarnatakaRegionYes" name='HyderabadKarnatakaRegion' value="1" disabled><b>Yes</b>
+                                            <input type="radio" id="HyderabadKarnatakaRegionNo" name='HyderabadKarnatakaRegion' value="0" checked disabled><b>No</b>&nbsp;
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Kannda Medium</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" id="KanndaMediumYes" name='KanndaMedium' value="1" disabled><b>Yes</b>
+                                            <input type="radio" id="KanndaMediumNo" name='KanndaMedium' value="0" checked disabled><b>No</b>&nbsp;
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Economically Weaker Sections </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" id="EwsYes" name='EconomicallyWeakerSections' value="1" disabled><b> Yes </b>
+                                            <input type="radio" id="EwsNo" name='EconomicallyWeakerSections' value="0" checked disabled><b> No </b>&nbsp;
+                                            <small class="text-danger" id="EconomicallyWeakerSections-Required" style="display:none">As you have given the documents, You have to select option as YES*</small>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Ex-Service </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" id="ExServiceYes" name='ExService' value="1" disabled><b> Yes </b>
+                                            <input type="radio" id="ExServiceNo" name='ExService' value="0" checked disabled><b> No </b>&nbsp;
+                                            <small class="text-danger" id="ExService-Required" style="display:none">As you have given the documents, You have to select option as YES*</small>
+                                        </div>
+
+                                    </div>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                            <h3 class="panel-title">
+                                <a role="button" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                    Education Details
+                                </a>
+                            </h3>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Qualification<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <select class="form-control" id="Qualification" disabled>
+                                                <option value="choose">Select Qualification</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Applicant Belongs To<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            @foreach (var Rlist in ViewBag.LocationList)
+                                            {
+                                                <input type="radio" name="RuralUrban" style="width:5%" value="@Rlist.location_id" required disabled> <b> @Rlist.location_name </b>
+                                            }
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Applied for which basics<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            @foreach (var Qlist in ViewBag.QualificationList)
+                                            {
+                                                <input type="radio" name="AppBasics" style="width:5%" value="@Qlist.QualificationId" required disabled> <b> @Qlist.Qualification </b>
+                                            }
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Have you studied Science and Maths?</label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input type="radio" id="studiedMathsScience" name="studiedMathsScience" value="1" checked disabled>
+                                            <label>Yes</label>&nbsp;&nbsp;
+                                            <input type="radio" id="studiedMathsScience" name="studiedMathsScience" value="0" disabled>
+                                            <label>No</label>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>10th Board<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            @foreach (var Slist in ViewBag.SyllabusList)
+                                            {
+                                                <input type="radio" name="TenthBoard" style="width:5%" value="@Slist.Syllabus_type_id" required onchange="TenthBoardStateType()" disabled><b> @Slist.Syllabus_type</b>
+                                            }
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div id="TenthCOBSEType">
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <label>COBSE Board<font class="text-danger">*</font></label>
+                                            </div>
+                                            <div class="col-md-5">
+                                                @foreach (var Slist in ViewBag.SyllabusListCOBSE)
+                                                {
+                                                    <input type="radio" name="TenthCOBSEBoard" style="width:5%" value="@Slist.Syllabus_type_id" required checked onchange="TenthCOBSEBoardType()" disabled><b> @Slist.Syllabus_type</b>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div id="TenthCBSEICSEType">
+                                            <br>
+                                            @*<div class="row">
+                                                                                <div class="col-md-5">
+                                                                                    <label>Enter the Grade<font class="text-danger">*</font></label>
+                                                                                </div>
+                                                                                <div class="col-md-5">
+                                                                                    <input name="txtEduGrade" type="text" id="txtEduGrade" autocomplete="off" maxlength="3" class="form-control" disabled>
+                                                                                    <small class="text-danger" id="txtInstituteStudied-Required" style="display:none">Grade is required*</small>
+                                                                                </div>
+                                                </div>*@
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Institute studied as per Qualification<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input name="txtInstituteStudied" type="text" id="txtInstituteStudied" maxlength="20" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Maximum Marks as per Qualification<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input name="txtMaximumMarks" type="number" id="txtMaximumMarks" class="form-control" disabled onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                        </div>
+                                    </div>
+                                    <div class="row" style="display:none">
+                                        <div class="col-md-5">
+                                            <label>Minimum marks<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input name="txtMinMarks" type="number" id="txtMinMarks" class="form-control" disabled onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                            <small class="text-danger" id="txtMinMarks-Required" style="display:none">Minimum Marks is required*</small>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Marks Obtained as per Qualification<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input name="txtMarksObtained" type="number" id="txtMarksObtained" class="form-control" disabled onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Percentage</label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label id="lblPercAsPerMarks">100%</label>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Select results as per Qualification<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="Results" disabled>
+                                                <option value="0">Select Results</option>
+                                                <option value="1">Pass</option>
+                                                <option value="2">Fail</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingThree">
+                            <h3 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                    Communication Details
+                                </a>
+                            </h3>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Communication Address<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <textarea name="txtCommunicationAddress" style="resize: none;" type="text" id="txtCommunicationAddress" maxlength="50" class="form-control" rows="4" cols="50" disabled>
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>District<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <select class="form-control" id="Districts" onchange="GetTaluka('Communication')" disabled>
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>Taluka<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="Talukas" disabled>
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>Pincode<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <input name="txtPincode" type="text" id="txtPincode" maxlength="6" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-10">
+                                            <input name="chkSameAsCommunicationAddress" type="checkbox" id="chkSameAsCommunicationAddress" onchange="OnchangechkSameAsCommunicationAddress()" disabled> <b>If Communication address is same as Permanent Address</b>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Permanent Address<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <textarea name="txtPermanentAddress" style="resize: none;" type="text" id="txtPermanentAddress" maxlength="50" class="form-control" rows="4" cols="50" disabled>
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>District<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <select class="form-control" id="PermanentDistricts" onchange="GetTaluka('Permanent')" disabled>
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>Taluka<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <select class="form-control" id="PermanentTalukas" disabled>
+                                                <option value="choose">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>Pincode<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <input name="txtPermanentPincode" type="text" id="txtPermanentPincode" maxlength="6" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label>Applicant Phone number<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <input name="txtApplicantPhoneNumber" type="number" id="txtApplicantPhoneNumber" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)" disabled>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Applicant Father's Phone number<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <input name="txtFathersPhoneNumber" type="number" id="txtFathersPhoneNumber" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label>Applicant EmailID<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <input name="txtEmailId" type="text" id="txtEmailId" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingFour">
+                            <h3 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                    Documents
+                                </a>
+                            </h3>
+                        </div>
+                        <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <table class="table table-bordered table-hover text-center" id="tblGrid">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>Document Type</th>
+                                                <th>Document File</th>
+                                                <th width="2%">Link</th>
+                                                <th>Document Status</th>
+                                                <th>Document Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="color:Black;" id="SeatRulesValues">
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Educational certificate</b>
+                                                    <div id="DocEduCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocEduCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="EduCertificate" class="form-control" id="EduCertificate">
+                                                </td>
+                                                <td>
+                                                    <a id="aEduCertificate" href="" class="link EduFileAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Education Documents" class="pull-left aEduCertificate" id="aEduCertificate" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="EduDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocEduStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocEduStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Educational Details</b>  </small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtEduCertRemarks" style="resize: none;width: 90%" type="text" id="txtEduCertRemarks" maxlength="50" class="form-control" rows="4" cols="20"></textarea>
+                                                    <small class="text-danger" id="WithoutDocEduRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Caste certificate</b>
+                                                    <div id="DocCasCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocCasCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="CasteCertificate" class="form-control" id="CasteCertificate">
+                                                </td>
+                                                <td>
+                                                    <a id="aCasteCertificate" href="" class="link CasteFileAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Caste Documents" class="pull-left aCasteCertificate" id="aCasteCertificate" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="CasDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocCasStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocCasStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Caste Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtCasteCertRemarks" style="resize: none;width: 90%" type="text" id="txtCasteCertRemarks" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocCasRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Ration card</b>
+                                                    <div id="DocRatCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocRatCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Rationcard" class="form-control" id="Rationcard">
+                                                </td>
+                                                <td>
+                                                    <a id="aRationCard" href="" class="link RationFileAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Ration Documents" class="pull-left aRationCard" id="aRationCard" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="RationDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocRatStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocRatStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Ration Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtRationCardRemarks" style="resize: none;width: 90%" type="text" id="txtRationCardRemarks" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocRatRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Income certificate</b>
+                                                    <div id="DocIncCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocIncCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Incomecertificate" class="form-control" id="Incomecertificate">
+                                                </td>
+                                                <td>
+                                                    <a id="aIncomeCertificate" href="" class="link IncomeCertificateAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Income Documents" class="pull-left aIncomeCertificate" id="aIncomeCertificate" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="IncCerDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocIncStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocIncStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Income Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtIncCertRemarks" style="resize: none;width: 90%" type="text" id="txtIncCertRemarks" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocIncRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>UID Number</b>
+                                                    <div id="DocUIDCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocUIDCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="UIDNumber" class="form-control" id="UIDNumber">
+                                                </td>
+                                                <td>
+                                                    <a id="aUIDNumber" href="" class="link UIDFileAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Income Documents" class="pull-left aUIDNumber" id="aUIDNumber" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="UIDDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocUIDStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocUIDStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>UID Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtUIDRemarks" style="resize: none;width: 90%" type="text" id="txtUIDRemarks" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocUIDRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Rural certificate</b>
+                                                    <div id="DocRurCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocRurCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Ruralcertificate" class="form-control" id="Ruralcertificate">
+                                                </td>
+                                                <td>
+                                                    <a id="aRuralcertificate" href="" class="link RuralcertificateAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Income Documents" class="pull-left aRuralcertificate" id="aRuralcertificate" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="RcerDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocRurStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocRurStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Rural Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtRurCertRemarks" style="resize: none;width: 90%" type="text" id="txtRurCertRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocRurRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Kannada medium Certificate</b>
+                                                    <div id="DocKanMedCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocKanMedCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="KannadamediumCertificate" class="form-control" id="KannadamediumCertificate">
+                                                </td>
+                                                <td>
+                                                    <a id="aKannadamediumCertificate" href="" class="link KannadamediumCertificateAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Kannada Documents" class="pull-left aKannadamediumCertificate" id="aKannadamediumCertificate" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="KanMedCerDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocKMCStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocKMCStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Kannada Medium Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtKanMedRemarks" style="resize: none;width: 90%" type="text" id="txtKanMedRemarks" maxlength="50" class="form-control" rows="4" cols="30"></textarea>
+                                                    <small class="text-danger" id="WithoutDocKMCRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Person with disability certificate</b>
+                                                    <div id="DocDidAblCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocDidAblCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Differentlyabledcertificate" class="form-control" id="Differentlyabledcertificate">
+                                                </td>
+                                                <td>
+                                                    <a id="aDifferentlyabledcertificate" href="" class="link DifferentlyabledcertificateAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Person with disability Documents" class="pull-left aDifferentlyabledcertificate" id="aDifferentlyabledcertificate" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="DiffAblDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocDAStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocDAStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Person With Disability Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtDiffAbledCertRemarks" style="resize: none;width: 90%" type="text" id="txtDiffAbledCertRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocDARemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Exempted from study Certificate</b>
+                                                    <div id="DocExStuCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocExStuCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="ExemptedCertificate" class="form-control" id="ExemptedCertificate">
+                                                </td>
+                                                <td>
+                                                    <a id="aExemptedCertificate" href="" class="link ExemptedCertificateAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Person with disability Documents" class="pull-left aExemptedCertificate" id="aExemptedCertificate" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="ExCerDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocECStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocECStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Exempted From Study Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtExeCertRemarks" style="resize: none;width: 90%" type="text" id="txtExeCertRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocECRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Hyderabad Karnataka Region</b>
+                                                    <div id="DocHyKarRegAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocHyKarRegRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="HyderabadKarnatakaRegion" class="form-control" id="HyderabadKarnatakaRegion">
+                                                </td>
+                                                <td>
+                                                    <a id="aHyderabadKarnatakaRegion" href="" class="link HyderabadKarnatakaRegionAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Region Documents" class="pull-left aHyderabadKarnatakaRegion" id="aHyderabadKarnatakaRegion" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="HyKarDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocHKRStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocHKRStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Hyderabad Karnataka Region Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtHydKarnRemarks" style="resize: none;width: 90%" type="text" id="txtHydKarnRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocHKRRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Horanaadu/Gadinaadu Kannadiga's</b>
+                                                    <div id="DocHorGadKanAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocHorGadKanRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="HoranaaduKannadiga" class="form-control" id="HoranaaduKannadiga">
+                                                </td>
+                                                <td>
+                                                    <a id="aHoranaaduKannadiga" href="" class="link HoranaaduKannadigaAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Horanaadu/Gadinaadu Kannadiga's Documents" class="pull-left aHoranaaduKannadiga" id="aHoranaaduKannadiga" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="HorKanDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocHorKanStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocHorKanStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Horanaadu/Gadinaadu Kannadiga's Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtHorGadKannadigaRemarks" style="resize: none;width: 90%" type="text" id="txtHorGadKannadigaRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocHorKanRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center" style=" display:none;">
+                                                <td>
+                                                    <b>Other Certificates</b>
+                                                    <div id="DocOthCerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocOthCerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="OtherCertificates" class="form-control" id="OtherCertificates">
+                                                </td>
+                                                <td>
+                                                    <a id="aOtherCertificates" href="" class="link OtherCertificatesAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Others Certificate Documents" class="pull-left aOtherCertificates" id="aOtherCertificates" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="OtherCerDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocOCStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocOCStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Other Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtOtherCertRemarks" style="resize: none;width: 90%" type="text" id="txtOtherCertRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocOCRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Ex serviceman</b>
+                                                    <div id="DocExSerAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocExSerRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="Exserviceman" class="form-control FileUpload" id="Exserviceman" accept=".pdf,.PDF">
+                                                </td>
+                                                <td>
+                                                    <a id="aExserviceman" href="" class="link ExservicemanAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached Ex-serviceman Documents" class="pull-left aExserviceman" id="aExserviceman" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="ExserDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocExSerStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocExSerStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Ex-Serviceman Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtExservicemanRemarks" style="resize: none;width: 90%" type="text" id="txtExservicemanRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocExSerRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td>
+                                                    <b>Economically Weaker Sections</b>
+                                                    <div id="DocEWSAcceptedImg">
+                                                        <img class="img-thumbnail zoom" style="width:15%;height:25%;" src="~/Images/checkmark-flat.png" alt="dental">
+                                                    </div>
+                                                    <div id="DocEWSRejectedImg" style="display:none;">
+                                                        <img class="img-thumbnail zoom sizevar" style="width:15%;height:25%;" src="~/Images/checkmark-cross.png" alt="dental">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="file" value="EWSCertificate" class="form-control FileUpload" id="EWSCertificate" accept=".pdf,.PDF">
+                                                </td>
+                                                <td>
+                                                    <a id="aEWSCertificate" href="" class="link EWSCertificateAttach" target="_blank" style="color:green;">
+                                                        <img title="Download attached EWSCertificate Documents" class="pull-left aEWSCertificate" id="aEWSCertificate" width="25" height="25" src="~/Images/download.png">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control OnChangeofDocumentStatus" id="EWSDocStatus">Update the status</select>
+                                                    <small class="text-danger" id="WithoutDocEWSStatus-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                    <small class="text-danger" id="WithoutDocEWSStatusHold-Required" style="display:none">You can't save document details,when document status is on hold. Please check the <b>Economically Weaker Sections Details</b></small>
+                                                </td>
+                                                <td>
+                                                    <textarea name="txtEWSCertificateRemarks" style="resize: none;width: 90%" type="text" id="txtEWSCertificateRemarks" maxlength="50" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                                    <small class="text-danger" id="WithoutDocEWSRemarks-Required" style="display:none">Without Document not eligible to choose document status/Remarks</small>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <label id="EDocAppId" hidden></label>
+                                    <label id="ECreatedBy" hidden></label>
+                                    <label id="CDocAppId" hidden></label>
+                                    <label id="CCreatedBy" hidden></label>
+                                    <label id="RDocAppId" hidden></label>
+                                    <label id="RCreatedBy" hidden></label>
+                                    <label id="IDocAppId" hidden></label>
+                                    <label id="ICreatedBy" hidden></label>
+                                    <label id="UDocAppId" hidden></label>
+                                    <label id="UCreatedBy" hidden></label>
+                                    <label id="RUDocAppId" hidden></label>
+                                    <label id="RUCreatedBy" hidden></label>
+                                    <label id="KDocAppId" hidden></label>
+                                    <label id="KCreatedBy" hidden></label>
+                                    <label id="DDocAppId" hidden></label>
+                                    <label id="DCreatedBy" hidden></label>
+                                    <label id="ExDocAppId" hidden></label>
+                                    <label id="ExCreatedBy" hidden></label>
+                                    <label id="HDocAppId" hidden></label>
+                                    <label id="HCreatedBy" hidden></label>
+                                    <label id="HGKDocAppId" hidden></label>
+                                    <label id="HGKCreatedBy" hidden></label>
+                                    <label id="ODocAppId" hidden></label>
+                                    <label id="OCreatedBy" hidden></label>
+                                    <label id="KMDocAppId" hidden></label>
+                                    <label id="KMCreatedBy" hidden></label>
+                                    <label id="ExSDocAppId" hidden></label>
+                                    <label id="ExSCreatedBy" hidden></label>
+                                    <label id="LLDocAppId" hidden></label>
+                                    <label id="LLCreatedBy" hidden></label>
+                                    <label id="EWSDocAppId" hidden></label>
+                                    <label id="EWSCreatedBy" hidden></label>
+                                    <label id="ApplStatus" hidden></label>
+                                    <label id="ApplCredatedBy" hidden></label>
+                                    <label id="ApplFlowId" hidden></label>
+                                    <div id="ErrorWithoutStatusMsg" class="panel panel-default" style="display: none;">
+                                        <br>
+                                        <div class="row">
+                                            <div class="text-justify" style="text-align:center">
+                                                <div class="form-group">
+                                                    <large class="text-danger">
+                                                        Error : You have to select the status for each submitted documents by applicant
+                                                    </large>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @*-Offline Payment section for Verification Officer--*@
+
+
+                                    @if (Session["RoleId"].ToString().Equals("12") || Session["RoleId"].ToString().Equals("12"))
+
+                                    {
+                                        <div class="panel panel-default" id="pymntdiv">
+                                            <div class="panel-heading" role="tab" id="headingSeven">
+                                                <h4 class="panel-title">
+                                                    <a style="background: repeat;" role="button" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                                                        Payment of Document verification fees
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseSeven" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSeven">
+                                                <div class="panel-body">
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <label>Document Verification fee Payment through<font class="text-danger">*</font></label>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <input type="radio" id="PaymentOption" name="PaymentOption" value="1" onchange="DocumentPaymentOption(1)">
+                                                                <label>Online</label>&nbsp;&nbsp;
+                                                                <input type="radio" id="PaymentOption" name="PaymentOption" value="0" checked onchange="DocumentPaymentOption(1)">
+                                                                <label>Offline</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="PaymentThroughOffline" class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <label>Document Verification Fee Details</label>
+                                                                <label id="ReVerficationStatus" hidden></label>
+                                                            </div>
+                                                            <div class="col-lg-1">
+                                                                <label lblDocVerfiFees="" id="verifee">50</label>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label>Document Verification Receipt Details</label>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <input name="txtDocumentFeeReceiptDetails" type="text" id="txtDocumentFeeReceiptDetails" maxlength="10" class="form-control">
+                                                                <small class="text-danger" id="txtDocumentFeeReceiptDetails-Required" style="display:none">Document Verification Receipt Details is required</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="PaymentThroughOnline" class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <label>Document Verification Fee Details<font class="text-danger">*</font></label>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <label lblDocVerfiFees="">Rs.50</label>
+                                                            </div>
+                                                            <div class="col-lg-2">
+                                                                <label>Proceed to Pay</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="button" value="Payment" class="btn btn-primary ProceedtoPay-button" onclick="ProceedtoPay()" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <label>Online Fee Payment Receipt</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <table class="table table-bordered" id="PaymentReceipt">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Applicant Name</th>
+                                                                            <th>Receipt Number</th>
+                                                                            <th>Payment Status</th>
+                                                                            <th>Fee Paid Amount (In ₹)</th>
+                                                                            <th>Payment Date</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <label id="PayApplicantName"></label>
+                                                                            </td>
+                                                                            <td>
+                                                                                <label id="PayReceiptNumber"></label>
+                                                                            </td>
+                                                                            <td>
+                                                                                <label id="PayPaymentStatus"></label>
+                                                                            </td>
+                                                                            <td>
+                                                                                <label id="PayFeePaid"></label>
+                                                                            </td>
+                                                                            <td>
+                                                                                <label id="PayFeePaidDate"></label>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div id="SavePaymentsDetails" class="row">
+                                                            <div class="text-justify" style="text-align:right;margin-right:100px;">
+                                                                <input type="button" value="Save Payments Details" class="btn btn-primary" onclick="SavePaymentsDetails()" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <large id="" class="text-danger">
+                                                            &nbsp;&nbsp;&nbsp;Note : Whichever Fields having Asterisk (*) that indicates it as "mandatory".
+                                                        </large>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Other Remarks<font class="text-danger">*</font></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <textarea name="txtRemarks" style="resize: none;" type="text" id="txtRemarks" maxlength="250" class="form-control" rows="4" cols="30">
+                                            </textarea>
+                                            <small class="text-danger" id="txtRemarks-Required" style="display:none">Remarks is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="saveDocumentsRemarksDetDiv">
+                                        <div class="text-justify" style="text-align:center;margin-right:100px;">
+                                            <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" onclick="fnCloseModalWindow('myModal')" value="Close" />
+                                            @*<input type="button" id="saveDocumentsRemarksDet" value="Save Details as Draft" class="btn btn-primary" onclick="SaveDocumentsRemarksDet(0)" />
+                                                <input type="button" value=" Verified and Save Details" class="btn btn-success Verified-button EnableDisableDocStatus" onclick="SaveDocumentsRemarksDet(1)" />
+                                                <input type="button" value="Save Details and Send for Corrections" class="btn btn-danger SendforCorrections-button EnableDisDocSentCorrection" onclick="SaveDocumentsRemarksDet(2)" />*@
+                                        </div>
+                                    </div>
+                                    @*<div id="ToShowMsgToVOApproved" class="panel panel-default">
+                                            <br>
+                                            <div class="row">
+                                                <div class="text-justify" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <large class="text-danger">
+                                                            Note : Application Verified by the Verification Officer.
+                                                        </large>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="ToShowMsgToVO" class="panel panel-default">
+                                            <br>
+                                            <div class="row">
+                                                <div class="text-justify" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <large class="text-danger">
+                                                            Note : Application Sent for correction to the applicant, applicant has to correct the details and resubmit the documents as per the remarks.
+                                                        </large>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="ToShowMsgToVOGriApplied" class="panel panel-default">
+                                            <br>
+                                            <div class="row">
+                                                <div class="text-justify" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <large class="text-danger">
+                                                            Note : Grievance Raised by Applicant, Grievance Documents Verification Pending
+                                                        </large>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="ToShowMsgToVOGriAppliedApproved" class="panel panel-default">
+                                            <br>
+                                            <div class="row">
+                                                <div class="text-justify" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <large class="text-danger">
+                                                            Note : Grievance Approved
+                                                        </large>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="ToShowMsgToVOGriAppliedRejected" class="panel panel-default">
+                                            <br>
+                                            <div class="row">
+                                                <div class="text-justify" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <large class="text-danger">
+                                                            Note : Grievance Rejected
+                                                        </large>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="EligibleVerificationForm" class="panel panel-default">
+                                            <br>
+                                            <div class="row">
+                                                <div class="text-justify" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <large class="text-danger">
+                                                            Note : You're not eligible to verify the application form because the current date not yet reached the committed date.
+                                                        </large>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!------ End Action POP UP-->
+<!--START ADD OFFICER MODAL POPUP-->
+<div class="modal fade enabledisable" id="OfficerModal" tabindex="-1" role="dialog" aria-labelledby="OfficerModalModalLabel" aria-hidden="true">
+    <!-- modal contents -->
+    <!--</div>
+    <div class="modal fade enabledisable" id="OfficerModal" tabindex="-1" role="dialog" aria-labelledby="OfficerModal" aria-hidden="true">-->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="head1" id="exampleModalLabel">
+                    Add Officer
+                </h2>
+            </div>
+            <div class="modal-body" style=" min-height: 200px;">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="OfficerName">KGID NO.<span style="color:red">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="kgidno" class="form-control" maxlength="50" onfocusout="fnGetUserDataFromKGIDNumber()" />
+                                    <span id="OfficerNameErr" style="color:red;"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="OfficerName">Officer Name<span style="color:red">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="OfficerName" class="form-control" readonly />
+                                    <span id="OfficerNameErr" style="color:red;"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="Designation">Designation<span style="color:red">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="Designation" class="form-control" readonly />
+                                    <span id="DesignationErr" style="color:red;"></span>
+                                </div>
+                            </div>
+                            @*<div class="row">
+                                    <div class="col-md-4">
+                                        <label for="OfficerLoginUserName">Username<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="OfficerLoginUserName" maxlength="30" class="form-control" />
+                                        <span id="OfficerLoginUserNameErr" style="color:red;"></span>
+                                    </div>
+                                </div>*@
+                            @*<div class="row">
+                                    <div class="col-md-4">
+                                        <label for="OfficerLoginPwd">Password<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="password" id="OfficerLoginPwd" maxlength="30" class="form-control" />
+                                        <span id="OfficerLoginPwdErr" style="color:red;"></span>
+                                    </div>
+                                </div>*@
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="PhoneNo">Phone No<span style="color:red">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="PhoneNo" class="form-control" readonly />
+                                    <span id="PhoneNoErr" style="color:red;"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="EmailId">Email ID<span style="color:red">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="EmailId" class="form-control" readonly />
+                                    <span id="EmailIdErr" style="color:red;"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" value="Close" />
+                <input type="button" class="btn btn-primary" onclick="AddOfficer()" value="Add" />
+            </div>
+        </div>
+    </div>
+</div>
+<!--END ADD OFFICER-->
+<!--START EDIT OFFICER MODAL POPUP-->
+<div class="modal fade enabledisable" id="EditOfficerModal" tabindex="-1" role="dialog" aria-labelledby="EditOfficerModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="head1" id="exampleModalLabel">
+                    Edit Officer
+                </h2>
+            </div>
+            <div class="modal-body" style=" min-height: 200px;">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="Kgid No">KGID NO.<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="number" id="kgidnoe" class="form-control" disabled />
+                                        <span id="OfficerNameErr" style="color:red;"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="hidden" id="OfficerIdEdit" />
+                                    <label for="OfficerNameEdit">Officer Name<span style="color:red">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="OfficerNameEdit" class="form-control" disabled />
+                                    <span id="OfficerNameEditErr" style="color:red;"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="DesignationEdit">Designation<span style="color:red">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="DesignationEdit" class="form-control" disabled />
+                                    <span id="DesignationEditErr" style="color:red;"></span>
+                                </div>
+                            </div>
+                            @*<div class="row">
+                                    <div class="col-md-4">
+                                        <label for="OfficerLoginUserNameEdit">Username<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="OfficerLoginUserNameEdit" class="form-control" />
+                                        <span id="OfficerLoginUserNameEditErr" style="color:red;"></span>
+                                    </div>
+                                </div>*@
+                            @*<div class="row">
+                                    <div class="col-md-4">
+                                        <label for="OfficerLoginPwdEdit">Password<span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="password" id="OfficerLoginPwdEdit" class="form-control" />
+                                        <span id="OfficerLoginPwdEditErr" style="color:red;"></span>
+                                    </div>
+                                </div>*@
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="PhoneNoEdit">Phone No<span style="color:red">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="PhoneNoEdit" class="form-control" readonly />
+                                    <span id="PhoneNoEditErr" style="color:red;"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="EmailIdEdit">Email ID<span style="color:red">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="EmailIdEdit" class="form-control" readonly />
+                                    <span id="EmailIdEditErr" style="color:red;"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="Status">Status</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select id="Status" class="form-control">
+                                        <option value="1">Active</option>
+                                        <option value="0">InActive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" data-dismiss="modal" value="Close" />
+                <input type="button" class="btn btn-primary" onclick="UpdateOfficer()" value="Update" />
+            </div>
+        </div>
+    </div>
+</div>
+<!--END EDIT OFFICER-->
+<input type="hidden" id="hdnAdmVerOfficerMenu" data-value="@ViewBag.Header" />
+<input type="hidden" id="hdnDiv_ID" data-value="@ViewBag.UserDivionId" />

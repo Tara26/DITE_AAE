@@ -1,0 +1,1272 @@
+﻿@model Models.Admission.AssignDataBasedOnTabs
+@{
+    ViewBag.Title = "ApplicantAdmissionAgainstVacancy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .RemovePadding {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+</style>
+<script src="~/Scripts/Admission/bootstrap-multiselect.js"></script>
+<link href="~/Scripts/Admission/bootstrap-multiselect.css" rel="stylesheet" />
+<link href="~/Scripts/Admission/ApplicantOnlineApplicationForm.css" rel="stylesheet" />
+<br />
+<br />
+<br />
+
+<ul class="nav nav-tabs">
+    <li>
+        <a href="#tab_1" id="tab1" data-toggle="tab">Direct Admission Form</a>
+    </li>
+    <li>
+        <a href="#tab_2" id="tab2" data-toggle="tab">Application Admission Form</a>
+    </li>
+</ul>
+<div class="row" style="padding-left:50px;padding-top:50px;padding-bottom:100px">
+    <div class="container" style="background-color:white;box-shadow: 0 2px 4px rgba(0,0,0,0.6);margin-top:20px; padding:20px;">
+        <div class="tab-content">
+            <div class="tab-pane fade" id="tab_1">
+                <div class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Application Details</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <label>Has the candidate filled the application form for the current year <script type="text/javascript">document.write(new Date().getFullYear());</script>?</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="radio" id="NewOldApplicationYes" name='NewOldApplication' value="1" onchange="NavigateTabApplicantDetails()"><b>Yes</b>&nbsp;&nbsp;
+                                        <input type="radio" id="NewOldApplicationNo" name='NewOldApplication' value="0" onchange="NavigateTabApplicantDetails()" checked><b>No</b>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row EnableGetApplicationNumber">
+                                    <div class="col-md-5">
+                                        <label>
+                                            Enter the Application Number to get the Applicant Details : 
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input class="form-control" type="text" autocomplete="off" id="ExistChkApplicationNumber" maxlength="12" name="ExistChkApplicationNumber">
+                                        <small class="text-danger" id="ExistChkApplicationNumber-Required" style="display:none">Application Number is required*</small>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="button" value="Submit" class="btn btn-primary update-button" onclick="ToGetApplicationDeatilsForOldApplicant()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="tab_2">
+            <div class="row DirectAdmissionApplicantDetails">
+                <div class="col-sm-12" style="text-align: center;">
+                    <table id="DirectAdmissionApplicantDetails" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                </div>
+            </div>
+        </div>
+
+        <div class="ApplicationFormDetails" hidden>
+            <div>
+                <div class="col-lg-12">
+                    <div>
+                        <div>
+                            <div>
+                                <div class="accordion-option">
+                                    <button type="button" class="close" title="close" onclick="OnClickEditCancel()">&times;</button>
+                                </div>
+                                <div class="accordion-option EligibleApplicationForm" id="AppFormID">
+                                    <h3 class="title">Application Form Details</h3>
+                                    <a href="javascript:void(0)" class="toggle-accordion active" accordion-id="#accordion"></a>
+                                </div>
+                                <div class="clearfix EligibleApplicationForm"></div>
+                                <div class="panel-group EligibleApplicationForm" id="accordion" role="tablist" aria-multiselectable="true">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingOne">
+                                            <h4 class="panel-title">
+                                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    Applicant Details
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                            <div class="panel-body">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Applicant Full Name<font class="text-danger">*</font></label>
+                                                            <label id="ApplicantId" hidden></label>
+                                                            <label id="ApplicantNumber" hidden></label>
+                                                            <label id="CredatedBy" hidden></label>
+                                                            <label id="ApplCredatedBy" hidden></label>
+                                                            <label id="DocumentSubmittedID" hidden></label>
+                                                            <label id="PreferenceSubmittedID" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input name="txtApplicantName" type="text" maxlength="50" id="txtApplicantName" style="text-transform:uppercase;" autocomplete="off" class="form-control">
+                                                            <small class="text-danger" id="txtApplicantName-Required" style="display:none">Name of Applicant is required*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Upload Photo<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div id="FileAttach"><img class="pull-left" width="50" height="50" src="~/Images/ProfilePic.png" id="ImgPhotoUpload"></div>
+                                                            <input type="file" value="PhotoUpload" class="form-control" id="PhotoUpload" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);">
+                                                            <input type="hidden" id="IsUploaded" value="" />
+                                                            <img id="previewimage" src="~/Images/ProfilePic.png" alt="selected file preview image" width="25" height="25" />
+                                                            <small class="text-danger" id="PhotoUpload-Required" style="display:none">Photo is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Father's Name<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input name="txtFathersName" type="text" id="txtFathersName" maxlength="50" autocomplete="off" class="form-control">
+                                                            <small class="text-danger" id="txtFathersName-Required" style="display:none">Fathers Name is required*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Date of Birth<font class="text-danger">*</font></label>
+                                                            <label id="dobError" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="text" id="dateofbirth" name="dateofbirth" class="form-control" autocomplete="off" style="background-position:right;background-size:30px;background-image:url(../../Content/img/Calendar.png);background-repeat:no-repeat;">
+                                                            <small class="text-danger" id="dateofbirth-Required" style="display:none">Age should not be less than 13*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Mother's Name<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input name="txtMothersName" type="text" id="txtMothersName" maxlength="50" autocomplete="off" class="form-control">
+                                                            <small class="text-danger" id="txtMothersName-Required" style="display:none">Mothers Name is required*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Parent Occupation<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input name="txtParentOccupation" type="text" id="txtParentOccupation" maxlength="50" autocomplete="off" class="form-control">
+                                                            <small class="text-danger" id="txtParentOccupation-Required" style="display:none">Parent Occupation is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Gender<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <select class="form-control" id="Gender"></select>
+                                                            <small class="text-danger" id="Gender-Required" style="display:none">Gender is required*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Category<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <select class="form-control" id="Category" onchange="oncategorycanges()">
+                                                                <option value="choose">Select Category</option>
+                                                            </select>
+                                                            <small class="text-danger" id="Category-Required" style="display:none">Category is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Religion<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <select class="form-control" id="Religion">
+                                                                <option value="choose">Select Religion</option>
+                                                            </select>
+                                                            <small class="text-danger" id="Religion-Required" style="display:none">Religion is required*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Caste</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input name="txtCaste" type="text" id="txtCaste" maxlength="50" autocomplete="off" class="form-control">
+                                                            <small class="text-danger" id="txtCaste-Required" style="display:none">Caste is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Minority Category<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <select class="form-control" id="MinorityCategory">
+                                                                <option value="0">Select Category</option>
+                                                                <option value="1">Yes</option>
+                                                                <option value="2">No</option>
+                                                            </select>
+                                                            <small class="text-danger" id="MinorityCategory-Required" style="display:none">Minority Category is required*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Applicant Type<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <select class="form-control" id="ApplicantTypeSelect">
+                                                                <option value="0">Select Applicant Type</option>
+                                                            </select>
+                                                            <small class="text-danger" id="ApplicantType-Required" style="display:none">Applicant Type is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Family Annual Income</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input name="txtFamilyAnnualIncome" type="number" id="txtFamilyAnnualIncome" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                                            <small class="text-danger" id="txtFamilyAnnualIncome-Required" style="display:none">AnnualIncome is required*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Ration Card Number</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control" type="text" autocomplete="off" id="txtRationCard" maxlength="12" name="txtRationCard">
+                                                            <small class="text-danger" id="txtRationCard-Required" style="display:none">Ration Card is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>AadhaarNumber<font class="text-danger">*</font></label>
+                                                            <label hidden id="AadhaarNumberDuplicate"></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control AadhaarNumberText" autocomplete="off" id="txtAadhaarNumber" maxlength="14" name="txtAadhaarNumber" onchange="CheckAadhaarNumberAvailability()">
+                                                            <small class="text-danger" id="txtAadhaarNumber-Required" style="display:none">Enter Valid AadhaarNumber*</small>
+                                                            <small class="text-danger" id="txtAadhaarNumberDuplicate-Required" style="display:none">AadhaarNumber Already Exist/Invalid*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label>Aadhaar Based Bank Details</label>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Account Number<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control" type="number" autocomplete="off" id="AccountNumber" maxlength="16" name="AccountNumber" onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                                            <small class="text-danger" id="AccountNumber-Required" style="display:none">Enter Valid 11 to 16 digits Account Number*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Bank Name<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control" type="text" autocomplete="off" id="BankName" maxlength="25" name="BankName">
+                                                            <small class="text-danger" id="BankName-Required" style="display:none">Enter Valid Bank Name*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>IFSC Code<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control" autocomplete="off" id="IFSCCode" maxlength="11" name="IFSCCode">
+                                                            <small class="text-danger" id="IFSCCode-Required" style="display:none">Enter Valid IFSCCode*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" hidden>
+                                                        <label>Select applicable Reservations</label>
+                                                        <label id="DiffAbledCer"></label>
+                                                        <label id="KanMedCer"></label>
+                                                        <label id="ExServiceCer"></label>
+                                                        <label id="LandLoserCer"></label>
+                                                        <label id="EcoWeakCer"></label>
+                                                        <label id="KMCer"></label>
+                                                        <label id="HoraNaduCer"></label>
+                                                        <label id="HydKarCer"></label>
+                                                        <label id="ExeStuCer"></label>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Person with Disability</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="radio" id="PhysicallyHanidcapYes" name='PhysicallyHanidcapInd' value="1" onchange="PhysicallyHanidcapEna(this)"><b>Yes</b>
+                                                            <input type="radio" id="PhysicallyHanidcapNo" name='PhysicallyHanidcapInd' value="0" onchange="PhysicallyHanidcapEna(this)" checked><b>No</b>&nbsp;
+                                                            <small class="text-danger" id="DifferentlyabledcertificateYes-Required" style="display:none">As you uploaded the document for Person with disability, you have to choose Disability Type*</small>
+                                                        </div>
+                                                        <div id="PhysicallyHanidcapDiv1" class="col-md-2">
+                                                            <label>If Yes, Select the Disability</label>
+                                                        </div>
+                                                        <div id="PhysicallyHanidcapDiv2" class="col-md-4">
+                                                            <select name="PhysicallyHanidcapType" class="form-control" id="PhysicallyHanidcapType"></select>
+                                                            <small class="text-danger" id="PersonWithDisability-Required" style="display:none">Person with Disability is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>HoraNadu/GadiNadu Kannidagas</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="radio" id="HoraNaduYes" name='HoraNadu' value="1"><b>Yes</b>
+                                                            <input type="radio" id="HoraNaduNo" name='HoraNadu' value="0" checked><b>No</b>&nbsp;
+                                                            <small class="text-danger" id="HoranaaduKannadigaYes-Required" style="display:none">As you have given the documents, You have to select option as YES*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Exempted from Study Certificate</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="radio" id="ExemptedFromStudyCertificateYes" name='ExemptedFromStudyCertificate' value="1"><b>Yes</b>
+                                                            <input type="radio" id="ExemptedFromStudyCertificateNo" name='ExemptedFromStudyCertificate' value="0" checked><b>No</b>&nbsp;
+                                                            <small class="text-danger" id="ExemptedFromStudyCertificateYes-Required" style="display:none">As you have given the documents, You have to select option as YES*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Hyderabad Karnataka Region</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="radio" id="HyderabadKarnatakaRegionYes" name='HyderabadKarnatakaRegion' value="1"><b>Yes</b>
+                                                            <input type="radio" id="HyderabadKarnatakaRegionNo" name='HyderabadKarnatakaRegion' value="0" checked><b>No</b>&nbsp;
+                                                            <small class="text-danger" id="HyderabadKarnatakaRegionYes-Required" style="display:none">As you have given the documents, You have to select option as YES*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Kannada Medium</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="radio" id="KanndaMediumYes" name='KanndaMedium' value="1"><b>Yes</b>
+                                                            <input type="radio" id="KanndaMediumNo" name='KanndaMedium' value="0" checked><b>No</b>&nbsp;
+                                                            <small class="text-danger" id="KannadamediumCertificateYes-Required" style="display:none">As you have given the documents, You have to select option as YES*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Ex-Service Man</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="radio" id="ExServiceManYes" name='ExServiceMan' value="1"><b>Yes</b>
+                                                            <input type="radio" id="ExServiceManNo" name='ExServiceMan' value="0" checked><b>No</b>&nbsp;
+                                                            <small class="text-danger" id="ExServiceManYes-Required" style="display:none">As you have given the documents, You have to select option as YES*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Economic Weaker Section</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="radio" id="EconomyWeakerSectionYes" name='EconomyWeakerSection' value="1"><b>Yes</b>
+                                                            <input type="radio" id="EconomyWeakerSectionNo" name='EconomyWeakerSection' value="0" checked><b>No</b>&nbsp;
+                                                            <small class="text-danger" id="EconomyWeakerSectionYes-Required" style="display:none">As you have given the documents, You have to select option as YES*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div id="SaveApplicantDetails" class="row">
+                                                        <div class="text-justify" style="text-align:right;margin-right:100px;">
+                                                            <input type="button" value="Save Applicant Details" class="btn btn-primary" onclick="SaveApplicantDetails()" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <large id="" class="text-danger">
+                                                            &nbsp;&nbsp;&nbsp;Note : Whichever Fields having Asterisk (*) that indicates it as "mandatory".
+                                                        </large>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingTwo">
+                                            <h4 class="panel-title">
+                                                <a role="button" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                                    Education Details
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                                            <div class="panel-body">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <label>Qualification<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <select class="form-control" id="Qualification">
+                                                                <option value="choose">Select Qualification</option>
+                                                            </select>
+                                                            <small class="text-danger" id="Qualification-Required" style="display:none">Qualification is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <label>Applicant Belongs To<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            @foreach (var Rlist in ViewBag.LocationList)
+                                                            {
+                                                                <input type="radio" name="RuralUrban" class="RuralUrbanID" style="width:5%" value="@Rlist.location_id" required> <b> @Rlist.location_name </b>
+                                                            }
+                                                            <small class="text-danger" id="RuralcertificateYes-Required" style="display:none">As you have given the documents, You have to select option as RURAL*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <label>Applied for which basics<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            @foreach (var Qlist in ViewBag.QualificationList)
+                                                            {
+                                                                <input type="radio" name="AppBasics" style="width:5%" value="@Qlist.QualificationId" required> <b> @Qlist.Qualification </b>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row"  style="display:none;">
+                                                        <div class="col-md-5">
+                                                            <label>Have you studied Science and Maths?</label>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <input type="radio" id="studiedMathsScience" name="studiedMathsScience" value="1" checked>
+                                                            <label>Yes</label>&nbsp;&nbsp;
+                                                            <input type="radio" id="studiedMathsScience" name="studiedMathsScience" value="0">
+                                                            <label>No</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <label>10th Board<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            @foreach (var Slist in ViewBag.SyllabusList)
+                                                            {
+                                                                <input type="radio" name="TenthBoard" style="width:5%" value="@Slist.Syllabus_type_id" required onchange="TenthBoardStateType()"><b> @Slist.Syllabus_type</b>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="TenthCOBSEType">
+                                                        <br>
+                                                        <div class="row TenthCOBSEType">
+                                                            <div class="col-md-5">
+                                                                <label>COBSE Board<font class="text-danger">*</font></label>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                @foreach (var Slist in ViewBag.SyllabusListCOBSE)
+                                                                {
+                                                                    <input type="radio" name="TenthCOBSEBoard" style="width:5%" value="@Slist.Syllabus_type_id" required checked onchange="TenthCOBSEBoardType()"><b> @Slist.Syllabus_type</b>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div id="TenthCBSEICSEType">
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row OtherBoardsType">
+                                                        <div class="col-md-6">
+                                                            <label>Select Appropriate Board/Institute<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <select class="form-control" id="OtherBoards">
+                                                                <option value="0">Select Board/Institute</option>
+                                                            </select>
+                                                            <small class="text-danger" id="OtherBoards-Required" style="display:none">Other Boards/Institute is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row TenthCOBSEType">
+                                                        <div class="col-md-2">
+                                                            <label>Grade/Marks<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="radio" name="CGPAMarks" value="1" checked onchange="MarksCGPAType()">
+                                                            <label>CGPA</label>&nbsp;&nbsp;
+                                                            <input type="radio" name="CGPAMarks" value="0" onchange="MarksCGPAType()">
+                                                            <label>Marks Obtained</label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Enter CGPA Grade<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input name="txtCGPA" max="2" maxlength="2" type="number" id="txtCGPA" class="form-control" onkeypress="CalculatePercentage()">
+                                                            <small class="text-danger" id="txtCGPA-Required" style="display:none">CGPA Grade is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <label>Institute studied as per Qualification<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <input name="txtInstituteStudied" type="text" id="txtInstituteStudied" autocomplete="off" maxlength="20" class="form-control">
+                                                            <small class="text-danger" id="txtInstituteStudied-Required" style="display:none">Institute studied is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <label>Maximum Marks as per Qualification<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <input name="txtMaximumMarks" type="number" id="txtMaximumMarks" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                                            <small class="text-danger" id="txtMaximumMarks-Required" style="display:none">Maximum Marks is required*</small>
+                                                            <small class="text-danger" id="CalculationMaximumMarks-Required" style="display:none">Maximum Marks should be less than Marks Obtained*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <label>Marks Obtained as per Qualification<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <input name="txtMarksObtained" type="number" id="txtMarksObtained" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                                            <small class="text-danger" id="txtMarksObtained-Required" style="display:none">Marks Obtained is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <label>Percentage</label>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <label id="lblPercAsPerMarks">0%</label>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <label>Select results as per Qualification<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <select class="form-control" id="Results">
+                                                                <option value="0">Select Results</option>
+                                                                <option value="1">Pass</option>
+                                                                <option value="2">Fail</option>
+                                                            </select>
+                                                            <small class="text-danger" id="Results-Required" style="display:none">Select results as per Qualification is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div id="SaveEducationDetails" class="row">
+                                                        <div class="text-justify" style="text-align:right;margin-right:100px;">
+                                                            <input type="button" value="Save Education Details" class="btn btn-primary" onclick="SaveEducationDetails()" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <large id="" class="text-danger">
+                                                            &nbsp;&nbsp;&nbsp;Note : Whichever Fields having Asterisk (*) that indicates it as "mandatory".
+                                                        </large>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingThree">
+                                            <h4 class="panel-title">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                                    Communication Details
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                                            <div class="panel-body">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Communication Address<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-10">
+                                                            <textarea name="txtCommunicationAddress" style="resize: none;" type="text" id="txtCommunicationAddress" maxlength="50" class="form-control" rows="4" cols="50">
+                                            </textarea>
+                                                            <small class="text-danger" id="txtCommunicationAddress-Required" style="display:none">Communication Address is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>District<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <select class="form-control" id="Districts" onchange="GetTaluka('Communication')">
+                                                                <option value="0">Select</option>
+                                                            </select>
+                                                            <small class="text-danger" id="Districts-Required" style="display:none">Districts is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <label>Taluka<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <select class="form-control" id="Talukas">
+                                                                <option value="0">Select</option>
+                                                            </select>
+                                                            <small class="text-danger" id="Talukas-Required" style="display:none">Talukas is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <label>Pincode<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <input name="txtPincode" type="number" id="txtPincode" maxlength="6" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                                            <small class="text-danger" id="txtPincode-Required" style="display:none">PinCode is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-10">
+                                                            <input name="chkSameAsCommunicationAddress" type="checkbox" id="chkSameAsCommunicationAddress" onchange="OnchangechkSameAsCommunicationAddress()"> <b>If Communication address is same as Permanent Address</b>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Permanent Address<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-10">
+                                                            <textarea name="txtPermanentAddress" style="resize: none;" type="text" id="txtPermanentAddress" maxlength="50" class="form-control" rows="4" cols="50">
+                                            </textarea>
+                                                            <small class="text-danger" id="txtPermanentAddress-Required" style="display:none">Permanent Address is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>District<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <select class="form-control" id="PermanentDistricts" onchange="GetTaluka('Permanent')">
+                                                                <option value="0">Select</option>
+                                                            </select>
+                                                            <small class="text-danger" id="PermanentDistricts-Required" style="display:none">Permanent Districts is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <label>Taluka<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <select class="form-control" id="PermanentTalukas">
+                                                                <option value="0">Select</option>
+                                                            </select>
+                                                            <small class="text-danger" id="PermanentTalukas-Required" style="display:none">Permanent Talukas is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <label>Pincode<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <input name="txtPermanentPincode" type="number" id="txtPermanentPincode" maxlength="6" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                                            <small class="text-danger" id="txtPermanentPincode-Required" style="display:none">PinCode is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <label>Applicant Phone number<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <input name="txtApplicantPhoneNumber" type="number" id="txtApplicantPhoneNumber" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                                            <small class="text-danger" id="txtApplicantPhoneNumber-Required" style="display:none">Enter Valid Phone number*</small>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>Applicant Father's Phone number<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <input name="txtFathersPhoneNumber" type="number" id="txtFathersPhoneNumber" class="form-control" onkeypress="IncomeMoneyPhoneValidation(event,this.id)">
+                                                            <small class="text-danger" id="txtFathersPhoneNumber-Required" style="display:none">Enter Valid Father's Phone number*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <label>Applicant EmailID<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <input name="txtEmailId" type="email" id="txtEmailId" maxlength="50" class="form-control">
+                                                            <small class="text-danger" id="txtEmailId-Required" style="display:none">Valid EmailId is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div id="SaveAddressDetails" class="row">
+                                                        <div class="text-justify" style="text-align:right;margin-right:100px;">
+                                                            <input type="button" value="Save Address Details" class="btn btn-primary" onclick="SaveAddressDetails()" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <large id="" class="text-danger">
+                                                            &nbsp;&nbsp;&nbsp;Note : Whichever Fields having Asterisk (*) that indicates it as "mandatory".
+                                                        </large>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingFour">
+                                            <h4 class="panel-title">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                                    Documents
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
+                                            <div class="panel-body">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Educational certificate<font class="text-danger">*</font></label>
+                                                            <label id="EDocAppId" hidden></label>
+                                                            <label id="ECreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="EduCertificate" class="form-control FileUpload" id="EduCertificate" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="EduCertificate-Required" style="display:none">Educational Certificate is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="EduFileAttach">
+                                                                <a id="aEduCertificate" href="" class="link" target="_blank" style="color:green;">
+                                                                    <img title="Download attached Education Documents" class="pull-left aEduCertificate" id="aEduCertificate" width="25" height="25" src="~/Images/download.png">
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Caste certificate</label>
+                                                            <label id="CDocAppId" hidden></label>
+                                                            <label id="CCreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="CasteCertificate" class="form-control FileUpload" id="CasteCertificate" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="CasteCertificate-Required" style="display:none">Caste Certificate is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="CasteFileAttach">
+                                                                <a id="aCasteCertificate" href="" class="link" target="_blank" style="color:green;">
+                                                                    <img title="Download attached Caste Documents" class="pull-left aCasteCertificate" id="aCasteCertificate" width="25" height="25" src="~/Images/download.png">
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Ration card</label>
+                                                            <label id="RDocAppId" hidden></label>
+                                                            <label id="RCreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="Rationcard" class="form-control FileUpload" id="Rationcard" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="Rationcard-Required" style="display:none">Ration card is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="RationFileAttach">
+                                                                <a id="aRationCard" href="" class="link" target="_blank" style="color:green;">
+                                                                    <img title="Download attached Ration Card Documents" class="pull-left aRationCard" id="aRationCard" width="25" height="25" src="~/Images/download.png">
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Income certificate</label>
+                                                            <label>Validity upto 05 Years except for SC/ST whose validity is lifetime</label>
+                                                            <label id="IDocAppId" hidden></label>
+                                                            <label id="ICreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="Incomecertificate" class="form-control FileUpload" id="Incomecertificate" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="Incomecertificate-Required" style="display:none">Income certificate is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="IncomeCertificateAttach"><a id="aIncomeCertificate" href="" class="link" target="_blank" style="color:green;"> <img title="Download attached Income Documents" class="pull-left aIncomeCertificate" id="aIncomeCertificate" width="25" height="25" src="~/Images/download.png"></a></div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>UID Number<font class="text-danger">*</font></label>
+                                                            <label id="UDocAppId" hidden></label>
+                                                            <label id="UCreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="UIDNumber" class="form-control FileUpload" id="UIDNumber" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="UIDNumber-Required" style="display:none">UID Number is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="UIDFileAttach"><a id="aUIDNumber" href="" class="link" target="_blank" name="aUIDNumber" style="color:green;"> <img title="Download attached UID Documents" class="pull-left aUIDNumber" id="aUIDNumber" width="25" height="25" src="~/Images/download.png"></a></div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Rural certificate</label>
+                                                            <label id="RUDocAppId" hidden></label>
+                                                            <label id="RUCreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="Ruralcertificate" class="form-control FileUpload" id="Ruralcertificate" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="Ruralcertificate-Required" style="display:none">Rural certificate is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="RuralcertificateAttach"><a id="aRuralcertificate" href="" class="link" target="_blank" style="color:green;"> <img title="Download attached Rural Documents" class="pull-left aRuralcertificate" id="aRuralcertificate" width="25" height="25" src="~/Images/download.png"></a></div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Kannada medium Certificate</label>
+                                                            <label id="KDocAppId" hidden></label>
+                                                            <label id="KCreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="KannadamediumCertificate" class="form-control FileUpload" id="KannadamediumCertificate" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="KannadamediumCertificate-Required" style="display:none">Kannada medium Certificate is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="KannadamediumCertificateAttach">
+                                                                <a id="aKannadamediumCertificate" href="" class="link" target="_blank" style="color:green;">
+                                                                    <img title="Download attached Kannada medium Documents" class="pull-left aKannadamediumCertificate" id="aKannadamediumCertificate" width="25" height="25" src="~/Images/download.png">
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Person with disability certificate</label>
+                                                            <label id="DDocAppId" hidden></label>
+                                                            <label id="DCreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="Differentlyabledcertificate" class="form-control FileUpload" id="Differentlyabledcertificate" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="Differentlyabledcertificate-Required" style="display:none">Person with disability certificate is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="DifferentlyabledcertificateAttach">
+                                                                <a id="aDifferentlyabledcertificate" href="" class="link" target="_blank" style="color:green;">
+                                                                    <img title="Download attached Person with disability Documents" class="pull-left aDifferentlyabledcertificate" id="aDifferentlyabledcertificate" width="25" height="25" src="~/Images/download.png">
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Exempted from study Certificate</label>
+                                                            <label id="ExDocAppId" hidden></label>
+                                                            <label id="ExCreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="ExemptedCertificate" class="form-control FileUpload" id="ExemptedCertificate" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="ExemptedCertificate-Required" style="display:none">Exempted from study Certificate is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="ExemptedCertificateAttach"><a id="aExemptedCertificate" href="" class="link" target="_blank" style="color:green;"> <img title="Download attached Exempted from study Documents" class="pull-left aExemptedCertificate" id="aExemptedCertificate" width="25" height="25" src="~/Images/download.png"></a></div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Hyderabad Karnataka Region</label>
+                                                            <label id="HDocAppId" hidden></label>
+                                                            <label id="HCreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="HyderabadKarnatakaRegion" class="form-control FileUpload" id="HyderabadKarnatakaRegion" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="HyderabadKarnatakaRegion-Required" style="display:none">Hyderabad Karnataka Region is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="HyderabadKarnatakaRegionAttach"><a id="aHyderabadKarnatakaRegion" href="" class="link" target="_blank" style="color:green;"> <img title="Download attached Hyderabad Karnataka Region Documents" class="pull-left aHyderabadKarnatakaRegion" id="aHyderabadKarnatakaRegion" width="25" height="25" src="~/Images/download.png"></a></div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Horanaadu/Gadinaadu Kannadiga's</label>
+                                                            <label id="HGKDocAppId" hidden></label>
+                                                            <label id="HGKCreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="HoranaaduKannadiga" class="form-control FileUpload" id="HoranaaduKannadiga" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="HoranaaduKannadiga-Required" style="display:none">Horanaadu/Gadinaadu's Kannadiga Document is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="HoranaaduKannadigaAttach"><a id="aHoranaaduKannadiga" href="" class="link" target="_blank" style="color:green;"> <img title="Download attached Horanaadu/Gadinaadu's Kannadiga Documents" class="pull-left aHoranaaduKannadiga" id="aHoranaaduKannadiga" width="25" height="25" src="~/Images/download.png"></a></div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Other Certificates</label>
+                                                            <label id="ODocAppId" hidden></label>
+                                                            <label id="OCreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="OtherCertificates" class="form-control FileUpload" id="OtherCertificates" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="OtherCertificates-Required" style="display:none">Other Certificates is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="OtherCertificatesAttach">
+                                                                <a id="aOtherCertificates" href="" class="link" target="_blank" style="color:green;">
+                                                                    <img title="Download Other Certificates Documents" class="pull-left aOtherCertificates" id="aOtherCertificates" width="25" height="25" src="~/Images/download.png">
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Economically Weaker Sections </label>
+                                                            <label id="EWSDocAppId" hidden></label>
+                                                            <label id="EWSCreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="EWSCertificate" class="form-control FileUpload" id="EWSCertificate" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="EWSCertificate-Required" style="display:none">EWSCertificate is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="EWSCertificateAttach">
+                                                                <a id="aEWSCertificate" href="" class="link" target="_blank" style="color:green;">
+                                                                    <img title="Download attached Economically Weaker Sections Documents" class="pull-left aEWSCertificate" id="aEWSCertificate" width="25" height="25" src="~/Images/download.png">
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Ex-serviceman</label>
+                                                            <label id="ExSDocAppId" hidden></label>
+                                                            <label id="ExSCreatedBy" hidden></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" value="Exserviceman" class="form-control FileUpload" id="Exserviceman" accept=".pdf,.PDF">
+                                                            <small class="text-danger" id="Exserviceman-Required" style="display:none">Ex-serviceman is required*</small>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="ExservicemanAttach">
+                                                                <a id="aExserviceman" href="" class="link" target="_blank" style="color:green;">
+                                                                    <img title="Download Ex-serviceman Education Documents" class="pull-left aExserviceman" id="aExserviceman" width="25" height="25" src="~/Images/download.png">
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div id="SaveDocDet" class="row">
+                                                        <div class="text-justify" style="text-align:right;margin-right:100px;">
+                                                            <input type="button" value="Save Documents Details" class="btn btn-primary" onclick="SaveDocumentDetails()" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <large id="" class="text-danger">
+                                                            &nbsp;&nbsp;&nbsp;Note : Whichever Fields having Asterisk (*) that indicates it as "mandatory".
+                                                        </large>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingFive">
+                                            <h4 class="panel-title">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+                                                    Institute and Other Details
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">
+                                            <div class="panel-body">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <label id="AcademicMonths" hidden></label>
+                                                        <label id="AcademicYear" hidden></label>
+                                                        <div class="col-md-3">
+                                                            <label>Select Academic Year<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="text" id="academicyear1" name="academicyear1" class="form-control date-picker" autocomplete="off" style="background-position:right;background-size:30px;background-image:url(../../Content/img/Calendar.png);background-repeat:no-repeat;">
+                                                            <small class="text-danger" id="academicyear1-Required" style="display:none">Session is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-2">
+                                                            <label>Application Number:</label>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label id="ApplicationNumber"> </label>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <label>Applicant Name:</label>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label id="ApplicationName"> </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-sm-1">
+                                                            <label>Division Code:</label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label id="DivisionId"> </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label>Division Name:</label>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <label id="DivisionName"> </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label>District Code:</label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label id="DistrictCd"> </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label>District Name:</label>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <label id="DistrictName"> </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label>Taluk Code:</label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label id="TalukId"> </label>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-sm-1">
+                                                            <label>Taluk Name:</label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label id="TalukName"> </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label>MISCode:</label>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <label id="MISCode"> </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label>Institute Name:</label>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <label id="InstituteName"> </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label>Institute Type:</label>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <label id="InstituteType"> </label>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Vertical Category<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <select class="form-control" id="VerticalCategory">
+                                                                <option value="choose">Select Vertical</option>
+                                                            </select>
+                                                            <small class="text-danger" id="VerticalCategory-Required" style="display:none">Vertical Category is required*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Horizontal Category<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <select class="form-control" id="HorizontalCategory">
+                                                                <option value="0">Select Horizontal</option>
+                                                            </select>
+                                                            <small class="text-danger" id="HorizontalCategory-Required" style="display:none">Horizontal Category is required*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Trainee Type<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <select class="form-control" id="TraineeType">
+                                                                <option value="0">Select Trainee Type</option>
+                                                            </select>
+                                                            <small class="text-danger" id="TraineeType-Required" style="display:none">Trainee Type is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Trade<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label id="CollegeId" hidden></label>
+                                                            <select class="form-control" id="TradeDetails" onchange="GetAdmissionUnitsShifts(UnitsDetails, ShiftsDetails);"></select>
+
+                                                            <small class="text-danger" id="TradeDetails-Required" style="display:none">Trade is required*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Units<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <select class="form-control" id="UnitsDetails">
+                                                                <option value="0">Select Units</option>
+                                                            </select>
+                                                            <small class="text-danger" id="UnitsDetails-Required" style="display:none">Units is required*</small>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Shifts<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <select class="form-control" id="ShiftsDetails">
+                                                                <option value="0">Select Shifts</option>
+                                                            </select>
+                                                            <small class="text-danger" id="ShiftsDetails-Required" style="display:none">Shifts is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Is the ITI under PPP?</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="radio" id="ITIUnderPPP" name="ITIUnderPPP" value="1" checked>
+                                                            <label>Yes</label>&nbsp;&nbsp;
+                                                            <input type="radio" id="ITIUnderPPP" name="ITIUnderPPP" value="0">
+                                                            <label>No</label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Admission Date and Time<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="text" id="AdmisionTime" name="AdmisionTime" class="form-control" autocomplete="off" style="background-position:right;background-size:30px;background-image:url(../../Content/img/Calendar.png);background-repeat:no-repeat;">
+                                                            <small class="text-danger" id="AdmisionTime-Required" style="display:none">Admission Date is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Tuition Fee (In ₹)</label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label id="AdmissionFee"></label>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div id="AllocationFeePay" class="row">
+                                                        <div class="text-justify" style="text-align:center;margin-right:100px;">
+                                                            <label>If you want to make payment through online, then</label>
+                                                            <input type="button" id="SaveSeatAllocationFeePay" value="Click to Pay" class="btn btn-primary" onclick="SaveSeatAllocationFeePay(1)" disabled />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row PaymentGenerationGridCls" style="display:none;">
+                                                        <div class="col-sm-12" style="text-align: center;">
+                                                            <label>Payment Receipt Detail</label>
+                                                            <table id="PaymentGenerationGrid" class="table table-striped table-hover text-center shadow clswidth" border="1"></table>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row PaymentGenerationGridCls" style="display:none;">
+                                                        <div class="text-justify" style="text-align:right;margin-right:100px;">
+                                                            <a class="btn btn-primary" data-url='@Url.Action("GeneratePaymentReceiptPDF", "PaymentPDFGeneration")' id="DownloadReceipt" role="button" target="_blank">Download Receipt</a>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Tuition Fee paid status</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="radio" id="AdmFeePaidStatus" class="AdmFeePaidStatus" name="AdmFeePaidStatus" value="1" onchange="OnChangeAdmFeePaidStatus();">
+                                                            <label>Received</label>&nbsp;&nbsp;
+                                                            <input type="radio" id="AdmFeePaidStatus" class="AdmFeePaidStatus" name="AdmFeePaidStatus" value="0" checked onchange="OnChangeAdmFeePaidStatus();">
+                                                            <label>Pending</label>
+                                                            <label>[Select Received, If Payment through Offline]</label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Payment Date and Time<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="text" id="PaymentDate" name="PaymentDate" class="form-control" autocomplete="off" style="background-position:right;background-size:30px;background-image:url(../../Content/img/Calendar.png);background-repeat:no-repeat;">
+                                                            <small class="text-danger" id="PaymentDate-Required" style="display:none">Payment Date is required*</small>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Receipt number<font class="text-danger">*</font></label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label id="ReceiptNumber"></label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Admission Registration number</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label id="AdmissionRegistrationNumber"> </label>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>State registration number</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label id="StateRegistrationNumber"> </label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Roll Number</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label id="RollNumber"> </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="EnableDisableSubmit" class="panel panel-default">
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label>Admission status</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="radio" id="AdmittedStatus" name="AdmittedStatus" value="6">
+                                                <label>Applicant Admitted</label>&nbsp;&nbsp;
+                                                @*<input type="radio" id="AdmittedStatus" name="AdmittedStatus" value="3" checked>
+                        <label>Rejected</label> &nbsp; &nbsp;*@
+                                                <label id="lblToShowPendingStatus">[As of Now, the status of Applicant as Pending]</label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="text-justify" style="text-align:center">
+                                                <div id="FinalSubmitRemarks" class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label>Remarks</label>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <textarea name="txtApplRemarks" style="resize: none;" type="text" id="txtApplRemarks" maxlength="250" class="form-control" rows="4" cols="20"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row EditOptionShowGrid" style="text-align:center;">
+                                                    <div>
+                                                        <a class="btn btn-primary" id="EditSubmitbtn" onclick="OnClickEditSubmit()">Submit </a>
+                                                        <a class="btn btn-primary" id="EditCancelbtn" onclick="OnClickEditCancel()">Back</a>
+                                                        <br><br>
+                                                        <large class="text-danger">
+                                                            Note : Kindly click the submit button if you are updating any changes in anyone of the listed above details,
+                                                            then only changes will get reflect to your Application*
+                                                        </large>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="HistoryRemarksCommentsModal" role="dialog">
+    <div class="modal-dialog modal-xl" style="width: 60%; margin: 30px auto; padding: 2px;">
+        <div class="modal-content" style="padding:15px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Remarks</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <table class="table table-striped table-hover text-center shadow clswidth" id="GetCommentRemarksDetails" style="width:100% !important" border="1" align="center"></table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 20%;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="hdnSession" data-value='@Request.RequestContext.HttpContext.Session["RoleId"]' />
+<input type="hidden" id="hdnSessionLoginId" data-value='@Request.RequestContext.HttpContext.Session["LoginId"]' />
+@Scripts.Render("~/bundles/ApplicantAdmissionAgainstVacancy")

@@ -1,0 +1,1737 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<!-- Head -->
+<head>
+    <title>Department of Industrial Training and Employment (DITE)  | Home :: DITE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Department of Industrial Training and Employment (DITE)" />
+
+    @Scripts.Render("~/bundles/jquery")
+
+
+    @Scripts.Render("~/bundles/Bootbox")
+    @Scripts.Render("~/bundles/jqueryUi")
+
+    <link href="~/Content/frontend/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/frontend/css/owl.carousel.css" rel="stylesheet" />
+    <link href="~/Content/frontend/css/simplelightbox.min.css" rel="stylesheet" />
+    <link href="~/Content/frontend/css/flexslider.css" rel="stylesheet" />
+    <link href="~/Content/frontend/css/style.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.6.0.js"></script>
+
+
+    @*<script src="~/Content/frontend/js/jquery.min.js"></script>*@
+    <link href="~/Content/css/jquery-ui.min.css" rel="stylesheet" />
+    <script src="~/Content/js/select2.min.js"></script>
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/frontend/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Content/frontend/js/jquery-ui.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Content/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/js/buttons.html5.min.js"></script>
+    <script src="~/Content/js/jszip.min.js"></script>
+    <script src="~/Content/js/buttons.print.min.js"></script>
+
+    <link href="~/Content/frontend/css/owl.carousel.css" rel="stylesheet" />
+    <script src="~/Scripts/bootbox.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/bootbox.locales.min.js"></script>
+    <script src="~/Scripts/Admission/bootstrap-multiselect.js"></script>
+    <link href="~/Scripts/Admission/bootstrap-multiselect.css" rel="stylesheet" />
+    <link href="~/Content/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Content/frontend/css/style.css" rel="stylesheet" />
+
+    <link href="~/Content/frontend/css/nav-style.css" rel="stylesheet" />
+    <link href="~/Content/frontend/css/flexslider.css" rel="stylesheet" />
+    <link href="~/Content/frontend/css/simplelightbox.min.css" rel="stylesheet" />
+
+    <link href="~/Content/frontend/header/stellarnav.css" rel="stylesheet" />
+    <script src="~/Content/frontend/accessibility-controls/js/jquery_cookie.js"></script>
+    <script src="~/Scripts/crypto-js.min.js"></script>
+    <script src="~/Scripts/aes.js"></script>
+    <link href="~/Content/frontend/css/style1.css" rel="stylesheet" />
+
+    <script>
+        $(function () {
+            $('input').keydown(function (e) {
+                if (e.keyCode == 13) {
+                    $("input[value='Login']").focus().click();
+                    return false;
+                }
+            });
+        });
+
+				@{
+    string cookieToken, formToken;
+    AntiForgery.GetTokens(null, out cookieToken, out formToken);
+    var tokenHeaderValue = cookieToken + ":" + formToken;
+}
+		  var TOKENHEADERVALUE = '@tokenHeaderValue';
+
+		(function ($) {
+
+			var rotateLeft = function (lValue, iShiftBits) {
+				return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
+			}
+
+			var lsbHex = function (value) {
+				var string = "";
+				var i;
+				var vh;
+				var vl;
+				for (i = 0; i <= 6; i += 2) {
+					vh = (value >>> (i * 4 + 4)) & 0x0f;
+					vl = (value >>> (i * 4)) & 0x0f;
+					string += vh.toString(16) + vl.toString(16);
+				}
+				return string;
+			};
+
+			var cvtHex = function (value) {
+				var string = "";
+				var i;
+				var v;
+				for (i = 7; i >= 0; i--) {
+					v = (value >>> (i * 4)) & 0x0f;
+					string += v.toString(16);
+				}
+				return string;
+			};
+
+			var uTF8Encode = function (string) {
+				string = string.replace(/\x0d\x0a/g, "\x0a");
+				var output = "";
+				for (var n = 0; n < string.length; n++) {
+					var c = string.charCodeAt(n);
+					if (c < 128) {
+						output += String.fromCharCode(c);
+					} else if ((c > 127) && (c < 2048)) {
+						output += String.fromCharCode((c >> 6) | 192);
+						output += String.fromCharCode((c & 63) | 128);
+					} else {
+						output += String.fromCharCode((c >> 12) | 224);
+						output += String.fromCharCode(((c >> 6) & 63) | 128);
+						output += String.fromCharCode((c & 63) | 128);
+					}
+				}
+				return output;
+			};
+
+			$.extend({
+				sha1: function (string) {
+					var blockstart;
+					var i, j;
+					var W = new Array(80);
+					var H0 = 0x67452301;
+					var H1 = 0xEFCDAB89;
+					var H2 = 0x98BADCFE;
+					var H3 = 0x10325476;
+					var H4 = 0xC3D2E1F0;
+					var A, B, C, D, E;
+					var tempValue;
+					string = uTF8Encode(string);
+					var stringLength = string.length;
+					var wordArray = new Array();
+					for (i = 0; i < stringLength - 3; i += 4) {
+						j = string.charCodeAt(i) << 24 | string.charCodeAt(i + 1) << 16 | string.charCodeAt(i + 2) << 8 | string.charCodeAt(i + 3);
+						wordArray.push(j);
+					}
+					switch (stringLength % 4) {
+						case 0:
+							i = 0x080000000;
+							break;
+						case 1:
+							i = string.charCodeAt(stringLength - 1) << 24 | 0x0800000;
+							break;
+						case 2:
+							i = string.charCodeAt(stringLength - 2) << 24 | string.charCodeAt(stringLength - 1) << 16 | 0x08000;
+							break;
+						case 3:
+							i = string.charCodeAt(stringLength - 3) << 24 | string.charCodeAt(stringLength - 2) << 16 | string.charCodeAt(stringLength - 1) << 8 | 0x80;
+							break;
+					}
+					wordArray.push(i);
+					while ((wordArray.length % 16) != 14) wordArray.push(0);
+					wordArray.push(stringLength >>> 29);
+					wordArray.push((stringLength << 3) & 0x0ffffffff);
+					for (blockstart = 0; blockstart < wordArray.length; blockstart += 16) {
+						for (i = 0; i < 16; i++) W[i] = wordArray[blockstart + i];
+						for (i = 16; i <= 79; i++) W[i] = rotateLeft(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+						A = H0;
+						B = H1;
+						C = H2;
+						D = H3;
+						E = H4;
+						for (i = 0; i <= 19; i++) {
+							tempValue = (rotateLeft(A, 5) + ((B & C) | (~B & D)) + E + W[i] + 0x5A827999) & 0x0ffffffff;
+							E = D;
+							D = C;
+							C = rotateLeft(B, 30);
+							B = A;
+							A = tempValue;
+						}
+						for (i = 20; i <= 39; i++) {
+							tempValue = (rotateLeft(A, 5) + (B ^ C ^ D) + E + W[i] + 0x6ED9EBA1) & 0x0ffffffff;
+							E = D;
+							D = C;
+							C = rotateLeft(B, 30);
+							B = A;
+							A = tempValue;
+						}
+						for (i = 40; i <= 59; i++) {
+							tempValue = (rotateLeft(A, 5) + ((B & C) | (B & D) | (C & D)) + E + W[i] + 0x8F1BBCDC) & 0x0ffffffff;
+							E = D;
+							D = C;
+							C = rotateLeft(B, 30);
+							B = A;
+							A = tempValue;
+						}
+						for (i = 60; i <= 79; i++) {
+							tempValue = (rotateLeft(A, 5) + (B ^ C ^ D) + E + W[i] + 0xCA62C1D6) & 0x0ffffffff;
+							E = D;
+							D = C;
+							C = rotateLeft(B, 30);
+							B = A;
+							A = tempValue;
+						}
+						H0 = (H0 + A) & 0x0ffffffff;
+						H1 = (H1 + B) & 0x0ffffffff;
+						H2 = (H2 + C) & 0x0ffffffff;
+						H3 = (H3 + D) & 0x0ffffffff;
+						H4 = (H4 + E) & 0x0ffffffff;
+					}
+					var tempValue = cvtHex(H0) + cvtHex(H1) + cvtHex(H2) + cvtHex(H3) + cvtHex(H4);
+					return tempValue.toLowerCase();
+
+				}
+			});
+		})(jQuery);
+    </script>
+    <style>
+        .radioemployee {
+            width: 35px;
+            margin-top: 0px;
+        }
+
+        .main-section {
+            margin: 0 auto;
+            margin-top: 100px;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 0px;
+        }
+
+        .user-img {
+            margin-top: -50px;
+        }
+
+            .user-img img {
+                height: 100px;
+                width: 100px;
+            }
+
+        .user-name {
+            margin: 10px 0px;
+        }
+
+            .user-name h1 {
+                font-size: 30px;
+                color: #676363;
+            }
+
+            .user-name button {
+                position: absolute;
+                top: -50px;
+                right: 20px;
+                font-size: 30px;
+            }
+
+        .form-input button {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .link-part {
+            border-radius: 0px 0px 5px 5px;
+            background-color: #ECF0F1;
+            border-top: 1px solid #c2c2c2;
+        }
+
+        .open-modal {
+            margin-top: 100px !important;
+        }
+
+        .pt20 {
+            padding-bottom: 20px;
+        }
+
+        .captchabg {
+            background-image: url('../../Content/img/CaptchaBackground.jpg');
+            text-align: center;
+            border: none;
+            font-weight: bold;
+            font-family: Modern;
+            width: 150px;
+            font-size: 30px;
+            background-color: transparent;
+            min-width: 130px
+        }
+    </style>
+</head>
+
+<!-- Body -->
+<body>
+
+    <!-- banner -->
+
+
+    <div class="header-top">
+
+        <div class="col-md-12" style="background: #243b58; padding: 5px 0 0 0">
+            <div class="container-fluid">
+                <div class="ht-left" style="float:left; color:white; font-weight:700">
+                    <div class="mail-service">
+                        <i class=" fa fa-envelope"></i>
+                        <a style="color:white; font-weight:700" @*href="mailto:pscet.bangalore@gmail.com"*@>pscet[dot]bangalore[at]gmail[dot]com</a>
+                    </div>
+                    <div class="phone-service ht-left">
+                        <i class=" fa fa-phone"></i>
+                        155267
+                    </div>
+                </div>
+                @*<a href="@Url.Action("Encrypt_Click", "Home")" style="color: #243b58; font-weight: 700">Encrypt Web.config</a>*@
+                @if (Session["RoleName"] == null)
+                {
+                    <div class="ht-right">
+                        <div class="agile-logologinblock">
+                            <p style="padding:5px 5px; color:#fff; font-weight: 700;">
+                                Kannada |
+
+                                <!-- Button HTML (to Trigger Modal) -->
+                                <a href="#reg" class="trigger-btn" data-toggle="modal" style="padding:5px 5px; color:#fff; font-weight: 700;" id="Loginlink">Login</a>
+
+                                @*<a class="readmore" style="color: #fff; font-weight: 700; cursor:pointer"
+                                    id="Loginlink" onclick="SwitchLogin()">Login</a>*@
+                            </p>
+                        </div>
+                    </div>
+                    <div class="ht-right">
+                        <div class="page white-page-bg" style="width:250px;">
+                            <div style="float: left">
+                                @*&nbsp;&nbsp;&nbsp;&nbsp;<a class='yellowblack' href='#'><img src="~/Content/frontend/accessibility-controls/images/1.png" title='Yellow on Black' style="float: left" /></a>
+                                    <a class='yellowblue' href='#'><img src='~/Content/frontend/accessibility-controls/images/2.png' title='Yellow on Blue' style="float: left" /></a>*@
+                                <a class='fushblack' href='#'><img src='~/Content/frontend/accessibility-controls/images/3.png' title='Fuchsia on Black' style="float: left" /></a>
+                                <a class='standards' href='#'><img src="~/Content/frontend/accessibility-controls/images/4.png" title='Standard' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                            </div>
+                            <div style="float: left">
+                                <a class='decreaseFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/aSmall.png' title='Font Decrease' style="float: left" /></a>
+                                <a class='resetFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/a_reset.png' title='Standard' style="float: left" /></a>
+                                <a class='increaseFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/aBig.png' title='Font Increase' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                            </div>
+                            @*<div style="float: left">
+                                    <a class='defaultspace' href='#'><img src='~/Content/frontend/accessibility-controls/images/default.png' title='Narrow' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                                    <a class='widest' href='#'><img src='~/Content/frontend/accessibility-controls/images/wider.png' title='Wider' style="float: left" /></a>
+                                </div>*@
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    if (Session["RoleName"].ToString() == "Applicant")
+                    {
+                        <div class="ht-right">
+                            <div class="agile-logologinblock">
+                                <p style="padding:5px 5px;">
+                                    @*Kannada |     <a class="readmore" href="@Url.Action("Logout", "Home")" data-toggle="modal" data-target="#reg">Logout</a>*@
+                                    <a style="color:#fff;font-weight:700;" href='#' onclick="fnLogoutClick()">Logout</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ht-right">
+                            <div class="page white-page-bg" style="width:250px;">
+                                <div style="float: left">
+                                    @*&nbsp;&nbsp;&nbsp;&nbsp;<a class='yellowblack' href='#'><img src="~/Content/frontend/accessibility-controls/images/1.png" title='Yellow on Black' style="float: left" /></a>
+                                        <a class='yellowblue' href='#'><img src='~/Content/frontend/accessibility-controls/images/2.png' title='Yellow on Blue' style="float: left" /></a>*@
+                                    <a class='fushblack' href='#'><img src='~/Content/frontend/accessibility-controls/images/3.png' title='Fuchsia on Black' style="float: left" /></a>
+                                    <a class='standards' href='#'><img src="~/Content/frontend/accessibility-controls/images/4.png" title='Standard' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <div style="float: left">
+                                    <a class='decreaseFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/aSmall.png' title='Font Decrease' style="float: left" /></a>
+                                    <a class='resetFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/a_reset.png' title='Standard' style="float: left" /></a>
+                                    <a class='increaseFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/aBig.png' title='Font Increase' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                                </div>
+                                @*<div style="float: left">
+                                        <a class='defaultspace' href='#'><img src='~/Content/frontend/accessibility-controls/images/default.png' title='Narrow' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                                        <a class='widest' href='#'><img src='~/Content/frontend/accessibility-controls/images/wider.png' title='Wider' style="float: left" /></a>
+                                    </div>*@
+                            </div>
+                        </div> }
+                    else
+                    {
+                        <div class="ht-right">
+                            <div class="col-md-12">
+                                <div class="agile-logologinblock">
+                                    <p style="padding:5px 5px; color:#fff">
+                                        <a style="color:#fff;font-weight:700;" href='#' onclick="fnLogoutClick()">Logout</a>&nbsp;<span>|</span> &nbsp;
+                                        @if (Session["LoginAttempt"] != null)
+                                        {
+                                            if (Session["LoginAttempt"].ToString() == "1")
+                                            {
+                                                <a class="readmore" style="color:#fff;font-weight:700;" id="ChangePasswordlink" href="" data-toggle="modal" data-target="#ChangePassword">Change Password &nbsp;<span>|</span>&nbsp;</a>}
+                                        }
+                                        <a style="color: #fff;cursor:pointer;font-weight:700;" id="switchbtn" onclick="SwitchRole()">Switch</a>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="ht-right">
+                            <div class="page white-page-bg" style="width:250px;">
+                                <div style="float: left">
+                                    @*&nbsp;&nbsp;&nbsp;&nbsp;<a class='yellowblack' href='#'><img src="~/Content/frontend/accessibility-controls/images/1.png" title='Yellow on Black' style="float: left" /></a>
+                                        <a class='yellowblue' href='#'><img src='~/Content/frontend/accessibility-controls/images/2.png' title='Yellow on Blue' style="float: left" /></a>*@
+                                    <a class='fushblack' href='#'><img src='~/Content/frontend/accessibility-controls/images/3.png' title='Fuchsia on Black' style="float: left" /></a>
+                                    <a class='standards' href='#'><img src="~/Content/frontend/accessibility-controls/images/4.png" title='Standard' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <div style="float: left">
+                                    <a class='decreaseFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/aSmall.png' title='Font Decrease' style="float: left" /></a>
+                                    <a class='resetFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/a_reset.png' title='Standard' style="float: left" /></a>
+                                    <a class='increaseFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/aBig.png' title='Font Increase' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                                </div>
+
+                                @*<div style="float: left">
+                                        <a class='defaultspace' href='#'><img src='~/Content/frontend/accessibility-controls/images/default.png' title='Narrow' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                                        <a class='widest' href='#'><img src='~/Content/frontend/accessibility-controls/images/wider.png' title='Wider' style="float: left" /></a>
+                                    </div>*@
+                            </div>
+                        </div>
+                        <div class="ht-right">
+                            <div id="FileAttach"><i class="fa fa-user" aria-hidden="true"></i>@*&emsp;&emsp;<span style="font-size:medium; font-weight:bold">Super Admin</span>*@</div>
+                            <a class="link" onclick="fnShowProfileScreen(1);"><label style="color:white; cursor:pointer">Profile</label></a>
+                        </div>
+
+                    }
+
+                }
+                @if (Session["RoleName"] != null)
+                {
+                    <div class="ht-center">
+
+                        <div class="col-12 ti-user text-capitalize text-center" style="color:white;font-weight:700">
+                            @Session["UserName"].ToString(),(@Session["RoleName"].ToString())
+                        </div>
+                        <input type="hidden" id="hdRoleName" data-value="@Request.RequestContext.HttpContext.Session["RoleName"].ToString()" />
+                    </div>
+                }
+                <!-- Modal -->
+                @if (Session["RoleName"] == null)
+                {
+                    @*<div id="loginModal" class="modal fade text-center">*@
+                    <div class="modal fade text-center" id="reg" @*tabindex="-1" role="dialog" aria-labelledby="reg" aria-hidden="true"*@>
+                        <div class="modal-dialog">
+                            <div class="col-md-3"></div>
+                            <div class="col-lg-7 col-sm-7 col-12 main-section">
+                                <div class="modal-content">
+                                    <div class="col-lg-12 col-sm-12 col-12 user-img">
+                                        <img src="~/Content/img/man01.png">
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-12 user-name">
+                                        <h1>User Login</h1>
+                                        <button type="button" class="close text-right" data-dismiss="modal">×</button>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="radio" class="radioemployee" name="DITENonDITE" id="cbxLoginDiteEe" checked value="1" onclick="fnClearInputFields(this.id)"><span>DITE</span>
+                                        <input type="radio" class="radioemployee" name="DITENonDITE" id="cbxLoginNonDiteEe" value="0" onclick="fnClearInputFields(this.id)"><span>NON-DITE</span>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-12 form-input">
+                                        <form onsubmit="return false">
+                                            <div class="form-group">
+                                                <input class="form-control" autocomplete="off" type="text" id="txtUserName" name="UserName" placeholder="Enter KGID Number" required onkeypress="allowAlphaNumericSpace(event, this.id)">
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group" id="show_hide_password">
+                                                    <input class="form-control" type="password" maxlength="16" id="txtPassword" name="Password" placeholder="Enter Password" required>
+                                                    <div class="input-group-addon">
+                                                        <a href="" onclick="fnShowHidePwd(event, 'show_hide_password'); return false;"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" id="HDNpwd" name="HDNpwd">
+                                            </div>
+                                            <!--<div class="form-group">
+        <div class="col-md-2">
+            <label for="captcha">Captcha</label>
+        </div>
+        <div class="col-md-5">
+            <input id="captchaText" maxlength="6" name="captchaText" type="text" value="" class="form-control" onkeypress="allowAlphaNumericSpace(event, this.id)" />
+        </div>
+        <div class="col-md-5">
+            <img id="m_imgCaptcha" alt="Click to Change image" title="Click to Change image"
+                 style="cursor:pointer; height:45px;"-->
+                                            @*onclick="loadCaptcha();"*@
+                                            <!--onclick="fngetcaptcha();" />
+        </div>
+    </div>-->
+
+                                            <div class="row form-group">
+
+                                                <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                                    <!--<div class="col-md-8" style="float:left;height: 35px; ">
+                <label for="captcha" id="myCaptcha">Captcha</label>-->
+                                                    @*@Html.LabelFor(x => x.DeptSecretorymyCaptcha, new { @autocomplete = "off", id = "DeptSecretorymyCaptcha", @class = " custom_style ", @style = "width:100%;height:35px;font-size:25px;padding:0;", @oncontextmenu = "return false;" })*@
+                                                    <!--</div>-->
+                                                    <div class="col-md-8" style="float:left;">
+                                                        <span for="captcha" id="myCaptcha" class="captchabg">Captcha</span>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <img src="~/Content/img/Refresh.png" alt="Click to refresh captcha" onclick="fngetcaptcha()" style="cursor: pointer; height: 25px;width:20px;margin:10px;"title="Click to Change Captcha">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                                    <label>Enter Captcha<span style="color:red">*</span></label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input id="captchaText" maxlength="6" name="captchaText" type="text" value="" class="form-control" @*onkeypress="allowAlphaNumericSpace(event, this.id)"*@ />
+
+                                                </div>
+                                            </div>
+
+
+                                            <input type="hidden" id="CaptchaImg" name="CaptchaImg">
+                                       
+                                            <button class="form-control" style="background:green;color:white" id="btnSubmit">
+                                                LOGIN
+                                            </button>
+                                        </form>
+                                        <div class="col-lg-12 col-sm-12 col-12 link-part">
+                                            <a href="#" data-target="#pwdModal" data-toggle="modal" onclick="fnOpenPwdModal()">Forgot Password</a>
+                                        </div>
+                                        <div class="col-md-12 pt20">
+                                            <p>Not a User yet? Sign Up.</p>
+                                            <input type="radio" class="radioemployee" name="group1" value="off" onClick="fnRedirect('NewEmployeeRegister')"><span>Employee</span>
+                                            <input type="radio" class="radioemployee" name="group1" value="off" onClick="fnRedirect('NewApplicantRegister')"><span>Applicant</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<!--<div class="modal fade enabledisable" id="reg" tabindex="-1" role="dialog" aria-labelledby="reg" aria-hidden="true">
+
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <span aria-hidden="true" style="float:right!important; color:red; font-weight:bold;
+                    font-size:25px; width: 0%; cursor:pointer" onclick="CancelContinue1()">&times;</span>
+                                                        <h5 class="modal-title" id="exampleModalLabel" style="color: #010480; padding-top: 15px;
+                    font-size: 27px; text-align: center; font-family: sans-serif;">
+                                                            DITE-Login
+                                                        </h5>-->
+                    @*<button type="button" class="close" style="outline:none;" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" style="float:right!important; width: 0%;">&times;</span>
+                        </button>*@
+
+                    <!--</div>-->
+                    @*<div class="modal-body" style=" min-height: 450px;">
+                            <form action="/action_page.php" method="post">
+                                <div class="col-md-12">
+                                    <label for="uname"><b>KGID Number/Username</b></label>
+                                    <input type="text" placeholder="Enter Username" id="txtUserName" name="UserName" required>
+                                    <label for="psw"><b>Password</b></label>
+                                    <input type="password" placeholder="Enter Password" id="txtPassword" name="Password" required>
+                                   <input type="checkbox" id="showPass" /> Show Password
+                                    <br />
+                                    <input type="hidden" id="HDNpwd" name="HDNpwd">
+                                    <br />
+                                    <input type="hidden" id="log" name="log">
+                                    <input type="hidden" id="Entryvalues" name="Entryvalues">
+                                    <br />
+                                    <label>
+                                        <input type="checkbox" checked="checked" name="remember"> Remember me
+                                    </label><br /><br />
+                                    <input type="button" id="btnSubmit" value="Login" class="btn btn-primary" style="margin-left:15px" />
+                                    <div class="clearfix"></div>
+                                    <div class="col-md-12">
+                                        <span class="psw">Forgot <a href="#">Password?</a></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>*@
+                    <!--</div>
+                        </div>
+                    </div>-->
+
+                }		@if (Session["UserName"] != null)
+                {
+                    <div class="modal fade" id="ChangePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel" style="color: #010480; padding-top: 15px; font-size: 27px; text-align: center; font-family: sans-serif;">Change Password  </h5>
+                                    <button type="button" class="close" style="outline:none;" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" style="float:right!important; width: 0%;">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" style=" min-height: 450px;">
+                                    <form method="post" action="/action_page.php">
+                                        @*<input name="__RequestVerificationToken" type="hidden" value="@DIT.Common.CSRFAntiForgery.GetAntiXsrfToken()" />*@
+                                        <div class="col-md-12">
+                                            <label><b>OldPassword</b></label>
+                                            <input type="password" placeholder="Enter Old Password" id="txtOldPassword" name="OldPassword" autocomplete="off" required>
+                                            <span class="field-validation-valid" data-valmsg-for="OldPassword" data-valmsg-replace="true"></span>
+                                            <br />
+
+                                            <label><b>NewPassword</b></label>
+                                            <input type="password" placeholder="Enter New Password" id="txtNewPassword" name="NewPassword" autocomplete="off" required>
+                                            <span class="field-validation-valid" data-valmsg-for="NewPassword" data-valmsg-replace="true"></span>
+                                            <br />
+
+                                            <label><b>ConfirmPassword</b></label>
+                                            <input type="password" placeholder="Confirm Password" id="txtConfirmPassword" name="ConfirmPassword" autocomplete="off" required>
+                                            <span class="field-validation-valid" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"></span>
+                                            <br />
+                                            <input type="button" id="btnSubmit2" value="ChangePassword" class="btn btn-primary" style="margin-left:15px" />
+                                            <div class="clearfix"></div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="modal fade enabledisable" id="RoleModal" tabindex="-1" role="dialog" aria-labelledby="RoleModal" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel" style="color: #010480; padding-top: 15px; font-size: 27px; text-align: center; font-family: sans-serif;">Select sub-department to continue </h5>
+                            </div>
+                            <div class="modal-body" style=" min-height: 200px;">
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-8">
+                                        @*<select id="depts" class="form-control"></select>*@
+                                        @*<select id="SubDept" onchange="GetLoginRoles()" class="form-control"></select>
+                                            <span id="SubDeptErr" style="color:red;font-size:12px;"></span>
+                                            <br />
+                                            <select id="Roles" class="form-control"></select>*@
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="text-right">
+                                                    @*<label>Sub Dept :</label><br /><br /><br />*@
+                                                    <label>Role :</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                @*<select id="SubDept" onchange="GetLoginRoles()" class="form-control"></select>
+                                                    <span id="SubDeptErr" style="color:red;font-size:12px;"></span>
+                                                    <br />*@
+                                                <select id="Roles" class="form-control"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2"></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-warning" onclick="CancelContinue()" value="Cancel" />
+                                <input type="button" class="btn btn-primary" onclick="LoginContinue()" value="Continue" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div id="loginModal" class="modal fade">
+                <div class="modal-dialog modal-login modal-md">
+                    <div class="modal-content">
+                        <form action="index.cshtml" method="post">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="form" id="form">
+                                <div class="field email">
+                                    <div class="icon"></div>
+                                    <input autocomplete="off" type="text" placeholder="Enter Username/KGID Number" id="txtUserName" name="UserName" required>
+                                </div>
+                                <div class="field password">
+                                    <div class="icon"></div>
+                                    <input type="password" placeholder="Enter Password" id="txtPassword" name="Password" required>
+                                    <input type="hidden" id="HDNpwd" name="HDNpwd">
+                                </div>
+                                <input type="checkbox" onclick="fnShowPassword()" style="width:30px; margin-top:0px;"><label>Show Password</label>
+                                <div class="field password">
+                                    <div style="display:inline-block;width:500px;">
+                                        <label class="col-md-2" style="margin-top:23px" for="captcha"><b>Captcha</b></label>
+                                        <div class="col-md-6" style="display: inline-block;width: 150px;">
+
+                                            <input class="custom_style" id="captchaText" maxlength="6" name="captchaText" style="min-width: 130px; background:transparent; font-size:25px; border:1px solid black " type="text" value="" />
+                                        </div>
+                                        <div style="display:inline-block;">
+                                            <img id="m_imgCaptcha" alt="Click to Change image" title="Click to Change image"
+                                                 style="cursor:pointer; height:60px; width:100px; " onclick="loadCaptcha();" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="CaptchaImg" name="CaptchaImg">
+                                <input type="checkbox" id="rememberMe" style="width:30px; margin-top:0px;"><label for="rememberMe">Remember me</label>
+                                <button class="button" id="btnSubmit">
+                                    LOGIN
+                                </button>
+                            </div>
+                            <div class="modal-footer justify-content-between">-->
+                @*<label class="form-check-label"></label>*@
+                <!--<a class="btn btn-launch" href="javascript:;" data-toggle="modal" data-target="#forgotPassModal"><label>Forgot Password?</label> </a>-->
+                @*<input type="submit" class="btn btn-primary" value="Login">*@
+                <!--</div>
+                            </form>
+                        </div>
+                    </div>
+                </div>-->
+
+                <div id="pwdModal" class="modal fade text-center">
+                    <div class="modal-dialog">
+                        <div class="col-md-3"></div>
+                        <div class="col-lg-7 col-sm-7 col-12 main-section">
+                            <div class="modal-content">
+                                <div class="col-lg-12 col-sm-12 col-12 user-img">
+                                    <img src="~/Content/img/man01.png">
+                                </div>
+                                <div class="col-lg-12 col-sm-12 col-12 user-name">
+                                    <h1>Forgot Password</h1>
+                                    <button type="button" class="close text-right" data-dismiss="modal">×</button>
+                                </div>
+                                <div class="row">
+                                    <div class="desc">
+                                        <div class="col-lg-12 col-sm-12 col-12 form-input form-group">
+                                            <div class="form-group">
+                                                <input class="form-control" autocomplete="off" type="text" maxlength="7" placeholder="Enter KGID Number" onfocusout="fnGetMobileFromKGIDNumber()" id="txtForgotPassUserName" name="UserName" required">
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input class="form-control" type="number" id="txtForgotPassMobileNumber" name="number" placeholder="Enter Mobile number" onKeyDown="if(this.value.length==10 && event.keyCode != 8) return false;" required>
+
+                                                    <div class="input-group-addon">
+                                                        <a href="" data-placement="top" title="click here to submit" onclick="fnForgotPassword('Generate OTP');return false;"><i class='fa fa-send'></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text" id="txtForgotPassOTP" name="Password" placeholder="Enter OTP" onKeyPress="if(this.value.length==4) return false;" required disabled>
+                                                    <div class="input-group-addon">
+                                                        <a href="" data-placement="top" title="click here to Verify" onclick="fnForgotPassword('Validate');return false;"><i class='fa fa-send'></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group" id="show_hide_password1">
+                                                    <input class="form-control" type="password" id="txtForgotPassCreatePass" name="Password" placeholder="Create Password" data-placement="left" title="Please Enter your new password" required disabled>
+                                                    <div class="input-group-addon">
+                                                        <a href="" onclick="fnShowHidePwd(event, 'show_hide_password1'); return false;"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group" id="show_hide_password2">
+                                                    <input class="form-control" type="password" id="txtForgotPassConfirmPass" name="Password" placeholder="Confirm password" data-placement="left" title="Please Re-enter your new password" required disabled>
+                                                    <div class="input-group-addon">
+                                                        <a href="" onclick="fnShowHidePwd(event, 'show_hide_password2'); return false;"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="form-control" style="background:green;color:white" id="btnForgotPassSubmit" onclick="fnForgotPassword('Register Employee');return false;" disabled>
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="col-lg-12 col-sm-12 col-12 link-part" style="padding-top: 20px;">-->
+                                @*<a href="#" data-target="#loginModal" data-toggle="modal">Login</a>*@
+
+                                <!--</div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="ht-right">
+                        <div class="page white-page-bg" style="width:250px;">
+                            <div style="float: left">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<a class='yellowblack' href='#'><img src="~/Content/frontend/accessibility-controls/images/1.png" title='Yellow on Black' style="float: left" /></a>
+                                <a class='yellowblue' href='#'><img src='~/Content/frontend/accessibility-controls/images/2.png' title='Yellow on Blue' style="float: left" /></a>
+                                <a class='fushblack' href='#'><img src='~/Content/frontend/accessibility-controls/images/3.png' title='Fuchsia on Black' style="float: left" /></a>
+                                <a class='standards' href='#'><img src="~/Content/frontend/accessibility-controls/images/4.png" title='Standard' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                            </div>
+                            <div style="float: left">
+                                <a class='decreaseFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/aSmall.png' title='Font Decrease' style="float: left" /></a>
+                                <a class='resetFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/a_reset.png' title='Standard' style="float: left" /></a>
+                                <a class='increaseFont' href='#'><img src='~/Content/frontend/accessibility-controls/images/aBig.png' title='Font Increase' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                            </div>
+                            <div style="float: left">
+                                <a class='defaultspace' href='#'><img src='~/Content/frontend/accessibility-controls/images/default.png' title='Narrow' style="float: left" /></a>&nbsp;&nbsp;&nbsp;
+                                <a class='widest' href='#'><img src='~/Content/frontend/accessibility-controls/images/wider.png' title='Wider' style="float: left" /></a>
+                            </div>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+
+    </div>
+
+    <div class="header-top" style="background: white">
+
+        <div class="container-fluid">
+
+
+            <div class="col-md-6 text-center" style="padding:30px">
+                <h3 class="form-group">
+                    <b>
+                        Government of Karnataka
+                    </b>
+                </h3>
+                <h3>
+                    Department of Industrial Training and Employment
+                </h3>
+
+            </div>
+            <div class="agile-logo col-md-2" style="margin:10px">
+                <a href="https://dgt.gov.in/" target="_blank"><img src="~/Content/frontend/images/a.png"></a>
+
+            </div>
+            <div class="agile-logo col-md-2" style="margin:10px">
+                <a href="https://www.skillindia.gov.in/" target="_blank"><img src="~/Content/frontend/images/c.png"></a>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- nav -->
+    <div class="nav_w3pvt text-center ">
+        @{
+            Html.RenderAction("Menu", "Home");
+        }
+    </div>
+    <!-- end nav -->
+    @RenderBody()
+    <!-- footer -->
+    <!-- end footer -->
+    <!-- copyright -->
+    <footer>
+
+        <div class="container-fluid text-center" style="background-color: #243b58">
+            <p style="color:white">
+                Content Owned and Maintained by : Department of Industrial Training and Employment (DITE), Government of Karnataka<br>
+                <br> Design &amp; Developed by <a href="https://csg.karnataka.gov.in/" style="color:aqua">Center for Smart Governance</a> (V_@System.Configuration.ConfigurationManager.AppSettings["Version"] S_@System.Configuration.ConfigurationManager.AppSettings["ServerId"])
+            </p>
+        </div>
+
+        <!--end copyright -->
+    </footer>
+
+    <div class="modal fade" id="forgotPassModal" tabindex="-1" role="dialog" aria-labelledby="forgotPassLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content login-modal">
+
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div role="tabpanel" class="login-tab">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+
+                                <li role="presentation"><a id="forgetpass-taba" href="#forget_password" aria-controls="forget_password" role="tab" data-toggle="tab">Forget Password</a></li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active text-center" id="home">
+                                    &nbsp;&nbsp;
+                                    <span id="login_fail" class="response_error" style="display: none;">Loggin failed, please try again.</span>
+                                    <div class="clearfix"></div>
+                                    <form>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                                <input type="text" class="form-control" id="login_username" placeholder="Username">
+                                            </div>
+                                            <span class="help-block has-error" id="email-error"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+                                                <input type="password" class="form-control" placeholder="Password">
+                                            </div>
+                                            <span class="help-block has-error" id="password-error"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+                                                <input type="password" class="form-control" placeholder="Password">
+                                            </div>
+                                            <span class="help-block has-error" id="password-error"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+                                                <input type="password" class="form-control" placeholder="Password">
+                                            </div>
+                                            <span class="help-block has-error" id="password-error"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+                                                <input type="password" class="form-control" placeholder="Password">
+                                            </div>
+                                            <span class="help-block has-error" id="password-error"></span>
+                                        </div>
+                                        <button type="button" id="login_btn" class="btn btn-block bt-login" data-loading-text="Signing In....">Submit</button>
+                                        <div class="clearfix"></div>
+
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- //here ends scrolling icon -->
+
+    <div class="modal" id="EditProfile" tabindex="-1" role="dialog" aria-labelledby="EditProfile" aria-hidden="true" data-backdrop="false" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="head1" id="exampleModalLabel">
+                        Edit Profile
+                    </h2>
+                </div>
+                <div class="modal-body" style=" min-height: 200px;">
+                    <div class="row border form-group">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Name<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" id="txtNameEditProfile" maxlength="50" class="form-control" style="width: 180px;">
+                                        <small class="text-danger" id="txtNameEditProfile-Required" style="display:none">Name is required*</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Father Name<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" id="txtFatherNameEditProfile" maxlength="50" class="form-control" style="width: 180px;">
+                                        <small class="text-danger" id="txtNameEditProfile-Required" style="display:none">Name is required*</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Email<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" id="txtEmailEditProfile" class="form-control" style="width: 180px;">
+                                        <small class="text-danger" id="txtEmailEditProfile-Required" style="display:none">Email is required*</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Mobile<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" id="txtMobileEditProfile" maxlength="10" class="form-control ipeWidth" style="width: 180px;">
+                                        <small class="text-danger" id="txtMobileEditProfile-Required" style="display:none">Mobile is required*</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Photo Upload<font class="text-danger">*</font></label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div id="FileAttach"><img class="pull-left" width="50" height="50" src="~/Images/ProfilePic.png" id="ImgPhotoUpload">@*&emsp;&emsp;<span style="font-size:medium; font-weight:bold">Super Admin</span>*@</div>
+                                        <input type="file" value="PhotoUpload" class="form-control" id="PhotoUpload" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" style="width: 180px;">
+                                        <input type="hidden" id="PhotoUpload" value="" />
+                                        <small class="text-danger" id="PhotoUpload-Required" style="display:none">Photo is required*</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-secondary" style="background-color:gray;color:white;" onclick="fnClearEditProfile();" value="Close" />
+                    <input type="button" class="btn btn-primary" onclick="fnUpdtProfile();" value="Update" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading" style="display:none">
+        <img id="loading-image" src="~/Content/img/Gear.gif" alt="Loading..." />
+    </div>
+    <style>
+        #loading {
+            position: fixed;
+            display: block;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            text-align: center;
+            opacity: 0.7;
+            background-color: #fff;
+            z-index: 99;
+        }
+
+        #loading-image {
+            display: block;
+            margin: 0 auto;
+            width: 5%;
+            z-index: 100;
+            position: relative;
+            top: 40%;
+        }
+    </style>
+
+
+    @Scripts.Render("~/bundles/jqueryFlex")
+    @Scripts.Render("~/bundles/carousel")
+    @*@Scripts.Render("~/bundles/SmoothScroll")*@
+    @Scripts.Render("~/bundles/move")
+    @Scripts.Render("~/bundles/easing")
+    @Scripts.Render("~/bundles/steller")
+    @RenderSection("scripts", required: false)
+
+
+    <script>
+    $(document).ready(function () {
+        $("input[name$='cars']").click(function () {
+            var test = $(this).val();
+
+            $("div.desc").hide();
+            $("#Cars" + test).show();
+        });
+
+        $.ajaxSetup({
+            headers: {
+                'RequestVerificationToken': TOKENHEADERVALUE
+            },
+        });
+
+        jQuery('.stellarnav').stellarNav({
+            theme: 'light',
+            breakpoint: 960,
+            position: 'right',
+            phoneBtn: '18009997788',
+
+        });
+        $('#txtPassword').bind('copy paste cut', function (e) {
+            e.preventDefault(); //disable cut,copy,paste
+            //	alert('cut,copy & paste options are disabled !!');
+        });
+
+        if (navigator.userAgent.search("MSIE") >= 0) {
+            //alert("P2");
+            $("#txtPassword").each(function () {
+                $(this).attr("autocomplete", "off");
+            });
+        }
+        //Check if browser is Chrome or not
+        else if (navigator.userAgent.search("Chrome") >= 0) {
+
+            //alert("P3");
+            $("#txtPassword").each(function () {
+                $(this).attr("autocomplete", "off");
+            });
+        }
+        //Check if browser is Firefox or not
+        else if (navigator.userAgent.search("Firefox") >= 0) {
+            //alert("P4");
+            $("#txtPassword").each(function () {
+                $(this).attr("autocomplete", "false");
+            });
+            $("#txtPassword").autocomplete(false);
+        }
+        //Check if browser is Safari or not
+        else if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
+            $("#txtPassword").each(function () {
+                $(this).attr("autocomplete", "off");
+            });
+        }
+        //Check if browser is Opera or not
+        else if (navigator.userAgent.search("Opera") >= 0) {
+            $("#txtPassword").each(function () {
+                $(this).attr("autocomplete", "off");
+            });
+        }
+        else {
+            $("#txtPassword").each(function () {
+                $(this).attr("autocomplete", "off");
+            });
+        }
+        $('#showPass').on('click', function () {
+            var passInput = $("#txtPassword");
+            if (passInput.attr('type') === 'password') {
+                passInput.attr('type', 'text');
+            } else {
+                passInput.attr('type', 'password');
+            }
+        })
+    });
+    //Testimonials script js start
+    //start - slider - script
+    $(window).on('load', function () {
+        $('.flexslider').flexslider({
+            animation: "slide",
+            start: function (slider) {
+                $('body').removeClass('loading');
+            }
+        });
+    });
+    //end
+    jQuery(document).ready(function ($) {
+        //start - smooth - scrolling
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+            $('html,body').animate({ scrollTop: $(this.hash).offset().top }, 1000);
+        });
+        //end
+        $().UItoTop({ easingType: 'easeOutQuart' });
+        //Owl-Carousel-JavaScript
+        $("#owl-demo").owlCarousel({
+            items: 3,
+            lazyLoad: true,
+            autoPlay: true,
+            pagination: true,
+        });
+        //  $("#txtInputCaptcha").val(generate());
+        //end
+
+    });
+
+    function fnLogoutClick() {
+        $.ajax({
+            type: "GET",
+            url: "/Home/Logout",
+            success: function (response) {
+                window.location.href = response;
+            }
+        });
+    }
+
+    function generate() {
+        return Math.floor(Math.random() * 90000) + 10000;
+    }
+
+    function fnShowHidePwd(e, id) {
+        e.preventDefault();
+        if ($('#' + id + ' input').attr("type") == "text") {
+            $('#' + id + ' input').attr('type', 'password');
+            $('#' + id + ' i').addClass("fa-eye-slash");
+            $('#' + id + ' i').removeClass("fa-eye");
+        } else if ($('#' + id + ' input').attr("type") == "password") {
+            $('#' + id + ' input').attr('type', 'text');
+            $('#' + id + ' i').removeClass("fa-eye-slash");
+            $('#' + id + ' i').addClass("fa-eye");
+        }
+    }
+
+    $("#Loginlink").click(function (e) {
+        //	alert("1");
+        $("#txtPassword").val("");
+        $("#txtUserName").val("");
+        $("#captchaText").val('');
+        //loadCaptcha();
+        fngetcaptcha();
+    });
+
+    $("#ChangePasswordlink").click(function (e) {
+        $('#reg').modal('hide');
+        $("#txtOldPassword").val("");
+        $("#txtNewPassword").val("");
+        $("#txtConfirmPassword").val("");
+    });
+
+	$("#btnSubmit2").click(function (e) {
+		var oldPassword = $("#txtOldPassword").val();
+		$("#txtOldPassword").val(SHAEncryption(oldPassword));
+		oldPassword = $("#txtOldPassword").val();
+		var newPassword = $("#txtNewPassword").val();
+		$("#txtNewPassword").val(SHAEncryption(newPassword));
+		newPassword = $("#txtNewPassword").val();
+		var confirmPassword = $("#txtConfirmPassword").val();
+		$("#txtConfirmPassword").val(SHAEncryption(confirmPassword));
+		confirmPassword = $("#txtConfirmPassword").val();
+
+		$.ajax({
+            type: 'POST',
+            dataType: "json",
+			url: "/Home/ChangePassword",
+			data:
+			{
+				OldPassword: oldPassword,
+				NewPassword: newPassword,
+				ConfirmPassword: confirmPassword
+			},
+			dataType: 'json',
+			success: function (result) {
+				if (result.success != false) {
+					if (result.subdeptCount == 2) {
+						//alert("1");
+                        GetSubDepartments();
+                        GetLoginRoles();
+						//alert("3");
+						$('#reg').modal('hide');
+						$('#ChangePassword').modal('hide');
+						//alert("5");
+						$('#RoleModal').modal({ backdrop: 'static', keyboard: false });
+						$('#RoleModal').modal('show');
+						//alert("4");
+					}
+					else {
+
+						//alert("2");
+						$('#reg').modal('hide');
+						$('#ChangePassword').modal('hide');
+						window.location.href = "/Home/Index";
+						$('#switchbtn').hide();
+
+					}
+				}
+				else {
+					//alert("1");
+					$('#txtOldPassword').val('');
+					$('#txtNewPassword').val('');
+					$("#txtConfirmPassword").val('');
+					bootbox.alert(result.message);
+				}
+
+			},
+			error: function (result) {
+                bootbox.alert("Error1", result.message);
+			}
+		});
+	});
+    //GetDepartments();
+    //function GetDepartments() {
+    //    $("#depts").empty();
+    //    $("#depts").append('<option value="choose">choose</option>');
+    //    $.ajax({
+    //        url: "/Admission/GetDepartments",
+    //        type: 'Get',
+    //        contentType: 'application/json; charset=utf-8',
+    //        success: function (data) {
+    //            if (data != null || data != '') {
+    //                $.each(data, function () {
+    //                    $("#depts").append($("<option/>").val(this.DeptId).text(this.DeptName));
+    //                });
+    //            }
+
+    //        }, error: function (result) {
+    //            alert("Error", "something went wrong");
+    //        }
+    //    });
+    //}
+
+    function GetSubDepartments() {
+        $("#SubDept").empty();
+        $("#SubDept").append('<option value="choose">choose</option>');
+        $.ajax({
+            url: "/Home/GetDepartments",
+            type: 'Get',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data != null || data != '') {
+                    $.each(data, function () {
+                        $("#SubDept").append($("<option/>").val(this.DeptId).text(this.DeptName));
+                    });
+                }
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function GetLoginRoles() {
+        $("#SubDeptErr").hide();
+        //var subDeptid = $("#SubDept").val();
+        var subDeptid = 0;
+        $("#Roles").empty();
+        $.ajax({
+            url: "/Home/GetLoginRoles",
+            type: 'Get',
+            data: { subDeptId: subDeptid },
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data != null || data != '') {
+                    $.each(data, function () {
+                        $("#Roles").append($("<option/>").val(this.RoleID).text(this.RoleName));
+                    });
+                }
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function LoginContinue() {
+        $("#SubDeptErr").text('');
+        var subDeptid = 0;
+        var roleid = $("#Roles").val();
+        if (roleid == null)
+            roleid = 0;
+        if (subDeptid == 'choose') {
+            $("#SubDeptErr").text('Select the Department');
+		}
+		else {
+            $("#SubDeptErr").text('Select the Department').hide();
+            $.ajax({
+                url: "/Home/ContinueLogin",
+                type: 'Get',
+                data: { subDeptId: subDeptid, roleId: roleid },
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data == true) {
+                        window.location.href = "/Home/Index1";
+                        $('#RoleModal').modal('hide');
+                    }
+                }, error: function (result) {
+                    alert("Error", "something went wrong");
+                }
+            });
+        }
+    }
+
+    function SwitchRole() {
+        GetSubDepartments();
+        GetLoginRoles();
+        $('#RoleModal').modal('show');
+    }
+    function SwitchLogin() {
+        $('#reg').modal('show');
+    }
+	function CancelContinue() {
+		//var hdnRoleIdsessionValue = $("#hdRoleName").data('value');
+		//if (hdnRoleIdsessionValue != null) {
+			$('#RoleModal').modal('hide');
+	//	}
+	}
+    function CancelContinue1() {
+        //var hdnRoleIdsessionValue = $("#hdRoleName").data('value');
+        //if (hdnRoleIdsessionValue != null) {
+        $('#reg').modal('hide');
+        //	}
+    }
+
+	function SHAEncryption(ControlID) {
+    @*//var salt = '@Request.RequestContext.HttpContext.Session["lid"].ToString()';*@
+    //var hashText = CryptoJS.SHA256(str);
+    //var concathashwithSalt = hashText.concat(salt.toString());
+    //var SecondhashText = CryptoJS.SHA256(concathashwithSalt);
+    //return SecondhashText;
+    var Values_ = ControlID;
+    var EncryValues = "";
+
+
+    if (Values_ == "") {
+      // alert('Please enter UserName');
+      return false;
+    }
+
+    else {
+      var key = CryptoJS.enc.Utf8.parse('8080808080808080');
+      var iv = CryptoJS.enc.Utf8.parse('8080808080808080');
+
+      var encryptedValues = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(Values_), key,
+        {
+          keySize: 128 / 8,
+          iv: iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+        });
+
+
+      EncryValues = encryptedValues;
+      //            alert('encrypted Username :' + EncryValues);
+
+    }
+
+    return EncryValues;
+  }
+    function fnShowPassword() {
+        var x = document.getElementById("txtPassword");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+
+    //const rmCheck = document.getElementById("rememberMe"),
+    //    emailInput = document.getElementById("email");
+
+    //if (localStorage.checkbox && localStorage.checkbox !== "") {
+    //    rmCheck.setAttribute("checked", "checked");
+    //    emailInput.value = localStorage.username;
+    //} else {
+    //    rmCheck.removeAttribute("checked");
+    //    emailInput.value = "";
+    //}
+
+    function fnRememberMe() {
+        if (rmCheck.checked && emailInput.value !== "") {
+            localStorage.username = emailInput.value;
+            localStorage.checkbox = rmCheck.value;
+        } else {
+            localStorage.username = "";
+            localStorage.checkbox = "";
+        }
+    }
+
+    function fnShowProfileScreen(id) {
+        $('#PhotoUpload').val('');
+        $.ajax({
+            type: "GET",
+            url: "/Admin/GetEditProfileData",
+            contentType: "application/json",
+            success: function (data) {
+                if (data != null || data != '') {
+                    $("#txtNameEditProfile").val(data[0].UserName);
+                    $("#txtFatherNameEditProfile").val(data[0].FatherName);
+                    $("#txtEmailEditProfile").val(data[0].Email);
+                    $("#txtMobileEditProfile").val(data[0].Mobile);
+                    if (data[0].Photo != null && data[0].Photo != "") {
+                        $('#ImgPhotoUpload').attr('src', data[0].Photo);
+                        $('#ddlUserMgmt').attr('src', data[0].Photo);
+                        $("#ddlUserMgmt").css("background-image", 'url(' + data[0].Photo + ')');
+                        //$("#PhotoUpload").val(data[0].Photo.split('/').pop());
+                    }
+                    else {
+                        $('#ImgPhotoUpload').attr("src", "/Images/ProfilePic.png");
+                        $("#ddlUserMgmt").css("background-image", 'url(' + '/Images/ProfilePic.png' + ')');
+                    }
+                    if (id != '')
+                        $('#EditProfile').modal('show');
+                }
+                else {
+                    bootbox.alert("No Data found !!")
+                }
+            }, error: function (result) {
+                alert("Error", "something went wrong");
+            }
+        });
+    }
+
+        function fnUpdtProfile() {
+            ;
+        var name = $("#txtNameEditProfile").val();
+        if (name == '') {
+            bootbox.alert("Enter Name");
+            return;
+        }
+        else {
+            var regex = new RegExp("^[a-zA-Z .]+$");
+            if (regex.test(name)) {
+            }
+            else {
+                bootbox.alert("Please Enter Alphabate");
+                return false;
+            }
+        }
+        var fathername = $("#txtFatherNameEditProfile").val();
+        if (fathername == '') {
+            bootbox.alert("Enter Father Name");
+            return;
+        }
+        var email = $("#txtEmailEditProfile").val();
+        if (email == '') {
+
+            bootbox.alert("Enter Email");
+            return;
+        }
+        else {
+            var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+            if (!emailReg.test(email)) {
+                bootbox.alert("Enter Valid Email");
+                return;
+            }
+        }
+        var mobile = $("#txtMobileEditProfile").val();
+        if (mobile == '') {
+
+
+            bootbox.alert("Enter Mobile");
+            return;
+        }
+        else {
+            var filter = /^\d*(?:\.\d{1,2})?$/;
+            if (filter.test(mobile)) {
+                if (mobile.length == 10) {
+
+                } else {
+                    bootbox.alert("Please put 10  digit mobile number");
+                    return false;
+                }
+            }
+            else {
+
+                bootbox.alert("Not a valid number");
+                return false;
+            }
+        }
+
+        var fileUpload = $("#PhotoUpload").get(0);
+        var files = fileUpload.files;
+        //
+        //var ext = $('#PhotoUpload').val().split('.').pop().toLowerCase();
+        //if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+        //    alert('invalid extension!');
+        //}
+
+        var fileData = new FormData();
+        for (var i = 0; i < files.length; i++) {
+            fileData.append("ImageFile", files[i]);
+        }
+
+        fileData.append(
+            "UserName", $("#txtNameEditProfile").val()
+        );
+        fileData.append(
+            "FatherName", $("#txtFatherNameEditProfile").val()
+        );
+        fileData.append(
+            "Email", $("#txtEmailEditProfile").val()
+        );
+        fileData.append(
+            "Mobile", $("#txtMobileEditProfile").val()
+        );
+
+        $.ajax({
+            url: "/Admin/GetEditProfileData",
+            type: 'POST',
+            dataType: "json",
+            data: fileData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                ;
+                if (data == "Success") {
+                     $("#EditProfile").hide();
+                    bootbox.alert("Details Updated successfully");
+                    $("#EditProfile").removeClass("in");
+                    //$(".modal-backdrop").remove();
+                    //$('body').removeClass('modal-open');
+                    //$('body').css('padding-right', '');
+                   
+                    //GetOfficers();
+                }
+                else {
+                    //bootbox.alert("failed");
+                    bootbox.alert(data);
+                }
+            }, error: function (result) {
+                bootbox.alert("Error", "something went wrong");
+            }
+        });
+    }
+
+    function fnClearEditProfile() {
+        $('#EditProfile').modal('hide');
+        $("#ddlUserMgmt").val('')
+    }
+
+    function allowAlphaNumericSpace(e, id) {
+        var code = ('charCode' in e) ? e.charCode : e.keyCode;
+        if (!(code == 32) && // space
+            !(code > 47 && code < 58) && // numeric (0-9)
+            !(code > 64 && code < 91) && // upper alpha (A-Z)
+            !(code > 96 && code < 123) ||
+            (id == "captchaText" && !(code > 47 && code < 58))){ // lower alpha (a-z)
+            e.preventDefault();
+        }
+        if (id.includes("txtUserName")) {
+            var maxLength = $("#" + id).val().length;
+            if (($("#cbxLoginDiteEe").prop('checked') == true && maxLength == 7) || ($("#cbxLoginDiteEe").prop('checked') == false && maxLength == 10)) {
+                e.preventDefault();
+            }
+        }
+    }
+
+    function fnClearInputFields(id) {
+        $("#txtUserName").val('');
+        $("#txtPassword").val('');
+        $("#captchaText").val('');
+        if ($("#" + id).val() == 1) {
+            $("#txtUserName").attr("placeholder", "Enter KGID Number");
+            $("#txtForgotPassUserName").show();
+        }
+        else {
+            $("#txtUserName").attr("placeholder", "Enter Mobile Number");
+            $("#txtForgotPassUserName").hide();
+        }
+    }
+    function fnRedirect(url) {
+        // Re-direct the browser to the url value
+        window.location.href = '../Home/' + url
+    }
+
+        function fnForgotPassword(str) {
+            
+        var isValid = 1;
+            var forgotPassMobileNum = $('#txtForgotPassMobileNumber').val();
+            var txtForgotPassUserNamedata = $('#txtForgotPassUserName').val();
+
+        if (forgotPassMobileNum == "" || forgotPassMobileNum == null) {
+            bootbox.alert("Please enter Mobile Number");
+            isValid = 0;
+        }
+        if (isValid) {
+            var forgotPassOTP = '';
+            if (str.includes('Validate')) {
+                forgotPassOTP = $('#txtForgotPassOTP').val();
+
+                if (forgotPassOTP == "" || forgotPassOTP == null) {
+                    bootbox.alert("Please enter OTP");
+                    isValid = 0;
+                }
+            }
+        }
+        if (isValid) {
+            var forgotPassCreatePass = '';
+            var forgotPassConfirmPass = '';
+            if (str.includes('Register Employee')) {
+                forgotPassCreatePass = $('#txtForgotPassCreatePass').val();
+
+                if (forgotPassCreatePass == "" || forgotPassCreatePass == null) {
+                    bootbox.alert("Please enter OTP");
+                    isValid = 0;
+                }
+                forgotPassConfirmPass = $('#txtForgotPassConfirmPass').val();
+
+                if (forgotPassConfirmPass == "" || forgotPassConfirmPass == null) {
+                    bootbox.alert("Please enter OTP");
+                    isValid = 0;
+                }
+            }
+            var OriginalPwdCheck = RandomWithPassword($("#HDNpwd").val());
+        }
+        if (isValid) {
+            $.ajax({
+                url: "/Home/NewEmployeeRegister",
+                type: 'POST',
+                dataType: "json",
+                data: {
+                    newEmployee: { MobileNumber: forgotPassMobileNum, MobileOTP: forgotPassOTP, NewPassword: forgotPassCreatePass, ConfirmNewPassword: forgotPassConfirmPass, hdnValue: "ForgotPassword", EmployeeKGIDNumber: txtForgotPassUserNamedata },
+                    submit: str
+                },
+                success: function (data) {
+
+                    if (data != '' || data != null) {
+                        bootbox.alert({
+                            message: data.message,
+                            callback: function () {
+                                if (data.issucess == true) {
+                                    if (str.includes("Generate OTP"))
+                                        $("#txtForgotPassOTP").prop("disabled", false);
+                                    if (str.includes("Validate")) {
+                                        $("#txtForgotPassCreatePass").prop("disabled", false);
+                                        $("#txtForgotPassConfirmPass").prop("disabled", false);
+                                        $("#btnForgotPassSubmit").prop("disabled", false);
+                                    }
+                                    if (str.includes("Register Employee")) {
+                                        window.location.href = window.location.href;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }, error: function (result) {
+                    bootbox.alert("Error", "something went wrong");
+                }
+            });
+        }
+    }
+
+    function fnOpenPwdModal() {
+        $("#txtForgotPassUserName").val('');
+        $("#txtForgotPassMobileNumber").val('');
+        $("#txtForgotPassOTP").val('');
+        $("#txtForgotPassCreatePass").val('');
+        $("#txtForgotPassConfirmPass").val('');
+    }
+
+    function fnGetMobileFromKGIDNumber() {
+        if ($("#txtForgotPassUserName").val() != '') {
+            $.ajax({
+                type: "GET",
+                data: { KGIDNumber: $("#txtForgotPassUserName").val().trim() },
+                url: "/Home/GetUserDataByKGIDNumber",
+                contentType: "application/json",
+                success: function (data) {
+                    if (data != null || data.length > 0) {
+                        $("#txtForgotPassUserName").val(data[0].KGIDUserID);
+                        $("#txtForgotPassMobileNumber").val(data[0].phoneNum);
+                    }
+                }
+            });
+        }
+    }
+
+    </script>
+
+    @if (Session["lid"] != null)
+    {
+        <script>
+        function hashSHA256(str) {
+            var salt = '@Request.RequestContext.HttpContext.Session["lid"].ToString()';
+            //	alert(salt);
+            var hashText = CryptoJS.SHA256(str);
+            //	alert(hashText);
+            hashText = hashText.toString();
+            var concathashwithSalt = hashText.concat(salt.toString());
+
+            //	concathashwithSalt = hashText.toString() + '' + salt.toString();
+            //alert(concathashwithSalt);
+            var SecondhashText = CryptoJS.SHA256(concathashwithSalt);
+
+            return SecondhashText;
+            //  //  alert(salt);
+            //    var hash = CryptoJS.HmacSHA256(str, salt);
+            //  /*  //*/alert(hash);
+            //    var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+            //return hashInBase64;
+        }
+    function RandomWithPassword(HdnPWD1) {
+        var randomstr = '@Request.RequestContext.HttpContext.Session["lid"].ToString().ToUpper()';
+        //		alert(randomstr);
+        //alert(HdnPWD1);
+        var concatpwd = "";
+        for (var i = 0; i < HdnPWD1.length; i++) {
+            concatpwd += "$" + HdnPWD1.charAt(i) + "$";
+        }
+        //	var concatpwd = randompassword(HdnPWD1);
+        //alert(concatpwd);
+        var PwdChecks = randomstr.concat(concatpwd.toString());
+        var PwdCheck = PwdChecks.concat(randomstr.toString());
+        return PwdCheck;
+    }
+        </script>
+    }
+</body>
+</html>
