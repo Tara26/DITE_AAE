@@ -603,6 +603,8 @@ namespace DIT.Controllers
             return Json(updateemployee, JsonRequestBehavior.AllowGet);
         }
 
+        //Admission and Affiliation and Examination Module Integration in progress
+
         [HttpPost]
         public JsonResult PublishNotification(int Id, int Status)
         {
